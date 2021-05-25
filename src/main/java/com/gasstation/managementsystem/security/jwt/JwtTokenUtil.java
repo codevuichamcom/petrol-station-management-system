@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.gasstation.managementsystem.security.jwt;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -8,11 +8,11 @@ import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.stereotype.Component;
 
 /*
 The JwtTokenUtil is responsible for performing JWT operations like creation and validation.
@@ -21,7 +21,6 @@ It makes use of the io.jsonwebtoken.Jwts for achieving this.
 
 @Component
 public class JwtTokenUtil implements Serializable {
-
     private static final long serialVersionUID = -2550185165626007488L;
 
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
@@ -78,5 +77,4 @@ public class JwtTokenUtil implements Serializable {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
-
 }

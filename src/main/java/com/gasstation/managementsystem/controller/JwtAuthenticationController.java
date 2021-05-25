@@ -1,12 +1,12 @@
-package com.example.demo.controller;
+package com.gasstation.managementsystem.controller;
 
-import java.util.Objects;
-
-import com.example.demo.config.JwtTokenUtil;
-import com.example.demo.model.JwtRequest;
-import com.example.demo.model.JwtResponse;
-import com.example.demo.model.UserDTO;
-import com.example.demo.service.JwtUserDetailsService;
+import com.gasstation.managementsystem.entity.Account;
+import com.gasstation.managementsystem.model.JwtRequest;
+import com.gasstation.managementsystem.model.JwtResponse;
+import com.gasstation.managementsystem.model.dto.AccountDTO;
+import com.gasstation.managementsystem.security.jwt.JwtTokenUtil;
+import com.gasstation.managementsystem.service.AccountService;
+import com.gasstation.managementsystem.service.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,21 +14,11 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-/*
-Expose a POST API /authenticate using the JwtAuthenticationController. The POST API gets username and password in the
-body- Using Spring Authentication Manager we authenticate the username and password.If the credentials are valid,
-a JWT token is created using the JWTTokenUtil and provided to the client.
- */
 @RestController
 @CrossOrigin
 public class JwtAuthenticationController {
-
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -38,12 +28,16 @@ public class JwtAuthenticationController {
     @Autowired
     private JwtUserDetailsService userDetailsService;
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<?> saveUser(@RequestBody UserDTO user) throws Exception {
-        return ResponseEntity.ok(userDetailsService.save(user));
+    @Autowired
+    AccountService accountService;
+
+
+    @PostMapping(value = "/register")
+    public AccountDTO register(@RequestBody Account account) throws Exception {
+        return accountService.save(account);
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @PostMapping(value = "/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());

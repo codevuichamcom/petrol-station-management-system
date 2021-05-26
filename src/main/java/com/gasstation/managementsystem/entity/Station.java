@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.entity;
 
+import com.gasstation.managementsystem.model.dto.StationDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,4 +26,12 @@ public class Station {
 
     @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
     private List<Tank> tanks;
+
+    public Station(StationDTO stationDTO) {
+        this.id = stationDTO.getId();
+        this.user = stationDTO.getUser();
+        this.tanks = stationDTO.getTanks();
+        this.address = stationDTO.getAddress();
+        this.tanks = stationDTO.getTanks();
+    }
 }

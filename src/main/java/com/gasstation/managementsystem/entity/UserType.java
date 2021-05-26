@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.entity;
 
+import com.gasstation.managementsystem.model.dto.UserTypeDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,6 +19,12 @@ public class UserType {
     private int id;
     private String type;
 
-    @OneToMany(mappedBy = "userType",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userType", cascade = CascadeType.ALL)
     private List<Account> accounts;
+
+    public UserType(UserTypeDTO userTypeDTO) {
+        this.id = userTypeDTO.getId();
+        this.type = userTypeDTO.getType();
+        this.accounts = userTypeDTO.getAccounts();
+    }
 }

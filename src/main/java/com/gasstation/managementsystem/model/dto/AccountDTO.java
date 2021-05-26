@@ -11,6 +11,8 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
+
 public class AccountDTO {
     private int id;
     private String username;

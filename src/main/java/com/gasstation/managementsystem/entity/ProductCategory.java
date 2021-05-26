@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.entity;
 
+import com.gasstation.managementsystem.model.dto.ProductCategoryDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,4 +22,9 @@ public class ProductCategory {
     @OneToMany(mappedBy = "productCategory", cascade = CascadeType.ALL)
     private List<Tank> tanks;
 
+    public ProductCategory(ProductCategoryDTO productCategoryDTO) {
+        this.id = productCategoryDTO.getId();
+        this.name = productCategoryDTO.getName();
+        this.tanks = productCategoryDTO.getTanks();
+    }
 }

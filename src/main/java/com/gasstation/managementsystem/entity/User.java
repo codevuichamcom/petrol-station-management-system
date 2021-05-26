@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.entity;
 
+import com.gasstation.managementsystem.model.dto.UserDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -36,4 +37,19 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Station> station;
+
+    public User(UserDTO userDTO) {
+        this.id = userDTO.getId();
+        this.fullName = userDTO.getFullName();
+        this.address = userDTO.getAddress();
+        this.phone = userDTO.getPhone();
+        this.email = userDTO.getEmail();
+        this.note = userDTO.getNote();
+        this.cashLimit = userDTO.getCashLimit();
+        this.limitSetDate = userDTO.getLimitSetDate();
+        this.account = userDTO.getAccount();
+        this.cards = userDTO.getCards();
+        this.cardsActive = userDTO.getCardsActive();
+        this.station = userDTO.getStation();
+    }
 }

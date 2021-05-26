@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.entity;
 
+import com.gasstation.managementsystem.model.dto.TankDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,4 +27,11 @@ public class Tank {
     @JoinColumn(name = "station_id")
     private Station station;
 
+    public Tank(TankDTO tankDTO) {
+        this.id = tankDTO.getId();
+        this.volume = tankDTO.getVolume();
+        this.remain = tankDTO.getRemain();
+        this.productCategory = tankDTO.getProductCategory();
+        this.station = tankDTO.getStation();
+    }
 }

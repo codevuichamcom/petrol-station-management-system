@@ -1,13 +1,10 @@
 package com.gasstation.managementsystem.model.dto;
 
-import com.gasstation.managementsystem.entity.Account;
-import com.gasstation.managementsystem.entity.Card;
-import com.gasstation.managementsystem.entity.Station;
 import com.gasstation.managementsystem.entity.User;
+import com.gasstation.managementsystem.entity.UserType;
 import lombok.*;
 
 import java.sql.Date;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,30 +14,29 @@ import java.util.List;
 
 public class UserDTO {
     private int id;
-    private String fullName;
+    private String identityCardNumber;//số chứng minh nhân dân
+    private String name;
+    private Boolean gender;
+    private Date dateOfBirth;
     private String address;
     private String phone;
     private String email;
     private String note;
-    private double cashLimit;
+    private Double cashLimit;
     private Date limitSetDate;
-    private Account account;
-    private List<Card> cards;
-    private List<Card> cardsActive;
-    private List<Station> station;
+    private UserTypeDTO userType;
 
     public UserDTO(User user) {
         this.id = user.getId();
-        this.fullName = user.getFullName();
+        this.identityCardNumber = user.getIdentityCardNumber();
+        this.name = user.getName();
+        this.dateOfBirth = user.getDateOfBirth();
         this.address = user.getAddress();
         this.phone = user.getPhone();
         this.email = user.getEmail();
         this.note = user.getNote();
         this.cashLimit = user.getCashLimit();
         this.limitSetDate = user.getLimitSetDate();
-        this.account = user.getAccount();
-        this.cards = user.getCards();
-        this.cardsActive = user.getCardsActive();
-        this.station = user.getStation();
+        this.userType = new UserTypeDTO(user.getUserType());
     }
 }

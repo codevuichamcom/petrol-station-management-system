@@ -14,11 +14,9 @@ import java.util.List;
 public class UserTypeDTO {
     private int id;
     private String type;
-    private List<Account> accounts;
 
     public UserTypeDTO(UserType userType) {
         this.id = userType.getId();
         this.type = userType.getType();
-        this.accounts = userType.getAccounts();
     }
 }

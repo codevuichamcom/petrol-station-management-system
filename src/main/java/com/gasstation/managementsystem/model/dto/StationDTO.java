@@ -22,9 +22,9 @@ public class StationDTO {
 
     public StationDTO(Station station) {
         this.id = station.getId();
-        this.user = station.getUser();
-        this.tanks = station.getTanks();
+//        this.user = station.getUser();
+//        this.tanks = station.getTanks();
         this.address = station.getAddress();
-        this.tanks = station.getTanks();
+//        this.tanks = station.getTanks();
     }
 }

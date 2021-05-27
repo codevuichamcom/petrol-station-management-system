@@ -23,7 +23,7 @@ public class CardDTO {
     private Date limitSetDate;
     private Date issuedDate;
     private Date activeDate;
-    private User userCard;
+//    private User userCard;
     private User userActive;
 
     public CardDTO(Card card) {
@@ -36,7 +36,7 @@ public class CardDTO {
         this.limitSetDate = card.getLimitSetDate();
         this.issuedDate = card.getIssuedDate();
         this.activeDate = card.getActiveDate();
-        this.userCard = card.getUserCard();
+//        this.userCard = card.getUserCard();
         this.userActive = card.getUserActive();
     }
 }

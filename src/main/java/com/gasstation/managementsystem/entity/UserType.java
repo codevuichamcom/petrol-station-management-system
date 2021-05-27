@@ -1,6 +1,5 @@
 package com.gasstation.managementsystem.entity;
 
-import com.gasstation.managementsystem.model.dto.UserTypeDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,11 +19,12 @@ public class UserType {
     private String type;
 
     @OneToMany(mappedBy = "userType", cascade = CascadeType.ALL)
-    private List<Account> accounts;
+    private List<User> userList;//Dánh sách user có thuộc type này
 
-    public UserType(UserTypeDTO userTypeDTO) {
-        this.id = userTypeDTO.getId();
-        this.type = userTypeDTO.getType();
-        this.accounts = userTypeDTO.getAccounts();
-    }
+
+//    public UserType(UserTypeDTO userTypeDTO) {
+//        this.id = userTypeDTO.getId();
+//        this.type = userTypeDTO.getType();
+//        this.accounts = userTypeDTO.getAccounts();
+//    }
 }

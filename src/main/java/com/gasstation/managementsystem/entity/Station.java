@@ -1,6 +1,5 @@
 package com.gasstation.managementsystem.entity;
 
-import com.gasstation.managementsystem.model.dto.StationDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,18 +19,30 @@ public class Station {
     private String name;
     private String address;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
+    private List<Tank> tankList;//Danh sách các bể của trạm này
 
     @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
-    private List<Tank> tanks;
+    private List<PriceChangeHistory> priceChangeHistoryList;//Danh sách đổi giá của trạm này
 
-    public Station(StationDTO stationDTO) {
-        this.id = stationDTO.getId();
-        this.user = stationDTO.getUser();
-        this.tanks = stationDTO.getTanks();
-        this.address = stationDTO.getAddress();
-        this.tanks = stationDTO.getTanks();
-    }
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;//Chủ Tạm là ai
+
+    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
+    private List<Shift> shiftList;//Danh Sách ca bơm của Trạm này
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "user_staton_tbl", joinColumns = @JoinColumn(name = "station_id"),
+            inverseJoinColumns = @JoinColumn(name = "employee_id"))
+    private List<User> employeeList;
+
+//
+//    public Station(StationDTO stationDTO) {
+//        this.id = stationDTO.getId();
+//        this.user = stationDTO.getUser();
+//        this.tanks = stationDTO.getTanks();
+//        this.address = stationDTO.getAddress();
+//        this.tanks = stationDTO.getTanks();
+//    }
 }

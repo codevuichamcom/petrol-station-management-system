@@ -1,4 +1,4 @@
-package com.gasstation.managementsystem.service;
+package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.Account;
 import com.gasstation.managementsystem.entity.User;
@@ -18,8 +18,6 @@ import java.util.List;
 public class JwtUserDetailsService implements UserDetailsService {
     @Autowired
     AccountRepository accountRepository;
-    @Autowired
-    private PasswordEncoder bcryptEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

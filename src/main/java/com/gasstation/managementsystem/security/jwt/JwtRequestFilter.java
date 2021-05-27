@@ -1,6 +1,6 @@
 package com.gasstation.managementsystem.security.jwt;
 
-import com.gasstation.managementsystem.service.JwtUserDetailsService;
+import com.gasstation.managementsystem.service.impl.JwtUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

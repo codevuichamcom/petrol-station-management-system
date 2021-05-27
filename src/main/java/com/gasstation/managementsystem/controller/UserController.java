@@ -3,6 +3,7 @@ package com.gasstation.managementsystem.controller;
 import com.gasstation.managementsystem.model.dto.AccountDTO;
 import com.gasstation.managementsystem.model.dto.UserDTO;
 import com.gasstation.managementsystem.service.AccountService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,10 +16,12 @@ import java.security.Principal;
 @RequestMapping("/api/v1")
 @RestController
 @CrossOrigin
-@Tag(name = "user")
+@Tag(name = "User", description = "API for User")
 public class UserController {
     @Autowired
     AccountService accountService;
+
+    @Operation(summary = "View profile of user logined")
     @GetMapping("/profile")
     public UserDTO profile(Principal principal) {
         AccountDTO accountDTO = accountService.findByUsername(principal.getName());

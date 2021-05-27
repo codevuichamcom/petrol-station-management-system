@@ -30,6 +30,7 @@ public class UserDTO {
         this.id = user.getId();
         this.identityCardNumber = user.getIdentityCardNumber();
         this.name = user.getName();
+        this.gender = user.getGender();
         this.dateOfBirth = user.getDateOfBirth();
         this.address = user.getAddress();
         this.phone = user.getPhone();

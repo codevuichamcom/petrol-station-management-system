@@ -5,10 +5,12 @@ import com.gasstation.managementsystem.model.dto.StationDTO;
 import com.gasstation.managementsystem.repository.StationRepository;
 import com.gasstation.managementsystem.service.StationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class StationServiceImpl implements StationService {
     @Autowired
     StationRepository stationRepository;

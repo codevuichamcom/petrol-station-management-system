@@ -5,10 +5,12 @@ import com.gasstation.managementsystem.model.dto.TankDTO;
 import com.gasstation.managementsystem.repository.TankRepository;
 import com.gasstation.managementsystem.service.TankService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class TankServiceImpl implements TankService {
     @Autowired
     TankRepository tankRepository;

@@ -5,10 +5,12 @@ import com.gasstation.managementsystem.model.dto.UserTypeDTO;
 import com.gasstation.managementsystem.repository.UserTypeRepository;
 import com.gasstation.managementsystem.service.UserTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class UserTypeImpl implements UserTypeService {
     @Autowired
     UserTypeRepository userTypeRepository;

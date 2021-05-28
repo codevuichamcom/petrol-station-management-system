@@ -33,7 +33,7 @@ public class Station {
     private List<Shift> shiftList;//Danh Sách ca bơm của Trạm này
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "user_staton_tbl", joinColumns = @JoinColumn(name = "station_id"),
+    @JoinTable(name = "user_station_tbl", joinColumns = @JoinColumn(name = "station_id"),
             inverseJoinColumns = @JoinColumn(name = "employee_id"))
     private List<User> employeeList;
 

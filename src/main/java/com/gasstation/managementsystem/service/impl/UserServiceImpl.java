@@ -5,9 +5,12 @@ import com.gasstation.managementsystem.model.dto.UserDTO;
 import com.gasstation.managementsystem.repository.UserRepository;
 import com.gasstation.managementsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -16,13 +19,17 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     @Override
-    public List<UserDTO> findAll() {
-        List<User> users = userRepository.findAll();
+    public HashMap<String, Object> findAll(Pageable pageable) {
+        Page<User> users = userRepository.findAll(pageable);
         List<UserDTO> userDTOS = new ArrayList<>();
         for (User user : users) {
             userDTOS.add(new UserDTO(user));
         }
-        return userDTOS;
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("data", userDTOS);
+        map.put("totalElement", users.getTotalElements());
+        map.put("totalPage", users.getTotalPages());
+        return map;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.model.dto;
 
+import com.gasstation.managementsystem.entity.Account;
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.entity.UserType;
 import lombok.*;
@@ -25,6 +26,7 @@ public class UserDTO {
     private Double cashLimit;
     private Date limitSetDate;
     private UserTypeDTO userType;
+    private AccountDTO account;
 
     public UserDTO(User user) {
         this.id = user.getId();
@@ -39,5 +41,6 @@ public class UserDTO {
         this.cashLimit = user.getCashLimit();
         this.limitSetDate = user.getLimitSetDate();
         this.userType = new UserTypeDTO(user.getUserType());
+//        this.account = new AccountDTO(user.getAccount());
     }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String identityCardNumber;//số chứng minh nhân dân
     private String name;
     private Boolean gender;

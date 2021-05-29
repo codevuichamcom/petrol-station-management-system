@@ -1,13 +1,19 @@
 package com.gasstation.managementsystem.service.impl;
 
+import com.gasstation.managementsystem.entity.Account;
 import com.gasstation.managementsystem.entity.User;
+import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.model.dto.UserDTO;
+import com.gasstation.managementsystem.repository.AccountRepository;
 import com.gasstation.managementsystem.repository.UserRepository;
+import com.gasstation.managementsystem.repository.UserTypeRepository;
 import com.gasstation.managementsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,18 +23,25 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserTypeRepository userTypeRepository;
+    @Autowired
+    AccountRepository accountRepository;
+
+    @Autowired
+    PasswordEncoder bcryptEncoder;
 
     @Override
-    public HashMap<String, Object> findAll(Pageable pageable) {
-        Page<User> users = userRepository.findAll(pageable);
+    public HashMap<String, Object> findAll() {
+        List<User> users = userRepository.findAll();
         List<UserDTO> userDTOS = new ArrayList<>();
         for (User user : users) {
             userDTOS.add(new UserDTO(user));
         }
         HashMap<String, Object> map = new HashMap<>();
         map.put("data", userDTOS);
-        map.put("totalElement", users.getTotalElements());
-        map.put("totalPage", users.getTotalPages());
+//        map.put("totalElement", users.getTotalElements());
+//        map.put("totalPage", users.getTotalPages());
         return map;
     }
 
@@ -38,8 +51,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDTO save(User user) {
-        userRepository.save(user);
+        if(user.getUserType()!=null){
+            UserType userType = userTypeRepository.findById(user.getUserType().getId()).get();
+            user.setUserType(userType);
+        }
+        user = userRepository.save(user);
+        Account account = user.getAccount();
+        if(account!=null){
+            account.setUserInfo(user);
+            account.setPassword(bcryptEncoder.encode(account.getPassword()));
+            accountRepository.save(account);
+        }
         return new UserDTO(user);
     }
 

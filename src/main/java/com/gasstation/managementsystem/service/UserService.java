@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface UserService {
-    public HashMap<String,Object> findAll();
+    public HashMap<String,Object> findAll(Pageable pageable);
 
     public UserDTO findById(int id);
 

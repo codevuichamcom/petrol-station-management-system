@@ -32,16 +32,16 @@ public class UserServiceImpl implements UserService {
     PasswordEncoder bcryptEncoder;
 
     @Override
-    public HashMap<String, Object> findAll() {
-        List<User> users = userRepository.findAll();
+    public HashMap<String, Object> findAll(Pageable pageable) {
+        Page<User> users = userRepository.findAll(pageable);
         List<UserDTO> userDTOS = new ArrayList<>();
         for (User user : users) {
             userDTOS.add(new UserDTO(user));
         }
         HashMap<String, Object> map = new HashMap<>();
         map.put("data", userDTOS);
-//        map.put("totalElement", users.getTotalElements());
-//        map.put("totalPage", users.getTotalPages());
+        map.put("totalElement", users.getTotalElements());
+        map.put("totalPage", users.getTotalPages());
         return map;
     }
 

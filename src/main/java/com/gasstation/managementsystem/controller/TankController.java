@@ -6,10 +6,11 @@ import com.gasstation.managementsystem.service.TankService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -22,8 +23,9 @@ public class TankController {
 
     @Operation(summary = "View All tank")
     @GetMapping("/tanks")
-    public List<TankDTO> getAll() {
-        return tankService.findAll();
+    public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
+                                          @RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize) {
+        return tankService.findAll(PageRequest.of(pageIndex - 1, pageSize));
     }
 
     @Operation(summary = "Find tank by id")

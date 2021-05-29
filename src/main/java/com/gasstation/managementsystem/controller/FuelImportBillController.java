@@ -6,9 +6,11 @@ import com.gasstation.managementsystem.service.FuelImportBillService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -22,8 +24,9 @@ public class FuelImportBillController {
 
     @Operation(summary = "View All import bill")
     @GetMapping("/fuel-import-bills")
-    public List<FuelImportBillDTO> getAll() {
-        return fuelImportBillService.findAll();
+    public HashMap<String,Object> getAll(@RequestParam(name = "pageIndex",defaultValue = "1")Integer pageIndex,
+                                         @RequestParam(name = "pageSize",defaultValue = "2")Integer pageSize) {
+        return fuelImportBillService.findAll(PageRequest.of(pageIndex-1,pageSize));
     }
 
     @Operation(summary = "Find import bill by id")

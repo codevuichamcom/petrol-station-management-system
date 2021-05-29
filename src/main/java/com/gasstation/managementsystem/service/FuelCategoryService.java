@@ -2,11 +2,12 @@ package com.gasstation.managementsystem.service;
 
 import com.gasstation.managementsystem.entity.FuelCategory;
 import com.gasstation.managementsystem.model.dto.FuelCategoryDTO;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+import java.util.HashMap;
 
 public interface FuelCategoryService {
-    public List<FuelCategoryDTO> findAll();
+    public HashMap<String, Object> findAll(Pageable pageable);
 
     public FuelCategoryDTO findById(int id);
 

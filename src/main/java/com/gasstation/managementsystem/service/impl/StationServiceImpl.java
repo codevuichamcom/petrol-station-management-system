@@ -5,9 +5,12 @@ import com.gasstation.managementsystem.model.dto.StationDTO;
 import com.gasstation.managementsystem.repository.StationRepository;
 import com.gasstation.managementsystem.service.StationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -16,13 +19,17 @@ public class StationServiceImpl implements StationService {
     StationRepository stationRepository;
 
     @Override
-    public List<StationDTO> findAll() {
-        List<Station> stations = stationRepository.findAll();
+    public HashMap<String, Object> findAll(Pageable pageable) {
+        Page<Station> stations = stationRepository.findAll(pageable);
         List<StationDTO> stationDTOS = new ArrayList<>();
         for (Station station : stations) {
             stationDTOS.add(new StationDTO(station));
         }
-        return stationDTOS;
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("data", stationDTOS);
+        map.put("totalElement", stations.getTotalElements());
+        map.put("totalPage", stations.getTotalPages());
+        return map;
     }
 
     @Override

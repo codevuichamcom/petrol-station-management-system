@@ -2,12 +2,12 @@ package com.gasstation.managementsystem.service;
 
 import com.gasstation.managementsystem.entity.Account;
 import com.gasstation.managementsystem.model.dto.AccountDTO;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+import java.util.HashMap;
 
 public interface AccountService {
-    public List<AccountDTO> findAll();
+    public HashMap<String, Object> findAll(Pageable pageable);
 
     public AccountDTO findById(int id);
 

@@ -6,9 +6,11 @@ import com.gasstation.managementsystem.service.FuelCategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -22,8 +24,9 @@ public class FuelCategoryController {
 
     @Operation(summary = "View All fuel category")
     @GetMapping("/fuel-categories")
-    public List<FuelCategoryDTO> getAll() {
-        return fuelCategoryService.findAll();
+    public HashMap<String,Object> getAll(@RequestParam(name = "pageIndex",defaultValue = "1")Integer pageIndex,
+                                         @RequestParam(name = "pageSize",defaultValue = "2")Integer pageSize) {
+        return fuelCategoryService.findAll(PageRequest.of(pageIndex-1,pageSize));
     }
 
     @Operation(summary = "Find fuel category by id")

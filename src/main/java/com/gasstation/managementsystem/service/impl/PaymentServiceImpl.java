@@ -5,9 +5,12 @@ import com.gasstation.managementsystem.model.dto.PaymentDTO;
 import com.gasstation.managementsystem.repository.PaymentRepository;
 import com.gasstation.managementsystem.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -16,13 +19,17 @@ public class PaymentServiceImpl implements PaymentService {
     PaymentRepository paymentRepository;
 
     @Override
-    public List<PaymentDTO> findAll() {
-        List<Payment> payments = paymentRepository.findAll();
+    public HashMap<String, Object> findAll(Pageable pageable) {
+        Page<Payment> payments = paymentRepository.findAll(pageable);
         List<PaymentDTO> paymentDTOS = new ArrayList<>();
         for (Payment payment : payments) {
             paymentDTOS.add(new PaymentDTO(payment));
         }
-        return paymentDTOS;
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("data", paymentDTOS);
+        map.put("totalElement", payments.getTotalElements());
+        map.put("totalPage", payments.getTotalPages());
+        return map;
     }
 
     @Override

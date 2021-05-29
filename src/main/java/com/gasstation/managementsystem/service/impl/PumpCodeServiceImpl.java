@@ -5,9 +5,12 @@ import com.gasstation.managementsystem.model.dto.PumpCodeDTO;
 import com.gasstation.managementsystem.repository.PumpCodeRepository;
 import com.gasstation.managementsystem.service.PumpCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -16,13 +19,17 @@ public class PumpCodeServiceImpl implements PumpCodeService {
     PumpCodeRepository pumpCodeRepository;
 
     @Override
-    public List<PumpCodeDTO> findAll() {
-        List<PumpCode> pumpCodes = pumpCodeRepository.findAll();
+    public HashMap<String, Object> findAll(Pageable pageable) {
+        Page<PumpCode> pumpCodes = pumpCodeRepository.findAll(pageable);
         List<PumpCodeDTO> pumpCodeDTOS = new ArrayList<>();
         for (PumpCode pumpCode : pumpCodes) {
             pumpCodeDTOS.add(new PumpCodeDTO(pumpCode));
         }
-        return pumpCodeDTOS;
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("data", pumpCodeDTOS);
+        map.put("totalElement", pumpCodes.getTotalElements());
+        map.put("totalPage", pumpCodes.getTotalPages());
+        return map;
     }
 
     @Override

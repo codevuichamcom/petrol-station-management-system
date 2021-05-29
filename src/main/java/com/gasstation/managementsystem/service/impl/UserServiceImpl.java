@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
@@ -51,7 +52,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public UserDTO save(User user) {
         if(user.getUserType()!=null){
             UserType userType = userTypeRepository.findById(user.getUserType().getId()).get();
@@ -75,5 +75,10 @@ public class UserServiceImpl implements UserService {
             return new UserDTO(user);
         }
         return null;
+    }
+
+    @Override
+    public UserDTO findByUserName(String username) {
+        return new UserDTO(userRepository.findByUsername(username));
     }
 }

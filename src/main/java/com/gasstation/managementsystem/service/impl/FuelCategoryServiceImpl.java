@@ -5,24 +5,33 @@ import com.gasstation.managementsystem.model.dto.FuelCategoryDTO;
 import com.gasstation.managementsystem.repository.FuelCategoryRepository;
 import com.gasstation.managementsystem.service.FuelCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
+@Transactional
 public class FuelCategoryServiceImpl implements FuelCategoryService {
     @Autowired
     FuelCategoryRepository fuelCategoryRepository;
 
     @Override
-    public List<FuelCategoryDTO> findAll() {
-        List<FuelCategory> fuelCategories = fuelCategoryRepository.findAll();
+    public HashMap<String, Object> findAll(Pageable pageable) {
+        Page<FuelCategory> fuelCategories = fuelCategoryRepository.findAll(pageable);
         List<FuelCategoryDTO> fuelCategoryDTOS = new ArrayList<>();
-        for (FuelCategory fuelCategory : fuelCategories) {
-            fuelCategoryDTOS.add(new FuelCategoryDTO(fuelCategory));
+        for (FuelCategory supplier : fuelCategories) {
+            fuelCategoryDTOS.add(new FuelCategoryDTO(supplier));
         }
-        return fuelCategoryDTOS;
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("data", fuelCategoryDTOS);
+        map.put("totalElement", fuelCategories.getTotalElements());
+        map.put("totalPage", fuelCategories.getTotalPages());
+        return map;
     }
 
     @Override

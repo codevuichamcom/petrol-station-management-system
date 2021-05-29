@@ -5,9 +5,12 @@ import com.gasstation.managementsystem.model.dto.PriceChangeHistoryDTO;
 import com.gasstation.managementsystem.repository.PriceChangeHistoryRepository;
 import com.gasstation.managementsystem.service.PriceChangeHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -16,13 +19,17 @@ public class PriceChangeHistoryServiceImpl implements PriceChangeHistoryService 
     PriceChangeHistoryRepository priceChangeHistoryRepository;
 
     @Override
-    public List<PriceChangeHistoryDTO> findAll() {
-        List<PriceChangeHistory> priceChangeHistories = priceChangeHistoryRepository.findAll();
+    public HashMap<String, Object> findAll(Pageable pageable) {
+        Page<PriceChangeHistory> priceChangeHistories = priceChangeHistoryRepository.findAll(pageable);
         List<PriceChangeHistoryDTO> priceChangeHistoryDTOS = new ArrayList<>();
         for (PriceChangeHistory priceChangeHistory : priceChangeHistories) {
             priceChangeHistoryDTOS.add(new PriceChangeHistoryDTO(priceChangeHistory));
         }
-        return priceChangeHistoryDTOS;
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("data", priceChangeHistoryDTOS);
+        map.put("totalElement", priceChangeHistories.getTotalElements());
+        map.put("totalPage", priceChangeHistories.getTotalPages());
+        return map;
     }
 
     @Override

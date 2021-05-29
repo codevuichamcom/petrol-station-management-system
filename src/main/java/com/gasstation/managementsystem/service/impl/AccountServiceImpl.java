@@ -5,13 +5,18 @@ import com.gasstation.managementsystem.model.dto.AccountDTO;
 import com.gasstation.managementsystem.repository.AccountRepository;
 import com.gasstation.managementsystem.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
+@Transactional
 public class AccountServiceImpl implements AccountService {
     @Autowired
     AccountRepository accountRepository;
@@ -19,13 +24,17 @@ public class AccountServiceImpl implements AccountService {
     PasswordEncoder bcryptEncoder;
 
     @Override
-    public List<AccountDTO> findAll() {
-        List<Account> accounts = accountRepository.findAll();
+    public HashMap<String, Object> findAll(Pageable pageable) {
+        Page<Account> accounts = accountRepository.findAll(pageable);
         List<AccountDTO> accountDTOS = new ArrayList<>();
-        for (Account account : accounts) {
-            accountDTOS.add(new AccountDTO(account));
+        for (Account supplier : accounts) {
+            accountDTOS.add(new AccountDTO(supplier));
         }
-        return accountDTOS;
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("data", accountDTOS);
+        map.put("totalElement", accounts.getTotalElements());
+        map.put("totalPage", accounts.getTotalPages());
+        return map;
     }
 
     @Override

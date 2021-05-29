@@ -5,9 +5,12 @@ import com.gasstation.managementsystem.model.dto.TankDTO;
 import com.gasstation.managementsystem.repository.TankRepository;
 import com.gasstation.managementsystem.service.TankService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -16,13 +19,17 @@ public class TankServiceImpl implements TankService {
     TankRepository tankRepository;
 
     @Override
-    public List<TankDTO> findAll() {
-        List<Tank> tanks = tankRepository.findAll();
-        List<TankDTO> tankDTOS = new ArrayList<>();
-        for (Tank tank : tanks) {
-            tankDTOS.add(new TankDTO(tank));
+    public HashMap<String, Object> findAll(Pageable pageable) {
+        Page<Tank> tanks = tankRepository.findAll(pageable);
+        List<TankDTO> supplierDTOS = new ArrayList<>();
+        for (Tank supplier : tanks) {
+            supplierDTOS.add(new TankDTO(supplier));
         }
-        return tankDTOS;
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("data", supplierDTOS);
+        map.put("totalElement", tanks.getTotalElements());
+        map.put("totalPage", tanks.getTotalPages());
+        return map;
     }
 
     @Override

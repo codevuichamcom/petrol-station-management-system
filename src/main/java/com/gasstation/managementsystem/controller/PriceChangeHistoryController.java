@@ -15,39 +15,39 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/api/v1")
 @CrossOrigin
-@Tag(name = "PriceChangeHistory", description = "API for PriceChangeHistory")
+@Tag(name = "Price Change History", description = "API for PriceChangeHistory")
 public class PriceChangeHistoryController {
     @Autowired
     PriceChangeHistoryService priceChangeHistoryService;
 
     @Operation(summary = "View All PriceChangeHistory")
-    @GetMapping("/PriceChangeHistory")
+    @GetMapping("/price-change-history")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
                                           @RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize) {
         return priceChangeHistoryService.findAll(PageRequest.of(pageIndex - 1, pageSize));
     }
 
     @Operation(summary = "Find priceChangeHistory by id")
-    @GetMapping("/PriceChangeHistory/{id}")
+    @GetMapping("/price-change-history/{id}")
     public PriceChangeHistoryDTO getOne(@PathVariable(name = "id") Integer id) {
         return priceChangeHistoryService.findById(id);
     }
 
     @Operation(summary = "Create new priceChangeHistory")
-    @PostMapping("/PriceChangeHistory")
+    @PostMapping("/price-change-history")
     public PriceChangeHistoryDTO create(@Valid @RequestBody PriceChangeHistory priceChangeHistory) {
         return priceChangeHistoryService.save(priceChangeHistory);
     }
 
     @Operation(summary = "Update priceChangeHistory by id")
-    @PutMapping("/PriceChangeHistory/{id}")
+    @PutMapping("/price-change-history/{id}")
     public PriceChangeHistoryDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody PriceChangeHistory priceChangeHistory) {
         priceChangeHistory.setId(id);
         return priceChangeHistoryService.save(priceChangeHistory);
     }
 
     @Operation(summary = "Delete priceChangeHistory by id")
-    @DeleteMapping("/PriceChangeHistory/{id}")
+    @DeleteMapping("/price-change-history/{id}")
     public PriceChangeHistoryDTO delete(@PathVariable(name = "id") Integer id) {
         return priceChangeHistoryService.delete(id);
     }

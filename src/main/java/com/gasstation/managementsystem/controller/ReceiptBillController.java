@@ -21,33 +21,33 @@ public class ReceiptBillController {
     ReceiptBillService ReceiptBillService;
 
     @Operation(summary = "View All ReceiptBill")
-    @GetMapping("/ReceiptBills")
+    @GetMapping("/receipt-bills")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
                                           @RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize) {
         return ReceiptBillService.findAll(PageRequest.of(pageIndex - 1, pageSize));
     }
 
     @Operation(summary = "Find ReceiptBill by id")
-    @GetMapping("/ReceiptBills/{id}")
+    @GetMapping("/receipt-bills/{id}")
     public ReceiptBillDTO getOne(@PathVariable(name = "id") Integer id) {
         return ReceiptBillService.findById(id);
     }
 
     @Operation(summary = "Create new ReceiptBill")
-    @PostMapping("/ReceiptBills")
+    @PostMapping("/rreceipt-bills")
     public ReceiptBillDTO create(@Valid @RequestBody ReceiptBill receiptBill) {
         return ReceiptBillService.save(receiptBill);
     }
 
     @Operation(summary = "Update ReceiptBill by id")
-    @PutMapping("/ReceiptBills/{id}")
+    @PutMapping("/receipt-bills/{id}")
     public ReceiptBillDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody ReceiptBill receiptBill) {
         receiptBill.setId(id);
         return ReceiptBillService.save(receiptBill);
     }
 
     @Operation(summary = "Delete ReceiptBill by id")
-    @DeleteMapping("/ReceiptBills/{id}")
+    @DeleteMapping("/receipt-bills/{id}")
     public ReceiptBillDTO delete(@PathVariable(name = "id") Integer id) {
         return ReceiptBillService.delete(id);
     }

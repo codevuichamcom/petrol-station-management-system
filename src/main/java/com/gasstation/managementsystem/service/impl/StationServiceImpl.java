@@ -1,7 +1,9 @@
 package com.gasstation.managementsystem.service.impl;
 
+import com.gasstation.managementsystem.entity.Account;
 import com.gasstation.managementsystem.entity.Station;
 import com.gasstation.managementsystem.model.dto.StationDTO;
+import com.gasstation.managementsystem.repository.AccountRepository;
 import com.gasstation.managementsystem.repository.StationRepository;
 import com.gasstation.managementsystem.service.StationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,10 +20,13 @@ import java.util.List;
 public class StationServiceImpl implements StationService {
     @Autowired
     StationRepository stationRepository;
+    @Autowired
+    AccountRepository accountRepository;
 
     @Override
-    public HashMap<String, Object> findAll(Pageable pageable) {
-        Page<Station> stations = stationRepository.findAll(pageable);
+    public HashMap<String, Object> findAll(Pageable pageable,Principal principal) {
+        Account account =accountRepository.findByUsername(principal.getName());
+        Page<Station> stations = stationRepository.findByOwnerId(account.getUserInfo().getId(),pageable);
         List<StationDTO> stationDTOS = new ArrayList<>();
         for (Station station : stations) {
             stationDTOS.add(new StationDTO(station));

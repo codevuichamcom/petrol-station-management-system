@@ -16,40 +16,40 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/api/v1")
 @CrossOrigin
-@Tag(name = "PumpCodeCode", description = "API for PumpCodeCode")
+@Tag(name = "Pump Code", description = "API for PumpCodeCode")
 
 public class PumpCodeController {
     @Autowired
     PumpCodeService PumpCodeService;
 
     @Operation(summary = "View All PumpCode")
-    @GetMapping("/PumpCodes")
+    @GetMapping("/pump-codes")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
                                           @RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize) {
         return PumpCodeService.findAll(PageRequest.of(pageIndex - 1, pageSize));
     }
 
     @Operation(summary = "Find PumpCode by id")
-    @GetMapping("/PumpCodes/{id}")
+    @GetMapping("/pump-codes/{id}")
     public PumpCodeDTO getOne(@PathVariable(name = "id") Integer id) {
         return PumpCodeService.findById(id);
     }
 
     @Operation(summary = "Create new PumpCode")
-    @PostMapping("/PumpCodes")
+    @PostMapping("/pump-codes")
     public PumpCodeDTO create(@Valid @RequestBody PumpCode pumpCode) {
         return PumpCodeService.save(pumpCode);
     }
 
     @Operation(summary = "Update PumpCode by id")
-    @PutMapping("/PumpCodes/{id}")
+    @PutMapping("/pump-codes/{id}")
     public PumpCodeDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody PumpCode pumpCode) {
         pumpCode.setId(id);
         return PumpCodeService.save(pumpCode);
     }
 
     @Operation(summary = "Delete PumpCode by id")
-    @DeleteMapping("/PumpCodes/{id}")
+    @DeleteMapping("/pump-codes/{id}")
     public PumpCodeDTO delete(@PathVariable(name = "id") Integer id) {
         return PumpCodeService.delete(id);
     }

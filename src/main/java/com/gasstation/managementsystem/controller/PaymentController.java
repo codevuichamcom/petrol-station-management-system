@@ -22,33 +22,33 @@ public class PaymentController {
     PaymentService PaymentService;
 
     @Operation(summary = "View All Payment")
-    @GetMapping("/Payments")
+    @GetMapping("/payments")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
                                           @RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize) {
         return PaymentService.findAll(PageRequest.of(pageIndex - 1, pageSize));
     }
 
     @Operation(summary = "Find Payment by id")
-    @GetMapping("/Payments/{id}")
+    @GetMapping("/payments/{id}")
     public PaymentDTO getOne(@PathVariable(name = "id") Integer id) {
         return PaymentService.findById(id);
     }
 
     @Operation(summary = "Create new Payment")
-    @PostMapping("/Payments")
+    @PostMapping("/payments")
     public PaymentDTO create(@Valid @RequestBody Payment payment) {
         return PaymentService.save(payment);
     }
 
     @Operation(summary = "Update Payment by id")
-    @PutMapping("/Payments/{id}")
+    @PutMapping("/payments/{id}")
     public PaymentDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody Payment payment) {
         payment.setId(id);
         return PaymentService.save(payment);
     }
 
     @Operation(summary = "Delete Payment by id")
-    @DeleteMapping("/Payments/{id}")
+    @DeleteMapping("/payments/{id}")
     public PaymentDTO delete(@PathVariable(name = "id") Integer id) {
         return PaymentService.delete(id);
     }

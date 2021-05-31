@@ -60,4 +60,11 @@ public class UserController {
         return userService.delete(id);
     }
 
+    @Operation(summary = "View profile of user logined")
+    @GetMapping("/profile")
+    public UserDTO profile(Principal principal) {
+        AccountDTO accountDTO = accountService.findByUsername(principal.getName());
+        UserDTO userDTO = accountDTO.getUserInfo();
+        return userDTO;
+    }
 }

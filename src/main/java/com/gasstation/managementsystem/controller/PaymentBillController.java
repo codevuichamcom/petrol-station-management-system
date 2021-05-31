@@ -21,33 +21,33 @@ public class PaymentBillController {
     PaymentBillService PaymentBillService;
 
     @Operation(summary = "View All PaymentBill")
-    @GetMapping("/PaymentBills")
+    @GetMapping("/payment-bills")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
                                           @RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize) {
         return PaymentBillService.findAll(PageRequest.of(pageIndex - 1, pageSize));
     }
 
     @Operation(summary = "Find PaymentBill by id")
-    @GetMapping("/PaymentBills/{id}")
+    @GetMapping("/payment-bills/{id}")
     public PaymentBillDTO getOne(@PathVariable(name = "id") Integer id) {
         return PaymentBillService.findById(id);
     }
 
     @Operation(summary = "Create new PaymentBill")
-    @PostMapping("/PaymentBills")
+    @PostMapping("/payment-bills")
     public PaymentBillDTO create(@Valid @RequestBody PaymentBill paymentBill) {
         return PaymentBillService.save(paymentBill);
     }
 
     @Operation(summary = "Update PaymentBill by id")
-    @PutMapping("/PaymentBills/{id}")
+    @PutMapping("/payment-bills/{id}")
     public PaymentBillDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody PaymentBill paymentBill) {
         paymentBill.setId(id);
         return PaymentBillService.save(paymentBill);
     }
 
     @Operation(summary = "Delete PaymentBill by id")
-    @DeleteMapping("/PaymentBills/{id}")
+    @DeleteMapping("/payment-bills/{id}")
     public PaymentBillDTO delete(@PathVariable(name = "id") Integer id) {
         return PaymentBillService.delete(id);
     }

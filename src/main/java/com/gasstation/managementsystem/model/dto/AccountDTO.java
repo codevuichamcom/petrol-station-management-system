@@ -2,6 +2,7 @@ package com.gasstation.managementsystem.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gasstation.managementsystem.entity.Account;
+import com.gasstation.managementsystem.entity.User;
 import lombok.*;
 
 @AllArgsConstructor
@@ -15,7 +16,6 @@ public class AccountDTO {
     private String username;
     @JsonIgnore
     private String password;
-    @JsonIgnore
     private UserDTO userInfo;
 
     public AccountDTO(Account account) {

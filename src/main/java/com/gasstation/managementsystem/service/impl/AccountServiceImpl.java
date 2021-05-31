@@ -1,7 +1,10 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.Account;
+import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.model.dto.AccountDTO;
+import com.gasstation.managementsystem.model.dto.UserDTO;
+import com.gasstation.managementsystem.model.dto.UserTypeDTO;
 import com.gasstation.managementsystem.repository.AccountRepository;
 import com.gasstation.managementsystem.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +30,15 @@ public class AccountServiceImpl implements AccountService {
     public HashMap<String, Object> findAll(Pageable pageable) {
         Page<Account> accounts = accountRepository.findAll(pageable);
         List<AccountDTO> accountDTOS = new ArrayList<>();
-        for (Account supplier : accounts) {
-            accountDTOS.add(new AccountDTO(supplier));
+        for (Account account : accounts) {
+            AccountDTO accountDTO = new AccountDTO(account);
+            User user = account.getUserInfo();
+            UserDTO userDTO = UserDTO.builder()
+                    .id(user.getId())
+                    .name(user.getName())
+                    .userType(new UserTypeDTO(user.getUserType())).build();
+            accountDTO.setUserInfo(userDTO);
+            accountDTOS.add(accountDTO);
         }
         HashMap<String, Object> map = new HashMap<>();
         map.put("data", accountDTOS);

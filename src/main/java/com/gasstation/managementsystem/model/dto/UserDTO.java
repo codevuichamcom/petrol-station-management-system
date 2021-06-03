@@ -12,28 +12,26 @@ import java.sql.Date;
 @Builder
 
 public class UserDTO {
-    private Integer id;
+    private int id;
     private String identityCardNumber;//số chứng minh nhân dân
     private String name;
-    private Boolean gender;
+    private boolean gender;
     private Date dateOfBirth;
     private String address;
     private String phone;
     private String email;
     private String note;
-    private Double cashLimit;
+    private double cashLimit = 0;
     private Date limitSetDate;
     private UserTypeDTO userType;
     private AccountDTO account;
 
     public UserDTO(User user) {
         if (user != null) {
-            if (user.getId() != null) {
-                this.id = user.getId();
-            }
+            this.id = user.getId();
             this.identityCardNumber = user.getIdentityCardNumber();
             this.name = user.getName();
-            this.gender = user.getGender();
+            this.gender = user.isGender();
             this.dateOfBirth = user.getDateOfBirth();
             this.address = user.getAddress();
             this.phone = user.getPhone();

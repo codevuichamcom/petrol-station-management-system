@@ -1,6 +1,5 @@
 package com.gasstation.managementsystem.entity;
 
-import com.gasstation.managementsystem.model.dto.AccountDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,7 +14,7 @@ import javax.persistence.*;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
     @Column(unique = true, nullable = false)
     private String username;
     private String password;

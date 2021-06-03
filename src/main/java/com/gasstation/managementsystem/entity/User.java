@@ -17,16 +17,16 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
     private String identityCardNumber;//số chứng minh nhân dân
     private String name;
-    private Boolean gender;
+    private boolean gender = false;
     private Date dateOfBirth;
     private String address;
     private String phone;
     private String email;
     private String note;
-    private Double cashLimit;
+    private double cashLimit = 0;
     private Date limitSetDate;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

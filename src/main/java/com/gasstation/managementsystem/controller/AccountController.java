@@ -30,7 +30,7 @@ public class AccountController {
     }
 
     @Operation(summary = "Get Account by id")
-    @GetMapping("/account/{id}")
+    @GetMapping("/accounts/{id}")
     public AccountDTO getOne(@PathVariable(name = "id") Integer id) {
         return accountService.findById(id);
     }

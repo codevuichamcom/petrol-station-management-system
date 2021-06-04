@@ -53,13 +53,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO save(User user) {
-        if(user.getUserType()!=null){
+        if (user.getUserType() != null) {
             UserType userType = userTypeRepository.findById(user.getUserType().getId()).get();
             user.setUserType(userType);
         }
         user = userRepository.save(user);
         Account account = user.getAccount();
-        if(account!=null){
+        if (account != null) {
             account.setUserInfo(user);
             account.setPassword(bcryptEncoder.encode(account.getPassword()));
             accountRepository.save(account);
@@ -80,5 +80,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findByUserName(String username) {
         return new UserDTO(userRepository.findByUsername(username));
+    }
+
+    @Override
+    public List<UserDTO> findByUserTypeId(int typeId) {
+        List<User> users = userRepository.findByUserTypeId(typeId);
+        List<UserDTO> userDTOS = new ArrayList<>();
+        for (User user : users) {
+            userDTOS.add(new UserDTO(user));
+        }
+        return userDTOS;
     }
 }

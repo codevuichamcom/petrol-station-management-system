@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,18 +33,30 @@ public class UserServiceImpl implements UserService {
     @Autowired
     PasswordEncoder bcryptEncoder;
 
-    @Override
-    public HashMap<String, Object> findAll(Pageable pageable) {
-        Page<User> users = userRepository.findAll(pageable);
+    private HashMap<String, Object> listUserToMap(List<User> users) {
         List<UserDTO> userDTOS = new ArrayList<>();
         for (User user : users) {
             userDTOS.add(new UserDTO(user));
         }
         HashMap<String, Object> map = new HashMap<>();
         map.put("data", userDTOS);
+        return map;
+    }
+
+
+    @Override
+    public HashMap<String, Object> findAll(Pageable pageable) {
+        Page<User> users = userRepository.findAll(pageable);
+        HashMap<String, Object> map = listUserToMap(users.getContent());
         map.put("totalElement", users.getTotalElements());
         map.put("totalPage", users.getTotalPages());
         return map;
+    }
+
+    @Override
+    public HashMap<String, Object> findAll() {
+        List<User> users = userRepository.findAll();
+        return listUserToMap(users);
     }
 
     @Override
@@ -83,12 +96,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> findByUserTypeId(int typeId) {
+    public HashMap<String, Object> findByUserTypeId(int typeId) {
         List<User> users = userRepository.findByUserTypeId(typeId);
-        List<UserDTO> userDTOS = new ArrayList<>();
-        for (User user : users) {
-            userDTOS.add(new UserDTO(user));
-        }
-        return userDTOS;
+        return listUserToMap(users);
     }
 }

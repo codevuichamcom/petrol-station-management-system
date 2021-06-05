@@ -23,19 +23,30 @@ public class StationServiceImpl implements StationService {
     @Autowired
     AccountRepository accountRepository;
 
-    @Override
-    public HashMap<String, Object> findAll(Pageable pageable,Principal principal) {
-        Account account =accountRepository.findByUsername(principal.getName());
-        Page<Station> stations = stationRepository.findByOwnerId(account.getUserInfo().getId(),pageable);
+    private HashMap<String,Object> listStationToMap(List<Station> stations){
         List<StationDTO> stationDTOS = new ArrayList<>();
         for (Station station : stations) {
             stationDTOS.add(new StationDTO(station));
         }
         HashMap<String, Object> map = new HashMap<>();
         map.put("data", stationDTOS);
+        return map;
+    }
+    @Override
+    public HashMap<String, Object> findAll(Pageable pageable,Principal principal) {
+        Account account =accountRepository.findByUsername(principal.getName());
+        Page<Station> stations = stationRepository.findByOwnerId(account.getUserInfo().getId(),pageable);
+        HashMap<String, Object> map = listStationToMap(stations.getContent());
         map.put("totalElement", stations.getTotalElements());
         map.put("totalPage", stations.getTotalPages());
         return map;
+    }
+
+    @Override
+    public HashMap<String, Object> findAll(Principal principal) {
+        Account account =accountRepository.findByUsername(principal.getName());
+        List<Station> stations =  stationRepository.findByOwnerId(account.getUserInfo().getId());
+        return listStationToMap(stations);
     }
 
     @Override

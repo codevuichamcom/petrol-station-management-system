@@ -11,6 +11,8 @@ import java.util.List;
 public interface StationService {
     public HashMap<String,Object> findAll(Pageable pageable, Principal principal);
 
+    public HashMap<String, Object> findAll(Principal principal);
+
     public StationDTO findById(int id);
 
     public StationDTO save(Station station);

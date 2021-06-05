@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 
 @RequestMapping("/api/v1")
 @RestController
@@ -30,13 +29,13 @@ public class UserController {
     @Operation(summary = "View All user")
     @GetMapping("/users")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
-                                          @RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize,
+                                          @RequestParam(name = "pageSize", required = false) Integer pageSize,
                                           @RequestParam(name = "userTypeId", required = false) Integer userTypeId) {
         if (userTypeId != null) {
-            HashMap<String,Object> map = new HashMap<>();
-            List<UserDTO> userDTOS =  userService.findByUserTypeId(userTypeId);
-            map.put("data",userDTOS);
-            return map;
+            return userService.findByUserTypeId(userTypeId);
+        }
+        if (pageSize == null) {
+            return userService.findAll();
         }
         return userService.findAll(PageRequest.of(pageIndex - 1, pageSize));
     }

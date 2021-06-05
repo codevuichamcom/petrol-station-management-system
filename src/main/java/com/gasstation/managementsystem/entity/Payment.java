@@ -16,8 +16,8 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private double amount;
-    private double discounts;//chiết khấu
+    private double amount = 0;
+    private double discounts = 0;//chiết khấu
     private String note;
 
     @ManyToOne

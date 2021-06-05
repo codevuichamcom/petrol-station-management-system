@@ -18,7 +18,7 @@ public class PriceChangeHistory {
     private int id;
 
     private Date date;
-    private double price;
+    private double price = 0;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

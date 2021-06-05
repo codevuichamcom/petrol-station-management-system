@@ -19,8 +19,8 @@ public class PumpCode {
 
     private Time time;
     private Time duration;
-    private double numberOfLiters;
-    private double pricePerLiter;
+    private double numberOfLiters = 0;
+    private double pricePerLiter = 0;
 
     @ManyToOne
     @JoinColumn(name = "pump_id")

@@ -21,7 +21,7 @@ public class PaymentBill {
     private String receiver;
     private String address;
     private String reason;
-    private double amount;
+    private double amount = 0;
     private String amountInWords;
 
     @ManyToOne

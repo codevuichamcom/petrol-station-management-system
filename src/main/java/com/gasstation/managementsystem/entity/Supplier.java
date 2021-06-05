@@ -18,7 +18,7 @@ public class Supplier {
     private int id;
 
     private String name;
-    private double debtBeginPeriod;//công nợ đầu kì
+    private double debtBeginPeriod = 0;//công nợ đầu kì
     private String phone;
     private String address;
     private String note;

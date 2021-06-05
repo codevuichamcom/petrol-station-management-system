@@ -20,9 +20,9 @@ public class Card {
     private String driverPhone;
     private String driverName;
     private String licensePalates;
-    private double initialDebt;
-    private double availableBalance;
-    private double outstandingBalance;
+    private double initialDebt = 0;
+    private double availableBalance = 0;
+    private double outstandingBalance = 0;
     private Date limitSetDate;
     private Date issuedDate;
     private Date activeDate;

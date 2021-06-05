@@ -16,8 +16,8 @@ public class Tank {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private double volume;
-    private double remain;
+    private double volume = 0;
+    private double remain = 0;
 
     @OneToMany(mappedBy = "tank", cascade = CascadeType.ALL)
     private List<FuelImportBill> fuelImportBillList; //Danh sách phiếu nhập của bể này

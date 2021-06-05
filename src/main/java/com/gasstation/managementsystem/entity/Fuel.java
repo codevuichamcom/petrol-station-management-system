@@ -18,7 +18,7 @@ public class Fuel {
 
     private String name;
     private String unit;
-    private double price;
+    private double price = 0;
 
     @OneToOne
     @JoinColumn(name = "fuel_category_id")//join với fuel_category_tbl

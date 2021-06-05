@@ -19,10 +19,10 @@ public class FuelImportBill {
 
     private String name;
     private Date date;
-    private double numberOfLiters;
-    private double pricePerLiter;
+    private double numberOfLiters = 0;
+    private double pricePerLiter = 0;
     private String note;
-    private double vatPercent;
+    private double vatPercent = 0;
 
     @ManyToOne
     @JoinColumn(name = "supplier_id")//join với supplier_tbl

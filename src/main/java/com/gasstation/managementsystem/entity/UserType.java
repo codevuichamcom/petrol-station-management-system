@@ -14,6 +14,10 @@ import java.util.List;
 @Setter
 @Builder
 public class UserType {
+    public static final int ADMIN = 1;
+    public static final int OWNER = 2;
+    public static final int EMPLOYEE = 3;
+    public static final int CUSTOMER = 4;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

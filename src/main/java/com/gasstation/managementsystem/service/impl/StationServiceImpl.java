@@ -3,6 +3,7 @@ package com.gasstation.managementsystem.service.impl;
 import com.gasstation.managementsystem.entity.Account;
 import com.gasstation.managementsystem.entity.Station;
 import com.gasstation.managementsystem.entity.User;
+import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.model.dto.StationDTO;
 import com.gasstation.managementsystem.repository.AccountRepository;
 import com.gasstation.managementsystem.repository.StationRepository;
@@ -47,8 +48,17 @@ public class StationServiceImpl implements StationService {
 
     @Override
     public HashMap<String, Object> findAll(Principal principal) {
-        Account account =accountRepository.findByUsername(principal.getName());
-        List<Station> stations =  stationRepository.findByOwnerId(account.getUserInfo().getId());
+        Account account = accountRepository.findByUsername(principal.getName());
+        List<Station> stations = new ArrayList<>();
+        int userTypeId = account.getUserInfo().getUserType().getId();
+        switch (userTypeId) {
+            case UserType.ADMIN:
+                stations = stationRepository.findAll();
+                break;
+            case UserType.OWNER:
+                stations = stationRepository.findByOwnerId(account.getUserInfo().getId());
+                break;
+        }
         return listStationToMap(stations);
     }
 

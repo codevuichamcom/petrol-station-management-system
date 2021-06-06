@@ -2,10 +2,13 @@ package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.Account;
 import com.gasstation.managementsystem.entity.Station;
+import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.model.dto.StationDTO;
 import com.gasstation.managementsystem.repository.AccountRepository;
 import com.gasstation.managementsystem.repository.StationRepository;
+import com.gasstation.managementsystem.repository.UserRepository;
 import com.gasstation.managementsystem.service.StationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,11 +20,11 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class StationServiceImpl implements StationService {
-    @Autowired
-    StationRepository stationRepository;
-    @Autowired
-    AccountRepository accountRepository;
+    private final StationRepository stationRepository;
+    private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
 
     private HashMap<String,Object> listStationToMap(List<Station> stations){
         List<StationDTO> stationDTOS = new ArrayList<>();
@@ -56,7 +59,9 @@ public class StationServiceImpl implements StationService {
 
     @Override
     public StationDTO save(Station station) {
-        stationRepository.save(station);
+        User owner = userRepository.getById(station.getOwner().getId());
+        station.setOwner(owner);
+        station = stationRepository.save(station);
         return new StationDTO(station);
     }
 

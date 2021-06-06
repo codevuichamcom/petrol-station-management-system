@@ -25,6 +25,8 @@ public class StationDTO {
         this.address = station.getAddress();
         this.ownerId = station.getOwner().getId();
         this.ownerName = station.getOwner().getName();
-        this.numberOfEmployee = Optional.ofNullable(station.getEmployeeList().size()).orElse(0);
+        if(station.getEmployeeList()!=null){
+            this.numberOfEmployee = station.getEmployeeList().size();
+        }
     }
 }

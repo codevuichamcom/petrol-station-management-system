@@ -3,7 +3,8 @@ package com.gasstation.managementsystem.model.dto;
 import com.gasstation.managementsystem.entity.User;
 import lombok.*;
 
-import java.sql.Date;
+import java.util.Date;
+
 
 @AllArgsConstructor
 @NoArgsConstructor

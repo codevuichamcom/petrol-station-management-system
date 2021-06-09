@@ -18,7 +18,9 @@ public class AccountMapper {
                 .password(accountDTOUpdate.getPassword()).build();
     }
     public static AccountDTO toAccountDTO(Account account){
+        if(account==null) return null;
             return AccountDTO.builder()
+                    .id(account.getId())
                     .username(account.getUsername())
                     .name(account.getUserInfo().getName())
                     .userType(account.getUserInfo().getUserType().getType()).build();

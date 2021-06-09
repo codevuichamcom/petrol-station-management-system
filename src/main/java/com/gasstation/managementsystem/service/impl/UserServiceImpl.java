@@ -69,7 +69,9 @@ public class UserServiceImpl implements UserService {
         User user = UserMapper.toUser(userDTOCreate);
         UserType userType = userTypeRepository.findById(userDTOCreate.getUserTypeId()).get();
         user.setUserType(userType);
-        user.setAccount(AccountMapper.toAccount(userDTOCreate.getAccount()));
+        if(user.getAccount()!=null){
+            user.setAccount(AccountMapper.toAccount(userDTOCreate.getAccount()));
+        }
         user = userRepository.save(user);
         Account account = user.getAccount();
         if (account != null) {
@@ -81,11 +83,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO update(int id, UserDTOUpdate userDTOUpdate) {
-        User user = UserMapper.toUser(userDTOUpdate);
-        user.setId(id);
-        UserType userType = userTypeRepository.findById(userDTOUpdate.getUserTypeId()).get();
-        user.setUserType(userType);
-        user.setAccount(AccountMapper.toAccount(userDTOUpdate.getAccount()));
+        User user = userRepository.findById(id).get();
+        UserMapper.copyToUser(user, userDTOUpdate);
+        if (userDTOUpdate.getUserTypeId() != null) {
+            UserType userType = userTypeRepository.findById(userDTOUpdate.getUserTypeId()).get();
+            user.setUserType(userType);
+        }
+        if (userDTOUpdate.getAccount() != null) {
+            user.setAccount(AccountMapper.toAccount(userDTOUpdate.getAccount()));
+        }
         user = userRepository.save(user);
         return UserMapper.toUserDTO(user);
     }

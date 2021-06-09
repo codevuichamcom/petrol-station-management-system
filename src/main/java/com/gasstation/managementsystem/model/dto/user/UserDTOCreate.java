@@ -31,13 +31,17 @@ public class UserDTOCreate {
     @Past(message = "Must be in past")
     private Date dateOfBirth;
 
+    @Schema(description = "Hà Nội")
+    @NotBlank(message = "Address is mandatory")
     private String address;
 
+    @NotBlank(message = "Phone is mandatory")
     @Pattern(regexp = "^[0-9]+$", message = "Phone just include digit")
     private String phone;
 
+    @NotBlank(message = "Email is mandatory")
     @Email(message = "Field must be email")
-    @Schema(description = "Field must be email", example = "quan@gmail.com")
+    @Schema(example = "quan@gmail.com")
     private String email;
 
     private String note;
@@ -45,7 +49,7 @@ public class UserDTOCreate {
     private double cashLimit = 0;
 
     private Date limitSetDate = new Date();
-
+    @Schema(description = "User type is positive integer and required")
     @Positive(message = "User type id is positive integer")
     private int userTypeId;
 

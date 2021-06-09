@@ -22,11 +22,5 @@ public class Account {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User userInfo;
-
-
-//    public Account(AccountDTO accountDTO) {
-//        this.id = accountDTO.getId();
-//        this.username = accountDTO.getUsername();
-//        this.password = accountDTO.getPassword();
-//    }
+    
 }

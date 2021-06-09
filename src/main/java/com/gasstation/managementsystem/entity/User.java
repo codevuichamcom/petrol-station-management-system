@@ -20,36 +20,27 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Schema(example = "123456789",description = "Identity card number is composed of 9 or 12 digits")
-    @NotBlank(message = "Identity card number is mandatory")
-    @Pattern(regexp = "^[0-9]{9}|[0-9]{12}$", message = "Identity card number is composed of 9 or 12 digits")
+    @Column(unique = true, nullable = false)
     private String identityCardNumber;//số chứng minh nhân dân
 
-    @Schema(example = "Lê Hồng Quân")
-    @NotBlank(message = "Name is mandatory")
     private String name;
 
-    private boolean gender = false;
+    private boolean gender;
 
-    @Schema(description = "Must be in past")
-    @Past(message = "Must be in past")
     private Date dateOfBirth;
 
     private String address;
 
-    @Pattern(regexp = "^[0-9]+$", message = "Phone just include digit")
+    @Column(unique = true)
     private String phone;
 
-    @Email(message = "Field must be email")
-    @Schema(description = "Field must be email", example = "quan@gmail.com")
+    @Column(unique = true)
     private String email;
 
     private String note;
 
-    private double cashLimit = 0;
+    private double cashLimit;
 
-    @Schema(description = "Must be present in future")
-    @FutureOrPresent(message = "Must be present in future")
     private Date limitSetDate;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

@@ -1,7 +1,8 @@
 package com.gasstation.managementsystem.service;
 
-import com.gasstation.managementsystem.entity.User;
-import com.gasstation.managementsystem.model.dto.UserDTO;
+import com.gasstation.managementsystem.model.dto.user.UserDTO;
+import com.gasstation.managementsystem.model.dto.user.UserDTOCreate;
+import com.gasstation.managementsystem.model.dto.user.UserDTOUpdate;
 import org.springframework.data.domain.Pageable;
 
 import java.util.HashMap;
@@ -13,7 +14,9 @@ public interface UserService {
 
     public UserDTO findById(int id);
 
-    public UserDTO save(User user);
+    public UserDTO create(UserDTOCreate userDTOCreate);
+
+    public UserDTO update(int id, UserDTOUpdate userDTOUpdate);
 
     public UserDTO delete(int id);
 

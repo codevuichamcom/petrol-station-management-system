@@ -1,7 +1,9 @@
 package com.gasstation.managementsystem.controller;
 
 import com.gasstation.managementsystem.entity.User;
-import com.gasstation.managementsystem.model.dto.UserDTO;
+import com.gasstation.managementsystem.model.dto.user.UserDTO;
+import com.gasstation.managementsystem.model.dto.user.UserDTOCreate;
+import com.gasstation.managementsystem.model.dto.user.UserDTOUpdate;
 import com.gasstation.managementsystem.service.AccountService;
 import com.gasstation.managementsystem.service.UserService;
 import com.gasstation.managementsystem.service.UserTypeService;
@@ -48,15 +50,14 @@ public class UserController {
 
     @Operation(summary = "Create new user")
     @PostMapping("/users")
-    public UserDTO create(@Valid @RequestBody User user) {
-        return userService.save(user);
+    public UserDTO create(@Valid @RequestBody UserDTOCreate userDTOCreate) {
+        return userService.create(userDTOCreate);
     }
 
     @Operation(summary = "Update user by id")
     @PutMapping("/users/{id}")
-    public UserDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody User user) {
-        user.setId(id);
-        return userService.save(user);
+    public UserDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody UserDTOUpdate userDTOUpdate) {
+        return userService.update(id,userDTOUpdate);
     }
 
     @Operation(summary = "Delete user by id")

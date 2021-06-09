@@ -16,12 +16,12 @@ public class ApiExceptionHandler {
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage notExistException(Exception ex, WebRequest request) {
-        return new ErrorMessage(404, "Object is not exist");
+        return new ErrorMessage(404, "Object is not exist: "+ex.getMessage());
     }
 
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage duplicateException(Exception ex, WebRequest request) {
-        return new ErrorMessage(409, "Duplicate key in db");
+        return new ErrorMessage(409, "Duplicate key in db: "+ex.getMessage());
     }
 }

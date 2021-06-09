@@ -3,12 +3,16 @@ package com.gasstation.managementsystem.service.impl;
 import com.gasstation.managementsystem.entity.Account;
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.entity.UserType;
-import com.gasstation.managementsystem.model.dto.UserDTO;
+import com.gasstation.managementsystem.model.dto.user.UserDTO;
+import com.gasstation.managementsystem.model.dto.user.UserDTOCreate;
+import com.gasstation.managementsystem.model.dto.user.UserDTOUpdate;
+import com.gasstation.managementsystem.model.mapper.AccountMapper;
+import com.gasstation.managementsystem.model.mapper.UserMapper;
 import com.gasstation.managementsystem.repository.AccountRepository;
 import com.gasstation.managementsystem.repository.UserRepository;
 import com.gasstation.managementsystem.repository.UserTypeRepository;
 import com.gasstation.managementsystem.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,27 +20,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    UserTypeRepository userTypeRepository;
-    @Autowired
-    AccountRepository accountRepository;
+    private final UserRepository userRepository;
+    private final UserTypeRepository userTypeRepository;
+    private final AccountRepository accountRepository;
 
-    @Autowired
-    PasswordEncoder bcryptEncoder;
+    private final PasswordEncoder bcryptEncoder;
 
     private HashMap<String, Object> listUserToMap(List<User> users) {
         List<UserDTO> userDTOS = new ArrayList<>();
         for (User user : users) {
-            userDTOS.add(new UserDTO(user));
+            userDTOS.add(UserMapper.toUserDTO(user));
         }
         HashMap<String, Object> map = new HashMap<>();
         map.put("data", userDTOS);
@@ -61,23 +61,33 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO findById(int id) {
-        return new UserDTO(userRepository.findById(id).get());
+        return UserMapper.toUserDTO(userRepository.findById(id).get());
     }
 
     @Override
-    public UserDTO save(User user) {
-        if (user.getUserType() != null) {
-            UserType userType = userTypeRepository.findById(user.getUserType().getId()).get();
-            user.setUserType(userType);
-        }
+    public UserDTO create(UserDTOCreate userDTOCreate) {
+        User user = UserMapper.toUser(userDTOCreate);
+        UserType userType = userTypeRepository.findById(userDTOCreate.getUserTypeId()).get();
+        user.setUserType(userType);
+        user.setAccount(AccountMapper.toAccount(userDTOCreate.getAccount()));
         user = userRepository.save(user);
         Account account = user.getAccount();
         if (account != null) {
             account.setUserInfo(user);
-            account.setPassword(bcryptEncoder.encode(account.getPassword()));
             accountRepository.save(account);
         }
-        return new UserDTO(user);
+        return UserMapper.toUserDTO(user);
+    }
+
+    @Override
+    public UserDTO update(int id, UserDTOUpdate userDTOUpdate) {
+        User user = UserMapper.toUser(userDTOUpdate);
+        user.setId(id);
+        UserType userType = userTypeRepository.findById(userDTOUpdate.getUserTypeId()).get();
+        user.setUserType(userType);
+        user.setAccount(AccountMapper.toAccount(userDTOUpdate.getAccount()));
+        user = userRepository.save(user);
+        return UserMapper.toUserDTO(user);
     }
 
     @Override
@@ -85,14 +95,14 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).get();
         if (user != null) {
             userRepository.delete(user);
-            return new UserDTO(user);
+            return UserMapper.toUserDTO(user);
         }
         return null;
     }
 
     @Override
     public UserDTO findByUserName(String username) {
-        return new UserDTO(userRepository.findByUsername(username));
+        return UserMapper.toUserDTO(userRepository.findByUsername(username));
     }
 
     @Override

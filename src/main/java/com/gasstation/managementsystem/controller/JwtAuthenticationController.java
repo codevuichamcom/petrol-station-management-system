@@ -2,8 +2,7 @@ package com.gasstation.managementsystem.controller;
 
 import com.gasstation.managementsystem.model.JwtRequest;
 import com.gasstation.managementsystem.model.JwtResponse;
-import com.gasstation.managementsystem.model.dto.AccountDTO;
-import com.gasstation.managementsystem.model.dto.UserDTO;
+import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.security.jwt.JwtTokenUtil;
 import com.gasstation.managementsystem.service.AccountService;
 import com.gasstation.managementsystem.service.UserService;

@@ -2,9 +2,8 @@ package com.gasstation.managementsystem.model.dto;
 
 import com.gasstation.managementsystem.entity.Station;
 import com.gasstation.managementsystem.entity.User;
+import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import lombok.*;
-
-import java.util.Optional;
 
 @AllArgsConstructor
 @NoArgsConstructor

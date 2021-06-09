@@ -43,6 +43,14 @@ public class UserServiceImpl implements UserService {
         return map;
     }
 
+    private void linkUserToAccount(User user){ //gắn account với user truyền vào
+        Account account = user.getAccount();
+        if (account != null) {
+            account.setUserInfo(user);
+            accountRepository.save(account);
+        }
+    }
+
 
     @Override
     public HashMap<String, Object> findAll(Pageable pageable) {
@@ -69,15 +77,11 @@ public class UserServiceImpl implements UserService {
         User user = UserMapper.toUser(userDTOCreate);
         UserType userType = userTypeRepository.findById(userDTOCreate.getUserTypeId()).get();
         user.setUserType(userType);
-        if(user.getAccount()!=null){
+        if(userDTOCreate.getAccount()!=null){
             user.setAccount(AccountMapper.toAccount(userDTOCreate.getAccount()));
         }
         user = userRepository.save(user);
-        Account account = user.getAccount();
-        if (account != null) {
-            account.setUserInfo(user);
-            accountRepository.save(account);
-        }
+        linkUserToAccount(user);
         return UserMapper.toUserDTO(user);
     }
 
@@ -89,10 +93,14 @@ public class UserServiceImpl implements UserService {
             UserType userType = userTypeRepository.findById(userDTOUpdate.getUserTypeId()).get();
             user.setUserType(userType);
         }
-        if (userDTOUpdate.getAccount() != null) {
+        if(userDTOUpdate.getAccount()!=null){
+            if(user.getAccount()!=null){
+                accountRepository.delete(user.getAccount());
+            }
             user.setAccount(AccountMapper.toAccount(userDTOUpdate.getAccount()));
         }
         user = userRepository.save(user);
+        linkUserToAccount(user);
         return UserMapper.toUserDTO(user);
     }
 

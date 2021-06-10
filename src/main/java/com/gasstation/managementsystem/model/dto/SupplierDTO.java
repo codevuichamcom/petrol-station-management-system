@@ -18,11 +18,11 @@ public class SupplierDTO {
     private String note;
 
     public SupplierDTO(Supplier supplier) {
-        this.id = supplier.getId();
-        this.name = supplier.getName();
-        this.debtBeginPeriod = supplier.getDebtBeginPeriod();
-        this.phone = supplier.getPhone();
-        this.address = supplier.getAddress();
-        this.note = supplier.getNote();
+//        this.id = supplier.getId();
+//        this.name = supplier.getName();
+//        this.debtBeginPeriod = supplier.getDebtBeginPeriod();
+//        this.phone = supplier.getPhone();
+//        this.address = supplier.getAddress();
+//        this.note = supplier.getNote();
     }
 }

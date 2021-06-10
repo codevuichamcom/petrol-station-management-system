@@ -3,7 +3,7 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Time;
+import java.util.Date;
 
 @Entity
 @Table(name = "pump_code_tbl")
@@ -17,9 +17,13 @@ public class PumpCode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private Time time;
-    private Time duration;
+    @Column(nullable = false)
+    private Date time = new Date();
+
+    @Column(nullable = false)
     private double numberOfLiters = 0;
+
+    @Column(nullable = false)
     private double pricePerLiter = 0;
 
     @ManyToOne

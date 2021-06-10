@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.service;
 
+import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTOCreate;
 import com.gasstation.managementsystem.model.dto.user.UserDTOUpdate;
@@ -14,9 +15,9 @@ public interface UserService {
 
     public UserDTO findById(int id);
 
-    public UserDTO create(UserDTOCreate userDTOCreate);
+    public UserDTO create(UserDTOCreate userDTOCreate) throws CustomDuplicateFieldException;
 
-    public UserDTO update(int id, UserDTOUpdate userDTOUpdate);
+    public UserDTO update(int id, UserDTOUpdate userDTOUpdate) throws CustomDuplicateFieldException;
 
     public UserDTO delete(int id);
 

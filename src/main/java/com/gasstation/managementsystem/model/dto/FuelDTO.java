@@ -15,9 +15,9 @@ public class FuelDTO {
     private double price;
 
     public FuelDTO(Fuel fuel) {
-        this.id = fuel.getId();
-        this.name = fuel.getName();
-        this.unit = fuel.getUnit();
-        this.price = fuel.getPrice();
+//        this.id = fuel.getId();
+//        this.name = fuel.getName();
+//        this.unit = fuel.getUnit();
+//        this.price = fuel.getPrice();
     }
 }

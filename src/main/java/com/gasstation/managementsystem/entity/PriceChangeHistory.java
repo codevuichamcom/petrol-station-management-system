@@ -3,7 +3,7 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "price_change_history_tbl")
@@ -17,7 +17,10 @@ public class PriceChangeHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private Date date;
+    @Column(nullable = false)
+    private Date date = new Date();
+
+    @Column(nullable = false)
     private double price = 0;
 
     @ManyToOne

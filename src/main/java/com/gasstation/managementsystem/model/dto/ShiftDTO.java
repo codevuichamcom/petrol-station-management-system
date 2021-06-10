@@ -17,8 +17,8 @@ public class ShiftDTO {
     private Time endTime;
 
     public ShiftDTO(Shift shift) {
-        this.id = shift.getId();
-        this.startTime = shift.getStartTime();
-        this.endTime = shift.getEndTime();
+//        this.id = shift.getId();
+//        this.startTime = shift.getStartTime();
+//        this.endTime = shift.getEndTime();
     }
 }

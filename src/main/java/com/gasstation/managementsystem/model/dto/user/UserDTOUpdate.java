@@ -51,7 +51,4 @@ public class UserDTOUpdate {
     @Positive(message = "User type id is positive integer")
     private Integer userTypeId;
 
-    private AccountDTOUpdate account;
-
-
 }

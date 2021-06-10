@@ -3,7 +3,7 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "fuel_import_bill_tbl")
@@ -17,11 +17,20 @@ public class FuelImportBill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(nullable = false)
     private String name;
-    private Date date;
+
+    @Column(nullable = false)
+    private Date date = new Date();
+
+    @Column(nullable = false)
     private double numberOfLiters = 0;
+
+    @Column(nullable = false)
     private double pricePerLiter = 0;
     private String note;
+
+    @Column(nullable = false)
     private double vatPercent = 0;
 
     @ManyToOne

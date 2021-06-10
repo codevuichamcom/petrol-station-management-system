@@ -27,16 +27,16 @@ public class CardDTO {
     private User userActive;
 
     public CardDTO(Card card) {
-        this.id = card.getId();
-        this.driverPhone = card.getDriverPhone();
-        this.driverName = card.getDriverPhone();
-        this.licensePalates = card.getLicensePalates();
-        this.availableBalance = card.getAvailableBalance();
-        this.outstandingBalance = card.getOutstandingBalance();
-        this.limitSetDate = card.getLimitSetDate();
-        this.issuedDate = card.getIssuedDate();
-        this.activeDate = card.getActiveDate();
-//        this.userCard = card.getUserCard();
-        this.userActive = card.getUserActive();
+//        this.id = card.getId();
+//        this.driverPhone = card.getDriverPhone();
+//        this.driverName = card.getDriverPhone();
+//        this.licensePalates = card.getLicensePalates();
+//        this.availableBalance = card.getAvailableBalance();
+//        this.outstandingBalance = card.getOutstandingBalance();
+//        this.limitSetDate = card.getLimitSetDate();
+//        this.issuedDate = card.getIssuedDate();
+//        this.activeDate = card.getActiveDate();
+////        this.userCard = card.getUserCard();
+//        this.userActive = card.getUserActive();
     }
 }

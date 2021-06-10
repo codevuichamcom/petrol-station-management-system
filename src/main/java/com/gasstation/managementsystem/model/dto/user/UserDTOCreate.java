@@ -25,13 +25,13 @@ public class UserDTOCreate {
     @NotBlank(message = "Name is mandatory")
     private String name;
 
-    private boolean gender = true;
+    private boolean gender = false;
 
     @Schema(description = "Must be in past")
     @Past(message = "Must be in past")
     private Date dateOfBirth;
 
-    @Schema(description = "Hà Nội")
+    @Schema(example = "Hà Nội")
     @NotBlank(message = "Address is mandatory")
     private String address;
 
@@ -39,7 +39,6 @@ public class UserDTOCreate {
     @Pattern(regexp = "^[0-9]+$", message = "Phone just include digit")
     private String phone;
 
-    @NotBlank(message = "Email is mandatory")
     @Email(message = "Field must be email")
     @Schema(example = "quan@gmail.com")
     private String email;

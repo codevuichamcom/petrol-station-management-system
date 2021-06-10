@@ -1,10 +1,8 @@
 package com.gasstation.managementsystem.entity;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import java.util.Date;
 import java.util.List;
 
@@ -23,15 +21,18 @@ public class User {
     @Column(unique = true, nullable = false)
     private String identityCardNumber;//số chứng minh nhân dân
 
+    @Column(nullable = false)
     private String name;
 
-    private boolean gender;
+    @Column(nullable = false)
+    private boolean gender = false;
 
     private Date dateOfBirth;
 
+    @Column(nullable = false)
     private String address;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String phone;
 
     @Column(unique = true)
@@ -39,9 +40,11 @@ public class User {
 
     private String note;
 
-    private double cashLimit;
+    @Column(nullable = false)
+    private double cashLimit = 0;
 
-    private Date limitSetDate;
+    @Column(nullable = false)
+    private Date limitSetDate = new Date();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PriceChangeHistory> priceChangeHistoryList;//Danh sách những giá do người dùng này đổi
@@ -80,19 +83,6 @@ public class User {
     @ManyToMany(mappedBy = "employeeList")
     private List<Station> stationListOfEmployee; //Danh sách các trạm của nhân viên này
 
-
-//    public User(UserDTO userDTO) {
-//        this.id = userDTO.getId();
-//        this.fullName = userDTO.getFullName();
-//        this.address = userDTO.getAddress();
-//        this.phone = userDTO.getPhone();
-//        this.email = userDTO.getEmail();
-//        this.note = userDTO.getNote();
-//        this.cashLimit = userDTO.getCashLimit();
-//        this.limitSetDate = userDTO.getLimitSetDate();
-//        this.account = userDTO.getAccount();
-//        this.cards = userDTO.getCards();
-//        this.cardsActive = userDTO.getCardsActive();
-//        this.station = userDTO.getStation();
-//    }
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<Debt> debtList;
 }

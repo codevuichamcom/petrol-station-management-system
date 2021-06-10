@@ -3,7 +3,7 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -17,14 +17,29 @@ public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(nullable = false, unique = true)
     private String driverPhone;
+
+    @Column(nullable = false)
     private String driverName;
+
+    @Column(nullable = false)
     private String licensePalates;
+
+    @Column(nullable = false)
     private double initialDebt = 0;
+    @Column(nullable = false)
     private double availableBalance = 0;
+    @Column(nullable = false)
     private double outstandingBalance = 0;
-    private Date limitSetDate;
+
+    @Column(nullable = false)
+    private Date limitSetDate = new Date();
+
+    @Column(nullable = false)
     private Date issuedDate;
+
     private Date activeDate;
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)

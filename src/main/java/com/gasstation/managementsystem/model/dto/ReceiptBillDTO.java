@@ -21,12 +21,12 @@ public class ReceiptBillDTO {
     private String amountInWords;
 
     public ReceiptBillDTO(ReceiptBill receiptBill) {
-        this.id = receiptBill.getId();
-        this.date = receiptBill.getDate();
-        this.submitter = receiptBill.getSubmitter();
-        this.address = receiptBill.getAddress();
-        this.reason = receiptBill.getReason();
-        this.amount = receiptBill.getAmount();
-        this.amountInWords = receiptBill.getAmountInWords();
+//        this.id = receiptBill.getId();
+//        this.date = receiptBill.getDate();
+//        this.submitter = receiptBill.getSubmitter();
+//        this.address = receiptBill.getAddress();
+//        this.reason = receiptBill.getReason();
+//        this.amount = receiptBill.getAmount();
+//        this.amountInWords = receiptBill.getAmountInWords();
     }
 }

@@ -17,6 +17,7 @@ public class Account {
     private int id;
     @Column(unique = true, nullable = false)
     private String username;
+    @Column(nullable = false)
     private String password;
 
     @OneToOne

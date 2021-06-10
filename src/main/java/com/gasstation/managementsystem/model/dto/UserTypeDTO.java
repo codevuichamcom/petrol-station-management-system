@@ -16,7 +16,7 @@ public class UserTypeDTO {
     private String type;
 
     public UserTypeDTO(UserType userType) {
-        this.id = userType.getId();
-        this.type = userType.getType();
+//        this.id = userType.getId();
+//        this.type = userType.getType();
     }
 }

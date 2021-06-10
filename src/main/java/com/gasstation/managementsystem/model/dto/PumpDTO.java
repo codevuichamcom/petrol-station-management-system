@@ -15,7 +15,7 @@ public class PumpDTO {
     private String note;
 
     public PumpDTO(Pump pump) {
-        this.id = pump.getId();
-        this.name = pump.getName();
+//        this.id = pump.getId();
+//        this.name = pump.getName();
     }
 }

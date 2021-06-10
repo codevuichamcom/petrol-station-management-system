@@ -6,36 +6,28 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "receipt_bill_tbl")
+@Table(name = "debt_tbl")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
-public class ReceiptBill {
+public class Debt {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     @Column(nullable = false)
-    private Date date = new Date();
-
-    @Column(nullable = false)
-    private String submitter;
-
-    private String address;
-    private String reason;
+    private Date time = new Date();
 
     @Column(nullable = false)
     private double amount = 0;
 
     @ManyToOne
-    @JoinColumn(name = "creator")
-    private User creator;// Hóa đơn này do ai tạo
+    @JoinColumn(name = "customer_id")
+    private User customer;
 
     @ManyToOne
-    @JoinColumn(name = "shift_id")
-    private Shift shift; //Hóa đơn này của ca nào
-
-
+    @JoinColumn(name = "station_id")
+    private Station station;
 }

@@ -21,12 +21,12 @@ public class FuelImportBillDTO {
     private double vatPercent;
 
     public FuelImportBillDTO(FuelImportBill fuelImportBill) {
-        this.id = fuelImportBill.getId();
-        this.name = fuelImportBill.getName();
-        this.date = fuelImportBill.getDate();
-        this.numberOfLiters = fuelImportBill.getNumberOfLiters();
-        this.pricePerLiter = fuelImportBill.getPricePerLiter();
-        this.note = fuelImportBill.getNote();
-        this.vatPercent = fuelImportBill.getVatPercent();
+//        this.id = fuelImportBill.getId();
+//        this.name = fuelImportBill.getName();
+//        this.date = fuelImportBill.getDate();
+//        this.numberOfLiters = fuelImportBill.getNumberOfLiters();
+//        this.pricePerLiter = fuelImportBill.getPricePerLiter();
+//        this.note = fuelImportBill.getNote();
+//        this.vatPercent = fuelImportBill.getVatPercent();
     }
 }

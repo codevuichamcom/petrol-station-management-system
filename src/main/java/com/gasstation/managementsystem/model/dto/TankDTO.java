@@ -18,10 +18,10 @@ public class TankDTO {
     private Station station;
 
     public TankDTO(Tank tank) {
-        this.id = tank.getId();
-        this.volume = tank.getVolume();
-        this.remain = tank.getRemain();
-//        this.productCategory = tank.getProductCategory();
-        this.station = tank.getStation();
+//        this.id = tank.getId();
+//        this.volume = tank.getVolume();
+//        this.remain = tank.getRemain();
+////        this.productCategory = tank.getProductCategory();
+//        this.station = tank.getStation();
     }
 }

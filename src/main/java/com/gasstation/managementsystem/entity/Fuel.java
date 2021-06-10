@@ -16,8 +16,13 @@ public class Fuel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private String unit;
+
+    @Column(nullable = false)
     private double price = 0;
 
     @OneToOne

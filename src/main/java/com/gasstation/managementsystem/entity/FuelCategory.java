@@ -17,6 +17,7 @@ public class FuelCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(nullable = false)
     private String name;
 
     @OneToOne(mappedBy = "fuelCategory", cascade = CascadeType.ALL)

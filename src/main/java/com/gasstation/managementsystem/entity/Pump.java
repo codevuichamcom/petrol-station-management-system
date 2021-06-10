@@ -17,7 +17,9 @@ public class Pump {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(nullable = false)
     private String name;
+
     private String note;
 
     @ManyToOne

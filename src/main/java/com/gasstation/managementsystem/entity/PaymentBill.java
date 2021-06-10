@@ -3,7 +3,7 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "payment_bill_tbl") //hóa đơn thanh toán
@@ -17,12 +17,17 @@ public class PaymentBill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private Date date;
+    @Column(nullable = false)
+    private Date date = new Date();
+
+    @Column(nullable = false)
     private String receiver;
+
     private String address;
     private String reason;
+
+    @Column(nullable = false)
     private double amount = 0;
-    private String amountInWords;
 
     @ManyToOne
     @JoinColumn(name = "creator") //join với user_tbl

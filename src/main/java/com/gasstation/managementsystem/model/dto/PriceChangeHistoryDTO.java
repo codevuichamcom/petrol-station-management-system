@@ -17,8 +17,8 @@ public class PriceChangeHistoryDTO {
     private double price;
 
     public PriceChangeHistoryDTO(PriceChangeHistory priceChangeHistory) {
-        this.id = priceChangeHistory.getId();
-        this.date = priceChangeHistory.getDate();
-        this.price = priceChangeHistory.getPrice();
+//        this.id = priceChangeHistory.getId();
+//        this.date = priceChangeHistory.getDate();
+//        this.price = priceChangeHistory.getPrice();
     }
 }

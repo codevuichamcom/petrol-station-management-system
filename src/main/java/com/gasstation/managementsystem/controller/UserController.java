@@ -1,6 +1,7 @@
 package com.gasstation.managementsystem.controller;
 
 import com.gasstation.managementsystem.entity.User;
+import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTOCreate;
 import com.gasstation.managementsystem.model.dto.user.UserDTOUpdate;
@@ -50,13 +51,13 @@ public class UserController {
 
     @Operation(summary = "Create new user")
     @PostMapping("/users")
-    public UserDTO create(@Valid @RequestBody UserDTOCreate userDTOCreate) {
+    public UserDTO create(@Valid @RequestBody UserDTOCreate userDTOCreate) throws CustomDuplicateFieldException {
         return userService.create(userDTOCreate);
     }
 
     @Operation(summary = "Update user by id")
     @PutMapping("/users/{id}")
-    public UserDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody UserDTOUpdate userDTOUpdate) {
+    public UserDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody UserDTOUpdate userDTOUpdate) throws CustomDuplicateFieldException {
         return userService.update(id,userDTOUpdate);
     }
 

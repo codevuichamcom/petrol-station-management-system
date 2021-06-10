@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Time;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -18,8 +19,11 @@ public class Shift {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private Time startTime;
-    private Time endTime;
+    @Column(nullable = false)
+    private Date startTime = new Date();
+
+    @Column(nullable = false)
+    private Date endTime = new Date();
 
     @ManyToOne
     @JoinColumn(name = "employee_id")

@@ -16,9 +16,9 @@ public class PaymentDTO {
     private String note;
 
     public PaymentDTO(Payment payment) {
-        this.id = payment.getId();
-        this.amount = payment.getAmount();
-        this.discounts = payment.getDiscounts();
-        this.note = payment.getNote();
+//        this.id = payment.getId();
+//        this.amount = payment.getAmount();
+//        this.discounts = payment.getDiscounts();
+//        this.note = payment.getNote();
     }
 }

@@ -19,10 +19,10 @@ public class PumpCodeDTO {
     private double pricePerLiter;
 
     public PumpCodeDTO(PumpCode pumpCode) {
-        this.id = pumpCode.getId();
-        this.time = pumpCode.getTime();
-        this.duration = pumpCode.getDuration();
-        this.numberOfLiters = pumpCode.getNumberOfLiters();
-        this.pricePerLiter = pumpCode.getPricePerLiter();
+//        this.id = pumpCode.getId();
+//        this.time = pumpCode.getTime();
+//        this.duration = pumpCode.getDuration();
+//        this.numberOfLiters = pumpCode.getNumberOfLiters();
+//        this.pricePerLiter = pumpCode.getPricePerLiter();
     }
 }

@@ -16,7 +16,11 @@ public class Station {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private String address;
 
     @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
@@ -36,6 +40,9 @@ public class Station {
     @JoinTable(name = "user_station_tbl", joinColumns = @JoinColumn(name = "station_id"),
             inverseJoinColumns = @JoinColumn(name = "employee_id"))
     private List<User> employeeList;
+
+    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
+    private List<Debt> debtList;
 
 //
 //    public Station(StationDTO stationDTO) {

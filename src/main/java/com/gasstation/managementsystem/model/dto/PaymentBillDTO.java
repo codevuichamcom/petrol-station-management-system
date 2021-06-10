@@ -21,12 +21,12 @@ public class PaymentBillDTO {
     private String amountInWords;
 
     public PaymentBillDTO(PaymentBill paymentBill) {
-        this.id = paymentBill.getId();
-        this.date = paymentBill.getDate();
-        this.receiver = paymentBill.getReceiver();
-        this.address = paymentBill.getAddress();
-        this.reason = paymentBill.getReason();
-        this.amount = paymentBill.getAmount();
-        this.amountInWords = paymentBill.getAmountInWords();
+//        this.id = paymentBill.getId();
+//        this.date = paymentBill.getDate();
+//        this.receiver = paymentBill.getReceiver();
+//        this.address = paymentBill.getAddress();
+//        this.reason = paymentBill.getReason();
+//        this.amount = paymentBill.getAmount();
+//        this.amountInWords = paymentBill.getAmountInWords();
     }
 }

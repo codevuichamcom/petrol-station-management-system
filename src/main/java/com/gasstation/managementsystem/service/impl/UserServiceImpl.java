@@ -3,6 +3,7 @@ package com.gasstation.managementsystem.service.impl;
 import com.gasstation.managementsystem.entity.Account;
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.entity.UserType;
+import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTOCreate;
 import com.gasstation.managementsystem.model.dto.user.UserDTOUpdate;
@@ -51,6 +52,29 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    public void checkDuplicateField(String identityCardNumber, String phone, String email) throws CustomDuplicateFieldException {
+        User userDuplicate;
+        if(identityCardNumber!=null){
+            userDuplicate = userRepository.findByIdentityCardNumber(identityCardNumber);
+            if(userDuplicate!=null){
+                throw new CustomDuplicateFieldException("Duplicate field","indentityCardNumber",null);
+            }
+        }
+        if(phone!=null){
+            userDuplicate = userRepository.findByPhone(phone);
+            if(userDuplicate!=null){
+                throw new CustomDuplicateFieldException("Duplicate field","phone",null);
+            }
+        }
+
+        if(email!=null){
+            userDuplicate = userRepository.findByEmail(email);
+            if(userDuplicate!=null){
+                throw new CustomDuplicateFieldException("Duplicate field","email",null);
+            }
+        }
+    }
+
 
     @Override
     public HashMap<String, Object> findAll(Pageable pageable) {
@@ -73,7 +97,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO create(UserDTOCreate userDTOCreate) {
+    public UserDTO create(UserDTOCreate userDTOCreate) throws CustomDuplicateFieldException {
+
+        checkDuplicateField(userDTOCreate.getIdentityCardNumber(),userDTOCreate.getPhone(),userDTOCreate.getEmail());
         User user = UserMapper.toUser(userDTOCreate);
         UserType userType = userTypeRepository.findById(userDTOCreate.getUserTypeId()).get();
         user.setUserType(userType);
@@ -81,7 +107,6 @@ public class UserServiceImpl implements UserService {
             Account account = AccountMapper.toAccount(userDTOCreate.getAccount());
             account.setPassword(bcryptEncoder.encode(account.getPassword()));
             user.setAccount(account);
-
         }
         user = userRepository.save(user);
         linkUserToAccount(user);
@@ -89,21 +114,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO update(int id, UserDTOUpdate userDTOUpdate) {
+    public UserDTO update(int id, UserDTOUpdate userDTOUpdate) throws CustomDuplicateFieldException {
+        checkDuplicateField(userDTOUpdate.getIdentityCardNumber(),userDTOUpdate.getPhone(),userDTOUpdate.getEmail());
         User user = userRepository.findById(id).get();
         UserMapper.copyToUser(user, userDTOUpdate);
         if (userDTOUpdate.getUserTypeId() != null) {
             UserType userType = userTypeRepository.findById(userDTOUpdate.getUserTypeId()).get();
             user.setUserType(userType);
         }
-        if(userDTOUpdate.getAccount()!=null){
-            if(user.getAccount()!=null){
-                accountRepository.delete(user.getAccount());
-            }
-            user.setAccount(AccountMapper.toAccount(userDTOUpdate.getAccount()));
-        }
         user = userRepository.save(user);
-        linkUserToAccount(user);
         return UserMapper.toUserDTO(user);
     }
 

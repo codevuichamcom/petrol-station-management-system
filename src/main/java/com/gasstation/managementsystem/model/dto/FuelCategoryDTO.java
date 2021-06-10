@@ -13,7 +13,7 @@ public class FuelCategoryDTO {
     private String name;
 
     public FuelCategoryDTO(FuelCategory fuelCategory) {
-        this.id = fuelCategory.getId();
-        this.name = fuelCategory.getName();
+//        this.id = fuelCategory.getId();
+//        this.name = fuelCategory.getName();
     }
 }

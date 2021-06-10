@@ -78,7 +78,10 @@ public class UserServiceImpl implements UserService {
         UserType userType = userTypeRepository.findById(userDTOCreate.getUserTypeId()).get();
         user.setUserType(userType);
         if(userDTOCreate.getAccount()!=null){
-            user.setAccount(AccountMapper.toAccount(userDTOCreate.getAccount()));
+            Account account = AccountMapper.toAccount(userDTOCreate.getAccount());
+            account.setPassword(bcryptEncoder.encode(account.getPassword()));
+            user.setAccount(account);
+
         }
         user = userRepository.save(user);
         linkUserToAccount(user);

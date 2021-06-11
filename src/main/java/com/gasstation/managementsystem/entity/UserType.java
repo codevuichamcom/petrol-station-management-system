@@ -1,6 +1,6 @@
 package com.gasstation.managementsystem.entity;
 
-import com.gasstation.managementsystem.model.dto.UserTypeDTO;
+import com.gasstation.managementsystem.model.dto.userType.UserTypeDTO;
 import lombok.*;
 
 import javax.persistence.*;

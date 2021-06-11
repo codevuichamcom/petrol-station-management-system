@@ -1,11 +1,13 @@
 package com.gasstation.managementsystem.controller;
 
-import com.gasstation.managementsystem.entity.Station;
-import com.gasstation.managementsystem.model.dto.StationDTO;
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
+import com.gasstation.managementsystem.model.dto.station.StationDTO;
+import com.gasstation.managementsystem.model.dto.station.StationDTOCreate;
+import com.gasstation.managementsystem.model.dto.station.StationDTOUpdate;
 import com.gasstation.managementsystem.service.StationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,10 +20,9 @@ import java.util.HashMap;
 @RequestMapping("/api/v1")
 @CrossOrigin
 @Tag(name = "Station", description = "API for station")
-
+@RequiredArgsConstructor
 public class StationController {
-    @Autowired
-    StationService stationService;
+    private final StationService stationService;
 
     @Operation(summary = "View All Station")
     @GetMapping("/stations")
@@ -42,15 +43,14 @@ public class StationController {
 
     @Operation(summary = "Create new Station")
     @PostMapping("/stations")
-    public StationDTO create(@Valid @RequestBody Station station) {
-        return stationService.save(station);
+    public StationDTO create(@Valid @RequestBody StationDTOCreate stationDTOCreate) throws CustomBadRequestException {
+        return stationService.create(stationDTOCreate);
     }
 
     @Operation(summary = "Update Station by id")
     @PutMapping("/stations/{id}")
-    public StationDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody Station station) {
-        station.setId(id);
-        return stationService.save(station);
+    public StationDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody StationDTOUpdate stationDTOUpdate) throws CustomBadRequestException {
+        return stationService.update(id, stationDTOUpdate);
     }
 
     @Operation(summary = "Delete Station by id")

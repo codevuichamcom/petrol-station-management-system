@@ -1,7 +1,7 @@
 package com.gasstation.managementsystem.controller;
 
 import com.gasstation.managementsystem.entity.UserType;
-import com.gasstation.managementsystem.model.dto.UserTypeDTO;
+import com.gasstation.managementsystem.model.dto.userType.UserTypeDTO;
 import com.gasstation.managementsystem.service.UserTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,7 +24,10 @@ public class UserTypeController {
     @Operation(summary = "View All userType")
     @GetMapping("/user-types")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
-                                          @RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize) {
+                                          @RequestParam(name = "pageSize", required = false) Integer pageSize) {
+        if (pageSize == null) {
+            return userTypeService.findAll();
+        }
         return userTypeService.findAll(PageRequest.of(pageIndex - 1, pageSize));
     }
 

@@ -2,7 +2,7 @@ package com.gasstation.managementsystem.model.mapper;
 
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.entity.UserType;
-import com.gasstation.managementsystem.model.dto.UserTypeDTO;
+import com.gasstation.managementsystem.model.dto.userType.UserTypeDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTOCreate;
 import com.gasstation.managementsystem.model.dto.user.UserDTOUpdate;

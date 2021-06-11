@@ -105,6 +105,9 @@ public class UserServiceImpl implements UserService {
         user.setUserType(userType);
         if(userDTOCreate.getAccount()!=null){
             Account account = AccountMapper.toAccount(userDTOCreate.getAccount());
+            if(accountRepository.findByUsername(account.getUsername())!=null){
+                throw new CustomDuplicateFieldException("Duplicate field '"+account.getUsername()+"'","username",null);
+            }
             account.setPassword(bcryptEncoder.encode(account.getPassword()));
             user.setAccount(account);
         }

@@ -13,7 +13,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class DuplicateError {
+public class CustomError {
     private String message;
     private String field;
     private String table;

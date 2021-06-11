@@ -9,10 +9,10 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class CustomDuplicateFieldException extends Exception {
+public class CustomBadRequestException extends Exception {
     Map<String, CustomError> errorHashMap;
 
-    public CustomDuplicateFieldException(String message, String field, String table) {
+    public CustomBadRequestException(String message, String field, String table) {
         errorHashMap = toMap(message, field, table);
     }
 

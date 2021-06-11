@@ -1,9 +1,13 @@
 package com.gasstation.managementsystem.model.mapper;
 
 import com.gasstation.managementsystem.entity.Account;
+import com.gasstation.managementsystem.entity.Station;
 import com.gasstation.managementsystem.model.dto.account.AccountDTO;
 import com.gasstation.managementsystem.model.dto.account.AccountDTOCreate;
 import com.gasstation.managementsystem.model.dto.account.AccountDTOUpdate;
+import com.gasstation.managementsystem.model.dto.station.StationDTOUpdate;
+import com.gasstation.managementsystem.utils.NullAwareBeanUtilsBean;
+import org.apache.commons.beanutils.BeanUtilsBean;
 
 public class AccountMapper {
     public static Account toAccount(AccountDTOCreate accountDTOCreate){
@@ -12,11 +16,16 @@ public class AccountMapper {
                     .password(accountDTOCreate.getPassword()).build();
     }
 
-    public static Account toAccount(AccountDTOUpdate accountDTOUpdate){
-        return Account.builder()
-                .username(accountDTOUpdate.getUsername())
-                .password(accountDTOUpdate.getPassword()).build();
+
+    public static void copyNonNullToAccount (Account account, AccountDTOUpdate accountDTOUpdate) {
+        try {
+            BeanUtilsBean notNull = new NullAwareBeanUtilsBean();
+            notNull.copyProperties(account, accountDTOUpdate);
+        } catch (Exception ex) {
+            ex.printStackTrace(System.out);
+        }
     }
+
     public static AccountDTO toAccountDTO(Account account){
         if(account==null) return null;
             return AccountDTO.builder()

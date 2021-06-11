@@ -3,7 +3,9 @@ package com.gasstation.managementsystem.service.impl;
 import com.gasstation.managementsystem.entity.Account;
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.entity.UserType;
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
+import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTOCreate;
 import com.gasstation.managementsystem.model.dto.user.UserDTOUpdate;
@@ -23,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -44,7 +47,7 @@ public class UserServiceImpl implements UserService {
         return map;
     }
 
-    private void linkUserToAccount(User user){ //gắn account với user truyền vào
+    private void linkUserToAccount(User user) { //gắn account với user truyền vào
         Account account = user.getAccount();
         if (account != null) {
             account.setUserInfo(user);
@@ -54,27 +57,43 @@ public class UserServiceImpl implements UserService {
 
     public void checkDuplicateField(String identityCardNumber, String phone, String email) throws CustomDuplicateFieldException {
         User userDuplicate;
-        if(identityCardNumber!=null){
+        if (identityCardNumber != null) {
             userDuplicate = userRepository.findByIdentityCardNumber(identityCardNumber);
-            if(userDuplicate!=null){
-                throw new CustomDuplicateFieldException("Duplicate field","indentityCardNumber",null);
+            if (userDuplicate != null) {
+                throw new CustomDuplicateFieldException("Duplicate field", "indentityCardNumber", null);
             }
         }
-        if(phone!=null){
+        if (phone != null) {
             userDuplicate = userRepository.findByPhone(phone);
-            if(userDuplicate!=null){
-                throw new CustomDuplicateFieldException("Duplicate field","phone",null);
+            if (userDuplicate != null) {
+                throw new CustomDuplicateFieldException("Duplicate field", "phone", null);
             }
         }
 
-        if(email!=null){
+        if (email != null) {
             userDuplicate = userRepository.findByEmail(email);
-            if(userDuplicate!=null){
-                throw new CustomDuplicateFieldException("Duplicate field","email",null);
+            if (userDuplicate != null) {
+                throw new CustomDuplicateFieldException("Duplicate field", "email", null);
             }
         }
     }
 
+    private UserType getUserTypeById(Integer userTypeId) throws CustomBadRequestException {
+        Optional<UserType> userTypeOptional = userTypeRepository.findById(userTypeId);
+        if (userTypeOptional.isPresent()) {
+            return userTypeOptional.get();
+        } else {
+            throw new CustomBadRequestException("User Type is not exist", "userTypeId", "user_type_table");
+        }
+    }
+
+    private User getUserById(int id) throws CustomNotFoundException {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (!userOptional.isPresent()) {
+            throw new CustomNotFoundException("User is not found", "user", "user_table");
+        }
+        return userOptional.get();
+    }
 
     @Override
     public HashMap<String, Object> findAll(Pageable pageable) {
@@ -92,21 +111,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO findById(int id) {
-        return UserMapper.toUserDTO(userRepository.findById(id).get());
+    public UserDTO findById(int id) throws CustomNotFoundException {
+        return UserMapper.toUserDTO(getUserById(id));
     }
 
     @Override
-    public UserDTO create(UserDTOCreate userDTOCreate) throws CustomDuplicateFieldException {
+    public UserDTO create(UserDTOCreate userDTOCreate) throws CustomDuplicateFieldException, CustomBadRequestException {
 
-        checkDuplicateField(userDTOCreate.getIdentityCardNumber(),userDTOCreate.getPhone(),userDTOCreate.getEmail());
+        checkDuplicateField(userDTOCreate.getIdentityCardNumber(), userDTOCreate.getPhone(), userDTOCreate.getEmail());
         User user = UserMapper.toUser(userDTOCreate);
-        UserType userType = userTypeRepository.findById(userDTOCreate.getUserTypeId()).get();
+        UserType userType = getUserTypeById(userDTOCreate.getUserTypeId());
         user.setUserType(userType);
-        if(userDTOCreate.getAccount()!=null){
+        if (userDTOCreate.getAccount() != null) {
             Account account = AccountMapper.toAccount(userDTOCreate.getAccount());
-            if(accountRepository.findByUsername(account.getUsername())!=null){
-                throw new CustomDuplicateFieldException("Duplicate field '"+account.getUsername()+"'","username",null);
+            if (accountRepository.findByUsername(account.getUsername()) != null) {
+                throw new CustomDuplicateFieldException("Duplicate field '" + account.getUsername() + "'", "username", null);
             }
             account.setPassword(bcryptEncoder.encode(account.getPassword()));
             user.setAccount(account);
@@ -117,12 +136,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO update(int id, UserDTOUpdate userDTOUpdate) throws CustomDuplicateFieldException {
-        checkDuplicateField(userDTOUpdate.getIdentityCardNumber(),userDTOUpdate.getPhone(),userDTOUpdate.getEmail());
-        User user = userRepository.findById(id).get();
+    public UserDTO update(int id, UserDTOUpdate userDTOUpdate) throws CustomDuplicateFieldException, CustomBadRequestException, CustomNotFoundException {
+        checkDuplicateField(userDTOUpdate.getIdentityCardNumber(), userDTOUpdate.getPhone(), userDTOUpdate.getEmail());
+        User user = getUserById(id);
         UserMapper.copyToUser(user, userDTOUpdate);
         if (userDTOUpdate.getUserTypeId() != null) {
-            UserType userType = userTypeRepository.findById(userDTOUpdate.getUserTypeId()).get();
+            UserType userType = getUserTypeById(userDTOUpdate.getUserTypeId());
             user.setUserType(userType);
         }
         user = userRepository.save(user);
@@ -130,13 +149,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO delete(int id) {
-        User user = userRepository.findById(id).get();
-        if (user != null) {
-            userRepository.delete(user);
-            return UserMapper.toUserDTO(user);
-        }
-        return null;
+    public UserDTO delete(int id) throws CustomNotFoundException {
+        User user = getUserById(id);
+        userRepository.delete(user);
+        return UserMapper.toUserDTO(user);
     }
 
     @Override

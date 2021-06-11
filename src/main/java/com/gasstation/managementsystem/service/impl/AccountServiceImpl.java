@@ -9,6 +9,7 @@ import com.gasstation.managementsystem.model.dto.account.AccountDTOUpdate;
 import com.gasstation.managementsystem.model.mapper.AccountMapper;
 import com.gasstation.managementsystem.repository.AccountRepository;
 import com.gasstation.managementsystem.service.AccountService;
+import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -27,6 +27,7 @@ import java.util.Optional;
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder bcryptEncoder;
+    private final OptionalValidate optionalValidate;
 
 
     private HashMap<String, Object> listAccountToMap(List<Account> accounts) {
@@ -39,13 +40,6 @@ public class AccountServiceImpl implements AccountService {
         return map;
     }
 
-    private Account getAccountById(int id) throws CustomNotFoundException {
-        Optional<Account> accountOptional = accountRepository.findById(id);
-        if (!accountOptional.isPresent()) {
-            throw new CustomNotFoundException("Account is not found", "user", "user_table");
-        }
-        return accountOptional.get();
-    }
 
     @Override
     public HashMap<String, Object> findAll(Pageable pageable) {
@@ -63,7 +57,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountDTO findById(int id) throws CustomNotFoundException {
-        Account account = getAccountById(id);
+        Account account = optionalValidate.getAccountById(id);
         return AccountMapper.toAccountDTO(account);
     }
 
@@ -85,7 +79,7 @@ public class AccountServiceImpl implements AccountService {
             }
         }
 
-        Account account = getAccountById(id);
+        Account account = optionalValidate.getAccountById(id);
         AccountMapper.copyNonNullToAccount(account, accountDTOUpdate);
         account.setId(id);
         if (accountDTOUpdate.getPassword() != null) {
@@ -98,7 +92,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountDTO delete(int id) throws CustomNotFoundException {
-        Account account = getAccountById(id);
+        Account account = optionalValidate.getAccountById(id);
         accountRepository.delete(account);
         return AccountMapper.toAccountDTO(account);
     }

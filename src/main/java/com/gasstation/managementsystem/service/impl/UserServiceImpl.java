@@ -15,6 +15,7 @@ import com.gasstation.managementsystem.repository.AccountRepository;
 import com.gasstation.managementsystem.repository.UserRepository;
 import com.gasstation.managementsystem.repository.UserTypeRepository;
 import com.gasstation.managementsystem.service.UserService;
+import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserTypeRepository userTypeRepository;
     private final AccountRepository accountRepository;
+    private final OptionalValidate optionalValidate;
 
     private final PasswordEncoder bcryptEncoder;
 
@@ -78,22 +79,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private UserType getUserTypeById(Integer userTypeId) throws CustomBadRequestException {
-        Optional<UserType> userTypeOptional = userTypeRepository.findById(userTypeId);
-        if (userTypeOptional.isPresent()) {
-            return userTypeOptional.get();
-        } else {
-            throw new CustomBadRequestException("User Type is not exist", "userTypeId", "user_type_table");
-        }
-    }
 
-    private User getUserById(int id) throws CustomNotFoundException {
-        Optional<User> userOptional = userRepository.findById(id);
-        if (!userOptional.isPresent()) {
-            throw new CustomNotFoundException("User is not found", "user", "user_table");
-        }
-        return userOptional.get();
-    }
 
     @Override
     public HashMap<String, Object> findAll(Pageable pageable) {
@@ -112,7 +98,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO findById(int id) throws CustomNotFoundException {
-        return UserMapper.toUserDTO(getUserById(id));
+        return UserMapper.toUserDTO(optionalValidate.getUserById(id));
     }
 
     @Override
@@ -120,7 +106,7 @@ public class UserServiceImpl implements UserService {
 
         checkDuplicateField(userDTOCreate.getIdentityCardNumber(), userDTOCreate.getPhone(), userDTOCreate.getEmail());
         User user = UserMapper.toUser(userDTOCreate);
-        UserType userType = getUserTypeById(userDTOCreate.getUserTypeId());
+        UserType userType = optionalValidate.getUserTypeById(userDTOCreate.getUserTypeId());
         user.setUserType(userType);
         if (userDTOCreate.getAccount() != null) {
             Account account = AccountMapper.toAccount(userDTOCreate.getAccount());
@@ -138,10 +124,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO update(int id, UserDTOUpdate userDTOUpdate) throws CustomDuplicateFieldException, CustomBadRequestException, CustomNotFoundException {
         checkDuplicateField(userDTOUpdate.getIdentityCardNumber(), userDTOUpdate.getPhone(), userDTOUpdate.getEmail());
-        User user = getUserById(id);
+        User user = optionalValidate.getUserById(id);
         UserMapper.copyToUser(user, userDTOUpdate);
         if (userDTOUpdate.getUserTypeId() != null) {
-            UserType userType = getUserTypeById(userDTOUpdate.getUserTypeId());
+            UserType userType = optionalValidate.getUserTypeById(userDTOUpdate.getUserTypeId());
             user.setUserType(userType);
         }
         user = userRepository.save(user);
@@ -150,7 +136,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO delete(int id) throws CustomNotFoundException {
-        User user = getUserById(id);
+        User user = optionalValidate.getUserById(id);
         userRepository.delete(user);
         return UserMapper.toUserDTO(user);
     }

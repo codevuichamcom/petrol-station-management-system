@@ -27,6 +27,7 @@ public class User {
     @Column(nullable = false)
     private boolean gender = false;
 
+    @Column(nullable = false)
     private Date dateOfBirth;
 
     @Column(nullable = false)

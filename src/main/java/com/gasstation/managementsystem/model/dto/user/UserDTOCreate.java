@@ -28,7 +28,6 @@ public class UserDTOCreate {
     private boolean gender = false;
 
     @Schema(description = "Must be in past")
-    @NotBlank(message = "Date of birth is mandatory")
     @Past(message = "Must be in past")
     private Date dateOfBirth;
 

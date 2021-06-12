@@ -78,7 +78,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
     @Override
     public HashMap<String, Object> findAll(Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
@@ -134,6 +133,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO delete(int id) throws CustomNotFoundException {
         User user = optionalValidate.getUserById(id);
+        if (user.getAccount() != null) {
+            accountRepository.deleteById(user.getAccount().getId());
+        }
         userRepository.delete(user);
         return UserMapper.toUserDTO(user);
     }

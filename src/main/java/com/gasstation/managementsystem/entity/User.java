@@ -68,7 +68,7 @@ public class User {
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
     private List<ReceiptBill> receiptBillList;//Danh sách hóa đơn nhận của người này
 
-    @OneToOne(mappedBy = "userInfo", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "userInfo")
     private Account account;//Tài khoản của user này
 
     @ManyToOne

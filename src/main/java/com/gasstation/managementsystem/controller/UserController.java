@@ -46,7 +46,7 @@ public class UserController {
 
     @Operation(summary = "Create new user")
     @PostMapping("/users")
-    public UserDTO create(@Valid @RequestBody UserDTOCreate userDTOCreate) throws CustomDuplicateFieldException, CustomBadRequestException {
+    public UserDTO create(@Valid @RequestBody UserDTOCreate userDTOCreate) throws CustomDuplicateFieldException, CustomBadRequestException, CustomNotFoundException {
         return userService.create(userDTOCreate);
     }
 

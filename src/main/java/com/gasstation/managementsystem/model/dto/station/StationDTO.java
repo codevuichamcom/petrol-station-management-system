@@ -1,7 +1,5 @@
 package com.gasstation.managementsystem.model.dto.station;
 
-import com.gasstation.managementsystem.entity.Station;
-import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import lombok.*;
 
@@ -16,6 +14,6 @@ public class StationDTO {
     private String name;
     private String address;
     private UserDTO owner;
-    private int numberOfEmployee;
+    private Integer numberOfEmployee;
 
 }

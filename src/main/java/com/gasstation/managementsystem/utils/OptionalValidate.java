@@ -1,23 +1,22 @@
 package com.gasstation.managementsystem.utils;
 
-import com.gasstation.managementsystem.entity.Account;
-import com.gasstation.managementsystem.entity.User;
-import com.gasstation.managementsystem.entity.UserType;
-import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
+import com.gasstation.managementsystem.entity.*;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
-import com.gasstation.managementsystem.repository.AccountRepository;
-import com.gasstation.managementsystem.repository.UserRepository;
-import com.gasstation.managementsystem.repository.UserTypeRepository;
+import com.gasstation.managementsystem.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class OptionalValidate {
     private final UserRepository userRepository;
     private final UserTypeRepository userTypeRepository;
     private final AccountRepository accountRepository;
+    private final TankRepository tankRepository;
+    private final StationRepository stationRepository;
+    private final FuelCategoryRepository fuelCategoryRepository;
 
     public Account getAccountById(int id) throws CustomNotFoundException {
         Optional<Account> accountOptional = accountRepository.findById(id);
@@ -26,6 +25,7 @@ public class OptionalValidate {
         }
         return accountOptional.get();
     }
+
     public User getUserById(int id) throws CustomNotFoundException {
         Optional<User> userOptional = userRepository.findById(id);
         if (!userOptional.isPresent()) {
@@ -34,12 +34,39 @@ public class OptionalValidate {
         return userOptional.get();
     }
 
-    public UserType getUserTypeById(Integer userTypeId) throws CustomBadRequestException {
-        Optional<UserType> userTypeOptional = userTypeRepository.findById(userTypeId);
+    public UserType getUserTypeById(int id) throws CustomNotFoundException {
+        Optional<UserType> userTypeOptional = userTypeRepository.findById(id);
         if (userTypeOptional.isPresent()) {
             return userTypeOptional.get();
         } else {
-            throw new CustomBadRequestException("User Type is not exist", "userTypeId", "user_type_table");
+            throw new CustomNotFoundException("User Type is not exist", "userTypeId", "user_type_table");
+        }
+    }
+
+    public Tank getTankById(int id) throws CustomNotFoundException {
+        Optional<Tank> tankOptional = tankRepository.findById(id);
+        if (tankOptional.isPresent()) {
+            return tankOptional.get();
+        } else {
+            throw new CustomNotFoundException("Tank is not exist", "id", "tank_table");
+        }
+    }
+
+    public Station getStaionById(int id) throws CustomNotFoundException {
+        Optional<Station> stationOptional = stationRepository.findById(id);
+        if (stationOptional.isPresent()) {
+            return stationOptional.get();
+        } else {
+            throw new CustomNotFoundException("Station is not exist", "id", "tank_table");
+        }
+    }
+
+    public FuelCategory getFuelCategoryById(int id) throws CustomNotFoundException {
+        Optional<FuelCategory> fuelCategoryOptional = fuelCategoryRepository.findById(id);
+        if (fuelCategoryOptional.isPresent()) {
+            return fuelCategoryOptional.get();
+        } else {
+            throw new CustomNotFoundException("Station is not exist", "id", "tank_table");
         }
     }
 }

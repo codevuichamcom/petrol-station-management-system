@@ -1,11 +1,13 @@
 package com.gasstation.managementsystem.controller;
 
-import com.gasstation.managementsystem.entity.Tank;
-import com.gasstation.managementsystem.model.dto.TankDTO;
+import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
+import com.gasstation.managementsystem.model.dto.tank.TankDTO;
+import com.gasstation.managementsystem.model.dto.tank.TankDTOCreate;
+import com.gasstation.managementsystem.model.dto.tank.TankDTOUpdate;
 import com.gasstation.managementsystem.service.TankService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,40 +18,42 @@ import java.util.HashMap;
 @RequestMapping("/api/v1")
 @CrossOrigin
 @Tag(name = "Tank", description = "API for Tank")
+@RequiredArgsConstructor
 public class TankController {
 
-    @Autowired
-    TankService tankService;
+    private final TankService tankService;
 
     @Operation(summary = "View All tank")
     @GetMapping("/tanks")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
-                                          @RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize) {
-        return tankService.findAll(PageRequest.of(pageIndex - 1, pageSize));
+                                          @RequestParam(name = "pageSize", required = false) Integer pageSize) {
+        if (pageSize != null) {
+            return tankService.findAll(PageRequest.of(pageIndex - 1, pageSize));
+        }
+        return tankService.findAll();
     }
 
     @Operation(summary = "Find tank by id")
     @GetMapping("/tanks/{id}")
-    public TankDTO getOne(@PathVariable(name = "id") Integer id) {
+    public TankDTO getOne(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
         return tankService.findById(id);
     }
 
     @Operation(summary = "Create new tank")
     @PostMapping("/tanks")
-    public TankDTO create(@Valid @RequestBody Tank tank) {
-        return tankService.save(tank);
+    public TankDTO create(@Valid @RequestBody TankDTOCreate tankDTOCreate) throws CustomNotFoundException {
+        return tankService.create(tankDTOCreate);
     }
 
     @Operation(summary = "Update tank by id")
     @PutMapping("/tanks/{id}")
-    public TankDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody Tank tank) {
-        tank.setId(id);
-        return tankService.save(tank);
+    public TankDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody TankDTOUpdate tankDTOUpdate) throws CustomNotFoundException {
+        return tankService.update(id, tankDTOUpdate);
     }
 
     @Operation(summary = "Delete tank by id")
     @DeleteMapping("/tanks/{id}")
-    public TankDTO delete(@PathVariable(name = "id") Integer id) {
+    public TankDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
         return tankService.delete(id);
     }
 }

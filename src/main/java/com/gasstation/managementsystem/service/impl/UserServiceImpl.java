@@ -13,7 +13,6 @@ import com.gasstation.managementsystem.model.mapper.AccountMapper;
 import com.gasstation.managementsystem.model.mapper.UserMapper;
 import com.gasstation.managementsystem.repository.AccountRepository;
 import com.gasstation.managementsystem.repository.UserRepository;
-import com.gasstation.managementsystem.repository.UserTypeRepository;
 import com.gasstation.managementsystem.service.UserService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +31,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final UserTypeRepository userTypeRepository;
     private final AccountRepository accountRepository;
     private final OptionalValidate optionalValidate;
 
@@ -102,8 +100,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO create(UserDTOCreate userDTOCreate) throws CustomDuplicateFieldException, CustomBadRequestException {
-
+    public UserDTO create(UserDTOCreate userDTOCreate) throws CustomDuplicateFieldException, CustomBadRequestException, CustomNotFoundException {
         checkDuplicateField(userDTOCreate.getIdentityCardNumber(), userDTOCreate.getPhone(), userDTOCreate.getEmail());
         User user = UserMapper.toUser(userDTOCreate);
         UserType userType = optionalValidate.getUserTypeById(userDTOCreate.getUserTypeId());

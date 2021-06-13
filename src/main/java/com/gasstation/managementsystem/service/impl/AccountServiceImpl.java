@@ -1,7 +1,10 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.Account;
+import com.gasstation.managementsystem.entity.UserType;
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
+import com.gasstation.managementsystem.exception.custom.CustomForbiddenException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.account.AccountDTO;
 import com.gasstation.managementsystem.model.dto.account.AccountDTOCreate;
@@ -9,6 +12,7 @@ import com.gasstation.managementsystem.model.dto.account.AccountDTOUpdate;
 import com.gasstation.managementsystem.model.mapper.AccountMapper;
 import com.gasstation.managementsystem.repository.AccountRepository;
 import com.gasstation.managementsystem.service.AccountService;
+import com.gasstation.managementsystem.utils.AccountHelper;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,6 +32,7 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder bcryptEncoder;
     private final OptionalValidate optionalValidate;
+    private final AccountHelper accountHelper;
 
 
     private HashMap<String, Object> listAccountToMap(List<Account> accounts) {
@@ -72,20 +77,28 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDTO update(int id, AccountDTOUpdate accountDTOUpdate) throws CustomDuplicateFieldException, CustomNotFoundException {
-        if (accountDTOUpdate.getUsername() != null) { //check duplicate username
-            if (accountRepository.findByUsername(accountDTOUpdate.getUsername()) != null) {
-                throw new CustomDuplicateFieldException("Duplicate field '" + accountDTOUpdate.getUsername() + "'", "username", null);
+    public AccountDTO update(int id, AccountDTOUpdate accountDTOUpdate) throws CustomDuplicateFieldException, CustomNotFoundException, CustomForbiddenException, CustomBadRequestException {
+        Account account = accountHelper.getAccountLogined();
+        if (accountDTOUpdate.getOldPassword() != null) {
+            if (account.getId() == id) {
+                account.setPassword(bcryptEncoder.encode(accountDTOUpdate.getNewPassword()));
+                account = accountRepository.save(account);
+            } else {
+                throw new CustomForbiddenException("Account incorrect");
+            }
+        } else {
+            UserType userType = account.getUserInfo() != null ? account.getUserInfo().getUserType() : null;
+            if (userType != null && userType.getId() == UserType.ADMIN) {
+                Account acountUpdate = optionalValidate.getAccountById(id);
+                String oldPassword = bcryptEncoder.encode(acountUpdate.getPassword());
+                if (!oldPassword.equals(accountDTOUpdate.getOldPassword())) {
+                    throw new CustomBadRequestException("Old password is incorrect", null, null);
+                } else {
+                    acountUpdate.setPassword(bcryptEncoder.encode(accountDTOUpdate.getNewPassword()));
+                    account = accountRepository.save(acountUpdate);
+                }
             }
         }
-
-        Account account = optionalValidate.getAccountById(id);
-        AccountMapper.copyNonNullToAccount(account, accountDTOUpdate);
-        account.setId(id);
-        if (accountDTOUpdate.getPassword() != null) {
-            account.setPassword(bcryptEncoder.encode(accountDTOUpdate.getPassword()));
-        }
-        account = accountRepository.save(account);
         return AccountMapper.toAccountDTO(account);
     }
 

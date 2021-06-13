@@ -23,5 +23,8 @@ public class Account {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User userInfo;
+
+    @Column(nullable = false)
+    private boolean isActive = true;
     
 }

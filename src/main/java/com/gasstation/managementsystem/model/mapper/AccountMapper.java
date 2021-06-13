@@ -9,10 +9,9 @@ import com.gasstation.managementsystem.model.dto.account.AccountDTOUpdate;
 import com.gasstation.managementsystem.utils.NullAwareBeanUtilsBean;
 import org.apache.commons.beanutils.BeanUtilsBean;
 
-import java.util.Optional;
-
 public class AccountMapper {
     public static Account toAccount(AccountDTOCreate accountDTOCreate) {
+        if (accountDTOCreate == null) return null;
         return Account.builder()
                 .username(accountDTOCreate.getUsername())
                 .password(accountDTOCreate.getPassword()).build();
@@ -30,16 +29,21 @@ public class AccountMapper {
 
     public static AccountDTO toAccountDTO(Account account) {
         if (account == null) return null;
-        User userInfo = Optional.of(account.getUserInfo()).orElse(null);
-        UserType userType = null;
+        User userInfo = account.getUserInfo();
+        String name = userInfo != null ? userInfo.getName() : null;
+
+        String type = null;
         if (userInfo != null) {
-            userType = Optional.of(userInfo.getUserType()).orElse(null);
+            UserType userType = userInfo.getUserType();
+            type = (userType != null && userType.getType() != null)
+                    ? userType.getType()
+                    : null;
         }
         return AccountDTO.builder()
                 .id(account.getId())
                 .username(account.getUsername())
-                .name(userInfo.getName())
-                .userType(userType.getType()).build();
+                .name(name)
+                .userType(type).build();
     }
 
 }

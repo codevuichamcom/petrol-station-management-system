@@ -24,10 +24,9 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
     private boolean gender = false;
 
-    @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 
     @Column(nullable = false)
@@ -45,6 +44,7 @@ public class User {
     private double cashLimit = 0;
 
     @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date limitSetDate = new Date();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

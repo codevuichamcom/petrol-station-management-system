@@ -1,6 +1,5 @@
 package com.gasstation.managementsystem.service.impl;
 
-import com.gasstation.managementsystem.entity.FuelCategory;
 import com.gasstation.managementsystem.entity.Station;
 import com.gasstation.managementsystem.entity.Tank;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
@@ -58,12 +57,10 @@ public class TankServiceImpl implements TankService {
     @Override
     public TankDTO create(TankDTOCreate tankDTOCreate) throws CustomNotFoundException {
         Station station = optionalValidate.getStaionById(tankDTOCreate.getStationId());
-        FuelCategory fuelCategory = optionalValidate.getFuelCategoryById(tankDTOCreate.getFuelCategoryId());
 
         Tank tank = TankMapper.toTank(tankDTOCreate);
 
         tank.setStation(station);
-        tank.setFuelCategory(fuelCategory);
 
         tankRepository.save(tank);
         return TankMapper.toTankDTO(tank);
@@ -75,10 +72,6 @@ public class TankServiceImpl implements TankService {
         if (tankDTOUpdate.getStationId() != null) {
             Station station = optionalValidate.getStaionById(tankDTOUpdate.getStationId());
             tank.setStation(station);
-        }
-        if (tankDTOUpdate.getFuelCategoryId() != null) {
-            FuelCategory fuelCategory = optionalValidate.getFuelCategoryById(tankDTOUpdate.getFuelCategoryId());
-            tank.setFuelCategory(fuelCategory);
         }
         TankMapper.copyNonNullToTank(tank, tankDTOUpdate);
 

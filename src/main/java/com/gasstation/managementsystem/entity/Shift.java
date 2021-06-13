@@ -20,9 +20,11 @@ public class Shift {
     private int id;
 
     @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date startTime = new Date();
 
     @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date endTime = new Date();
 
     @ManyToOne

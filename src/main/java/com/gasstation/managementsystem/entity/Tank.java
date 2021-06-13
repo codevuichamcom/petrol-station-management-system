@@ -18,6 +18,9 @@ public class Tank {
     private int id;
 
     @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
     private double volume = 0;
 
     @Column(nullable = false)
@@ -30,8 +33,8 @@ public class Tank {
     private List<FuelImportBill> fuelImportBillList; //Danh sách phiếu nhập của bể này
 
     @ManyToOne
-    @JoinColumn(name = "fuel_category_id") //join với fuel_category_tbl
-    private FuelCategory fuelCategory;// Bể này thuộc thể loại nhiên liệu là gì
+    @JoinColumn(name = "fuel_id") //join với fuel_tbl
+    private Fuel fuel;// Bể này chứa nhiên liệu gì
 
     @ManyToOne
     @JoinColumn(name = "station_id")//join với station_tbl
@@ -43,11 +46,4 @@ public class Tank {
     @OneToMany(mappedBy = "tank", cascade = CascadeType.ALL)
     private List<PriceChangeHistory> priceChangeHistoryList;// Danh sách những lần đổ giá của bể này
 
-//    public Tank(TankDTO tankDTO) {
-//        this.id = tankDTO.getId();
-//        this.volume = tankDTO.getVolume();
-//        this.remain = tankDTO.getRemain();
-//        this.productCategory = tankDTO.getProductCategory();
-//        this.station = tankDTO.getStation();
-//    }
 }

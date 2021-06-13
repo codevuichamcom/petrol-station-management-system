@@ -18,6 +18,7 @@ public class ReceiptBill {
     private int id;
 
     @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date date = new Date();
 
     @Column(nullable = false)

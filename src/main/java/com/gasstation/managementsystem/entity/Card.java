@@ -35,11 +35,14 @@ public class Card {
     private double outstandingBalance = 0;
 
     @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date limitSetDate = new Date();
 
     @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date issuedDate;
 
+    @Temporal(TemporalType.DATE)
     private Date activeDate;
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
@@ -56,17 +59,4 @@ public class Card {
     @JoinColumn(name = "user_id")
     private User userInfo;//Người nào sử dụng thẻ này
 
-//    public Card(CardDTO cardDTO) {
-//        this.id = cardDTO.getId();
-//        this.driverPhone = cardDTO.getDriverPhone();
-//        this.driverName = cardDTO.getDriverPhone();
-//        this.licensePalates = cardDTO.getLicensePalates();
-//        this.availableBalance = cardDTO.getAvailableBalance();
-//        this.outstandingBalance = cardDTO.getOutstandingBalance();
-//        this.limitSetDate = cardDTO.getLimitSetDate();
-//        this.issuedDate = cardDTO.getIssuedDate();
-//        this.activeDate = cardDTO.getActiveDate();
-//        this.userCard = cardDTO.getUserCard();
-//        this.userActive = cardDTO.getUserActive();
-//    }
 }

@@ -1,6 +1,8 @@
 package com.gasstation.managementsystem.service;
 
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
+import com.gasstation.managementsystem.exception.custom.CustomForbiddenException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.account.AccountDTO;
 import com.gasstation.managementsystem.model.dto.account.AccountDTOCreate;
@@ -18,7 +20,7 @@ public interface AccountService {
 
     public AccountDTO create(AccountDTOCreate accountDTOCreate) throws CustomDuplicateFieldException;
 
-    public AccountDTO update(int id, AccountDTOUpdate accountDTOUpdate) throws CustomDuplicateFieldException, CustomNotFoundException;
+    public AccountDTO update(int id, AccountDTOUpdate accountDTOUpdate) throws CustomDuplicateFieldException, CustomNotFoundException, CustomForbiddenException, CustomBadRequestException;
 
     public AccountDTO delete(int id) throws CustomNotFoundException;
 

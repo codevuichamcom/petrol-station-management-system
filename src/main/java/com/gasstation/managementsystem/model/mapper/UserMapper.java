@@ -1,8 +1,9 @@
 package com.gasstation.managementsystem.model.mapper;
 
+import com.gasstation.managementsystem.entity.Account;
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.entity.UserType;
-import com.gasstation.managementsystem.model.dto.userType.UserTypeDTO;
+import com.gasstation.managementsystem.model.dto.account.AccountDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTOCreate;
 import com.gasstation.managementsystem.model.dto.user.UserDTOUpdate;
@@ -25,31 +26,15 @@ public class UserMapper {
                 .userType(UserType.builder().id(userDTOCreate.getUserTypeId()).build()).build();
     }
 
-    public static User toUser(UserDTOUpdate userDTOUpdate) {
-        return User.builder()
-                .identityCardNumber(userDTOUpdate.getIdentityCardNumber())
-                .name(userDTOUpdate.getName())
-                .gender(userDTOUpdate.getGender())
-                .dateOfBirth(userDTOUpdate.getDateOfBirth())
-                .address(userDTOUpdate.getAddress())
-                .phone(userDTOUpdate.getPhone())
-                .email(userDTOUpdate.getEmail())
-                .note(userDTOUpdate.getNote())
-                .cashLimit(userDTOUpdate.getCashLimit())
-                .limitSetDate(userDTOUpdate.getLimitSetDate())
-                .userType(UserType.builder().id(userDTOUpdate.getUserTypeId()).build()).build();
-    }
-
-    public static void copyToUser(User user, UserDTOUpdate userDTOUpdate) {
-        try {
-            BeanUtilsBean notNull = new NullAwareBeanUtilsBean();
-            notNull.copyProperties(user, userDTOUpdate);
-        } catch (Exception ex) {
-            ex.printStackTrace(System.out);
-        }
-    }
 
     public static UserDTO toUserDTO(User user) {
+        if (user == null) return null;
+        Account account = user.getAccount();
+        AccountDTO accountDTO = AccountMapper.toAccountDTO(account);
+        if (accountDTO != null) {
+            accountDTO.setUsername(null);
+            accountDTO.setUserType(null);
+        }
         return UserDTO.builder()
                 .id(user.getId())
                 .identityCardNumber(user.getIdentityCardNumber())
@@ -62,11 +47,17 @@ public class UserMapper {
                 .note(user.getNote())
                 .cashLimit(user.getCashLimit())
                 .limitSetDate(user.getLimitSetDate())
-                .userType(
-                        UserTypeDTO.builder()
-                                .id(user.getUserType().getId())
-                                .type(user.getUserType().getType()).build()
-                )
-                .account(AccountMapper.toAccountDTO(user.getAccount())).build();
+                .userType(UserTypeMapper.toUserTypeDTO(user.getUserType()))
+                .account(accountDTO).build();
     }
+
+    public static void copyToUser(User user, UserDTOUpdate userDTOUpdate) {
+        try {
+            BeanUtilsBean notNull = new NullAwareBeanUtilsBean();
+            notNull.copyProperties(user, userDTOUpdate);
+        } catch (Exception ex) {
+            ex.printStackTrace(System.out);
+        }
+    }
+
 }

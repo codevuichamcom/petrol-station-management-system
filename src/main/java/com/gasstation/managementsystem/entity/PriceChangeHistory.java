@@ -18,6 +18,7 @@ public class PriceChangeHistory {
     private int id;
 
     @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date date = new Date();
 
     @Column(nullable = false)

@@ -2,6 +2,7 @@ package com.gasstation.managementsystem.exception;
 
 import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
+import com.gasstation.managementsystem.exception.custom.CustomForbiddenException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.ErrorMessage;
@@ -33,6 +34,12 @@ public class ApiExceptionHandler {
     @ExceptionHandler(CustomNotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public Map<String, CustomError> notFoundIdException(CustomNotFoundException ex) {
+        return ex.getErrorHashMap();
+    }
+
+    @ExceptionHandler(CustomForbiddenException.class)
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    public Map<String, Object> forBiddenException(CustomForbiddenException ex) {
         return ex.getErrorHashMap();
     }
 

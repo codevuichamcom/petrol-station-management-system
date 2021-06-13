@@ -1,9 +1,7 @@
 package com.gasstation.managementsystem.model.mapper;
 
-import com.gasstation.managementsystem.entity.FuelCategory;
 import com.gasstation.managementsystem.entity.Station;
 import com.gasstation.managementsystem.entity.Tank;
-import com.gasstation.managementsystem.model.dto.FuelCategoryDTO;
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import com.gasstation.managementsystem.model.dto.tank.TankDTO;
 import com.gasstation.managementsystem.model.dto.tank.TankDTOCreate;
@@ -14,6 +12,7 @@ import org.apache.commons.beanutils.BeanUtilsBean;
 public class TankMapper {
 
     public static TankDTO toTankDTO(Tank tank) {
+        if (tank == null) return null;
         TankDTO tankDTO = TankDTO.builder()
                 .id(tank.getId())
                 .volume(tank.getVolume())
@@ -25,17 +24,11 @@ public class TankMapper {
                     .id(station.getId())
                     .name(station.getName()).build());
         }
-
-        FuelCategory fuelCategory = tank.getFuelCategory();
-        if (tank.getFuelCategory() != null) {
-            tankDTO.setCategory(FuelCategoryDTO.builder()
-                    .id(fuelCategory.getId())
-                    .name(fuelCategory.getName()).build());
-        }
         return tankDTO;
     }
 
     public static Tank toTank(TankDTOCreate tankDTOCreate) {
+        if (tankDTOCreate == null) return null;
         return Tank.builder()
                 .volume(tankDTOCreate.getVolume())
                 .remain(tankDTOCreate.getRemain())

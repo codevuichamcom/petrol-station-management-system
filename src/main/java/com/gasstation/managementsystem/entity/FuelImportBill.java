@@ -21,6 +21,7 @@ public class FuelImportBill {
     private String name;
 
     @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date date = new Date();
 
     @Column(nullable = false)

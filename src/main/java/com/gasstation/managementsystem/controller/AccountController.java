@@ -1,6 +1,8 @@
 package com.gasstation.managementsystem.controller;
 
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
+import com.gasstation.managementsystem.exception.custom.CustomForbiddenException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.account.AccountDTO;
 import com.gasstation.managementsystem.model.dto.account.AccountDTOCreate;
@@ -47,9 +49,9 @@ public class AccountController {
         return accountService.create(accountDTOCreate);
     }
 
-    @Operation(summary = "Update account by id")
+    @Operation(summary = "Change password")
     @PutMapping("/accounts/{id}")
-    public AccountDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody AccountDTOUpdate accountDTOUpdate) throws CustomDuplicateFieldException, CustomNotFoundException {
+    public AccountDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody AccountDTOUpdate accountDTOUpdate) throws CustomDuplicateFieldException, CustomNotFoundException, CustomForbiddenException, CustomBadRequestException {
         return accountService.update(id, accountDTOUpdate);
     }
 

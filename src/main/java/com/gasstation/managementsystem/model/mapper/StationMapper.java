@@ -12,17 +12,22 @@ import org.apache.commons.beanutils.BeanUtilsBean;
 public class StationMapper {
 
     public static StationDTO toStationDTO(Station station) {
+        if (station == null) return null;
+        User owner = station.getOwner();
+        UserDTO userDTO = owner != null ? UserDTO.builder()
+                .id(owner.getId())
+                .name(owner.getName()).build() : null;
+
         return StationDTO.builder()
                 .id(station.getId())
                 .name(station.getName())
                 .address(station.getAddress())
-                .owner(UserDTO.builder()
-                        .id(station.getOwner().getId())
-                        .name(station.getOwner().getName()).build())
+                .owner(userDTO)
                 .build();
     }
 
     public static Station toStation(StationDTOCreate stationDTOCreate) {
+        if (stationDTOCreate == null) return null;
         return Station.builder()
                 .name(stationDTOCreate.getName())
                 .address(stationDTOCreate.getAddress())

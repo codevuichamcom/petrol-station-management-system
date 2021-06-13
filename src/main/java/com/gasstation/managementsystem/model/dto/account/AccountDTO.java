@@ -1,7 +1,5 @@
 package com.gasstation.managementsystem.model.dto.account;
 
-import com.gasstation.managementsystem.entity.Account;
-import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import lombok.*;
 
 @AllArgsConstructor

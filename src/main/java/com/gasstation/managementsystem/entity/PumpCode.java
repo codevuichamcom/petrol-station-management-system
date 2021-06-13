@@ -18,6 +18,7 @@ public class PumpCode {
     private int id;
 
     @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date time = new Date();
 
     @Column(nullable = false)

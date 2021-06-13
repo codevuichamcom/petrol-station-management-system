@@ -3,6 +3,7 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "fuel_tbl") //nhiên liệu
@@ -16,7 +17,7 @@ public class Fuel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)
@@ -25,9 +26,10 @@ public class Fuel {
     @Column(nullable = false)
     private double price = 0;
 
-    @OneToOne
-    @JoinColumn(name = "fuel_category_id")//join với fuel_category_tbl
-    private FuelCategory fuelCategory; //nhiên liệu này thuộc thể loại nào
+    @Column(nullable = false)
+    private String type = "Xăng";
 
+    @OneToMany(mappedBy = "fuel", cascade = CascadeType.ALL)
+    private List<Tank> tankList;
 
 }

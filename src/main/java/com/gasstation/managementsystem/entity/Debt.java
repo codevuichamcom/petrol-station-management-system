@@ -18,6 +18,7 @@ public class Debt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date time = new Date();
 
     @Column(nullable = false)

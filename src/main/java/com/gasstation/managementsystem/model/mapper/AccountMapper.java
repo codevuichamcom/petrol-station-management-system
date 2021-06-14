@@ -14,7 +14,8 @@ public class AccountMapper {
         if (accountDTOCreate == null) return null;
         return Account.builder()
                 .username(accountDTOCreate.getUsername())
-                .password(accountDTOCreate.getPassword()).build();
+                .password(accountDTOCreate.getPassword())
+                .isActive(true).build();
     }
 
 
@@ -42,6 +43,7 @@ public class AccountMapper {
         return AccountDTO.builder()
                 .id(account.getId())
                 .username(account.getUsername())
+                .isActive(account.isActive())
                 .name(name)
                 .userType(type).build();
     }

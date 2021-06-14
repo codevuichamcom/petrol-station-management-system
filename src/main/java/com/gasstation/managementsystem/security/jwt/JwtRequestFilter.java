@@ -1,13 +1,19 @@
 package com.gasstation.managementsystem.security.jwt;
 
+import com.gasstation.managementsystem.entity.AcceptToken;
+import com.gasstation.managementsystem.entity.Account;
+import com.gasstation.managementsystem.repository.AcceptTokenRepository;
+import com.gasstation.managementsystem.repository.AccountRepository;
+import com.gasstation.managementsystem.service.AcceptTokenService;
 import com.gasstation.managementsystem.service.impl.JwtUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -22,13 +28,17 @@ class gets executed. It checks if the request has a valid JWT token. If it has a
  Authentication in the context, to specify that the current user is authenticated.
  */
 @Component
+@RequiredArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtUserDetailsService jwtUserDetailsService;
+    private final JwtUserDetailsService jwtUserDetailsService;
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
+
+    private final AccountRepository accountRepository;
+
+    private final AcceptTokenRepository acceptTokenRepository;
+    private final AcceptTokenService acceptTokenService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -43,12 +53,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         // JWT Token is in the form "Bearer token". Remove Bearer word and get
         // only the Token
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
-            jwtToken = requestTokenHeader.substring(7);
+            jwtToken = requestTokenHeader.substring(7).trim();
             try {
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
                 System.out.println("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
+                acceptTokenService.deleteByToken(jwtToken);
                 System.out.println("JWT Token has expired");
             }
         } else {
@@ -58,10 +69,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
+            Account account = accountRepository.findByUsername(username);
+            AcceptToken acceptToken = acceptTokenRepository.getAcceptToken(jwtToken,account.getId());
 
             // if token is valid configure Spring Security to manually set
             // authentication
-            if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
+            if (jwtTokenUtil.validateToken(jwtToken, account) && acceptToken != null) {
 
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());

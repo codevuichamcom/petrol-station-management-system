@@ -11,6 +11,7 @@ import com.gasstation.managementsystem.model.dto.account.AccountDTOCreate;
 import com.gasstation.managementsystem.model.dto.account.AccountDTOUpdate;
 import com.gasstation.managementsystem.model.mapper.AccountMapper;
 import com.gasstation.managementsystem.repository.AccountRepository;
+import com.gasstation.managementsystem.service.AcceptTokenService;
 import com.gasstation.managementsystem.service.AccountService;
 import com.gasstation.managementsystem.utils.AccountHelper;
 import com.gasstation.managementsystem.utils.OptionalValidate;
@@ -33,6 +34,7 @@ public class AccountServiceImpl implements AccountService {
     private final PasswordEncoder bcryptEncoder;
     private final OptionalValidate optionalValidate;
     private final AccountHelper accountHelper;
+    private final AcceptTokenService acceptTokenService;
 
 
     private HashMap<String, Object> listAccountToMap(List<Account> accounts) {
@@ -99,6 +101,7 @@ public class AccountServiceImpl implements AccountService {
                 }
             }
         }
+        acceptTokenService.deleteByAccountId(account.getId());
         return AccountMapper.toAccountDTO(account);
     }
 
@@ -113,9 +116,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountDTO findByUsername(String username) {
         Account account = accountRepository.findByUsername(username);
-        if (account != null) {
-            return AccountMapper.toAccountDTO(account);
-        }
-        return null;
+        return AccountMapper.toAccountDTO(account);
     }
+
 }

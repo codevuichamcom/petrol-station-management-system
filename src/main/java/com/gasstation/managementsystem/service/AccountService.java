@@ -12,17 +12,17 @@ import org.springframework.data.domain.Pageable;
 import java.util.HashMap;
 
 public interface AccountService {
-    public HashMap<String, Object> findAll(Pageable pageable);
+    HashMap<String, Object> findAll(Pageable pageable);
 
-    public HashMap<String, Object> findAll();
+    HashMap<String, Object> findAll();
 
-    public AccountDTO findById(int id) throws CustomNotFoundException;
+    AccountDTO findById(int id) throws CustomNotFoundException;
 
-    public AccountDTO create(AccountDTOCreate accountDTOCreate) throws CustomDuplicateFieldException;
+    AccountDTO create(AccountDTOCreate accountDTOCreate) throws CustomDuplicateFieldException;
 
-    public AccountDTO update(int id, AccountDTOUpdate accountDTOUpdate) throws CustomDuplicateFieldException, CustomNotFoundException, CustomForbiddenException, CustomBadRequestException;
+    AccountDTO update(int id, AccountDTOUpdate accountDTOUpdate) throws CustomDuplicateFieldException, CustomNotFoundException, CustomForbiddenException, CustomBadRequestException;
 
-    public AccountDTO delete(int id) throws CustomNotFoundException;
+    AccountDTO delete(int id) throws CustomNotFoundException;
 
-    public AccountDTO findByUsername(String username);
+    AccountDTO findByUsername(String username);
 }

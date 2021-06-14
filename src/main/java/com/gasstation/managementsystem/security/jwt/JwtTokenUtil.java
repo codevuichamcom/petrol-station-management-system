@@ -1,18 +1,20 @@
 package com.gasstation.managementsystem.security.jwt;
 
+import com.gasstation.managementsystem.entity.Account;
+import com.gasstation.managementsystem.model.dto.account.AccountDTO;
+import com.gasstation.managementsystem.service.AcceptTokenService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.stereotype.Component;
 
 /*
 The JwtTokenUtil is responsible for performing JWT operations like creation and validation.
@@ -20,10 +22,13 @@ It makes use of the io.jsonwebtoken.Jwts for achieving this.
  */
 
 @Component
+@RequiredArgsConstructor
 public class JwtTokenUtil implements Serializable {
     private static final long serialVersionUID = -2550185165626007488L;
 
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+
+    private final AcceptTokenService acceptTokenService;
 
     @Value("${jwt.secret}")
     private String secret;
@@ -55,9 +60,9 @@ public class JwtTokenUtil implements Serializable {
     }
 
     //generate token for user
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(AccountDTO accountDTO) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername());
+        return doGenerateToken(claims, accountDTO.getUsername());
     }
 
     //while creating the token -
@@ -73,8 +78,11 @@ public class JwtTokenUtil implements Serializable {
     }
 
     //validate token
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public Boolean validateToken(String token, Account account) {
+        if (isTokenExpired(token)) {
+            acceptTokenService.deleteByToken(token);
+        }
         final String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (username.equals(account.getUsername()) && account.isActive() && !isTokenExpired(token));
     }
 }

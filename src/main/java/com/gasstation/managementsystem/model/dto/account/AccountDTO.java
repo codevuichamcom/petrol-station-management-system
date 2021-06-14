@@ -13,5 +13,6 @@ public class AccountDTO {
     private String username;
     private String name;
     private String userType;
+    private boolean isActive;
 
 }

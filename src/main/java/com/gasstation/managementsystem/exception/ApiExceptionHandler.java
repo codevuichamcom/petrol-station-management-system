@@ -1,9 +1,6 @@
 package com.gasstation.managementsystem.exception;
 
-import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
-import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
-import com.gasstation.managementsystem.exception.custom.CustomForbiddenException;
-import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
+import com.gasstation.managementsystem.exception.custom.*;
 import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.ErrorMessage;
 import org.springframework.http.HttpStatus;
@@ -43,6 +40,12 @@ public class ApiExceptionHandler {
         return ex.getErrorHashMap();
     }
 
+    @ExceptionHandler(CustomUnauthorizedException.class)
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    public Map<String, String> unAuthorizedException(CustomUnauthorizedException ex) {
+        return ex.getErrorHashMap();
+    }
+
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage notExistException(Exception ex) {
@@ -53,6 +56,12 @@ public class ApiExceptionHandler {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage duplicateException(Exception ex) {
         return new ErrorMessage(409, "Duplicate key in db: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorMessage allException(Exception ex) {
+        return new ErrorMessage(500, "Some thing when wrong " + ex.getMessage()+"\n"+ex.getCause());
     }
 
 

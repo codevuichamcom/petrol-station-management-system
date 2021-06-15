@@ -27,4 +27,14 @@ public class AcceptTokenImpl implements AcceptTokenService {
     public void deleteByAccountId(int accountId) {
         acceptTokenRepository.deleteAllByAccountId(accountId);
     }
+
+    @Override
+    public AcceptToken getAcceptToken(String token, int id) {
+        return acceptTokenRepository.getAcceptToken(token,id);
+    }
+
+    @Override
+    public AcceptToken findByToken(String token) {
+        return acceptTokenRepository.findByToken(token);
+    }
 }

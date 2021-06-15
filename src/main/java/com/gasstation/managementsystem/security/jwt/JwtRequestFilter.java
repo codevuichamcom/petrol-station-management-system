@@ -2,18 +2,17 @@ package com.gasstation.managementsystem.security.jwt;
 
 import com.gasstation.managementsystem.entity.AcceptToken;
 import com.gasstation.managementsystem.entity.Account;
-import com.gasstation.managementsystem.repository.AcceptTokenRepository;
 import com.gasstation.managementsystem.repository.AccountRepository;
 import com.gasstation.managementsystem.service.AcceptTokenService;
 import com.gasstation.managementsystem.service.impl.JwtUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -21,6 +20,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
 The JwtRequestFilter extends the Spring Web Filter OncePerRequestFilter class. For any incoming request this Filter
@@ -37,7 +38,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final AccountRepository accountRepository;
 
-    private final AcceptTokenRepository acceptTokenRepository;
     private final AcceptTokenService acceptTokenService;
 
     @Override
@@ -67,10 +67,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
         // Once we get the token validate it.
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            AcceptToken acceptToken = acceptTokenService.findByToken(jwtToken);
+            if (acceptToken == null) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                return;
+            }
 
-            UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
             Account account = accountRepository.findByUsername(username);
-            AcceptToken acceptToken = acceptTokenRepository.getAcceptToken(jwtToken,account.getId());
+            List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+            UserDetails userDetails = new org.springframework.security.core.userdetails.User(account.getUsername(), account.getPassword(), true, true, true, true, authorities);
 
             // if token is valid configure Spring Security to manually set
             // authentication

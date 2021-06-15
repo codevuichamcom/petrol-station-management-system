@@ -20,4 +20,6 @@ public interface AcceptTokenRepository extends JpaRepository<AcceptToken, Accept
     @Query("select a from AcceptToken a where a.token=?1 and a.accountId=?2")
     AcceptToken getAcceptToken(String token, int id);
 
+    AcceptToken findByToken(String token);
+
 }

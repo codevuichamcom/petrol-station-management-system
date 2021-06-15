@@ -4,10 +4,13 @@ import com.gasstation.managementsystem.entity.AcceptToken;
 
 public interface AcceptTokenService {
 
-    public AcceptToken save(AcceptToken acceptToken);
+    AcceptToken save(AcceptToken acceptToken);
 
-    public void deleteByToken(String token);
+    void deleteByToken(String token);
 
-    public void deleteByAccountId(int accountId);
+    void deleteByAccountId(int accountId);
 
+    AcceptToken getAcceptToken(String token, int id);
+
+    AcceptToken findByToken(String token);
 }

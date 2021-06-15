@@ -2,10 +2,7 @@ package com.gasstation.managementsystem.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @IdClass(AcceptTokenPrimaryKey.class)
@@ -17,9 +14,11 @@ import javax.persistence.Table;
 @Builder
 public class AcceptToken {
     @Id
+    @Column(unique = true, nullable = false)
     private String token;
 
     @Id
+    @Column(nullable = false)
     private int accountId;
 
 

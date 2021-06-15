@@ -83,22 +83,23 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountHelper.getAccountLogined();
         if (accountDTOUpdate.getOldPassword() != null) {
             if (account.getId() == id) {
-                account.setPassword(bcryptEncoder.encode(accountDTOUpdate.getNewPassword()));
-                account = accountRepository.save(account);
+                Account accountUpdate = optionalValidate.getAccountById(id);
+                String oldPassword = accountUpdate.getPassword();
+                if (!bcryptEncoder.matches(accountDTOUpdate.getOldPassword(), oldPassword)) {
+                    throw new CustomBadRequestException("Old password is incorrect", null, null);
+                } else {
+                    accountUpdate.setPassword(bcryptEncoder.encode(accountDTOUpdate.getNewPassword()));
+                    account = accountRepository.save(accountUpdate);
+                }
             } else {
                 throw new CustomForbiddenException("Account incorrect");
             }
         } else {
             UserType userType = account.getUserInfo() != null ? account.getUserInfo().getUserType() : null;
             if (userType != null && userType.getId() == UserType.ADMIN) {
-                Account acountUpdate = optionalValidate.getAccountById(id);
-                String oldPassword = bcryptEncoder.encode(acountUpdate.getPassword());
-                if (!oldPassword.equals(accountDTOUpdate.getOldPassword())) {
-                    throw new CustomBadRequestException("Old password is incorrect", null, null);
-                } else {
-                    acountUpdate.setPassword(bcryptEncoder.encode(accountDTOUpdate.getNewPassword()));
-                    account = accountRepository.save(acountUpdate);
-                }
+                Account accountUpdate = optionalValidate.getAccountById(id);
+                accountUpdate.setPassword(bcryptEncoder.encode(accountDTOUpdate.getNewPassword()));
+                account = accountRepository.save(accountUpdate);
             }
         }
         acceptTokenService.deleteByAccountId(account.getId());

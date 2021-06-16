@@ -16,6 +16,7 @@ public class OptionalValidate {
     private final AccountRepository accountRepository;
     private final TankRepository tankRepository;
     private final StationRepository stationRepository;
+    private final FuelRepository fuelRepository;
 
     public Account getAccountById(int id) throws CustomNotFoundException {
         Optional<Account> accountOptional = accountRepository.findById(id);
@@ -57,6 +58,15 @@ public class OptionalValidate {
             return stationOptional.get();
         } else {
             throw new CustomNotFoundException("Station is not exist", "id", "tank_table");
+        }
+    }
+
+    public Fuel getFuelById(int id) throws CustomNotFoundException {
+        Optional<Fuel> fuelOptional = fuelRepository.findById(id);
+        if (fuelOptional.isPresent()) {
+            return fuelOptional.get();
+        } else {
+            throw new CustomNotFoundException("Fuel is not exist", "id", "fuel_table");
         }
     }
 

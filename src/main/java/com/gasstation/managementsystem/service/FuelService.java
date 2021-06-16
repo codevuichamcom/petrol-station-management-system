@@ -1,7 +1,9 @@
 package com.gasstation.managementsystem.service;
 
-import com.gasstation.managementsystem.entity.Fuel;
-import com.gasstation.managementsystem.model.dto.FuelDTO;
+import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
+import com.gasstation.managementsystem.model.dto.fuel.FuelDTO;
+import com.gasstation.managementsystem.model.dto.fuel.FuelDTOCreate;
+import com.gasstation.managementsystem.model.dto.fuel.FuelDTOUpdate;
 import org.springframework.data.domain.Pageable;
 
 import java.util.HashMap;
@@ -9,9 +11,13 @@ import java.util.HashMap;
 public interface FuelService {
     public HashMap<String, Object> findAll(Pageable pageable);
 
-    public FuelDTO findById(int id);
+    public HashMap<String, Object> findAll();
 
-    public FuelDTO save(Fuel fuel);
+    public FuelDTO findById(int id) throws CustomNotFoundException;
 
-    public FuelDTO delete(int id);
+    public FuelDTO create(FuelDTOCreate fuelDTOCreate);
+
+    public FuelDTO update(int id, FuelDTOUpdate fuelDTOUpdate) throws CustomNotFoundException;
+
+    public FuelDTO delete(int id) throws CustomNotFoundException;
 }

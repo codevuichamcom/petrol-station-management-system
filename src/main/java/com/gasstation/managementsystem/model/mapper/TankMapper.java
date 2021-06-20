@@ -15,10 +15,8 @@ public class TankMapper {
         if (tank == null) return null;
         TankDTO tankDTO = TankDTO.builder()
                 .id(tank.getId())
-                .name(tank.getName())
                 .volume(tank.getVolume())
-                .remain(tank.getRemain())
-                .currentPrice(tank.getCurentPrice()).build();
+                .remain(tank.getRemain()).build();
 
         Station station = tank.getStation();
         if (station != null) {
@@ -32,10 +30,9 @@ public class TankMapper {
     public static Tank toTank(TankDTOCreate tankDTOCreate) {
         if (tankDTOCreate == null) return null;
         return Tank.builder()
-                .name(tankDTOCreate.getName())
                 .volume(tankDTOCreate.getVolume())
                 .remain(tankDTOCreate.getRemain())
-                .curentPrice(tankDTOCreate.getCurrentPrice())
+                .station(Station.builder().id(tankDTOCreate.getStationId()).build())
                 .build();
     }
 

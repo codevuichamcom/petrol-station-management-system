@@ -46,10 +46,6 @@ public class UserDTOUpdate {
 
     private String note;
 
-    private Double cashLimit;
-
-    private Date limitSetDate;
-
     @Positive(message = "User type id is positive integer")
     private Integer userTypeId;
 

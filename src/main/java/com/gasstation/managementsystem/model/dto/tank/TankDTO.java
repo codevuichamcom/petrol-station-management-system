@@ -1,6 +1,5 @@
 package com.gasstation.managementsystem.model.dto.tank;
 
-import com.gasstation.managementsystem.model.dto.fuel.FuelDTO;
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import lombok.*;
 
@@ -12,10 +11,7 @@ import lombok.*;
 
 public class TankDTO {
     private int id;
-    private String name;
-    private Double volume;
-    private Double remain;
-    private Double currentPrice;
+    private double volume;
+    private double remain;
     private StationDTO station;
-    private FuelDTO fuelDTO;
 }

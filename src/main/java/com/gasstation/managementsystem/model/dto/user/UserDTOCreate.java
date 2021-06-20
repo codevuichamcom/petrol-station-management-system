@@ -49,10 +49,6 @@ public class UserDTOCreate {
 
     private String note;
 
-    private double cashLimit = 0;
-
-    private Date limitSetDate = new Date();
-
     @Schema(description = "User type is positive integer and required")
     @Positive(message = "User type id is positive integer")
     private int userTypeId;

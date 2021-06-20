@@ -40,13 +40,6 @@ public class User {
 
     private String note;
 
-    @Column(nullable = false)
-    private double cashLimit = 0;
-
-    @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date limitSetDate = new Date();
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PriceChangeHistory> priceChangeHistoryList;//Danh sách những giá do người dùng này đổi
 

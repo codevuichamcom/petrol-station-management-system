@@ -23,8 +23,6 @@ public class UserDTO {
     private String phone;
     private String email;
     private String note;
-    private Double cashLimit;
-    private Date limitSetDate;
     private UserTypeDTO userType;
     private AccountDTO account;
 

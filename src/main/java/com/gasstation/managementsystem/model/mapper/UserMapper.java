@@ -21,8 +21,6 @@ public class UserMapper {
                 .phone(userDTOCreate.getPhone())
                 .email(userDTOCreate.getEmail())
                 .note(userDTOCreate.getNote())
-                .cashLimit(userDTOCreate.getCashLimit())
-                .limitSetDate(userDTOCreate.getLimitSetDate())
                 .userType(UserType.builder().id(userDTOCreate.getUserTypeId()).build()).build();
     }
 
@@ -45,8 +43,6 @@ public class UserMapper {
                 .phone(user.getPhone())
                 .email(user.getEmail())
                 .note(user.getNote())
-                .cashLimit(user.getCashLimit())
-                .limitSetDate(user.getLimitSetDate())
                 .userType(UserTypeMapper.toUserTypeDTO(user.getUserType()))
                 .account(accountDTO).build();
     }

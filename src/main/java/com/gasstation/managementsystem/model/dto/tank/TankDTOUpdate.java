@@ -9,10 +9,8 @@ import lombok.*;
 @Builder
 
 public class TankDTOUpdate {
-    private String name;
     private Double volume;
     private Double remain;
-    private Double currentPrice;
     private Integer stationId;
-    private Integer fuelId;
+    private Integer fuelCategoryId;
 }

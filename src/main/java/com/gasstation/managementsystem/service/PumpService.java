@@ -1,23 +1,18 @@
 package com.gasstation.managementsystem.service;
 
-import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
-import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
-import com.gasstation.managementsystem.model.dto.pump.PumpDTOCreate;
-import com.gasstation.managementsystem.model.dto.pump.PumpDTOUpdate;
+import com.gasstation.managementsystem.entity.Pump;
+import com.gasstation.managementsystem.model.dto.PumpDTO;
 import org.springframework.data.domain.Pageable;
 
 import java.util.HashMap;
+import java.util.List;
 
 public interface PumpService {
-    HashMap<String, Object> findAll(Pageable pageable);
+    public HashMap<String,Object> findAll(Pageable pageable);
 
-    HashMap<String, Object> findAll();
+    public PumpDTO findById(int id);
 
-    PumpDTO findById(int id) throws CustomNotFoundException;
+    public PumpDTO save(Pump pump);
 
-    PumpDTO create(PumpDTOCreate pumpDTOCreate);
-
-    PumpDTO update(int id, PumpDTOUpdate pumpDTOUpdate) throws CustomNotFoundException;
-
-    PumpDTO delete(int id) throws CustomNotFoundException;
+    public PumpDTO delete(int id);
 }

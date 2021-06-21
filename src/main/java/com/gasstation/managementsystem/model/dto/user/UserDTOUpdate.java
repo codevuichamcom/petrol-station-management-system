@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
@@ -18,9 +17,6 @@ import java.util.Date;
 @Builder
 
 public class UserDTOUpdate {
-    @Schema(description = "Username has length greater than 3", example = "user")
-    @Length(min = 4, message = "Username has length greater than 3")
-    private String username;
 
     @Schema(description = "Password must contain at least 8 characters and include both letters and numbers", example = "1234567a")
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]{8,}$", message = "Password must contain at least 8 characters and include both letters and numbers")
@@ -50,7 +46,7 @@ public class UserDTOUpdate {
     private String phone;
 
     @Schema(example = "quan@gmail.com")
-    @Email(message = "Field must be email")
+    @Pattern(regexp = "^[a-zA-Z0-9]+@(\\w+\\.)*(\\w+)$", message = "Field must be email")
     private String email;
 
     private String note;

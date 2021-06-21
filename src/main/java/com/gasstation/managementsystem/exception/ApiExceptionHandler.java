@@ -58,11 +58,11 @@ public class ApiExceptionHandler {
         return new ErrorMessage(409, "Duplicate key in db: " + ex.getMessage());
     }
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorMessage allException(Exception ex) {
-        return new ErrorMessage(500, "Some thing when wrong " + ex.getMessage()+"\n"+ex.getCause());
-    }
+//    @ExceptionHandler(Exception.class)
+//    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+//    public ErrorMessage allException(Exception ex) {
+//        return new ErrorMessage(500, "Some thing when wrong " + ex.getMessage()+"\n"+ex.getCause());
+//    }
 
 
 }

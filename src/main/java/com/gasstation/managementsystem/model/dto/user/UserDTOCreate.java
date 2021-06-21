@@ -52,8 +52,8 @@ public class UserDTOCreate {
     @Pattern(regexp = "^[0-9]{10,11}$", message = "Phone just include 10 or 11 digit")
     private String phone;
 
-    @Email(message = "Field must be email")
     @Schema(example = "quan@gmail.com")
+    @Pattern(regexp = "^[a-zA-Z0-9]+@(\\w+\\.)*(\\w+)$", message = "Field must be email")
     private String email;
 
     private String note;

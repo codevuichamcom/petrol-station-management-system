@@ -43,8 +43,14 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    public void checkDuplicateField(String identityCardNumber, String phone, String email) throws CustomDuplicateFieldException {
+    public void checkDuplicateField(String username, String identityCardNumber, String phone, String email) throws CustomDuplicateFieldException {
         User userDuplicate;
+        if (username != null) {
+            userDuplicate = userRepository.findByUsername(username);
+            if (userDuplicate != null) {
+                throw new CustomDuplicateFieldException("User name field", "username", null);
+            }
+        }
         if (identityCardNumber != null) {
             userDuplicate = userRepository.findByIdentityCardNumber(identityCardNumber);
             if (userDuplicate != null) {
@@ -89,7 +95,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO create(UserDTOCreate userDTOCreate) throws CustomDuplicateFieldException, CustomBadRequestException, CustomNotFoundException {
-        checkDuplicateField(userDTOCreate.getIdentityCardNumber(), userDTOCreate.getPhone(), userDTOCreate.getEmail());
+        if (userDTOCreate.getUserTypeId() == UserType.ADMIN) {
+            throw new CustomBadRequestException("Can't create user with type Admin", "userType", null);
+        }
+        checkDuplicateField(userDTOCreate.getUsername(), userDTOCreate.getIdentityCardNumber(), userDTOCreate.getPhone(), userDTOCreate.getEmail());
         User user = UserMapper.toUser(userDTOCreate);
         UserType userType = optionalValidate.getUserTypeById(userDTOCreate.getUserTypeId());
         user.setUserType(userType);
@@ -100,10 +109,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO update(int id, UserDTOUpdate userDTOUpdate) throws CustomDuplicateFieldException, CustomBadRequestException, CustomNotFoundException {
-        checkDuplicateField(userDTOUpdate.getIdentityCardNumber(), userDTOUpdate.getPhone(), userDTOUpdate.getEmail());
+        checkDuplicateField(null, userDTOUpdate.getIdentityCardNumber(), userDTOUpdate.getPhone(), userDTOUpdate.getEmail());
         User user = optionalValidate.getUserById(id);
         UserMapper.copyToUser(user, userDTOUpdate);
         if (userDTOUpdate.getUserTypeId() != null) {
+            if (userDTOUpdate.getUserTypeId() == UserType.ADMIN) {
+                throw new CustomBadRequestException("Can't create user with type Admin", "userType", null);
+            }
             UserType userType = optionalValidate.getUserTypeById(userDTOUpdate.getUserTypeId());
             user.setUserType(userType);
         }

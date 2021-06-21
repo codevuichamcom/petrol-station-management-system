@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-    @Query("select u from User u inner join u.account as a where a.username=?1")
     public User findByUsername(String username);
 
     public List<User> findByUserTypeId(int typeId);

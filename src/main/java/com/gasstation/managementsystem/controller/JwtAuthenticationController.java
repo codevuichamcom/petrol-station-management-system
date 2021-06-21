@@ -4,11 +4,9 @@ import com.gasstation.managementsystem.entity.AcceptToken;
 import com.gasstation.managementsystem.exception.custom.CustomUnauthorizedException;
 import com.gasstation.managementsystem.model.JwtRequest;
 import com.gasstation.managementsystem.model.JwtResponse;
-import com.gasstation.managementsystem.model.dto.account.AccountDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.security.jwt.JwtTokenUtil;
 import com.gasstation.managementsystem.service.AcceptTokenService;
-import com.gasstation.managementsystem.service.AccountService;
 import com.gasstation.managementsystem.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,8 +30,6 @@ public class JwtAuthenticationController {
 
     private final JwtTokenUtil jwtTokenUtil;
 
-    private final AccountService accountService;
-
     private final UserService userService;
 
     private final AcceptTokenService acceptTokenService;
@@ -45,15 +41,15 @@ public class JwtAuthenticationController {
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-        final AccountDTO accountDTO = accountService.findByUsername(authenticationRequest.getUsername());
+        final UserDTO userDTO = userService.findByUserName(authenticationRequest.getUsername());
 
-        if (!accountDTO.isActive()) {
+        if (!userDTO.isActive()) {
             throw new CustomUnauthorizedException("Access denied");
         }
 
-        final String token = jwtTokenUtil.generateToken(accountDTO);
+        final String token = jwtTokenUtil.generateToken(userDTO);
 
-        AcceptToken acceptToken = AcceptToken.builder().token(token).accountId(accountDTO.getId()).build();
+        AcceptToken acceptToken = AcceptToken.builder().token(token).userId(userDTO.getId()).build();
         acceptTokenService.save(acceptToken);
 
         return ResponseEntity.ok(new JwtResponse(token));

@@ -14,10 +14,10 @@ public interface AcceptTokenRepository extends JpaRepository<AcceptToken, Accept
     void deleteAllByToken(String token);
 
     @Modifying
-    @Query("delete from AcceptToken a where a.accountId=?1")
+    @Query("delete from AcceptToken a where a.userId=?1")
     void deleteAllByAccountId(int accountId);
 
-    @Query("select a from AcceptToken a where a.token=?1 and a.accountId=?2")
+    @Query("select a from AcceptToken a where a.token=?1 and a.userId=?2")
     AcceptToken getAcceptToken(String token, int id);
 
     AcceptToken findByToken(String token);

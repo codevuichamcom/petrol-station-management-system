@@ -1,9 +1,7 @@
 package com.gasstation.managementsystem.model.mapper;
 
-import com.gasstation.managementsystem.entity.Account;
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.entity.UserType;
-import com.gasstation.managementsystem.model.dto.account.AccountDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTOCreate;
 import com.gasstation.managementsystem.model.dto.user.UserDTOUpdate;
@@ -15,6 +13,8 @@ public class UserMapper {
     public static User toUser(UserDTOCreate userDTOCreate) {
         return User.builder()
                 .identityCardNumber(userDTOCreate.getIdentityCardNumber())
+                .username(userDTOCreate.getUsername())
+                .password(userDTOCreate.getPassword())
                 .name(userDTOCreate.getName())
                 .gender(userDTOCreate.isGender())
                 .dateOfBirth(userDTOCreate.getDateOfBirth())
@@ -22,30 +22,26 @@ public class UserMapper {
                 .phone(userDTOCreate.getPhone())
                 .email(userDTOCreate.getEmail())
                 .note(userDTOCreate.getNote())
+                .active(true)
                 .userType(UserType.builder().id(userDTOCreate.getUserTypeId()).build()).build();
     }
 
 
     public static UserDTO toUserDTO(User user) {
         if (user == null) return null;
-        Account account = user.getAccount();
-        AccountDTO accountDTO = AccountMapper.toAccountDTO(account);
-        if (accountDTO != null) {
-            accountDTO.setUsername(null);
-            accountDTO.setUserType(null);
-        }
         return UserDTO.builder()
                 .id(user.getId())
+                .username(user.getUsername())
                 .identityCardNumber(user.getIdentityCardNumber())
                 .name(user.getName())
                 .gender(user.isGender())
-                .dateOfBirth(DateTimeHelper.formatDate(user.getDateOfBirth(),"yyyy-MM-dd"))
+                .dateOfBirth(DateTimeHelper.formatDate(user.getDateOfBirth(), "yyyy-MM-dd"))
                 .address(user.getAddress())
                 .phone(user.getPhone())
                 .email(user.getEmail())
                 .note(user.getNote())
-                .userType(UserTypeMapper.toUserTypeDTO(user.getUserType()))
-                .account(accountDTO).build();
+                .active(user.isActive())
+                .userType(UserTypeMapper.toUserTypeDTO(user.getUserType())).build();
     }
 
     public static void copyToUser(User user, UserDTOUpdate userDTOUpdate) {

@@ -1,6 +1,5 @@
 package com.gasstation.managementsystem.model.dto.user;
 
-import com.gasstation.managementsystem.model.dto.account.AccountDTOCreate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
@@ -16,6 +15,16 @@ import java.util.Date;
 @Builder
 
 public class UserDTOCreate {
+
+    @Schema(description = "Username has length greater than 3", example = "user")
+    @NotBlank(message = "Username is mandatory")
+    @Length(min = 4, message = "Username has length greater than 3")
+    private String username;
+
+    @Schema(description = "Password must contain at least 8 characters and include both letters and numbers", example = "1234567a")
+    @NotBlank(message = "Password is mandatory")
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]{8,}$", message = "Password must contain at least 8 characters and include both letters and numbers")
+    private String password;
 
     @Schema(example = "123456789", description = "Identity card number is composed of 9, 10, 12 or 13 digits")
     @NotBlank(message = "Identity card number is mandatory")
@@ -52,8 +61,6 @@ public class UserDTOCreate {
     @Schema(description = "User type is positive integer and required")
     @Positive(message = "User type id is positive integer")
     private int userTypeId;
-
-    private AccountDTOCreate account;
 
 
 }

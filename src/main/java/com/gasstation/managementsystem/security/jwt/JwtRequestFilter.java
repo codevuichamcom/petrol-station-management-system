@@ -1,8 +1,8 @@
 package com.gasstation.managementsystem.security.jwt;
 
 import com.gasstation.managementsystem.entity.AcceptToken;
-import com.gasstation.managementsystem.entity.Account;
-import com.gasstation.managementsystem.repository.AccountRepository;
+import com.gasstation.managementsystem.entity.User;
+import com.gasstation.managementsystem.repository.UserRepository;
 import com.gasstation.managementsystem.service.AcceptTokenService;
 import com.gasstation.managementsystem.service.impl.JwtUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -32,13 +32,11 @@ class gets executed. It checks if the request has a valid JWT token. If it has a
 @RequiredArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    private final JwtUserDetailsService jwtUserDetailsService;
-
     private final JwtTokenUtil jwtTokenUtil;
 
-    private final AccountRepository accountRepository;
-
     private final AcceptTokenService acceptTokenService;
+
+    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -73,14 +71,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 return;
             }
 
-            Account account = accountRepository.findByUsername(username);
+            User user = userRepository.findByUsername(username);
             List<SimpleGrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-            UserDetails userDetails = new org.springframework.security.core.userdetails.User(account.getUsername(), account.getPassword(), true, true, true, true, authorities);
+            UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), true, true, true, true, authorities);
 
             // if token is valid configure Spring Security to manually set
             // authentication
-            if (jwtTokenUtil.validateToken(jwtToken, account) && acceptToken != null) {
+            if (jwtTokenUtil.validateToken(jwtToken, user) && acceptToken != null) {
 
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());

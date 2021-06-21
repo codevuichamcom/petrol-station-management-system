@@ -11,19 +11,19 @@ import org.springframework.data.domain.Pageable;
 import java.util.HashMap;
 
 public interface UserService {
-    public HashMap<String, Object> findAll(Pageable pageable);
+    HashMap<String, Object> findAll(Pageable pageable);
 
-    public HashMap<String, Object> findAll();
+    HashMap<String, Object> findAll();
 
-    public UserDTO findById(int id) throws CustomNotFoundException;
+    UserDTO findById(int id) throws CustomNotFoundException;
 
-    public UserDTO create(UserDTOCreate userDTOCreate) throws CustomDuplicateFieldException, CustomBadRequestException, CustomNotFoundException;
+    UserDTO create(UserDTOCreate userDTOCreate) throws CustomDuplicateFieldException, CustomBadRequestException, CustomNotFoundException;
 
-    public UserDTO update(int id, UserDTOUpdate userDTOUpdate) throws CustomDuplicateFieldException, CustomBadRequestException, CustomNotFoundException;
+    UserDTO update(int id, UserDTOUpdate userDTOUpdate) throws CustomDuplicateFieldException, CustomBadRequestException, CustomNotFoundException;
 
-    public UserDTO delete(int id) throws CustomNotFoundException;
+    UserDTO delete(int id) throws CustomNotFoundException;
 
-    public UserDTO findByUserName(String username);
+    UserDTO findByUserName(String username);
 
-    public HashMap<String, Object> findByUserTypeId(int typeId);
+    HashMap<String, Object> findByUserTypeId(int typeId);
 }

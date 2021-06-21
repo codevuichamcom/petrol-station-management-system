@@ -13,5 +13,5 @@ import java.io.Serializable;
 @Setter
 public class AcceptTokenPrimaryKey implements Serializable {
     private String token;
-    private int accountId;
+    private int userId;
 }

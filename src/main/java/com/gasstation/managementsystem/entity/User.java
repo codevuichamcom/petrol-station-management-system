@@ -19,6 +19,11 @@ public class User {
     private int id;
 
     @Column(unique = true, nullable = false)
+    private String username;
+    @Column(nullable = false)
+    private String password;
+
+    @Column(unique = true, nullable = false)
     private String identityCardNumber;//số chứng minh nhân dân
 
     @Column(nullable = false)
@@ -40,6 +45,8 @@ public class User {
 
     private String note;
 
+    private boolean active = false;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PriceChangeHistory> priceChangeHistoryList;//Danh sách những giá do người dùng này đổi
 
@@ -60,9 +67,6 @@ public class User {
 
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
     private List<ReceiptBill> receiptBillList;//Danh sách hóa đơn nhận của người này
-
-    @OneToOne(mappedBy = "userInfo")
-    private Account account;//Tài khoản của user này
 
     @ManyToOne
     @JoinColumn(name = "user_type_id")

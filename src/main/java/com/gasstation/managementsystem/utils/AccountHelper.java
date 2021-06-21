@@ -1,9 +1,8 @@
 package com.gasstation.managementsystem.utils;
 
-import com.gasstation.managementsystem.entity.Account;
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.entity.UserType;
-import com.gasstation.managementsystem.repository.AccountRepository;
+import com.gasstation.managementsystem.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,24 +11,19 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class AccountHelper {
-    private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
 
-    public Account getAccountLogined() {
+    public User getUserLogin() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         if (principal instanceof UserDetails) {
             String username = ((UserDetails) principal).getUsername();
-            Account account = accountRepository.findByUsername(username);
-            if (account != null) {
-                return account;
-            }
+            return userRepository.findByUsername(username);
         }
         return null;
     }
 
-    public UserType getUserTypeOfAccountLogined() {
-        Account account = getAccountLogined();
-        User userInfo = account.getUserInfo();
-        return (userInfo != null) ? userInfo.getUserType() : null;
+    public UserType getUserTypeOfUserLogin() {
+        User user = getUserLogin();
+        return (user != null) ? user.getUserType() : null;
     }
 }

@@ -19,7 +19,7 @@ public class AcceptToken {
 
     @Id
     @Column(nullable = false)
-    private int accountId;
+    private int userId;
 
 
 }

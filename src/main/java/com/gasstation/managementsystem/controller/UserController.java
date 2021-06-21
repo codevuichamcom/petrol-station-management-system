@@ -32,10 +32,10 @@ public class UserController {
         if (userTypeId != null) {
             return userService.findByUserTypeId(userTypeId);
         }
-        if (pageSize == null) {
-            return userService.findAll();
+        if (pageSize != null) {
+            return userService.findAll(PageRequest.of(pageIndex - 1, pageSize));
         }
-        return userService.findAll(PageRequest.of(pageIndex - 1, pageSize));
+        return userService.findAll();
     }
 
     @Operation(summary = "Find user by id")

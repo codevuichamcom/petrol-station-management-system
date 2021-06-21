@@ -1,6 +1,5 @@
 package com.gasstation.managementsystem.service.impl;
 
-import com.gasstation.managementsystem.entity.Account;
 import com.gasstation.managementsystem.entity.Station;
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.entity.UserType;
@@ -9,7 +8,6 @@ import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import com.gasstation.managementsystem.model.dto.station.StationDTOCreate;
 import com.gasstation.managementsystem.model.dto.station.StationDTOUpdate;
 import com.gasstation.managementsystem.model.mapper.StationMapper;
-import com.gasstation.managementsystem.repository.AccountRepository;
 import com.gasstation.managementsystem.repository.StationRepository;
 import com.gasstation.managementsystem.repository.UserRepository;
 import com.gasstation.managementsystem.service.StationService;
@@ -28,7 +26,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StationServiceImpl implements StationService {
     private final StationRepository stationRepository;
-    private final AccountRepository accountRepository;
     private final UserRepository userRepository;
 
     private HashMap<String, Object> listStationToMap(List<Station> stations) {
@@ -43,8 +40,8 @@ public class StationServiceImpl implements StationService {
 
     @Override
     public HashMap<String, Object> findAll(Pageable pageable, Principal principal) {
-        Account account = accountRepository.findByUsername(principal.getName());
-        Page<Station> stations = stationRepository.findByOwnerId(account.getUserInfo().getId(), pageable);
+        User user = userRepository.findByUsername(principal.getName());
+        Page<Station> stations = stationRepository.findByOwnerId(user.getId(), pageable);
         HashMap<String, Object> map = listStationToMap(stations.getContent());
         map.put("totalElement", stations.getTotalElements());
         map.put("totalPage", stations.getTotalPages());
@@ -53,15 +50,15 @@ public class StationServiceImpl implements StationService {
 
     @Override
     public HashMap<String, Object> findAll(Principal principal) {
-        Account account = accountRepository.findByUsername(principal.getName());
+        User user = userRepository.findByUsername(principal.getName());
         List<Station> stations = new ArrayList<>();
-        int userTypeId = account.getUserInfo().getUserType().getId();
+        int userTypeId = user.getUserType().getId();
         switch (userTypeId) {
             case UserType.ADMIN:
                 stations = stationRepository.findAll();
                 break;
             case UserType.OWNER:
-                stations = stationRepository.findByOwnerId(account.getUserInfo().getId());
+                stations = stationRepository.findByOwnerId(user.getId());
                 break;
         }
         return listStationToMap(stations);

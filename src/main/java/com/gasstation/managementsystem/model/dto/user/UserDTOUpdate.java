@@ -18,6 +18,15 @@ import java.util.Date;
 @Builder
 
 public class UserDTOUpdate {
+    @Schema(description = "Username has length greater than 3", example = "user")
+    @Length(min = 4, message = "Username has length greater than 3")
+    private String username;
+
+    @Schema(description = "Password must contain at least 8 characters and include both letters and numbers", example = "1234567a")
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]{8,}$", message = "Password must contain at least 8 characters and include both letters and numbers")
+    private String password;
+
+
     @Schema(example = "123456789", description = "Identity card number is composed of 9, 10, 12 or 13 digits")
     @Pattern(regexp = "^[0-9]{9}|[0-9]{10}|[0-9]{12}|[0-9]{13}$", message = "Identity card number is composed of 9, 10, 12 or 13 digits")
     private String identityCardNumber;
@@ -45,6 +54,8 @@ public class UserDTOUpdate {
     private String email;
 
     private String note;
+
+    private Boolean active;
 
     @Positive(message = "User type id is positive integer")
     private Integer userTypeId;

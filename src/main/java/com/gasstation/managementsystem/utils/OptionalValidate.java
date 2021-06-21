@@ -13,7 +13,6 @@ import java.util.Optional;
 public class OptionalValidate {
     private final UserRepository userRepository;
     private final UserTypeRepository userTypeRepository;
-    private final AccountRepository accountRepository;
     private final TankRepository tankRepository;
     private final StationRepository stationRepository;
     private final FuelRepository fuelRepository;
@@ -22,13 +21,6 @@ public class OptionalValidate {
     private final ShiftRepository shiftRepository;
     private final CardRepository cardRepository;
 
-    public Account getAccountById(int id) throws CustomNotFoundException {
-        Optional<Account> accountOptional = accountRepository.findById(id);
-        if (!accountOptional.isPresent()) {
-            throw new CustomNotFoundException("Account is not found", "user", "user_table");
-        }
-        return accountOptional.get();
-    }
 
     public User getUserById(int id) throws CustomNotFoundException {
         Optional<User> userOptional = userRepository.findById(id);

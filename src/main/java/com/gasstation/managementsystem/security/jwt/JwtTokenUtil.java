@@ -1,7 +1,7 @@
 package com.gasstation.managementsystem.security.jwt;
 
-import com.gasstation.managementsystem.entity.Account;
-import com.gasstation.managementsystem.model.dto.account.AccountDTO;
+import com.gasstation.managementsystem.entity.User;
+import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.service.AcceptTokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -60,9 +60,9 @@ public class JwtTokenUtil implements Serializable {
     }
 
     //generate token for user
-    public String generateToken(AccountDTO accountDTO) {
+    public String generateToken(UserDTO userDTO) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, accountDTO.getUsername());
+        return doGenerateToken(claims, userDTO.getUsername());
     }
 
     //while creating the token -
@@ -78,11 +78,11 @@ public class JwtTokenUtil implements Serializable {
     }
 
     //validate token
-    public Boolean validateToken(String token, Account account) {
+    public Boolean validateToken(String token, User user) {
         if (isTokenExpired(token)) {
             acceptTokenService.deleteByToken(token);
         }
         final String username = getUsernameFromToken(token);
-        return (username.equals(account.getUsername()) && account.isActive() && !isTokenExpired(token));
+        return (username.equals(user.getUsername()) && user.isActive() && !isTokenExpired(token));
     }
 }

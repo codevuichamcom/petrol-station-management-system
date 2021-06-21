@@ -1,6 +1,5 @@
 package com.gasstation.managementsystem.model.dto.user;
 
-import com.gasstation.managementsystem.model.dto.account.AccountDTO;
 import com.gasstation.managementsystem.model.dto.userType.UserTypeDTO;
 import lombok.*;
 
@@ -13,6 +12,7 @@ import lombok.*;
 
 public class UserDTO {
     private int id;
+    private String username;
     private String identityCardNumber;//số chứng minh nhân dân
     private String name;
     private Boolean gender;
@@ -21,7 +21,7 @@ public class UserDTO {
     private String phone;
     private String email;
     private String note;
+    private boolean active;
     private UserTypeDTO userType;
-    private AccountDTO account;
 
 }

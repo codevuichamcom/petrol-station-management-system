@@ -1,6 +1,5 @@
 package com.gasstation.managementsystem.service.impl;
 
-import com.gasstation.managementsystem.entity.Account;
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
@@ -9,9 +8,7 @@ import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTOCreate;
 import com.gasstation.managementsystem.model.dto.user.UserDTOUpdate;
-import com.gasstation.managementsystem.model.mapper.AccountMapper;
 import com.gasstation.managementsystem.model.mapper.UserMapper;
-import com.gasstation.managementsystem.repository.AccountRepository;
 import com.gasstation.managementsystem.repository.UserRepository;
 import com.gasstation.managementsystem.service.UserService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
@@ -31,7 +28,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final AccountRepository accountRepository;
     private final OptionalValidate optionalValidate;
 
     private final PasswordEncoder bcryptEncoder;
@@ -46,13 +42,6 @@ public class UserServiceImpl implements UserService {
         return map;
     }
 
-    private void linkUserToAccount(User user) { //gắn account với user truyền vào
-        Account account = user.getAccount();
-        if (account != null) {
-            account.setUserInfo(user);
-            accountRepository.save(account);
-        }
-    }
 
     public void checkDuplicateField(String identityCardNumber, String phone, String email) throws CustomDuplicateFieldException {
         User userDuplicate;
@@ -104,16 +93,8 @@ public class UserServiceImpl implements UserService {
         User user = UserMapper.toUser(userDTOCreate);
         UserType userType = optionalValidate.getUserTypeById(userDTOCreate.getUserTypeId());
         user.setUserType(userType);
-        if (userDTOCreate.getAccount() != null) {
-            Account account = AccountMapper.toAccount(userDTOCreate.getAccount());
-            if (accountRepository.findByUsername(account.getUsername()) != null) {
-                throw new CustomDuplicateFieldException("Duplicate field '" + account.getUsername() + "'", "username", null);
-            }
-            account.setPassword(bcryptEncoder.encode(account.getPassword()));
-            user.setAccount(account);
-        }
+        user.setPassword(bcryptEncoder.encode(userDTOCreate.getPassword()));
         user = userRepository.save(user);
-        linkUserToAccount(user);
         return UserMapper.toUserDTO(user);
     }
 
@@ -126,6 +107,7 @@ public class UserServiceImpl implements UserService {
             UserType userType = optionalValidate.getUserTypeById(userDTOUpdate.getUserTypeId());
             user.setUserType(userType);
         }
+        user.setPassword(bcryptEncoder.encode(userDTOUpdate.getPassword()));
         user = userRepository.save(user);
         return UserMapper.toUserDTO(user);
     }
@@ -133,9 +115,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO delete(int id) throws CustomNotFoundException {
         User user = optionalValidate.getUserById(id);
-        if (user.getAccount() != null) {
-            accountRepository.deleteById(user.getAccount().getId());
-        }
         userRepository.delete(user);
         return UserMapper.toUserDTO(user);
     }

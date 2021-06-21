@@ -7,6 +7,7 @@ import com.gasstation.managementsystem.model.dto.account.AccountDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTOCreate;
 import com.gasstation.managementsystem.model.dto.user.UserDTOUpdate;
+import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.NullAwareBeanUtilsBean;
 import org.apache.commons.beanutils.BeanUtilsBean;
 
@@ -38,7 +39,7 @@ public class UserMapper {
                 .identityCardNumber(user.getIdentityCardNumber())
                 .name(user.getName())
                 .gender(user.isGender())
-                .dateOfBirth(user.getDateOfBirth())
+                .dateOfBirth(DateTimeHelper.formatDate(user.getDateOfBirth(),"yyyy-MM-dd"))
                 .address(user.getAddress())
                 .phone(user.getPhone())
                 .email(user.getEmail())

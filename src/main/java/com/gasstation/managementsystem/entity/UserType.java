@@ -1,6 +1,5 @@
 package com.gasstation.managementsystem.entity;
 
-import com.gasstation.managementsystem.model.dto.userType.UserTypeDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,9 +26,7 @@ public class UserType {
     @OneToMany(mappedBy = "userType", cascade = CascadeType.ALL)
     private List<User> userList;//Dánh sách user có thuộc type này
 
+    @ManyToMany(mappedBy = "userTypeList")
+    private List<Api> apiList;// danh sách api của type này
 
-    public UserType(UserTypeDTO userTypeDTO) {
-        this.id = userTypeDTO.getId();
-        this.type = userTypeDTO.getType();
-    }
 }

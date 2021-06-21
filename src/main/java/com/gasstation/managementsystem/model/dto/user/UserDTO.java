@@ -1,10 +1,8 @@
 package com.gasstation.managementsystem.model.dto.user;
 
-import com.gasstation.managementsystem.model.dto.userType.UserTypeDTO;
 import com.gasstation.managementsystem.model.dto.account.AccountDTO;
+import com.gasstation.managementsystem.model.dto.userType.UserTypeDTO;
 import lombok.*;
-
-import java.util.Date;
 
 
 @AllArgsConstructor
@@ -18,7 +16,7 @@ public class UserDTO {
     private String identityCardNumber;//số chứng minh nhân dân
     private String name;
     private Boolean gender;
-    private Date dateOfBirth;
+    private String dateOfBirth;
     private String address;
     private String phone;
     private String email;

@@ -1,12 +1,14 @@
 package com.gasstation.managementsystem.controller;
 
 
-import com.gasstation.managementsystem.entity.PumpCode;
-import com.gasstation.managementsystem.model.dto.PumpCodeDTO;
+import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
+import com.gasstation.managementsystem.model.dto.pumpCode.PumpCodeDTO;
+import com.gasstation.managementsystem.model.dto.pumpCode.PumpCodeDTOCreate;
+import com.gasstation.managementsystem.model.dto.pumpCode.PumpCodeDTOUpdate;
 import com.gasstation.managementsystem.service.PumpCodeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +19,9 @@ import java.util.HashMap;
 @RequestMapping("/api/v1")
 @CrossOrigin
 @Tag(name = "Pump Code", description = "API for PumpCodeCode")
-
+@RequiredArgsConstructor
 public class PumpCodeController {
-    @Autowired
-    PumpCodeService PumpCodeService;
+    private final PumpCodeService PumpCodeService;
 
     @Operation(summary = "View All PumpCode")
     @GetMapping("/pump-codes")
@@ -31,26 +32,25 @@ public class PumpCodeController {
 
     @Operation(summary = "Find PumpCode by id")
     @GetMapping("/pump-codes/{id}")
-    public PumpCodeDTO getOne(@PathVariable(name = "id") Integer id) {
+    public PumpCodeDTO getOne(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
         return PumpCodeService.findById(id);
     }
 
     @Operation(summary = "Create new PumpCode")
     @PostMapping("/pump-codes")
-    public PumpCodeDTO create(@Valid @RequestBody PumpCode pumpCode) {
-        return PumpCodeService.save(pumpCode);
+    public PumpCodeDTO create(@Valid @RequestBody PumpCodeDTOCreate pumpCodeDTOCreate) throws CustomNotFoundException {
+        return PumpCodeService.create(pumpCodeDTOCreate);
     }
 
     @Operation(summary = "Update PumpCode by id")
     @PutMapping("/pump-codes/{id}")
-    public PumpCodeDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody PumpCode pumpCode) {
-        pumpCode.setId(id);
-        return PumpCodeService.save(pumpCode);
+    public PumpCodeDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody PumpCodeDTOUpdate pumpCodeDTOUpdate) throws CustomNotFoundException {
+        return PumpCodeService.update(id, pumpCodeDTOUpdate);
     }
 
     @Operation(summary = "Delete PumpCode by id")
     @DeleteMapping("/pump-codes/{id}")
-    public PumpCodeDTO delete(@PathVariable(name = "id") Integer id) {
+    public PumpCodeDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
         return PumpCodeService.delete(id);
     }
 }

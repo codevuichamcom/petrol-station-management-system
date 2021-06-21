@@ -16,6 +16,11 @@ public class OptionalValidate {
     private final AccountRepository accountRepository;
     private final TankRepository tankRepository;
     private final StationRepository stationRepository;
+    private final FuelRepository fuelRepository;
+    private final PumpRepository pumpRepository;
+    private final PumpCodeRepository pumpCodeRepository;
+    private final ShiftRepository shiftRepository;
+    private final CardRepository cardRepository;
 
     public Account getAccountById(int id) throws CustomNotFoundException {
         Optional<Account> accountOptional = accountRepository.findById(id);
@@ -57,6 +62,51 @@ public class OptionalValidate {
             return stationOptional.get();
         } else {
             throw new CustomNotFoundException("Station is not exist", "id", "tank_table");
+        }
+    }
+
+    public Fuel getFuelById(int id) throws CustomNotFoundException {
+        Optional<Fuel> fuelOptional = fuelRepository.findById(id);
+        if (fuelOptional.isPresent()) {
+            return fuelOptional.get();
+        } else {
+            throw new CustomNotFoundException("Fuel is not exist", "id", "fuel_table");
+        }
+    }
+
+    public Pump getPumpById(int id) throws CustomNotFoundException {
+        Optional<Pump> pumpOptional = pumpRepository.findById(id);
+        if (pumpOptional.isPresent()) {
+            return pumpOptional.get();
+        } else {
+            throw new CustomNotFoundException("Pump is not exist", "id", "pump_table");
+        }
+    }
+
+    public PumpCode getPumpCodeById(int id) throws CustomNotFoundException {
+        Optional<PumpCode> pumpCodeOptional = pumpCodeRepository.findById(id);
+        if (pumpCodeOptional.isPresent()) {
+            return pumpCodeOptional.get();
+        } else {
+            throw new CustomNotFoundException("Pump Code is not exist", "id", "pump_code_table");
+        }
+    }
+
+    public Shift getShiftById(int id) throws CustomNotFoundException {
+        Optional<Shift> shiftOptional = shiftRepository.findById(id);
+        if (shiftOptional.isPresent()) {
+            return shiftOptional.get();
+        } else {
+            throw new CustomNotFoundException("Shift is not exist", "id", "shift_table");
+        }
+    }
+
+    public Card getCardById(int id) throws CustomNotFoundException {
+        Optional<Card> cardOptional = cardRepository.findById(id);
+        if (cardOptional.isPresent()) {
+            return cardOptional.get();
+        } else {
+            throw new CustomNotFoundException("Card is not exist", "id", "card_table");
         }
     }
 

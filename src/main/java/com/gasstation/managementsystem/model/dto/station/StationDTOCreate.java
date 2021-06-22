@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,8 +19,8 @@ public class StationDTOCreate {
     private String name;
     @NotBlank(message = "Address is mandatory")
     private String address;
-    @Positive(message = "owner id is a positive number")
-    private int ownerId;
+    @NotNull(message = "ownerId is mandatory")
+    private Integer ownerId;
     private Double longitude;
     private Double latitude;
 }

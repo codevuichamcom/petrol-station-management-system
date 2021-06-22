@@ -21,7 +21,7 @@ public class UserDTO {
     private String phone;
     private String email;
     private String note;
-    private boolean active;
+    private Boolean active;
     private UserTypeDTO userType;
 
 }

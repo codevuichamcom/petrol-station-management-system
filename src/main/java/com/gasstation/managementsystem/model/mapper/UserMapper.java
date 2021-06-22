@@ -16,7 +16,7 @@ public class UserMapper {
                 .username(userDTOCreate.getUsername())
                 .password(userDTOCreate.getPassword())
                 .name(userDTOCreate.getName())
-                .gender(userDTOCreate.isGender())
+                .gender(userDTOCreate.getGender())
                 .dateOfBirth(userDTOCreate.getDateOfBirth())
                 .address(userDTOCreate.getAddress())
                 .phone(userDTOCreate.getPhone())

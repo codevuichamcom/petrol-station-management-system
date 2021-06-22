@@ -43,7 +43,7 @@ public class JwtAuthenticationController {
 
         final UserDTO userDTO = userService.findByUserName(authenticationRequest.getUsername());
 
-        if (!userDTO.isActive()) {
+        if (!userDTO.getActive()) {
             throw new CustomUnauthorizedException("Access denied");
         }
 

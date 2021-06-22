@@ -4,7 +4,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 
@@ -36,7 +39,8 @@ public class UserDTOCreate {
     @Length(min = 3, message = "Length greater than 3")
     private String name;
 
-    private boolean gender = false;
+    @NotNull(message = "Gender is mandatory")
+    private Boolean gender;
 
     @Schema(description = "Must be in past")
     @Past(message = "Must be in past")
@@ -59,8 +63,8 @@ public class UserDTOCreate {
     private String note;
 
     @Schema(description = "User type is positive integer and required")
-    @Positive(message = "User type id is positive integer")
-    private int userTypeId;
+    @NotNull(message = "User type id is mandatory")
+    private Integer userTypeId;
 
 
 }

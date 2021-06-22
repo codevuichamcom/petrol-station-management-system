@@ -8,10 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @SpringBootApplication
 public class App {
 
-    public static void main(String[] args) {
-        ApplicationContext context = SpringApplication.run(App.class, args);
-        PasswordEncoder passwordEncoder = context.getBean(PasswordEncoder.class);
-        System.out.println(passwordEncoder.encode("1234567a"));
-    }
+    public static void main(String[] args) {SpringApplication.run(App.class, args); }
 
 }

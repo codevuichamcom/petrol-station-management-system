@@ -1,18 +1,23 @@
 package com.gasstation.managementsystem.service;
 
-import com.gasstation.managementsystem.entity.Shift;
-import com.gasstation.managementsystem.model.dto.ShiftDTO;
+import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
+import com.gasstation.managementsystem.model.dto.shift.ShiftDTO;
+import com.gasstation.managementsystem.model.dto.shift.ShiftDTOCreate;
+import com.gasstation.managementsystem.model.dto.shift.ShiftDTOUpdate;
 import org.springframework.data.domain.Pageable;
 
 import java.util.HashMap;
-import java.util.List;
 
 public interface ShiftService {
-    public HashMap<String,Object> findAll(Pageable pageable);
+    HashMap<String, Object> findAll(Pageable pageable);
 
-    public ShiftDTO findById(int id);
+    HashMap<String, Object> findAll();
 
-    public ShiftDTO save(Shift shift);
+    ShiftDTO findById(int id) throws CustomNotFoundException;
 
-    public ShiftDTO delete(int id);
+    ShiftDTO create(ShiftDTOCreate shiftDTOCreate) throws CustomNotFoundException;
+
+    ShiftDTO update(int id, ShiftDTOUpdate shiftDTOUpdate) throws CustomNotFoundException;
+
+    ShiftDTO delete(int id) throws CustomNotFoundException;
 }

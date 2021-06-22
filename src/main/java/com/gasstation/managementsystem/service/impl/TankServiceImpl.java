@@ -57,7 +57,7 @@ public class TankServiceImpl implements TankService {
 
     @Override
     public TankDTO create(TankDTOCreate tankDTOCreate) throws CustomNotFoundException {
-        Station station = optionalValidate.getStaionById(tankDTOCreate.getStationId());
+        Station station = optionalValidate.getStationById(tankDTOCreate.getStationId());
         Fuel fuel = optionalValidate.getFuelById(tankDTOCreate.getFuelId());
 
         Tank tank = TankMapper.toTank(tankDTOCreate);
@@ -74,7 +74,7 @@ public class TankServiceImpl implements TankService {
         Tank tank = optionalValidate.getTankById(id);
         TankMapper.copyNonNullToTank(tank, tankDTOUpdate);
         if (tankDTOUpdate.getStationId() != null) {
-            Station station = optionalValidate.getStaionById(tankDTOUpdate.getStationId());
+            Station station = optionalValidate.getStationById(tankDTOUpdate.getStationId());
             tank.setStation(station);
         }
         if(tankDTOUpdate.getFuelId()!=null){

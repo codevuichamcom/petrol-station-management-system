@@ -23,6 +23,11 @@ public class Station {
     @Column(nullable = false)
     private String address;
 
+    private Double longitude; //kinh độ
+
+    private Double latitude;//vĩ độ
+
+
     @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
     private List<Tank> tankList;//Danh sách các bể của trạm này
 
@@ -44,12 +49,4 @@ public class Station {
     @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
     private List<Debt> debtList;
 
-//
-//    public Station(StationDTO stationDTO) {
-//        this.id = stationDTO.getId();
-//        this.user = stationDTO.getUser();
-//        this.tanks = stationDTO.getTanks();
-//        this.address = stationDTO.getAddress();
-//        this.tanks = stationDTO.getTanks();
-//    }
 }

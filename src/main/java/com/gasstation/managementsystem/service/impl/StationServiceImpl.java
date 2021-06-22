@@ -4,6 +4,7 @@ import com.gasstation.managementsystem.entity.Station;
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
+import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import com.gasstation.managementsystem.model.dto.station.StationDTOCreate;
 import com.gasstation.managementsystem.model.dto.station.StationDTOUpdate;
@@ -11,6 +12,7 @@ import com.gasstation.managementsystem.model.mapper.StationMapper;
 import com.gasstation.managementsystem.repository.StationRepository;
 import com.gasstation.managementsystem.repository.UserRepository;
 import com.gasstation.managementsystem.service.StationService;
+import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +29,7 @@ import java.util.Optional;
 public class StationServiceImpl implements StationService {
     private final StationRepository stationRepository;
     private final UserRepository userRepository;
+    private final OptionalValidate optionalValidate;
 
     private HashMap<String, Object> listStationToMap(List<Station> stations) {
         List<StationDTO> stationDTOS = new ArrayList<>();
@@ -65,8 +68,8 @@ public class StationServiceImpl implements StationService {
     }
 
     @Override
-    public StationDTO findById(int id) {
-        return StationMapper.toStationDTO(stationRepository.findById(id).get());
+    public StationDTO findById(int id) throws CustomNotFoundException {
+        return StationMapper.toStationDTO(optionalValidate.getStationById(id));
     }
 
     private User validateOwner(int id) throws CustomBadRequestException {
@@ -91,8 +94,8 @@ public class StationServiceImpl implements StationService {
     }
 
     @Override
-    public StationDTO update(int id, StationDTOUpdate stationDTOUpdate) throws CustomBadRequestException {
-        Station station = stationRepository.findById(id).get();
+    public StationDTO update(int id, StationDTOUpdate stationDTOUpdate) throws CustomBadRequestException, CustomNotFoundException {
+        Station station = optionalValidate.getStationById(id);
         StationMapper.copyNonNullToStation(station, stationDTOUpdate);
         if (stationDTOUpdate.getOwnerId() != null) {
             User owner = validateOwner(stationDTOUpdate.getOwnerId());
@@ -103,8 +106,8 @@ public class StationServiceImpl implements StationService {
     }
 
     @Override
-    public StationDTO delete(int id) {
-        Station station = stationRepository.findById(id).get();
+    public StationDTO delete(int id) throws CustomNotFoundException {
+        Station station = optionalValidate.getStationById(id);
         stationRepository.delete(station);
         return StationMapper.toStationDTO(station);
     }

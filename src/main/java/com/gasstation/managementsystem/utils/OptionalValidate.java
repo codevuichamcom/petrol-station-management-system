@@ -48,12 +48,12 @@ public class OptionalValidate {
         }
     }
 
-    public Station getStaionById(int id) throws CustomNotFoundException {
+    public Station getStationById(int id) throws CustomNotFoundException {
         Optional<Station> stationOptional = stationRepository.findById(id);
         if (stationOptional.isPresent()) {
             return stationOptional.get();
         } else {
-            throw new CustomNotFoundException("Station is not exist", "id", "tank_table");
+            throw new CustomNotFoundException("Station is not exist", "id", "station_table");
         }
     }
 

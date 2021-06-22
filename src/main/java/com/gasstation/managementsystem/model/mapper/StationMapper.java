@@ -22,6 +22,8 @@ public class StationMapper {
                 .id(station.getId())
                 .name(station.getName())
                 .address(station.getAddress())
+                .longitude(station.getLongitude())
+                .latitude(station.getLatitude())
                 .owner(userDTO)
                 .build();
     }
@@ -31,6 +33,8 @@ public class StationMapper {
         return Station.builder()
                 .name(stationDTOCreate.getName())
                 .address(stationDTOCreate.getAddress())
+                .longitude(stationDTOCreate.getLongitude())
+                .latitude(stationDTOCreate.getLatitude())
                 .owner(User.builder().id(stationDTOCreate.getOwnerId()).build())
                 .build();
     }

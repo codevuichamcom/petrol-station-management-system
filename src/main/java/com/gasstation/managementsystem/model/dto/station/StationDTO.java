@@ -15,5 +15,7 @@ public class StationDTO {
     private String address;
     private UserDTO owner;
     private Integer numberOfEmployee;
+    private Double longitude;
+    private Double latitude;
 
 }

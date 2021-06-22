@@ -1,7 +1,5 @@
 package com.gasstation.managementsystem.model.dto.station;
 
-import com.gasstation.managementsystem.entity.Station;
-import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -23,4 +21,6 @@ public class StationDTOCreate {
     private String address;
     @Positive(message = "owner id is a positive number")
     private int ownerId;
+    private Double longitude;
+    private Double latitude;
 }

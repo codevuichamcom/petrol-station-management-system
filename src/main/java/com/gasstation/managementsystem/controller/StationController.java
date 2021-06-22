@@ -1,6 +1,7 @@
 package com.gasstation.managementsystem.controller;
 
 import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
+import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import com.gasstation.managementsystem.model.dto.station.StationDTOCreate;
 import com.gasstation.managementsystem.model.dto.station.StationDTOUpdate;
@@ -37,7 +38,7 @@ public class StationController {
 
     @Operation(summary = "Find Station by id")
     @GetMapping("/stations/{id}")
-    public StationDTO getOne(@PathVariable(name = "id") Integer id) {
+    public StationDTO getOne(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
         return stationService.findById(id);
     }
 
@@ -49,13 +50,13 @@ public class StationController {
 
     @Operation(summary = "Update Station by id")
     @PutMapping("/stations/{id}")
-    public StationDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody StationDTOUpdate stationDTOUpdate) throws CustomBadRequestException {
+    public StationDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody StationDTOUpdate stationDTOUpdate) throws CustomBadRequestException, CustomNotFoundException {
         return stationService.update(id, stationDTOUpdate);
     }
 
     @Operation(summary = "Delete Station by id")
     @DeleteMapping("/stations/{id}")
-    public StationDTO delete(@PathVariable(name = "id") Integer id) {
+    public StationDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
         return stationService.delete(id);
     }
 }

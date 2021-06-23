@@ -13,14 +13,14 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class ShiftDTOCreate {
     @NotNull(message = "Start time is mandatory")
-    private long startTime;
+    private Long startTime;
     @NotNull(message = "End time is mandatory")
-    private long endTime;
+    private Long endTime;
     @NotNull(message = "Employee id is mandatory")
-    private int employeeId;
+    private Integer employeeId;
     @NotNull(message = "Owner id is mandatory")
-    private int ownerId;
+    private Integer ownerId;
     @NotNull(message = "Station id is mandatory")
-    private int stationId;
+    private Integer stationId;
 
 }

@@ -15,13 +15,13 @@ public class TankDTOCreate {
     @NotBlank(message = "Name is mandatory")
     private String name;
     @NotNull(message = "Volume is mandatory")
-    private double volume;
+    private Double volume;
     @NotNull(message = "Remain is mandatory")
-    private double remain;
+    private Double remain;
     @NotNull(message = "Current price is mandatory")
-    private double currentPrice;
+    private Double currentPrice;
     @NotNull(message = "stationId is mandatory")
-    private int stationId;
+    private Integer stationId;
     @NotNull(message = "fuelId  is mandatory")
-    private int fuelId;
+    private Integer fuelId;
 }

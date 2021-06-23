@@ -11,17 +11,17 @@ import javax.validation.constraints.NotNull;
 @Setter
 @Builder
 public class PumpCodeDTOCreate {
-    @NotNull
-    private long time = DateTimeHelper.getCurrentUnixTime();
-    @NotNull
-    private double numberOfLiters;
-    @NotNull
-    private double pricePerLiter;
-    @NotNull
-    private int pumpId;
-    @NotNull
-    private int shiftId;
-    @NotNull
-    private int cardId;
+    @NotNull(message = "time is mandatory")
+    private Long time = DateTimeHelper.getCurrentUnixTime();
+    @NotNull(message = "number of litter is mandatory")
+    private Double numberOfLiters;
+    @NotNull(message = "pricePerLitter is mandatory")
+    private Double pricePerLiter;
+    @NotNull(message = "Pump id is mandatory")
+    private Integer pumpId;
+    @NotNull(message = "Shift Id is mandatory")
+    private Integer shiftId;
+    @NotNull(message = "Card ìd is mandatory")
+    private Integer cardId;
 
 }

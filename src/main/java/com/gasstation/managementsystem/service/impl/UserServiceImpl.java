@@ -109,19 +109,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO update(int id, UserDTOUpdate userDTOUpdate) throws CustomDuplicateFieldException, CustomBadRequestException, CustomNotFoundException {
-        checkDuplicateField(null, userDTOUpdate.getIdentityCardNumber(), userDTOUpdate.getPhone(), userDTOUpdate.getEmail());
-        User user = optionalValidate.getUserById(id);
-        UserMapper.copyToUser(user, userDTOUpdate);
+
+        User oldUser = optionalValidate.getUserById(id);
+        String identityCardNumber = userDTOUpdate.getIdentityCardNumber();
+        if (identityCardNumber.equals(oldUser.getIdentityCardNumber())) {
+            identityCardNumber = null;
+        }
+        String phone = userDTOUpdate.getPhone();
+        if (phone.equals(oldUser.getPhone())) {
+            phone = null;
+        }
+        String email = userDTOUpdate.getEmail();
+        if (email.equals(oldUser.getEmail())) {
+            email = null;
+        }
+        checkDuplicateField(null, identityCardNumber, phone, email);
+
+        UserMapper.copyToUser(oldUser, userDTOUpdate);
         if (userDTOUpdate.getUserTypeId() != null) {
             if (userDTOUpdate.getUserTypeId() == UserType.ADMIN) {
                 throw new CustomBadRequestException("Can't create user with type Admin", "userType", null);
             }
             UserType userType = optionalValidate.getUserTypeById(userDTOUpdate.getUserTypeId());
-            user.setUserType(userType);
+            oldUser.setUserType(userType);
         }
-        user.setPassword(bcryptEncoder.encode(userDTOUpdate.getPassword()));
-        user = userRepository.save(user);
-        return UserMapper.toUserDTO(user);
+        if (userDTOUpdate.getPassword() != null) {
+            oldUser.setPassword(bcryptEncoder.encode(userDTOUpdate.getPassword()));
+        }
+        oldUser = userRepository.save(oldUser);
+        return UserMapper.toUserDTO(oldUser);
     }
 
     @Override

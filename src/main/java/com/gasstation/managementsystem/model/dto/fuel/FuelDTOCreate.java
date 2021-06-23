@@ -18,7 +18,7 @@ public class FuelDTOCreate {
     @NotBlank(message = "Unit is mandatory")
     private String unit;
     @NotNull(message = "Price is mandatory")
-    private double price;
+    private Double price;
     @NotBlank(message = "Type is mandatory")
     private String type = "Xăng";
 }

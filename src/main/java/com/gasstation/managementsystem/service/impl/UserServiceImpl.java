@@ -112,15 +112,15 @@ public class UserServiceImpl implements UserService {
 
         User oldUser = optionalValidate.getUserById(id);
         String identityCardNumber = userDTOUpdate.getIdentityCardNumber();
-        if (identityCardNumber.equals(oldUser.getIdentityCardNumber())) {
+        if (identityCardNumber != null && identityCardNumber.equals(oldUser.getIdentityCardNumber())) {
             identityCardNumber = null;
         }
         String phone = userDTOUpdate.getPhone();
-        if (phone.equals(oldUser.getPhone())) {
+        if (phone != null && phone.equals(oldUser.getPhone())) {
             phone = null;
         }
         String email = userDTOUpdate.getEmail();
-        if (email.equals(oldUser.getEmail())) {
+        if (email != null && email.equals(oldUser.getEmail())) {
             email = null;
         }
         checkDuplicateField(null, identityCardNumber, phone, email);

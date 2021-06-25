@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -27,10 +28,9 @@ public class ApiServiceImpl implements ApiService {
     private final OptionalValidate optionalValidate;
 
     private HashMap<String, Object> listApiToMap(List<Api> apis) {
-        List<ApiDTO> apiDTOS = new ArrayList<>();
-        for (Api api : apis) {
-            apiDTOS.add(ApiMapper.toApiDTO(api));
-        }
+        List<ApiDTO> apiDTOS = apis.stream()
+                .map(ApiMapper::toApiDTO)
+                .collect(Collectors.toList());
         HashMap<String, Object> map = new HashMap<>();
         map.put("data", apiDTOS);
         return map;
@@ -124,10 +124,8 @@ public class ApiServiceImpl implements ApiService {
         if (permissions == null) {
             permissions = new HashSet<>();
         }
-        for (UserType userType : permissions) {
-            if (userType.getId() == typeId) {
-                throw new CustomDuplicateFieldException("Type id already has permission", "type_id", "error in ApiServiceImpl.class");
-            }
+        if (permissions.stream().anyMatch(userType -> userType.getId() == typeId)) {
+            throw new CustomDuplicateFieldException("Type id already has permission", "type_id", "error in ApiServiceImpl.class");
         }
         permissions.add(optionalValidate.getUserTypeById(typeId));
         api.setUserTypeList(permissions);

@@ -26,8 +26,11 @@ public class ApiController {
     @Operation(summary = "View All api")
     @GetMapping("/apis")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
-                                          @RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize) {
-        return apiService.findAll(PageRequest.of(pageIndex - 1, pageSize));
+                                          @RequestParam(name = "pageSize", required = false) Integer pageSize) {
+        if (pageSize != null) {
+            return apiService.findAll(PageRequest.of(pageIndex - 1, pageSize));
+        }
+        return apiService.findAll();
     }
 
     @Operation(summary = "Find api by id")

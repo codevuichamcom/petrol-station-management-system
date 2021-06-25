@@ -9,19 +9,18 @@ import com.gasstation.managementsystem.model.dto.userType.UserTypeDTO;
 import com.gasstation.managementsystem.utils.NullAwareBeanUtilsBean;
 import org.apache.commons.beanutils.BeanUtilsBean;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ApiMapper {
 
     public static ApiDTO toApiDTO(Api api) {
         if (api == null) return null;
         Set<UserType> userTypes = api.getUserTypeList();
-        List<UserTypeDTO> userTypeDTOList = new ArrayList<>();
-        for (UserType userType : userTypes) {
-            userTypeDTOList.add(UserTypeMapper.toUserTypeDTO(userType));
-        }
+        List<UserTypeDTO> userTypeDTOList = userTypes.stream()
+                .map(UserTypeMapper::toUserTypeDTO)
+                .collect(Collectors.toList());
 
         return ApiDTO.builder()
                 .id(api.getId())

@@ -1,10 +1,12 @@
 package com.gasstation.managementsystem.security.jwt;
 
 import com.gasstation.managementsystem.entity.AcceptToken;
+import com.gasstation.managementsystem.entity.Api;
 import com.gasstation.managementsystem.entity.User;
+import com.gasstation.managementsystem.entity.UserType;
+import com.gasstation.managementsystem.repository.ApiRepository;
 import com.gasstation.managementsystem.repository.UserRepository;
 import com.gasstation.managementsystem.service.AcceptTokenService;
-import com.gasstation.managementsystem.service.impl.JwtUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /*
 The JwtRequestFilter extends the Spring Web Filter OncePerRequestFilter class. For any incoming request this Filter
@@ -37,6 +41,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private final AcceptTokenService acceptTokenService;
 
     private final UserRepository userRepository;
+
+    private final ApiRepository apiRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -72,13 +78,42 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
 
             User user = userRepository.findByUsername(username);
+            UserType userType = user.getUserType();
+            if (false && userType.getId() != UserType.ADMIN) {
+
+                String apiRequest = request.getRequestURI().toLowerCase();
+                if (apiRequest.matches("^(/\\w+)+/\\d+$")) {
+                    apiRequest = apiRequest.substring(0, apiRequest.lastIndexOf('/')) + "/{id}";
+                }
+
+
+                String methodRequest = request.getMethod().toUpperCase();
+                Optional<Api> apiOptional = apiRepository.findByApiAndMethod(apiRequest, methodRequest);
+                if (!apiOptional.isPresent()) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND, "Api not found, Error in JwtRequestFilter.class");
+                    return;
+                }
+                Set<UserType> userTypeList = apiOptional.get().getUserTypeList();
+                boolean permission = false;
+                for (UserType u : userTypeList) {
+                    if (u.getId() == userType.getId()) {
+                        permission = true;
+                        break;
+                    }
+                }
+                if (!permission) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Access denied, You are not permission");
+                    return;
+                }
+            }
+
             List<SimpleGrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
             UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), true, true, true, true, authorities);
 
             // if token is valid configure Spring Security to manually set
             // authentication
-            if (jwtTokenUtil.validateToken(jwtToken, user) && acceptToken != null) {
+            if (jwtTokenUtil.validateToken(jwtToken, user)) {
 
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());

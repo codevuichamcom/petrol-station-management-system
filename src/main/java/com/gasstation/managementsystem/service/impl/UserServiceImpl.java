@@ -109,35 +109,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO update(int id, UserDTOUpdate userDTOUpdate) throws CustomDuplicateFieldException, CustomBadRequestException, CustomNotFoundException {
-
-        User oldUser = optionalValidate.getUserById(id);
-        String identityCardNumber = userDTOUpdate.getIdentityCardNumber();
-        if (identityCardNumber != null && identityCardNumber.equals(oldUser.getIdentityCardNumber())) {
-            identityCardNumber = null;
-        }
-        String phone = userDTOUpdate.getPhone();
-        if (phone != null && phone.equals(oldUser.getPhone())) {
-            phone = null;
-        }
-        String email = userDTOUpdate.getEmail();
-        if (email != null && email.equals(oldUser.getEmail())) {
-            email = null;
-        }
-        checkDuplicateField(null, identityCardNumber, phone, email);
-
-        UserMapper.copyToUser(oldUser, userDTOUpdate);
+        checkDuplicateField(null, userDTOUpdate.getIdentityCardNumber(), userDTOUpdate.getPhone(), userDTOUpdate.getEmail());
+        User user = optionalValidate.getUserById(id);
+        UserMapper.copyToUser(user, userDTOUpdate);
         if (userDTOUpdate.getUserTypeId() != null) {
             if (userDTOUpdate.getUserTypeId() == UserType.ADMIN) {
                 throw new CustomBadRequestException("Can't create user with type Admin", "userType", null);
             }
             UserType userType = optionalValidate.getUserTypeById(userDTOUpdate.getUserTypeId());
-            oldUser.setUserType(userType);
+            user.setUserType(userType);
         }
-        if (userDTOUpdate.getPassword() != null) {
-            oldUser.setPassword(bcryptEncoder.encode(userDTOUpdate.getPassword()));
-        }
-        oldUser = userRepository.save(oldUser);
-        return UserMapper.toUserDTO(oldUser);
+        user.setPassword(bcryptEncoder.encode(userDTOUpdate.getPassword()));
+        user = userRepository.save(user);
+        return UserMapper.toUserDTO(user);
     }
 
     @Override

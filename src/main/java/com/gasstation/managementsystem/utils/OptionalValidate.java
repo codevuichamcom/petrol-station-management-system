@@ -20,6 +20,7 @@ public class OptionalValidate {
     private final PumpCodeRepository pumpCodeRepository;
     private final ShiftRepository shiftRepository;
     private final CardRepository cardRepository;
+    private final ApiRepository apiRepository;
 
 
     public User getUserById(int id) throws CustomNotFoundException {
@@ -99,6 +100,24 @@ public class OptionalValidate {
             return cardOptional.get();
         } else {
             throw new CustomNotFoundException("Card is not exist", "id", "card_table");
+        }
+    }
+
+    public Api getApiById(int id) throws CustomNotFoundException {
+        Optional<Api> apiOptional = apiRepository.findById(id);
+        if (apiOptional.isPresent()) {
+            return apiOptional.get();
+        } else {
+            throw new CustomNotFoundException("Api is not exist", "id", "api_table");
+        }
+    }
+
+    public Api getApiByApiAndMethod(String api, String method) throws CustomNotFoundException {
+        Optional<Api> apiOptional = apiRepository.findByApiAndMethod(api, method);
+        if (apiOptional.isPresent()) {
+            return apiOptional.get();
+        } else {
+            throw new CustomNotFoundException("Api and method is not exist", "(api,method)", "api_table");
         }
     }
 

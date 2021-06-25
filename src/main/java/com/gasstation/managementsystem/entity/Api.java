@@ -3,10 +3,11 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "api_tbl")
+@Table(name = "api_tbl", uniqueConstraints = {@UniqueConstraint(columnNames = {"method", "api"})})
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -23,10 +24,10 @@ public class Api {
 
     private String api;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "permission_tbl", joinColumns = @JoinColumn(name = "api_id"),
             inverseJoinColumns = @JoinColumn(name = "user_type_id"))
-    private List<UserType> userTypeList;//Danh sách userType có quyền truy cập api này
+    private Set<UserType> userTypeList = new HashSet<>();//Danh sách userType có quyền truy cập api này
 
 
 }

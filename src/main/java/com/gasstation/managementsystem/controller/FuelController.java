@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.controller;
 
+import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.fuel.FuelDTO;
 import com.gasstation.managementsystem.model.dto.fuel.FuelDTOCreate;
@@ -43,13 +44,13 @@ public class FuelController {
 
     @Operation(summary = "Create new fuel category")
     @PostMapping("/fuels")
-    public FuelDTO create(@Valid @RequestBody FuelDTOCreate fuelDTOCreate) {
+    public FuelDTO create(@Valid @RequestBody FuelDTOCreate fuelDTOCreate) throws CustomDuplicateFieldException {
         return fuelService.create(fuelDTOCreate);
     }
 
     @Operation(summary = "Update fuel category by id")
     @PutMapping("/fuels/{id}")
-    public FuelDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody FuelDTOUpdate fuelDTOUpdate) throws CustomNotFoundException {
+    public FuelDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody FuelDTOUpdate fuelDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         return fuelService.update(id, fuelDTOUpdate);
     }
 

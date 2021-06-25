@@ -1,6 +1,7 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.Fuel;
+import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.fuel.FuelDTO;
 import com.gasstation.managementsystem.model.dto.fuel.FuelDTOCreate;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -56,18 +58,33 @@ public class FuelServiceImpl implements FuelService {
     }
 
     @Override
-    public FuelDTO create(FuelDTOCreate fuelDTOCreate) {
+    public FuelDTO create(FuelDTOCreate fuelDTOCreate) throws CustomDuplicateFieldException {
+        checkDuplicate(fuelDTOCreate.getName());
         Fuel fuel = FuelMapper.toFuel(fuelDTOCreate);
         fuel = fuelRepository.save(fuel);
         return FuelMapper.toFuelDTO(fuel);
     }
 
+    private void checkDuplicate(String name) throws CustomDuplicateFieldException {
+        if (name != null) {
+            Optional<Fuel> fuelOptional = fuelRepository.findByNameContainingIgnoreCase(name);
+            if (fuelOptional.isPresent()) {
+                throw new CustomDuplicateFieldException("Duplicate field name", "name", "fuel_tbl");
+            }
+        }
+    }
+
     @Override
-    public FuelDTO update(int id, FuelDTOUpdate fuelDTOUpdate) throws CustomNotFoundException {
-        Fuel fuel = optionalValidate.getFuelById(id);
-        FuelMapper.copyNonNullToFuel(fuel, fuelDTOUpdate);
-        fuel = fuelRepository.save(fuel);
-        return FuelMapper.toFuelDTO(fuel);
+    public FuelDTO update(int id, FuelDTOUpdate fuelDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
+        Fuel oldFuel = optionalValidate.getFuelById(id);
+        String name = fuelDTOUpdate.getName();
+        if (name != null && name.equalsIgnoreCase(oldFuel.getName())) {
+            name = null;
+        }
+        checkDuplicate(name);
+        FuelMapper.copyNonNullToFuel(oldFuel, fuelDTOUpdate);
+        oldFuel = fuelRepository.save(oldFuel);
+        return FuelMapper.toFuelDTO(oldFuel);
     }
 
     @Override

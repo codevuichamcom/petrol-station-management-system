@@ -17,5 +17,5 @@ public class TankDTO {
     private Double remain;
     private Double currentPrice;
     private StationDTO station;
-    private FuelDTO fuelDTO;
+    private FuelDTO fuel;
 }

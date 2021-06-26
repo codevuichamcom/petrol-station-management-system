@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface ApiRepository extends JpaRepository<Api, Integer> {
-    Optional<Api> findByApiAndMethod(String api, String method);
+    Optional<Api> findByPathAndMethod(String path, String method);
 }

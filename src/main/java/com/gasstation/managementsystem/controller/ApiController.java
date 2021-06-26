@@ -1,10 +1,12 @@
 package com.gasstation.managementsystem.controller;
 
+import com.gasstation.managementsystem.entity.Api;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.api.ApiDTO;
 import com.gasstation.managementsystem.model.dto.api.ApiDTOCreate;
 import com.gasstation.managementsystem.model.dto.api.ApiDTOUpdate;
+import com.gasstation.managementsystem.model.dto.api.UserTypePermissionDTOCreate;
 import com.gasstation.managementsystem.service.ApiService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,7 +18,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping(value = Api.PREFIX)
 @CrossOrigin
 @Tag(name = "Api", description = "API for api")
 @RequiredArgsConstructor
@@ -46,11 +48,10 @@ public class ApiController {
     }
 
     @Operation(summary = "Create new Permission for typeId")
-    @PostMapping("/apis/{id}/userTypes/{userTypeId}")
+    @PostMapping("/apis/{id}")
     public ApiDTO createPermission(@PathVariable(name = "id") Integer id,
-                                   @PathVariable(name = "userTypeId") Integer userTypeId) throws CustomNotFoundException, CustomDuplicateFieldException {
-
-        return apiService.addPermission(id, userTypeId);
+                                   @Valid @RequestBody UserTypePermissionDTOCreate userType) throws CustomNotFoundException, CustomDuplicateFieldException {
+        return apiService.addPermission(id, userType.getUserTypeId());
     }
 
     @Operation(summary = "Update api by id")

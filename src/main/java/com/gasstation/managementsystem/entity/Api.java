@@ -7,13 +7,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "api_tbl", uniqueConstraints = {@UniqueConstraint(columnNames = {"method", "api"})})
+@Table(name = "api_tbl", uniqueConstraints = {@UniqueConstraint(columnNames = {"method", "path"})})
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
 public class Api {
+    public static final String PREFIX ="/api/v1";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -22,7 +23,7 @@ public class Api {
 
     private String method;
 
-    private String api;
+    private String path;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "permission_tbl", joinColumns = @JoinColumn(name = "api_id"),

@@ -18,7 +18,7 @@ public class ApiDTO {
 
     private String method;
 
-    private String api;
+    private String path;
 
-    private List<UserTypeDTO> userTypeList;
+    private List<UserTypeDTO> accessibleUserTypes;
 }

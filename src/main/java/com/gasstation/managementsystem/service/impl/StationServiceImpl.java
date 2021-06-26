@@ -4,6 +4,7 @@ import com.gasstation.managementsystem.entity.Station;
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
+import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import com.gasstation.managementsystem.model.dto.station.StationDTOCreate;
@@ -74,9 +75,7 @@ public class StationServiceImpl implements StationService {
 
     private User validateOwner(int id) throws CustomBadRequestException {
         Optional<User> optionalUser = userRepository.findById(id);
-        if (!optionalUser.isPresent()) {
-            throw new CustomBadRequestException("owner is not exist", "id", "user_table");
-        }
+        if (optionalUser.isEmpty()) throw new CustomBadRequestException("owner is not exist", "id", "user_table");
         User owner = optionalUser.get();
         if (owner.getUserType().getId() != UserType.OWNER) {
             throw new CustomBadRequestException("user not type owner", "id", "user_table");
@@ -85,7 +84,8 @@ public class StationServiceImpl implements StationService {
     }
 
     @Override
-    public StationDTO create(StationDTOCreate stationDTOCreate) throws CustomBadRequestException {
+    public StationDTO create(StationDTOCreate stationDTOCreate) throws CustomBadRequestException, CustomDuplicateFieldException {
+        checkDuplicate(stationDTOCreate.getName(), stationDTOCreate.getAddress());
         Station station = StationMapper.toStation(stationDTOCreate);
         User owner = validateOwner(stationDTOCreate.getOwnerId());
         station.setOwner(owner);
@@ -93,16 +93,37 @@ public class StationServiceImpl implements StationService {
         return StationMapper.toStationDTO(station);
     }
 
+    private void checkDuplicate(String name, String address) throws CustomDuplicateFieldException {
+        if (name != null && address != null) {
+            Optional<Station> stationOptional = stationRepository.findByNameAndAddress(name, address);
+            if (stationOptional.isPresent()) {
+                throw new CustomDuplicateFieldException("Duplicate field (name,address)", "(name,address)", "station_tbl, error in StationServiceImpl.class");
+            }
+        }
+    }
+
     @Override
-    public StationDTO update(int id, StationDTOUpdate stationDTOUpdate) throws CustomBadRequestException, CustomNotFoundException {
-        Station station = optionalValidate.getStationById(id);
-        StationMapper.copyNonNullToStation(station, stationDTOUpdate);
+    public StationDTO update(int id, StationDTOUpdate stationDTOUpdate) throws CustomBadRequestException, CustomNotFoundException, CustomDuplicateFieldException {
+        Station oldStation = optionalValidate.getStationById(id);
+        String name = stationDTOUpdate.getName();
+        String address = stationDTOUpdate.getAddress();
+        if (notChangeNameAndAddress(name, address, oldStation)) {
+            name = null;
+            address = null;
+        }
+        checkDuplicate(name, address);
+        StationMapper.copyNonNullToStation(oldStation, stationDTOUpdate);
         if (stationDTOUpdate.getOwnerId() != null) {
             User owner = validateOwner(stationDTOUpdate.getOwnerId());
-            station.setOwner(owner);
+            oldStation.setOwner(owner);
         }
-        station = stationRepository.save(station);
-        return StationMapper.toStationDTO(station);
+        oldStation = stationRepository.save(oldStation);
+        return StationMapper.toStationDTO(oldStation);
+    }
+
+    private boolean notChangeNameAndAddress(String name, String address, Station oldStation) {
+        return name != null && name.equalsIgnoreCase(oldStation.getName())
+                && address != null && address.equalsIgnoreCase(oldStation.getAddress());
     }
 
     @Override

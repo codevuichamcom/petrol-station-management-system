@@ -13,9 +13,5 @@ import java.util.List;
 public class ApiDTOUpdate {
     private String name;
 
-    private String method;
-
-    private String api;
-
-    private List<Integer> userTypeList;
+    private List<Integer> accessibleUserTypes;
 }

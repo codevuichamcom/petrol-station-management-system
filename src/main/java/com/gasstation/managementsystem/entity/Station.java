@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "station_tbl")
+@Table(name = "station_tbl", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "address"})})
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -17,10 +17,10 @@ public class Station {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(name = "address", nullable = false)
     private String address;
 
     private Double longitude; //kinh độ

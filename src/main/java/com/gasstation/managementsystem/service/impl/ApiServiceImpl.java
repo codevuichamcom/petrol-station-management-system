@@ -57,9 +57,9 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public ApiDTO create(ApiDTOCreate apiDTOCreate) throws CustomNotFoundException, CustomDuplicateFieldException {
-        checkDuplicate(apiDTOCreate.getApi(), apiDTOCreate.getMethod());
+        checkDuplicate(Api.PREFIX + apiDTOCreate.getPath(), apiDTOCreate.getMethod());
         Api api = ApiMapper.toApi(apiDTOCreate);
-        List<Integer> userTypeIds = apiDTOCreate.getUserTypeList();
+        List<Integer> userTypeIds = apiDTOCreate.getAccessibleUserTypes();
         Set<UserType> userTypeList = new HashSet<>();
         for (Integer id : userTypeIds) {
             userTypeList.add(optionalValidate.getUserTypeById(id));
@@ -72,17 +72,8 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public ApiDTO update(int id, ApiDTOUpdate apiDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         Api oldApi = optionalValidate.getApiById(id);
-        String api = apiDTOUpdate.getApi();
-        String method = apiDTOUpdate.getMethod();
-        if (oldApi.getApi().equals(api)) {
-            api = null;
-        }
-        if (oldApi.getMethod().equals(method)) {
-            method = null;
-        }
-        checkDuplicate(api, method);
         ApiMapper.copyNonNullToApi(oldApi, apiDTOUpdate);
-        List<Integer> userTypeIds = apiDTOUpdate.getUserTypeList();
+        List<Integer> userTypeIds = apiDTOUpdate.getAccessibleUserTypes();
         if (userTypeIds != null) {
             Set<UserType> userTypeList = new HashSet<>();
             for (Integer typeId : userTypeIds) {
@@ -90,16 +81,15 @@ public class ApiServiceImpl implements ApiService {
             }
             oldApi.setUserTypeList(userTypeList);
         }
-
         oldApi = apiRepository.save(oldApi);
         return ApiMapper.toApiDTO(oldApi);
     }
 
-    private void checkDuplicate(String api, String method) throws CustomDuplicateFieldException {
-        if (api != null && method != null) {
-            Optional<Api> apiOptional = apiRepository.findByApiAndMethod(api, method);
+    private void checkDuplicate(String path, String method) throws CustomDuplicateFieldException {
+        if (path != null && method != null) {
+            Optional<Api> apiOptional = apiRepository.findByPathAndMethod(path, method);
             if (apiOptional.isPresent()) {
-                throw new CustomDuplicateFieldException("Duplicate (api,method)", "(api,method)", "api_tbl in ApiServiceImpl.class");
+                throw new CustomDuplicateFieldException("Duplicate (path,method)", "(path,method)", "api_tbl in ApiServiceImpl.class");
             }
 
         }
@@ -113,8 +103,8 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public ApiDTO getByApi(String api, String method) throws CustomNotFoundException {
-        return ApiMapper.toApiDTO(optionalValidate.getApiByApiAndMethod(api, method));
+    public ApiDTO getByApi(String path, String method) throws CustomNotFoundException {
+        return ApiMapper.toApiDTO(optionalValidate.getUrlByApiAndMethod(path, method));
     }
 
     @Override

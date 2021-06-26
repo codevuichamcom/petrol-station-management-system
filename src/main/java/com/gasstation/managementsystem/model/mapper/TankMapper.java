@@ -26,7 +26,8 @@ public class TankMapper {
         if (station != null) {
             tankDTO.setStation(StationDTO.builder()
                     .id(station.getId())
-                    .name(station.getName()).build());
+                    .name(station.getName())
+                    .address(station.getAddress()).build());
         }
         Fuel fuel = tank.getFuel();
         if (fuel != null) {

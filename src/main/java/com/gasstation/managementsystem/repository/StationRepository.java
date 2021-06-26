@@ -4,12 +4,18 @@ import com.gasstation.managementsystem.entity.Station;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface StationRepository extends JpaRepository<Station, Integer> {
-    public Page<Station> findByOwnerId(int ownerId, Pageable pageable);
-    public List<Station> findByOwnerId(int ownerId);
+    Page<Station> findByOwnerId(int ownerId, Pageable pageable);
+
+    List<Station> findByOwnerId(int ownerId);
+
+    @Query("select s from Station  s where s.name like ?1 and s.address like ?2")
+    Optional<Station> findByNameAndAddress(String name, String address);
 }

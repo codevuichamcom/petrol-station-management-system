@@ -16,9 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,10 +27,7 @@ public class TankServiceImpl implements TankService {
     private final OptionalValidate optionalValidate;
 
     private HashMap<String, Object> listTankToMap(List<Tank> tanks) {
-        List<TankDTO> tankDTOS = new ArrayList<>();
-        for (Tank tank : tanks) {
-            tankDTOS.add(TankMapper.toTankDTO(tank));
-        }
+        List<TankDTO> tankDTOS = tanks.stream().map(TankMapper::toTankDTO).collect(Collectors.toList());
         HashMap<String, Object> map = new HashMap<>();
         map.put("data", tankDTOS);
         return map;
@@ -59,12 +56,9 @@ public class TankServiceImpl implements TankService {
     public TankDTO create(TankDTOCreate tankDTOCreate) throws CustomNotFoundException {
         Station station = optionalValidate.getStationById(tankDTOCreate.getStationId());
         Fuel fuel = optionalValidate.getFuelById(tankDTOCreate.getFuelId());
-
         Tank tank = TankMapper.toTank(tankDTOCreate);
-
         tank.setStation(station);
         tank.setFuel(fuel);
-
         tankRepository.save(tank);
         return TankMapper.toTankDTO(tank);
     }
@@ -77,11 +71,10 @@ public class TankServiceImpl implements TankService {
             Station station = optionalValidate.getStationById(tankDTOUpdate.getStationId());
             tank.setStation(station);
         }
-        if(tankDTOUpdate.getFuelId()!=null){
+        if (tankDTOUpdate.getFuelId() != null) {
             Fuel fuel = optionalValidate.getFuelById(tankDTOUpdate.getFuelId());
             tank.setFuel(fuel);
         }
-
         tank = tankRepository.save(tank);
         return TankMapper.toTankDTO(tank);
     }

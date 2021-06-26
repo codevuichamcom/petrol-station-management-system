@@ -15,10 +15,10 @@ import java.util.List;
 public class ApiDTOCreate {
     @NotBlank(message = "Name is mandatory")
     private String name;
-    @NotBlank(message = "Method is manda")
+    @NotBlank(message = "Method is mandatory")
     private String method;
-    @NotBlank(message = "Method is manda")
-    private String api;
-    @NotNull(message = "User type list is mandatory")
-    private List<Integer> userTypeList;
+    @NotBlank(message = "Path is mandatory")
+    private String path;
+    @NotNull(message = "Accessible User Type list is mandatory")
+    private List<Integer> accessibleUserTypes;
 }

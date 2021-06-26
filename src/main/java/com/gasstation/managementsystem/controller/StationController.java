@@ -1,6 +1,7 @@
 package com.gasstation.managementsystem.controller;
 
 import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
+import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import com.gasstation.managementsystem.model.dto.station.StationDTOCreate;
@@ -44,13 +45,13 @@ public class StationController {
 
     @Operation(summary = "Create new Station")
     @PostMapping("/stations")
-    public StationDTO create(@Valid @RequestBody StationDTOCreate stationDTOCreate) throws CustomBadRequestException {
+    public StationDTO create(@Valid @RequestBody StationDTOCreate stationDTOCreate) throws CustomBadRequestException, CustomDuplicateFieldException {
         return stationService.create(stationDTOCreate);
     }
 
     @Operation(summary = "Update Station by id")
     @PutMapping("/stations/{id}")
-    public StationDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody StationDTOUpdate stationDTOUpdate) throws CustomBadRequestException, CustomNotFoundException {
+    public StationDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody StationDTOUpdate stationDTOUpdate) throws CustomBadRequestException, CustomNotFoundException, CustomDuplicateFieldException {
         return stationService.update(id, stationDTOUpdate);
     }
 

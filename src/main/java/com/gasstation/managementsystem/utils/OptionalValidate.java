@@ -25,7 +25,7 @@ public class OptionalValidate {
 
     public User getUserById(int id) throws CustomNotFoundException {
         Optional<User> userOptional = userRepository.findById(id);
-        if (!userOptional.isPresent()) {
+        if (userOptional.isEmpty()) {
             throw new CustomNotFoundException("User is not found", "user", "user_table");
         }
         return userOptional.get();
@@ -112,12 +112,12 @@ public class OptionalValidate {
         }
     }
 
-    public Api getApiByApiAndMethod(String api, String method) throws CustomNotFoundException {
-        Optional<Api> apiOptional = apiRepository.findByApiAndMethod(api, method);
+    public Api getUrlByApiAndMethod(String url, String method) throws CustomNotFoundException {
+        Optional<Api> apiOptional = apiRepository.findByPathAndMethod(url, method);
         if (apiOptional.isPresent()) {
             return apiOptional.get();
         } else {
-            throw new CustomNotFoundException("Api and method is not exist", "(api,method)", "api_table");
+            throw new CustomNotFoundException("Url and method is not exist", "(url,method)", "api_table");
         }
     }
 

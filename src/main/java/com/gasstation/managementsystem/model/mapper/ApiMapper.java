@@ -21,13 +21,16 @@ public class ApiMapper {
         List<UserTypeDTO> userTypeDTOList = userTypes.stream()
                 .map(UserTypeMapper::toUserTypeDTO)
                 .collect(Collectors.toList());
-
+        String url = api.getPath();
+        if (url.matches("^/api/v1/\\w+$")) {
+            url = url.substring(url.lastIndexOf("/"));
+        }
         return ApiDTO.builder()
                 .id(api.getId())
                 .name(api.getName())
                 .method(api.getMethod())
-                .api(api.getApi())
-                .userTypeList(userTypeDTOList).build();
+                .path(url)
+                .accessibleUserTypes(userTypeDTOList).build();
     }
 
     public static Api toApi(ApiDTOCreate apiDTOCreate) {
@@ -35,7 +38,7 @@ public class ApiMapper {
         return Api.builder()
                 .name(apiDTOCreate.getName())
                 .method(apiDTOCreate.getMethod())
-                .api(apiDTOCreate.getApi())
+                .path(Api.PREFIX + apiDTOCreate.getPath())
                 .build();
     }
 

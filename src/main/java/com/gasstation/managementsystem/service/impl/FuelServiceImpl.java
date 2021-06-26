@@ -16,10 +16,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -29,7 +29,10 @@ public class FuelServiceImpl implements FuelService {
     private final OptionalValidate optionalValidate;
 
     private HashMap<String, Object> listFuelToMap(List<Fuel> fuels) {
-        List<FuelDTO> fuelDTOS = fuels.stream().map(FuelMapper::toFuelDTO).collect(Collectors.toList());
+        List<FuelDTO> fuelDTOS = new ArrayList<>();
+        for (Fuel fuel : fuels) {
+            fuelDTOS.add(FuelMapper.toFuelDTO(fuel));
+        }
         HashMap<String, Object> map = new HashMap<>();
         map.put("data", fuelDTOS);
         return map;

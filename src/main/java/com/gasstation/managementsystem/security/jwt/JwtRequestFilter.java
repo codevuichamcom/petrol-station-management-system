@@ -88,7 +88,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 
                 String methodRequest = request.getMethod().toUpperCase();
-                Optional<Api> apiOptional = apiRepository.findByApiAndMethod(apiRequest, methodRequest);
+                Optional<Api> apiOptional = apiRepository.findByPathAndMethod(apiRequest, methodRequest);
                 if (!apiOptional.isPresent()) {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Api not found, Error in JwtRequestFilter.class");
                     return;

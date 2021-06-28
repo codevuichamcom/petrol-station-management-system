@@ -7,8 +7,9 @@ import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.exception.custom.CustomUnauthorizedException;
 import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.JwtRequest;
-import com.gasstation.managementsystem.model.JwtResponse;
 import com.gasstation.managementsystem.model.dto.RefreshTokenDTO;
+import com.gasstation.managementsystem.model.dto.token.JwtResponseLogin;
+import com.gasstation.managementsystem.model.dto.token.JwtResponseRefresh;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.repository.RefreshTokenRepository;
 import com.gasstation.managementsystem.security.jwt.JwtTokenUtil;
@@ -60,7 +61,7 @@ public class JwtAuthenticationController {
         refreshTokenRepository.save(RefreshToken.builder()
                 .refreshToken(refreshToken)
                 .user(User.builder().id(userDTO.getId()).build()).build());
-        return ResponseEntity.ok(new JwtResponse(accessToken, refreshToken));
+        return ResponseEntity.ok(new JwtResponseLogin(accessToken, refreshToken));
     }
 
 
@@ -114,7 +115,7 @@ public class JwtAuthenticationController {
             refreshTokenRepository.save(RefreshToken.builder()
                     .refreshToken(refreshToken)
                     .user(User.builder().id(userDTO.getId()).build()).build());
-            return ResponseEntity.ok(new JwtResponse(accessToken, refreshToken));
+            return ResponseEntity.ok(new JwtResponseRefresh(accessToken, refreshToken, userDTO));
         } else {
             throw new CustomNotFoundException(CustomError.builder()
                     .code("not.exist").field("refreshToken").message("Refresh token not exist").build());

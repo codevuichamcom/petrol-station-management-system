@@ -1,5 +1,6 @@
-package com.gasstation.managementsystem.model;
+package com.gasstation.managementsystem.model.dto.token;
 
+import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +15,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Getter
 @Setter
-public class JwtResponse implements Serializable {
+public class JwtResponseRefresh implements Serializable {
     private static final long serialVersionUID = -8091879091924046844L;
     private String accessToken;
     private String refreshToken;
+    private UserDTO user;
 }

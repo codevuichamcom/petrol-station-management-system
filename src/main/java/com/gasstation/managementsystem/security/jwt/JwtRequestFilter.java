@@ -1,12 +1,16 @@
 package com.gasstation.managementsystem.security.jwt;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gasstation.managementsystem.entity.Api;
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.entity.UserType;
+import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.repository.ApiRepository;
 import com.gasstation.managementsystem.repository.UserRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -62,10 +66,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 System.out.println("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
                 System.out.println("JWT Token has expired");
-                String code = "token.expired";
-                String field = "accessToken";
-                String message = "JWT Token has expired";
-                response.sendRedirect("/show-error?code=" + code + "&field=" + field + "&message=" + message);
+                CustomError customError = CustomError.builder().code("token.expired").field("accessToken").message("JWT Token has expired").build();
+                Map<String, CustomError> map = new HashMap<>();
+                map.put("error", customError);
+                response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                ObjectMapper mapper = new ObjectMapper();
+                mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+                response.getOutputStream().print(mapper.writeValueAsString(map));
+                response.flushBuffer();
                 return;
             }
         } else {

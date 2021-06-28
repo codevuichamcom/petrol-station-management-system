@@ -3,6 +3,7 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -60,12 +61,6 @@ public class User {
     private List<Shift> shiftListManageByMe;//Danh sách ca bơm thuộc sự quản lý của người này(owner này)
 
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
-    private List<PaymentBill> paymentBillList;//Danh sacsh hóa đơn thanh toán do người này tạo
-
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<Payment> paymentList;//Danh sách thanh toán của người dùng này
-
-    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
     private List<ReceiptBill> receiptBillList;//Danh sách hóa đơn nhận của người này
 
     @ManyToOne
@@ -83,4 +78,7 @@ public class User {
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Debt> debtList;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<RefreshToken> refreshTokenList = new ArrayList<>();
 }

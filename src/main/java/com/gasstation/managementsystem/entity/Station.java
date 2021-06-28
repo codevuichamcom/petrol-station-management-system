@@ -49,4 +49,7 @@ public class Station {
     @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
     private List<Debt> debtList;
 
+    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
+    private List<Expenditure> expenditureList; //Danh sách chi của trạm này
+
 }

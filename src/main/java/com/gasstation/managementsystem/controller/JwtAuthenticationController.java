@@ -1,13 +1,19 @@
 package com.gasstation.managementsystem.controller;
 
-import com.gasstation.managementsystem.entity.AcceptToken;
+import com.gasstation.managementsystem.entity.RefreshToken;
+import com.gasstation.managementsystem.entity.User;
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
+import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.exception.custom.CustomUnauthorizedException;
+import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.JwtRequest;
 import com.gasstation.managementsystem.model.JwtResponse;
+import com.gasstation.managementsystem.model.dto.RefreshTokenDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
+import com.gasstation.managementsystem.repository.RefreshTokenRepository;
 import com.gasstation.managementsystem.security.jwt.JwtTokenUtil;
-import com.gasstation.managementsystem.service.AcceptTokenService;
 import com.gasstation.managementsystem.service.UserService;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +25,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Optional;
 
 @RequestMapping("/api/v1")
 @RestController
@@ -32,7 +39,7 @@ public class JwtAuthenticationController {
 
     private final UserService userService;
 
-    private final AcceptTokenService acceptTokenService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
 
     @Operation(summary = "Login to Application")
@@ -44,29 +51,18 @@ public class JwtAuthenticationController {
         final UserDTO userDTO = userService.findByUserName(authenticationRequest.getUsername());
 
         if (!userDTO.getActive()) {
-            throw new CustomUnauthorizedException("Access denied");
+            throw new CustomUnauthorizedException(CustomError.builder().code("unauthorized")
+                    .message("Access denied, you are deactive").build());
         }
 
-        final String token = jwtTokenUtil.generateToken(userDTO);
-
-        AcceptToken acceptToken = AcceptToken.builder().token(token).userId(userDTO.getId()).build();
-        acceptTokenService.save(acceptToken);
-
-        return ResponseEntity.ok(new JwtResponse(token));
+        final String accessToken = jwtTokenUtil.generateToken(userDTO.getUsername(), JwtTokenUtil.ACCESS_TOKEN_EXPIRED);
+        final String refreshToken = jwtTokenUtil.generateToken(userDTO.getUsername(), JwtTokenUtil.REFRESH_TOKEN_EXPIRED);
+        refreshTokenRepository.save(RefreshToken.builder()
+                .refreshToken(refreshToken)
+                .user(User.builder().id(userDTO.getId()).build()).build());
+        return ResponseEntity.ok(new JwtResponse(accessToken, refreshToken));
     }
 
-    @Operation(summary = "Delete Accept token by token")
-    @DeleteMapping("/delete-accept-token")
-    public void deleteAcceptToken(@RequestParam(name = "token", required = false) String token,
-                                  @RequestParam(name = "accountId", required = false) Integer accountId) {
-        if (token != null) {
-            acceptTokenService.deleteByToken(token);
-        } else {
-            if (accountId != null) {
-                acceptTokenService.deleteByAccountId(accountId);
-            }
-        }
-    }
 
     @Operation(summary = "View profile of user logined")
     @GetMapping("/profile")
@@ -74,6 +70,56 @@ public class JwtAuthenticationController {
         return userService.findByUserName(principal.getName());
     }
 
+    @Operation(summary = "View profile of user logined")
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refresh(@RequestBody RefreshTokenDTO refreshTokenDTO)
+            throws CustomUnauthorizedException, CustomBadRequestException, CustomNotFoundException {
+        String refreshTokenFromClient = refreshTokenDTO.getRefreshToken();
+        Optional<RefreshToken> refreshTokenOptional = refreshTokenRepository.findById(refreshTokenFromClient);
+        if (refreshTokenOptional.isPresent()) {
+            refreshTokenRepository.delete(refreshTokenOptional.get());
+            String username;
+            try {
+                username = jwtTokenUtil.getUsernameFromToken(refreshTokenFromClient);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Unable to get JWT Token");
+                throw new CustomBadRequestException(CustomError.builder()
+                        .code("unable.get")
+                        .message("Unable to get Refresh Token")
+                        .field("refreshToken")
+                        .build());
+            } catch (ExpiredJwtException e) {
+                System.out.println("JWT Token has expired");
+                throw new CustomBadRequestException(CustomError.builder()
+                        .code("expired")
+                        .message("Refresh Token has expired")
+                        .field("refreshToken")
+                        .build());
+            } catch (Exception e) {
+                System.out.println("refresh has something error");
+                throw new CustomBadRequestException(CustomError.builder()
+                        .code("anything")
+                        .message("refresh has something error : \n" + e.getMessage())
+                        .field("refreshToken")
+                        .build());
+            }
+
+            UserDTO userDTO = userService.findByUserName(username);
+            if (!userDTO.getActive()) {
+                throw new CustomUnauthorizedException(CustomError.builder().code("unauthorized")
+                        .message("Access denied, you are deactive").build());
+            }
+            final String accessToken = jwtTokenUtil.generateToken(username, JwtTokenUtil.ACCESS_TOKEN_EXPIRED);
+            final String refreshToken = jwtTokenUtil.generateToken(username, JwtTokenUtil.REFRESH_TOKEN_EXPIRED);
+            refreshTokenRepository.save(RefreshToken.builder()
+                    .refreshToken(refreshToken)
+                    .user(User.builder().id(userDTO.getId()).build()).build());
+            return ResponseEntity.ok(new JwtResponse(accessToken, refreshToken));
+        } else {
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.exist").field("refreshToken").message("Refresh token not exist").build());
+        }
+    }
 
     private void authenticate(String username, String password) throws Exception {
         try {
@@ -81,7 +127,7 @@ public class JwtAuthenticationController {
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
-            throw new CustomUnauthorizedException("Unauthorized");
+            throw new CustomUnauthorizedException(CustomError.builder().code("unauthorized").message("Unauthorized").build());
         }
     }
 }

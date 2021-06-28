@@ -1,8 +1,6 @@
 package com.gasstation.managementsystem.security.jwt;
 
 import com.gasstation.managementsystem.entity.User;
-import com.gasstation.managementsystem.model.dto.user.UserDTO;
-import com.gasstation.managementsystem.service.AcceptTokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -26,9 +24,9 @@ It makes use of the io.jsonwebtoken.Jwts for achieving this.
 public class JwtTokenUtil implements Serializable {
     private static final long serialVersionUID = -2550185165626007488L;
 
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+    public static final long ACCESS_TOKEN_EXPIRED = 1 * 60; //10 phút
+    public static final long REFRESH_TOKEN_EXPIRED = 2 * 60; //1 ngày
 
-    private final AcceptTokenService acceptTokenService;
 
     @Value("${jwt.secret}")
     private String secret;
@@ -60,9 +58,9 @@ public class JwtTokenUtil implements Serializable {
     }
 
     //generate token for user
-    public String generateToken(UserDTO userDTO) {
+    public String generateToken(String username, long expiredDate) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDTO.getUsername());
+        return doGenerateToken(claims, username, expiredDate);
     }
 
     //while creating the token -
@@ -70,18 +68,15 @@ public class JwtTokenUtil implements Serializable {
     //2. Sign the JWT using the HS512 algorithm and secret key.
     //3. According to JWS Compact Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
     //   compaction of the JWT to a URL-safe string
-    private String doGenerateToken(Map<String, Object> claims, String subject) {
+    private String doGenerateToken(Map<String, Object> claims, String subject, long expiredDate) {
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + expiredDate * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
     //validate token
     public Boolean validateToken(String token, User user) {
-        if (isTokenExpired(token)) {
-            acceptTokenService.deleteByToken(token);
-        }
         final String username = getUsernameFromToken(token);
         return (username.equals(user.getUsername()) && user.isActive() && !isTokenExpired(token));
     }

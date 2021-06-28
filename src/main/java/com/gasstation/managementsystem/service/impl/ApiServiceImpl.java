@@ -4,6 +4,7 @@ import com.gasstation.managementsystem.entity.Api;
 import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
+import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.dto.api.ApiDTO;
 import com.gasstation.managementsystem.model.dto.api.ApiDTOCreate;
 import com.gasstation.managementsystem.model.dto.api.ApiDTOUpdate;
@@ -89,7 +90,9 @@ public class ApiServiceImpl implements ApiService {
         if (path != null && method != null) {
             Optional<Api> apiOptional = apiRepository.findByPathAndMethod(path, method);
             if (apiOptional.isPresent()) {
-                throw new CustomDuplicateFieldException("Duplicate (path,method)", "(path,method)", "api_tbl in ApiServiceImpl.class");
+                throw new CustomDuplicateFieldException(CustomError.builder()
+                        .code("duplicate").field("(path,method)").message("Duplicate (path,method)")
+                        .table("api_tbl in ApiServiceImpl.class").build());
             }
 
         }
@@ -115,7 +118,9 @@ public class ApiServiceImpl implements ApiService {
             permissions = new HashSet<>();
         }
         if (permissions.stream().anyMatch(userType -> userType.getId() == typeId)) {
-            throw new CustomDuplicateFieldException("Type id already has permission", "type_id", "error in ApiServiceImpl.class");
+            throw new CustomDuplicateFieldException(CustomError.builder()
+                    .code("not.permission").field("type_id").message("Type id already has permission")
+                    .table("error in ApiServiceImpl.class").build());
         }
         permissions.add(optionalValidate.getUserTypeById(typeId));
         api.setUserTypeList(permissions);

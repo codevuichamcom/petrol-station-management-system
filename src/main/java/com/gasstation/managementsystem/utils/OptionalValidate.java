@@ -2,6 +2,7 @@ package com.gasstation.managementsystem.utils;
 
 import com.gasstation.managementsystem.entity.*;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
+import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ public class OptionalValidate {
     private final StationRepository stationRepository;
     private final FuelRepository fuelRepository;
     private final PumpRepository pumpRepository;
-    private final PumpCodeRepository pumpCodeRepository;
+    private final TransactionRepository transactionRepository;
     private final ShiftRepository shiftRepository;
     private final CardRepository cardRepository;
     private final ApiRepository apiRepository;
@@ -26,7 +27,8 @@ public class OptionalValidate {
     public User getUserById(int id) throws CustomNotFoundException {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isEmpty()) {
-            throw new CustomNotFoundException("User is not found", "user", "user_table");
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found").field("id").message("User is not found").table("user_table").build());
         }
         return userOptional.get();
     }
@@ -36,7 +38,8 @@ public class OptionalValidate {
         if (userTypeOptional.isPresent()) {
             return userTypeOptional.get();
         } else {
-            throw new CustomNotFoundException("User Type is not exist", "userTypeId", "user_type_table");
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found").field("id").message("User Type is not exist").table("user_type_table").build());
         }
     }
 
@@ -45,7 +48,8 @@ public class OptionalValidate {
         if (tankOptional.isPresent()) {
             return tankOptional.get();
         } else {
-            throw new CustomNotFoundException("Tank is not exist", "id", "tank_table");
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found").field("id").message("Tank is not exist").table("tank_table").build());
         }
     }
 
@@ -54,7 +58,8 @@ public class OptionalValidate {
         if (stationOptional.isPresent()) {
             return stationOptional.get();
         } else {
-            throw new CustomNotFoundException("Station is not exist", "id", "station_table");
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found").field("id").message("Station is not exist").table("station_table").build());
         }
     }
 
@@ -63,7 +68,8 @@ public class OptionalValidate {
         if (fuelOptional.isPresent()) {
             return fuelOptional.get();
         } else {
-            throw new CustomNotFoundException("Fuel is not exist", "id", "fuel_table");
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found").field("id").message("Fuel is not exist").table("fuel_table").build());
         }
     }
 
@@ -72,16 +78,18 @@ public class OptionalValidate {
         if (pumpOptional.isPresent()) {
             return pumpOptional.get();
         } else {
-            throw new CustomNotFoundException("Pump is not exist", "id", "pump_table");
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found").field("id").message("Pump is not exist").table("pump_table").build());
         }
     }
 
-    public PumpCode getPumpCodeById(int id) throws CustomNotFoundException {
-        Optional<PumpCode> pumpCodeOptional = pumpCodeRepository.findById(id);
+    public Transaction getPumpCodeById(int id) throws CustomNotFoundException {
+        Optional<Transaction> pumpCodeOptional = transactionRepository.findById(id);
         if (pumpCodeOptional.isPresent()) {
             return pumpCodeOptional.get();
         } else {
-            throw new CustomNotFoundException("Pump Code is not exist", "id", "pump_code_table");
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found").field("id").message("Pump Code is not exist").table("pump_code_table").build());
         }
     }
 
@@ -90,7 +98,8 @@ public class OptionalValidate {
         if (shiftOptional.isPresent()) {
             return shiftOptional.get();
         } else {
-            throw new CustomNotFoundException("Shift is not exist", "id", "shift_table");
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found").field("id").message("Shift is not exist").table("shift_table").build());
         }
     }
 
@@ -99,7 +108,8 @@ public class OptionalValidate {
         if (cardOptional.isPresent()) {
             return cardOptional.get();
         } else {
-            throw new CustomNotFoundException("Card is not exist", "id", "card_table");
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found").field("id").message("Card is not exist").table("card_table").build());
         }
     }
 
@@ -108,7 +118,8 @@ public class OptionalValidate {
         if (apiOptional.isPresent()) {
             return apiOptional.get();
         } else {
-            throw new CustomNotFoundException("Api is not exist", "id", "api_table");
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found").field("id").message("Api is not exist").table("api_table").build());
         }
     }
 
@@ -117,7 +128,8 @@ public class OptionalValidate {
         if (apiOptional.isPresent()) {
             return apiOptional.get();
         } else {
-            throw new CustomNotFoundException("Url and method is not exist", "(url,method)", "api_table");
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found").field("(url,method)").message("Url and method is not exist").table("api_table").build());
         }
     }
 

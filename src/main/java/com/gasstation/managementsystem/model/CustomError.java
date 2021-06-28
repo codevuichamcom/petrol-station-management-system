@@ -1,19 +1,15 @@
 package com.gasstation.managementsystem.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.util.HashMap;
-import java.util.Map;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 
 public class CustomError {
+    private String code;
     private String message;
     private String field;
     private String table;

@@ -36,13 +36,13 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(CustomForbiddenException.class)
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
-    public Map<String, Object> forBiddenException(CustomForbiddenException ex) {
+    public Map<String, CustomError> forBiddenException(CustomForbiddenException ex) {
         return ex.getErrorHashMap();
     }
 
     @ExceptionHandler(CustomUnauthorizedException.class)
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
-    public Map<String, String> unAuthorizedException(CustomUnauthorizedException ex) {
+    public Map<String, CustomError> unAuthorizedException(CustomUnauthorizedException ex) {
         return ex.getErrorHashMap();
     }
 

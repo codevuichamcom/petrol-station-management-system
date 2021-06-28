@@ -27,7 +27,7 @@ public class Pump {
     private Tank tank;
 
     @OneToMany(mappedBy = "pump",cascade = CascadeType.ALL)
-    private List<PumpCode> pumpCodeList;//Danh sách mã bơm của vòi này
+    private List<Transaction> transactionList;//Danh sách mã bơm của vòi này
 
 
 

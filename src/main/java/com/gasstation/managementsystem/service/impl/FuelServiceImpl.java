@@ -3,6 +3,7 @@ package com.gasstation.managementsystem.service.impl;
 import com.gasstation.managementsystem.entity.Fuel;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
+import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.dto.fuel.FuelDTO;
 import com.gasstation.managementsystem.model.dto.fuel.FuelDTOCreate;
 import com.gasstation.managementsystem.model.dto.fuel.FuelDTOUpdate;
@@ -66,7 +67,8 @@ public class FuelServiceImpl implements FuelService {
         if (name != null) {
             Optional<Fuel> fuelOptional = fuelRepository.findByNameContainingIgnoreCase(name);
             if (fuelOptional.isPresent()) {
-                throw new CustomDuplicateFieldException("Duplicate field name", "name", "fuel_tbl");
+                throw new CustomDuplicateFieldException(CustomError.builder()
+                        .code("duplicate").field("name").message("Duplicate field name").build());
             }
         }
     }

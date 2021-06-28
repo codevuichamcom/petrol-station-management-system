@@ -3,7 +3,6 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Time;
 import java.util.Date;
 import java.util.List;
 
@@ -40,13 +39,7 @@ public class Shift {
     private Station station;
 
     @OneToMany(mappedBy = "shift", cascade = CascadeType.ALL)
-    private List<PumpCode> pumpCodeList;//Danh sách mã bơm của ca này
-
-    @OneToMany(mappedBy = "shift", cascade = CascadeType.ALL)
-    private List<PaymentBill> paymentBillList;//Danh sách hóa đơn thanh toán của ca này
-
-    @OneToMany(mappedBy = "shift", cascade = CascadeType.ALL)
-    private List<Payment> paymentList;//Danh sách thanh toán của ca này
+    private List<Transaction> transactionList;//Danh sách mã bơm của ca này
 
     @OneToMany(mappedBy = "shift", cascade = CascadeType.ALL)
     private List<ReceiptBill> receiptBillList;//Danh sách hóa đơn nhận của ca này;

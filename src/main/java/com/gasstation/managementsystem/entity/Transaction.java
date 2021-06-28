@@ -6,13 +6,13 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "pump_code_tbl")
+@Table(name = "transaction_tbl")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
-public class PumpCode {
+public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -22,17 +22,17 @@ public class PumpCode {
     private Date time = new Date();
 
     @Column(nullable = false)
-    private double numberOfLiters = 0;
+    private double volume = 0;
 
     @Column(nullable = false)
-    private double pricePerLiter = 0;
+    private double unitPrice = 0;
 
     @ManyToOne
-    @JoinColumn(name = "pump_id")
+    @JoinColumn(name = "pump_id", nullable = false)
     private Pump pump;//Mã bơm của vòi nào
 
     @ManyToOne
-    @JoinColumn(name = "shift_id")
+    @JoinColumn(name = "shift_id", nullable = false)
     private Shift shift;// Mã bơm này của ca nào
 
     @ManyToOne

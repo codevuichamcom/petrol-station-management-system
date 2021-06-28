@@ -1,4 +1,4 @@
-package com.gasstation.managementsystem.model.dto.pumpCode;
+package com.gasstation.managementsystem.model.dto.transaction;
 
 import com.gasstation.managementsystem.utils.DateTimeHelper;
 import lombok.*;
@@ -8,7 +8,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class PumpCodeDTOUpdate {
+public class TransactionDTOUpdate {
     private Long time = DateTimeHelper.getCurrentUnixTime();
     private Double numberOfLiters;
     private Double pricePerLiter;

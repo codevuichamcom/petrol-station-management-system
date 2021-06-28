@@ -5,6 +5,7 @@ import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
+import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTOCreate;
 import com.gasstation.managementsystem.model.dto.user.UserDTOUpdate;
@@ -18,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,26 +49,29 @@ public class UserServiceImpl implements UserService {
         if (username != null) {
             userDuplicate = userRepository.findByUsername(username);
             if (userDuplicate != null) {
-                throw new CustomDuplicateFieldException("User name field", "username", null);
+                throw new CustomDuplicateFieldException(CustomError.builder().code("duplicate").field("username").message("User name field").build());
             }
         }
         if (identityCardNumber != null) {
             userDuplicate = userRepository.findByIdentityCardNumber(identityCardNumber);
             if (userDuplicate != null) {
-                throw new CustomDuplicateFieldException("Duplicate field", "indentityCardNumber", null);
+                throw new CustomDuplicateFieldException(CustomError.builder().code("duplicate")
+                        .field("indentityCardNumber").message("Duplicate field").build());
             }
         }
         if (phone != null) {
             userDuplicate = userRepository.findByPhone(phone);
             if (userDuplicate != null) {
-                throw new CustomDuplicateFieldException("Duplicate field", "phone", null);
+                throw new CustomDuplicateFieldException(CustomError.builder()
+                        .code("duplicate").field("phone").message("Duplicate field").build());
             }
         }
 
         if (email != null) {
             userDuplicate = userRepository.findByEmail(email);
             if (userDuplicate != null) {
-                throw new CustomDuplicateFieldException("Duplicate field", "email", null);
+                throw new CustomDuplicateFieldException(CustomError.builder()
+                        .code("duplicate").field("email").message("Duplicate field").build());
             }
         }
     }
@@ -97,7 +100,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO create(UserDTOCreate userDTOCreate) throws CustomDuplicateFieldException, CustomBadRequestException, CustomNotFoundException {
         if (userDTOCreate.getUserTypeId() == UserType.ADMIN) {
-            throw new CustomBadRequestException("Can't create user with type Admin", "userType", null);
+            throw new CustomBadRequestException(CustomError.builder()
+                    .code("not.match.type").field("userType").message("Can't create user with type Admin").build());
         }
         checkDuplicateField(userDTOCreate.getUsername(), userDTOCreate.getIdentityCardNumber(), userDTOCreate.getPhone(), userDTOCreate.getEmail());
         User user = UserMapper.toUser(userDTOCreate);
@@ -129,7 +133,8 @@ public class UserServiceImpl implements UserService {
         UserMapper.copyToUser(oldUser, userDTOUpdate);
         if (userDTOUpdate.getUserTypeId() != null) {
             if (userDTOUpdate.getUserTypeId() == UserType.ADMIN) {
-                throw new CustomBadRequestException("Can't create user with type Admin", "userType", null);
+                throw new CustomBadRequestException(CustomError.builder()
+                        .code("forbidden").field("userType").message("Can't create user with type Admin").build());
             }
             UserType userType = optionalValidate.getUserTypeById(userDTOUpdate.getUserTypeId());
             oldUser.setUserType(userType);
@@ -158,4 +163,5 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.findByUserTypeId(typeId);
         return listUserToMap(users);
     }
+
 }

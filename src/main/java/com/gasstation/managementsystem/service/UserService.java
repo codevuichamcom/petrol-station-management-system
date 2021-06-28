@@ -26,4 +26,5 @@ public interface UserService {
     UserDTO findByUserName(String username);
 
     HashMap<String, Object> findByUserTypeId(int typeId);
+
 }

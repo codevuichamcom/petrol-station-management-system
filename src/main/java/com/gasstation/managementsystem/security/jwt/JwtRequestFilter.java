@@ -1,12 +1,10 @@
 package com.gasstation.managementsystem.security.jwt;
 
-import com.gasstation.managementsystem.entity.AcceptToken;
 import com.gasstation.managementsystem.entity.Api;
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.repository.ApiRepository;
 import com.gasstation.managementsystem.repository.UserRepository;
-import com.gasstation.managementsystem.service.AcceptTokenService;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,8 +36,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final JwtTokenUtil jwtTokenUtil;
 
-    private final AcceptTokenService acceptTokenService;
-
     private final UserRepository userRepository;
 
     private final ApiRepository apiRepository;
@@ -53,29 +49,25 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         final String requestTokenHeader = request.getHeader("Authorization");
 
         String username = null;
-        String jwtToken = null;
+        String accessToken = null;
         // JWT Token is in the form "Bearer token". Remove Bearer word and get
         // only the Token
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
-            jwtToken = requestTokenHeader.substring(7).trim();
+            accessToken = requestTokenHeader.substring(7).trim();
             try {
-                username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+                username = jwtTokenUtil.getUsernameFromToken(accessToken);
             } catch (IllegalArgumentException e) {
                 System.out.println("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
-                acceptTokenService.deleteByToken(jwtToken);
                 System.out.println("JWT Token has expired");
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "TokenExpired");
+                return;
             }
         } else {
             logger.warn("JWT Token does not begin with Bearer String");
         }
         // Once we get the token validate it.
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            AcceptToken acceptToken = acceptTokenService.findByToken(jwtToken);
-            if (acceptToken == null) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-                return;
-            }
 
             User user = userRepository.findByUsername(username);
             UserType userType = user.getUserType();
@@ -113,7 +105,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             // if token is valid configure Spring Security to manually set
             // authentication
-            if (jwtTokenUtil.validateToken(jwtToken, user)) {
+            if (jwtTokenUtil.validateToken(accessToken, user)) {
 
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());

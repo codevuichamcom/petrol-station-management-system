@@ -3,6 +3,7 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,10 +21,8 @@ public class Supplier {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private double debtBeginPeriod = 0;//công nợ đầu kì
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String phone;
 
     @Column(nullable = false)
@@ -32,7 +31,7 @@ public class Supplier {
     private String note;
 
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
-    private List<FuelImportBill> fuelImportBillList;// Danh sách phiếu nhập nhiên liệu của chuỗi cung ứng này
+    private List<FuelImportBill> fuelImportBillList = new ArrayList<>();// Danh sách phiếu nhập nhiên liệu của chuỗi cung ứng này
 
 
 }

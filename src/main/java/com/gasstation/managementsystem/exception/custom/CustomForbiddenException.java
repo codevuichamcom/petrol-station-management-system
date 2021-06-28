@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.exception.custom;
 
+import com.gasstation.managementsystem.model.CustomError;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,11 +10,11 @@ import java.util.Map;
 @Getter
 @Setter
 public class CustomForbiddenException extends Exception {
-    Map<String, Object> errorHashMap;
+    Map<String, CustomError> errorHashMap;
 
-    public CustomForbiddenException(String message) {
+    public CustomForbiddenException(CustomError customError) {
         errorHashMap = new HashMap<>();
-        errorHashMap.put("error", message);
+        errorHashMap.put("error", customError);
     }
 
 }

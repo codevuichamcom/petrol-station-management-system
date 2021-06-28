@@ -6,6 +6,7 @@ import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
+import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import com.gasstation.managementsystem.model.dto.station.StationDTOCreate;
 import com.gasstation.managementsystem.model.dto.station.StationDTOUpdate;
@@ -75,10 +76,12 @@ public class StationServiceImpl implements StationService {
 
     private User validateOwner(int id) throws CustomBadRequestException {
         Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isEmpty()) throw new CustomBadRequestException("owner is not exist", "id", "user_table");
+        if (optionalUser.isEmpty()) throw new CustomBadRequestException(CustomError.builder()
+                .code("not.exist").field("id").message("owner is not exist").build());
         User owner = optionalUser.get();
         if (owner.getUserType().getId() != UserType.OWNER) {
-            throw new CustomBadRequestException("user not type owner", "id", "user_table");
+            throw new CustomBadRequestException(CustomError.builder()
+                    .code("not.match.type").field("type_id").message("user not type owner").build());
         }
         return optionalUser.get();
     }
@@ -97,7 +100,9 @@ public class StationServiceImpl implements StationService {
         if (name != null && address != null) {
             Optional<Station> stationOptional = stationRepository.findByNameAndAddress(name, address);
             if (stationOptional.isPresent()) {
-                throw new CustomDuplicateFieldException("Duplicate field (name,address)", "(name,address)", "station_tbl, error in StationServiceImpl.class");
+                throw new CustomDuplicateFieldException(CustomError.builder()
+                        .code("duplicate").field("(name,address)").message("Duplicate field (name,address)")
+                        .table("station_tbl, error in StationServiceImpl.class").build());
             }
         }
     }

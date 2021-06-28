@@ -3,6 +3,7 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -46,10 +47,7 @@ public class Card {
     private Date activeDate;
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
-    private List<PumpCode> pumpCodeList;//Danh sách mã bơm trả bằng thẻ này
-
-    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
-    private List<Payment> paymentList;//Danh sách thanh toán của Thẻ này
+    private List<Transaction> transactionList;//Danh sách mã bơm trả bằng thẻ này
 
     @ManyToOne
     @JoinColumn(name = "activate_user_id")
@@ -58,5 +56,8 @@ public class Card {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User userInfo;//Người nào sử dụng thẻ này
+
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
+    private List<ReceiptBill> receiptBillList = new ArrayList<>();
 
 }

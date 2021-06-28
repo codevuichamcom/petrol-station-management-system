@@ -91,7 +91,7 @@ public class JwtAuthenticationController {
             } catch (ExpiredJwtException e) {
                 System.out.println("JWT Token has expired");
                 throw new CustomBadRequestException(CustomError.builder()
-                        .code("expired")
+                        .code("token.expired")
                         .message("Refresh Token has expired")
                         .field("refreshToken")
                         .build());

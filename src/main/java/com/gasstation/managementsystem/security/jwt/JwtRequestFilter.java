@@ -20,10 +20,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /*
 The JwtRequestFilter extends the Spring Web Filter OncePerRequestFilter class. For any incoming request this Filter
@@ -39,13 +36,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private final UserRepository userRepository;
 
     private final ApiRepository apiRepository;
+    private final List<String> listDontAuthorization = Arrays.asList("/show-error", "/api/v1/login", "/api/v1/refresh-token");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
 
-
+        String url = request.getRequestURI();
+        if (listDontAuthorization.stream().anyMatch(o -> o.equals(url))) {
+            chain.doFilter(request, response);
+            return;
+        }
         final String requestTokenHeader = request.getHeader("Authorization");
 
         String username = null;
@@ -60,7 +62,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 System.out.println("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
                 System.out.println("JWT Token has expired");
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "TokenExpired");
+                String code = "token.expired";
+                String field = "accessToken";
+                String message = "JWT Token has expired";
+                response.sendRedirect("/show-error?code=" + code + "&field=" + field + "&message=" + message);
                 return;
             }
         } else {

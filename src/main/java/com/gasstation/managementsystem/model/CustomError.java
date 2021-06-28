@@ -10,7 +10,7 @@ import lombok.*;
 
 public class CustomError {
     private String code;
-    private String message;
     private String field;
+    private String message;
     private String table;
 }

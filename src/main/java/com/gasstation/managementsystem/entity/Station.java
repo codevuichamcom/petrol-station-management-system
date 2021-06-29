@@ -41,15 +41,10 @@ public class Station {
     @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
     private List<Shift> shiftList;//Danh Sách ca bơm của Trạm này
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "user_station_tbl", joinColumns = @JoinColumn(name = "station_id"),
-            inverseJoinColumns = @JoinColumn(name = "employee_id"))
-    private List<User> employeeList;
-
     @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
     private List<Debt> debtList;
 
     @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
-    private List<Expenditure> expenditureList; //Danh sách chi của trạm này
+    private List<Expense> expenseList; //Danh sách chi của trạm này
 
 }

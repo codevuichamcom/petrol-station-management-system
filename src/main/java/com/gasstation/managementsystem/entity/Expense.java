@@ -6,13 +6,13 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "expenditure_tbl")
+@Table(name = "expense_tbl")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
-public class Expenditure {
+public class Expense {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +24,9 @@ public class Expenditure {
 
     @Column(nullable = false)
     private String note;
+
+    @Column(nullable = false)
+    private String reason;
 
     @Column(nullable = false)
     private double amount = 0;

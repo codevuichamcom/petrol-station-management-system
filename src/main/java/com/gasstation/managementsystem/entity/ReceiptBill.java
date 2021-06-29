@@ -21,6 +21,7 @@ public class ReceiptBill {
     @Temporal(TemporalType.DATE)
     private Date date = new Date();
 
+    @Column(nullable = false)
     private String reason;
 
     @Column(nullable = false)

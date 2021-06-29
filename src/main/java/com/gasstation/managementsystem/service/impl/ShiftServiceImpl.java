@@ -62,8 +62,7 @@ public class ShiftServiceImpl implements ShiftService {
         User employee = optionalValidate.getUserById(shiftDTOCreate.getEmployeeId());
         User owner = optionalValidate.getUserById(shiftDTOCreate.getOwnerId());
         Station station = optionalValidate.getStationById(shiftDTOCreate.getStationId());
-        shift.setEmployee(employee);
-        shift.setOwner(owner);
+//        shift.setEmployeeList(employee);
         shift.setStation(station);
         shift = shiftRepository.save(shift);
         return ShiftMapper.toShiftDTO(shift);
@@ -71,22 +70,23 @@ public class ShiftServiceImpl implements ShiftService {
 
     @Override
     public ShiftDTO update(int id, ShiftDTOUpdate shiftDTOUpdate) throws CustomNotFoundException {
-        Shift shift = optionalValidate.getShiftById(id);
-        ShiftMapper.copyNonNullToTank(shift, shiftDTOUpdate);
-        if (shiftDTOUpdate.getEmployeeId() != null) {
-            User employee = optionalValidate.getUserById(shiftDTOUpdate.getEmployeeId());
-            shift.setEmployee(employee);
-        }
-        if (shiftDTOUpdate.getOwnerId() != null) {
-            User owner = optionalValidate.getUserById(shiftDTOUpdate.getOwnerId());
-            shift.setOwner(owner);
-        }
-        if (shiftDTOUpdate.getStationId() != null) {
-            Station station = optionalValidate.getStationById(shiftDTOUpdate.getStationId());
-            shift.setStation(station);
-        }
-        shift = shiftRepository.save(shift);
-        return ShiftMapper.toShiftDTO(shift);
+//        Shift shift = optionalValidate.getShiftById(id);
+//        ShiftMapper.copyNonNullToTank(shift, shiftDTOUpdate);
+//        if (shiftDTOUpdate.getEmployeeId() != null) {
+//            User employee = optionalValidate.getUserById(shiftDTOUpdate.getEmployeeId());
+//            shift.setEmployee(employee);
+//        }
+//        if (shiftDTOUpdate.getOwnerId() != null) {
+//            User owner = optionalValidate.getUserById(shiftDTOUpdate.getOwnerId());
+//            shift.setOwner(owner);
+//        }
+//        if (shiftDTOUpdate.getStationId() != null) {
+//            Station station = optionalValidate.getStationById(shiftDTOUpdate.getStationId());
+//            shift.setStation(station);
+//        }
+//        shift = shiftRepository.save(shift);
+//        return ShiftMapper.toShiftDTO(shift);
+        return null;
     }
 
 

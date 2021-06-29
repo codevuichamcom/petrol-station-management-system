@@ -52,6 +52,6 @@ public class FuelImportBill {
     private Tank tank; // Phiếu nhập nhiên liệu này thuộc bể nào
 
     @OneToMany(mappedBy = "fuelImportBill", cascade = CascadeType.ALL)
-    private List<Expenditure> expenditureList = new ArrayList<>();//Danh sách chi phí của hóa đơn này
+    private List<Expense> expenseList = new ArrayList<>();//Danh sách chi phí của hóa đơn này
 
 }

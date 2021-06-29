@@ -4,7 +4,9 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "shift_tbl") //ca bơm
@@ -19,20 +21,17 @@ public class Shift {
     private int id;
 
     @Column(nullable = false)
+    private String name;
+    @Column(nullable = false)
+    private String type;
+
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date startTime = new Date();
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date endTime = new Date();
-
-    @ManyToOne
-    @JoinColumn(name = "employee_id")
-    private User employee;//Ca bơm đấy của nhân viên nào
-
-    @ManyToOne
-    @JoinColumn(name = "owener_id")
-    private User owner;
 
     @ManyToOne
     @JoinColumn(name = "station_id")
@@ -43,4 +42,7 @@ public class Shift {
 
     @OneToMany(mappedBy = "shift", cascade = CascadeType.ALL)
     private List<ReceiptBill> receiptBillList;//Danh sách hóa đơn nhận của ca này;
+
+    @ManyToMany(mappedBy = "shiftList")
+    private Set<User> employeeList = new HashSet<>();
 }

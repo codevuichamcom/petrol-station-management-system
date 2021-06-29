@@ -33,11 +33,11 @@ public class Tank {
     private List<FuelImportBill> fuelImportBillList; //Danh sách phiếu nhập của bể này
 
     @ManyToOne
-    @JoinColumn(name = "fuel_id") //join với fuel_tbl
+    @JoinColumn(name = "fuel_id", nullable = false) //join với fuel_tbl
     private Fuel fuel;// Bể này chứa nhiên liệu gì
 
     @ManyToOne
-    @JoinColumn(name = "station_id")//join với station_tbl
+    @JoinColumn(name = "station_id", nullable = false)//join với station_tbl
     private Station station; //Bể này của Trạm nào
 
     @OneToMany(mappedBy = "tank", cascade = CascadeType.ALL)

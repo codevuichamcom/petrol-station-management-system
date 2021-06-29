@@ -22,8 +22,8 @@ public class ShiftMapper {
 
     public static ShiftDTO toShiftDTO(Shift shift) {
         if (shift == null) return null;
-        UserDTO employee = userToUserDTO(shift.getEmployee());
-        UserDTO owner = userToUserDTO(shift.getOwner());
+//        UserDTO employee = userToUserDTO(shift.getEmployee());
+//        UserDTO owner = userToUserDTO(shift.getOwner());
 
         Station s = shift.getStation();
         StationDTO station = s != null ? StationDTO.builder()
@@ -33,8 +33,8 @@ public class ShiftMapper {
                 .id(shift.getId())
                 .startTime(DateTimeHelper.toUnixTime(shift.getStartTime()))
                 .endTime(DateTimeHelper.toUnixTime(shift.getEndTime()))
-                .employee(employee)
-                .owner(owner)
+//                .employee(employee)
+//                .owner(owner)
                 .station(station)
                 .build();
         return shiftDTO;

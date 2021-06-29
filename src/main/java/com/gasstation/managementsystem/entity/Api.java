@@ -19,10 +19,13 @@ public class Api {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String method;
 
+    @Column(nullable = false)
     private String path;
 
     @ManyToMany(fetch = FetchType.LAZY)

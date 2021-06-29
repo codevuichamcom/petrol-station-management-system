@@ -24,8 +24,8 @@ It makes use of the io.jsonwebtoken.Jwts for achieving this.
 public class JwtTokenUtil implements Serializable {
     private static final long serialVersionUID = -2550185165626007488L;
 
-    public static final long ACCESS_TOKEN_EXPIRED = 30; //10 phút
-    public static final long REFRESH_TOKEN_EXPIRED = 2 * 60; //1 ngày
+    public static final long ACCESS_TOKEN_EXPIRED = 2 * 60 * 60; //2 giờ
+    public static final long REFRESH_TOKEN_EXPIRED = 2 * 24 * 60 * 60; //2 ngày
 
 
     @Value("${jwt.secret}")

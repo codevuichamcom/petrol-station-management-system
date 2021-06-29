@@ -25,10 +25,10 @@ public class Debt {
     private double amount = 0;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private User customer;
+    @JoinColumn(name = "card_id", nullable = false)
+    private Card card;
 
     @ManyToOne
-    @JoinColumn(name = "station_id")
+    @JoinColumn(name = "station_id", nullable = false)
     private Station station;
 }

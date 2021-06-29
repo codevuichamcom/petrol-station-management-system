@@ -87,14 +87,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             UserType userType = user.getUserType();
             if (false && userType.getId() != UserType.ADMIN) {
 
-                String apiRequest = request.getRequestURI().toLowerCase();
-                if (apiRequest.matches("^(/\\w+)+/\\d+$")) {
-                    apiRequest = apiRequest.substring(0, apiRequest.lastIndexOf('/')) + "/{id}";
+                String path = request.getRequestURI().toLowerCase();
+                if (path.matches("^(/\\w+)+/\\d+$")) {
+                    path = path.substring(0, path.lastIndexOf('/')) + "/{id}";
                 }
 
 
                 String methodRequest = request.getMethod().toUpperCase();
-                Optional<Api> apiOptional = apiRepository.findByPathAndMethod(apiRequest, methodRequest);
+                Optional<Api> apiOptional = apiRepository.findByPathAndMethod(path, methodRequest);
                 if (!apiOptional.isPresent()) {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Api not found, Error in JwtRequestFilter.class");
                     return;

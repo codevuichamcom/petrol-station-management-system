@@ -25,15 +25,15 @@ public class PriceChangeHistory {
     private double price = 0;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;//người dùng nào đổi giá
 
     @ManyToOne
-    @JoinColumn(name = "station_id")
+    @JoinColumn(name = "station_id", nullable = false)
     private Station station; //Trạm nào đổi giá
 
     @ManyToOne
-    @JoinColumn(name = "tank_id")
+    @JoinColumn(name = "tank_id", nullable = false)
     private Tank tank; //Đổi giá tại bể nào
 
 }

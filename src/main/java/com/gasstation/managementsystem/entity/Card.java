@@ -36,6 +36,9 @@ public class Card {
     private double outstandingBalance = 0;
 
     @Column(nullable = false)
+    private double debtLimit = 0;
+
+    @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     private Date limitSetDate = new Date();
 
@@ -50,14 +53,16 @@ public class Card {
     private List<Transaction> transactionList;//Danh sách mã bơm trả bằng thẻ này
 
     @ManyToOne
-    @JoinColumn(name = "activate_user_id")
+    @JoinColumn(name = "activate_user_id", nullable = false)
     private User userActive; //Ai active thẻ này
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "customer_id", nullable = false)
     private User userInfo;//Người nào sử dụng thẻ này
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
     private List<ReceiptBill> receiptBillList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
+    private List<Debt> debtList = new ArrayList<>();
 }

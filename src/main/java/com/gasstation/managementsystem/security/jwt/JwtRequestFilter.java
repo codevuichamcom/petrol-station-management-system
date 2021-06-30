@@ -10,6 +10,7 @@ import com.gasstation.managementsystem.repository.ApiRepository;
 import com.gasstation.managementsystem.repository.UserRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -44,8 +45,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain chain) throws ServletException, IOException {
+                                    @NotNull HttpServletResponse response,
+                                    @NotNull FilterChain chain) throws ServletException, IOException {
 
         String url = request.getRequestURI();
         if (listDontAuthorization.stream().anyMatch(o -> o.equals(url))) {
@@ -67,14 +68,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             } catch (ExpiredJwtException e) {
                 System.out.println("JWT Token has expired");
                 CustomError customError = CustomError.builder().code("token.expired").field("accessToken").message("JWT Token has expired").build();
-                Map<String, CustomError> map = new HashMap<>();
-                map.put("error", customError);
-                response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                ObjectMapper mapper = new ObjectMapper();
-                mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-                response.getOutputStream().print(mapper.writeValueAsString(map));
-                response.flushBuffer();
+                responseToClient(response, customError, HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
         } else {
@@ -86,7 +80,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             User user = userRepository.findByUsername(username);
             UserType userType = user.getUserType();
             if (userType.getId() != UserType.ADMIN) {
-
                 String path = request.getRequestURI().toLowerCase();
                 if (path.matches("^(/\\w+)+/\\d+$")) {
                     path = path.substring(0, path.lastIndexOf('/'));
@@ -95,16 +88,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
                 String methodRequest = request.getMethod().toUpperCase();
                 Optional<Api> apiOptional = apiRepository.findByPathAndMethod(path, methodRequest);
-                if (!apiOptional.isPresent()) {
+                if (apiOptional.isEmpty()) {
                     CustomError customError = CustomError.builder().code("not.found").field("api").message("Api not found").table("api_tbl").build();
-                    Map<String, CustomError> map = new HashMap<>();
-                    map.put("error", customError);
-                    response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
-                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                    ObjectMapper mapper = new ObjectMapper();
-                    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-                    response.getOutputStream().print(mapper.writeValueAsString(map));
-                    response.flushBuffer();
+                    responseToClient(response, customError, HttpServletResponse.SC_NOT_FOUND);
                     return;
                 }
                 Set<UserType> userTypeList = apiOptional.get().getUserTypeList();
@@ -118,14 +104,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 }
                 if (!permission) {
                     CustomError customError = CustomError.builder().code("access.denied").message("Access denied, You are not permission").table("permission_tbl").build();
-                    Map<String, CustomError> map = new HashMap<>();
-                    map.put("error", customError);
-                    response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    ObjectMapper mapper = new ObjectMapper();
-                    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-                    response.getOutputStream().print(mapper.writeValueAsString(map));
-                    response.flushBuffer();
+                    responseToClient(response, customError, HttpServletResponse.SC_UNAUTHORIZED);
                     return;
                 }
             }
@@ -149,5 +128,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }
         chain.doFilter(request, response);
+    }
+
+    private void responseToClient(HttpServletResponse response, CustomError customError, int httpStatus) throws IOException {
+        response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+        response.setStatus(httpStatus);
+        Map<String, CustomError> map = new HashMap<>();
+        map.put("error", customError);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        response.getOutputStream().print(mapper.writeValueAsString(map));
+        response.flushBuffer();
     }
 }

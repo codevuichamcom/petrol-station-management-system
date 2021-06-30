@@ -2,6 +2,8 @@ package com.gasstation.managementsystem.model.dto;
 
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -9,5 +11,6 @@ import lombok.*;
 @Builder
 
 public class RefreshTokenDTO {
+    @NotNull
     private String refreshToken;
 }

@@ -25,6 +25,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Optional;
 
@@ -73,7 +74,7 @@ public class JwtAuthenticationController {
 
     @Operation(summary = "Refresh token")
     @PostMapping("/refresh-token")
-    public ResponseEntity<?> refresh(@RequestBody RefreshTokenDTO refreshTokenDTO)
+    public ResponseEntity<?> refresh(@Valid @RequestBody RefreshTokenDTO refreshTokenDTO)
             throws CustomUnauthorizedException, CustomBadRequestException, CustomNotFoundException {
         String refreshTokenFromClient = refreshTokenDTO.getRefreshToken();
         Optional<RefreshToken> refreshTokenOptional = refreshTokenRepository.findById(refreshTokenFromClient);
@@ -124,7 +125,7 @@ public class JwtAuthenticationController {
 
     @Operation(summary = "delete RefreshToken")
     @DeleteMapping("/refresh-token")
-    public void delete(@RequestBody RefreshTokenDTO refreshTokenDTO) throws CustomNotFoundException {
+    public void delete(@Valid @RequestBody RefreshTokenDTO refreshTokenDTO) throws CustomNotFoundException {
         String refreshTokenFromClient = refreshTokenDTO.getRefreshToken();
         Optional<RefreshToken> refreshTokenOptional = refreshTokenRepository.findById(refreshTokenFromClient);
         if (refreshTokenOptional.isPresent()) {

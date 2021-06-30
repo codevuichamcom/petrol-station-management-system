@@ -28,7 +28,7 @@ public class Api {
     @Column(nullable = false)
     private String path;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "permission_tbl", joinColumns = @JoinColumn(name = "api_id"),
             inverseJoinColumns = @JoinColumn(name = "user_type_id"))
     private Set<UserType> userTypeList = new HashSet<>();//Danh sách userType có quyền truy cập api này

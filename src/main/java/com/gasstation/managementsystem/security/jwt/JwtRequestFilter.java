@@ -100,6 +100,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                     return;
                 }
                 Set<UserType> userTypeList = apiOptional.get().getUserTypeList();
+
                 boolean permission = false;
                 for (UserType u : userTypeList) {
                     if (u.getId() == userType.getId()) {

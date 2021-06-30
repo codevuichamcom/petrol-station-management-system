@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-
+@ToString
 public class ApiDTOCreate {
     @NotBlank(message = "Name is mandatory")
     private String name;
@@ -20,5 +20,6 @@ public class ApiDTOCreate {
     @NotBlank(message = "Path is mandatory")
     private String path;
     @NotNull(message = "Accessible User Type list is mandatory")
+    @ToString.Exclude()
     private List<Integer> accessibleUserTypes;
 }

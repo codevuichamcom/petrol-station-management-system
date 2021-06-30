@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.controller;
 
+import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,7 +37,7 @@ public class UserController {
         if (pageSize != null) {
             return userService.findAll(PageRequest.of(pageIndex - 1, pageSize));
         }
-        return userService.findAll();
+        return userService.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
     @Operation(summary = "Find user by id")

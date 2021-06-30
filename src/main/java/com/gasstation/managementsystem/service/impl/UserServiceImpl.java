@@ -16,6 +16,7 @@ import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,8 +88,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public HashMap<String, Object> findAll() {
-        List<User> users = userRepository.findAll();
+    public HashMap<String, Object> findAll(Sort sort) {
+        List<User> users = userRepository.findAll(sort);
         return listUserToMap(users);
     }
 

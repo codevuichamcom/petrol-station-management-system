@@ -7,13 +7,14 @@ import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTOCreate;
 import com.gasstation.managementsystem.model.dto.user.UserDTOUpdate;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.HashMap;
 
 public interface UserService {
     HashMap<String, Object> findAll(Pageable pageable);
 
-    HashMap<String, Object> findAll();
+    HashMap<String, Object> findAll(Sort sort);
 
     UserDTO findById(int id) throws CustomNotFoundException;
 

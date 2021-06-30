@@ -22,9 +22,7 @@ public class ApiMapper {
                 .map(UserTypeMapper::toUserTypeDTO)
                 .collect(Collectors.toList());
         String path = api.getPath();
-        if (path.matches("^/api/v1/\\w+$")) {
-            path = path.substring(path.lastIndexOf("/"));
-        }
+        path = path.replaceAll(Api.PREFIX, "");
         return ApiDTO.builder()
                 .id(api.getId())
                 .name(api.getName())

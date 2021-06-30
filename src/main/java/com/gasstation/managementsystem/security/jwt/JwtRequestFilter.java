@@ -85,11 +85,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             User user = userRepository.findByUsername(username);
             UserType userType = user.getUserType();
-            if (false && userType.getId() != UserType.ADMIN) {
+            if (userType.getId() != UserType.ADMIN) {
 
                 String path = request.getRequestURI().toLowerCase();
                 if (path.matches("^(/\\w+)+/\\d+$")) {
-                    path = path.substring(0, path.lastIndexOf('/')) + "/{id}";
+                    path = path.substring(0, path.lastIndexOf('/'));
                 }
 
 

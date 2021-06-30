@@ -106,43 +106,13 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public ApiDTO getByApi(String path, String method) throws CustomNotFoundException {
-        return ApiMapper.toApiDTO(optionalValidate.getUrlByApiAndMethod(path, method));
+    public void saveAll(List<ApiDTOCreate> apiDTOCreateList) {
+        List<Api> apiList = apiDTOCreateList.stream().map(ApiMapper::toApi).collect(Collectors.toList());
+        apiRepository.saveAll(apiList);
     }
 
     @Override
-    public ApiDTO addPermission(int id, int typeId) throws CustomNotFoundException, CustomDuplicateFieldException {
-        Api api = optionalValidate.getApiById(id);
-        Set<UserType> permissions = api.getUserTypeList();
-        if (permissions == null) {
-            permissions = new HashSet<>();
-        }
-        if (permissions.stream().anyMatch(userType -> userType.getId() == typeId)) {
-            throw new CustomDuplicateFieldException(CustomError.builder()
-                    .code("not.permission").field("type_id").message("Type id already has permission")
-                    .table("error in ApiServiceImpl.class").build());
-        }
-        permissions.add(optionalValidate.getUserTypeById(typeId));
-        api.setUserTypeList(permissions);
-        api = apiRepository.save(api);
-        return ApiMapper.toApiDTO(api);
-    }
-
-    @Override
-    public ApiDTO deletePermission(int id, int typeId) throws CustomNotFoundException {
-        Api api = optionalValidate.getApiById(id);
-        Set<UserType> permissions = api.getUserTypeList();
-        if (permissions == null) {
-            permissions = new HashSet<>();
-        }
-        for (UserType userType : permissions) {
-            if (userType.getId() == typeId) {
-                permissions.remove(userType);
-                break;
-            }
-        }
-        api.setUserTypeList(permissions);
-        api = apiRepository.save(api);
-        return ApiMapper.toApiDTO(api);
+    public void deleteAll() {
+        apiRepository.deleteAll();
     }
 }

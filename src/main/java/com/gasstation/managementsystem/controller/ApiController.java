@@ -17,10 +17,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -55,6 +52,15 @@ public class ApiController {
     }
 
 
+    private boolean isRouteIgnore(String route) {
+        List<String> listRouteIgnore = Arrays.asList("refresh-token", "swagger-ui.html", "user-types", "api", "endpoints");
+        return listRouteIgnore.stream().anyMatch(route::startsWith);
+    }
+
+    private boolean isMethodIgnore(String method) {
+        return method.equalsIgnoreCase("getOne");
+    }
+
     @PostMapping("endpoints")
     public void getEndpoints() {
         apiService.deleteAll();
@@ -78,9 +84,13 @@ public class ApiController {
             } else if (method.equalsIgnoreCase("DELETE")) {
                 name = "Delete " + route;
             }
+
             if (!method.equals("")) {
-                if (!value.getMethod().getName().equalsIgnoreCase("getOne") && !route.startsWith("api") && !route.startsWith("endpoints")) {
-                    apiDTOCreateList.add(ApiDTOCreate.builder().name(name).method(method).path("/" + route).accessibleUserTypes(new ArrayList<>()).build());
+                String methodName = value.getMethod().getName(); //vd getOne
+                if (!isMethodIgnore(methodName) && !isRouteIgnore(route)) {
+                    apiDTOCreateList.add(ApiDTOCreate.builder()
+                            .name(name).method(method).path("/" + route)
+                            .build());
                 }
             }
         });

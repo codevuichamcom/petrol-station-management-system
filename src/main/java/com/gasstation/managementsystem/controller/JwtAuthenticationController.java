@@ -71,7 +71,7 @@ public class JwtAuthenticationController {
         return userService.findByUserName(principal.getName());
     }
 
-    @Operation(summary = "View profile of user logined")
+    @Operation(summary = "Refresh token")
     @PostMapping("/refresh-token")
     public ResponseEntity<?> refresh(@RequestBody RefreshTokenDTO refreshTokenDTO)
             throws CustomUnauthorizedException, CustomBadRequestException, CustomNotFoundException {
@@ -121,6 +121,20 @@ public class JwtAuthenticationController {
                     .code("not.exist").field("refreshToken").message("Refresh token not exist").build());
         }
     }
+
+    @Operation(summary = "delete RefreshToken")
+    @DeleteMapping("/refresh-token")
+    public void delete(@RequestBody RefreshTokenDTO refreshTokenDTO) throws CustomNotFoundException {
+        String refreshTokenFromClient = refreshTokenDTO.getRefreshToken();
+        Optional<RefreshToken> refreshTokenOptional = refreshTokenRepository.findById(refreshTokenFromClient);
+        if (refreshTokenOptional.isPresent()) {
+            refreshTokenRepository.delete(refreshTokenOptional.get());
+        } else {
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.exist").field("refreshToken").message("Refresh token not exist").build());
+        }
+    }
+
 
     private void authenticate(String username, String password) throws Exception {
         try {

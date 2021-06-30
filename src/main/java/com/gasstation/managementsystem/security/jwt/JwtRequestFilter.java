@@ -96,7 +96,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 String methodRequest = request.getMethod().toUpperCase();
                 Optional<Api> apiOptional = apiRepository.findByPathAndMethod(path, methodRequest);
                 if (!apiOptional.isPresent()) {
-                    response.sendError(HttpServletResponse.SC_NOT_FOUND, "Api not found, Error in JwtRequestFilter.class");
+                    CustomError customError = CustomError.builder().code("not.found").field("api").message("Api not found").table("api_tbl").build();
+                    Map<String, CustomError> map = new HashMap<>();
+                    map.put("error", customError);
+                    response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    ObjectMapper mapper = new ObjectMapper();
+                    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+                    response.getOutputStream().print(mapper.writeValueAsString(map));
+                    response.flushBuffer();
                     return;
                 }
                 Set<UserType> userTypeList = apiOptional.get().getUserTypeList();
@@ -109,7 +117,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                     }
                 }
                 if (!permission) {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Access denied, You are not permission");
+                    CustomError customError = CustomError.builder().code("access.denied").message("Access denied, You are not permission").table("permission_tbl").build();
+                    Map<String, CustomError> map = new HashMap<>();
+                    map.put("error", customError);
+                    response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    ObjectMapper mapper = new ObjectMapper();
+                    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+                    response.getOutputStream().print(mapper.writeValueAsString(map));
+                    response.flushBuffer();
                     return;
                 }
             }

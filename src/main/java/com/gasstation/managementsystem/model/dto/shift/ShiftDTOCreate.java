@@ -16,11 +16,4 @@ public class ShiftDTOCreate {
     private Long startTime;
     @NotNull(message = "End time is mandatory")
     private Long endTime;
-    @NotNull(message = "Employee id is mandatory")
-    private Integer employeeId;
-    @NotNull(message = "Owner id is mandatory")
-    private Integer ownerId;
-    @NotNull(message = "Station id is mandatory")
-    private Integer stationId;
-
 }

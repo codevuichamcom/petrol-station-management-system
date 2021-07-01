@@ -1,8 +1,6 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.Card;
-import com.gasstation.managementsystem.entity.Pump;
-import com.gasstation.managementsystem.entity.Shift;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.transaction.Transaction;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOCreate;
@@ -58,11 +56,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public Transaction create(TransactionDTOCreate transactionDTOCreate) throws CustomNotFoundException {
         com.gasstation.managementsystem.entity.Transaction transaction = TransactionMapper.toPumpCode(transactionDTOCreate);
-        Pump pump = optionalValidate.getPumpById(transactionDTOCreate.getPumpId());
-        Shift shift = optionalValidate.getShiftById(transactionDTOCreate.getShiftId());
         Card card = optionalValidate.getCardById(transactionDTOCreate.getCardId());
-        transaction.setPump(pump);
-        transaction.setShift(shift);
         transaction.setCard(card);
         transaction = transactionRepository.save(transaction);
         return TransactionMapper.toPumpCodeDTO(transaction);
@@ -72,15 +66,7 @@ public class TransactionServiceImpl implements TransactionService {
     public Transaction update(int id, TransactionDTOUpdate transactionDTOUpdate) throws CustomNotFoundException {
         com.gasstation.managementsystem.entity.Transaction transaction = optionalValidate.getPumpCodeById(id);
         TransactionMapper.copyNonNullToFuel(transaction, transactionDTOUpdate);
-        Integer pumpId = transactionDTOUpdate.getPumpId();
-        Integer shiftId = transactionDTOUpdate.getShiftId();
         Integer cardId = transactionDTOUpdate.getCardId();
-        if (pumpId != null) {
-            transaction.setPump(optionalValidate.getPumpById(pumpId));
-        }
-        if (shiftId != null) {
-            transaction.setShift(optionalValidate.getShiftById(shiftId));
-        }
         if (cardId != null) {
             transaction.setCard(optionalValidate.getCardById(cardId));
         }

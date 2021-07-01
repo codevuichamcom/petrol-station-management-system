@@ -10,8 +10,4 @@ import lombok.*;
 public class ShiftDTOUpdate {
     private Long startTime;
     private Long endTime;
-    private Integer employeeId;
-    private Integer ownerId;
-    private Integer stationId;
-
 }

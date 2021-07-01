@@ -46,7 +46,7 @@ public class User {
 
     private boolean active = false;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "editor", cascade = CascadeType.ALL)
     private List<PriceChangeHistory> priceChangeHistoryList;//Danh sách những giá do người dùng này đổi
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
@@ -64,12 +64,6 @@ public class User {
 
     @OneToMany(mappedBy = "userInfo", cascade = CascadeType.ALL)
     private List<Card> cardList;//Danh sách thẻ của người này
-
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "employee_shift_tbl", joinColumns = @JoinColumn(name = "employee_id"),
-            inverseJoinColumns = @JoinColumn(name = "shift_id"))
-    private Set<Shift> shiftList = new HashSet<>();
-
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<RefreshToken> refreshTokenList = new ArrayList<>();

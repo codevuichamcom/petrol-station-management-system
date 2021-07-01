@@ -1,6 +1,5 @@
 package com.gasstation.managementsystem.model.dto.shift;
 
-import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import lombok.*;
 
@@ -16,6 +15,4 @@ public class ShiftDTO {
 
     private UserDTO employee;
     private UserDTO owner;
-    private StationDTO station;
-
 }

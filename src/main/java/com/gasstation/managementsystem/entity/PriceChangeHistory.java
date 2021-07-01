@@ -25,8 +25,8 @@ public class PriceChangeHistory {
     private double price = 0;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;//người dùng nào đổi giá
+    @JoinColumn(name = "editor_id", nullable = false)
+    private User editor;//người dùng nào đổi giá
 
     @ManyToOne
     @JoinColumn(name = "station_id", nullable = false)

@@ -25,17 +25,12 @@ public class ShiftMapper {
 //        UserDTO employee = userToUserDTO(shift.getEmployee());
 //        UserDTO owner = userToUserDTO(shift.getOwner());
 
-        Station s = shift.getStation();
-        StationDTO station = s != null ? StationDTO.builder()
-                .id(s.getId())
-                .name(s.getName()).build() : null;
         ShiftDTO shiftDTO = ShiftDTO.builder()
                 .id(shift.getId())
                 .startTime(DateTimeHelper.toUnixTime(shift.getStartTime()))
                 .endTime(DateTimeHelper.toUnixTime(shift.getEndTime()))
 //                .employee(employee)
 //                .owner(owner)
-                .station(station)
                 .build();
         return shiftDTO;
     }

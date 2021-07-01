@@ -3,6 +3,7 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,9 +27,7 @@ public class Pump {
     @JoinColumn(name = "tank_id") //join with tank_tbl
     private Tank tank;
 
-    @OneToMany(mappedBy = "pump",cascade = CascadeType.ALL)
-    private List<Transaction> transactionList;//Danh sách mã bơm của vòi này
-
-
+    @OneToMany(mappedBy = "pump", cascade = CascadeType.ALL)
+    private List<HandOverShip> handOverShipList = new ArrayList<>();
 
 }

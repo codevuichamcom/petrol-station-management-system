@@ -59,11 +59,6 @@ public class ShiftServiceImpl implements ShiftService {
     @Override
     public ShiftDTO create(ShiftDTOCreate shiftDTOCreate) throws CustomNotFoundException {
         Shift shift = ShiftMapper.toShift(shiftDTOCreate);
-        User employee = optionalValidate.getUserById(shiftDTOCreate.getEmployeeId());
-        User owner = optionalValidate.getUserById(shiftDTOCreate.getOwnerId());
-        Station station = optionalValidate.getStationById(shiftDTOCreate.getStationId());
-//        shift.setEmployeeList(employee);
-        shift.setStation(station);
         shift = shiftRepository.save(shift);
         return ShiftMapper.toShiftDTO(shift);
     }

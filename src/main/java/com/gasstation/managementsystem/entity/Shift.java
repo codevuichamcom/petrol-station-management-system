@@ -3,10 +3,7 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "shift_tbl") //ca bơm
@@ -22,8 +19,6 @@ public class Shift {
 
     @Column(nullable = false)
     private String name;
-    @Column(nullable = false)
-    private String type;
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -33,16 +28,12 @@ public class Shift {
     @Temporal(TemporalType.TIMESTAMP)
     private Date endTime = new Date();
 
-    @ManyToOne
-    @JoinColumn(name = "station_id")
-    private Station station;
-
-    @OneToMany(mappedBy = "shift", cascade = CascadeType.ALL)
-    private List<Transaction> transactionList;//Danh sách mã bơm của ca này
-
     @OneToMany(mappedBy = "shift", cascade = CascadeType.ALL)
     private List<ReceiptBill> receiptBillList;//Danh sách hóa đơn nhận của ca này;
 
-    @ManyToMany(mappedBy = "shiftList")
-    private Set<User> employeeList = new HashSet<>();
+    @OneToMany(mappedBy = "shift", cascade = CascadeType.ALL)
+    private Set<WorkSchedule> workScheduleSet = new HashSet<>();
+
+    @OneToMany(mappedBy = "shift", cascade = CascadeType.ALL)
+    private List<HandOverShip> handOverShipList = new ArrayList<>();
 }

@@ -3,6 +3,7 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -39,12 +40,11 @@ public class Station {
     private User owner;//Chủ Tạm là ai
 
     @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
-    private List<Shift> shiftList;//Danh Sách ca bơm của Trạm này
-
-    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
     private List<Debt> debtList;
 
     @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
     private List<Expense> expenseList; //Danh sách chi của trạm này
 
+    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
+    private List<Employee> employeeList = new ArrayList<>();//danh sách nhân viên của trạm này
 }

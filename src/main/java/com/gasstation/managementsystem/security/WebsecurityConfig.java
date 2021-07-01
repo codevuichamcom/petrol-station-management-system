@@ -2,6 +2,7 @@ package com.gasstation.managementsystem.security;
 
 import com.gasstation.managementsystem.security.jwt.JwtAuthenticationEntryPoint;
 import com.gasstation.managementsystem.security.jwt.JwtRequestFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,15 +21,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class WebsecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    @Autowired
-    private UserDetailsService jwtUserDetailsService;
+    private final UserDetailsService jwtUserDetailsService;
 
-    @Autowired
-    private JwtRequestFilter jwtRequestFilter;
+    private final JwtRequestFilter jwtRequestFilter;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -51,12 +50,11 @@ public class WebsecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+        String[] listPermitAll = new String[]{"/api/v1/login", "/api/v1/refresh-token", "/api/v1/user-types"};
         // We don't need CSRF for this example
         httpSecurity.csrf().disable().cors().and()
                 // dont authenticate this particular request
-                .authorizeRequests().antMatchers("/api/v1/login").permitAll()
-                .antMatchers("/api/v1/refresh-token").permitAll()
-                .antMatchers("/show-error").permitAll()
+                .authorizeRequests().antMatchers(listPermitAll).permitAll()
                 .antMatchers("/api/v1/**").authenticated().
                 // all other requests need to be authenticated
                         anyRequest().permitAll().and().

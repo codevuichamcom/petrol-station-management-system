@@ -41,7 +41,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private final UserRepository userRepository;
 
     private final ApiRepository apiRepository;
-    private final List<String> listDontAuthorization = Arrays.asList("/show-error", "/api/v1/login", "/api/v1/refresh-token");
+    private final List<String> listDontAuthorization = Arrays.asList("/api/v1/user-types", "/api/v1/login", "/api/v1/refresh-token");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -89,7 +89,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 String methodRequest = request.getMethod().toUpperCase();
                 Optional<Api> apiOptional = apiRepository.findByPathAndMethod(path, methodRequest);
                 if (apiOptional.isEmpty()) {
-                    CustomError customError = CustomError.builder().code("access.denied").message("Access denied, You are not permission").table("permission_tbl").build();
+                    CustomError customError = CustomError.builder().code("access.denied").message("Access denied, You have no permission").table("permission_tbl").build();
                     responseToClient(response, customError, HttpServletResponse.SC_FORBIDDEN);
                     return;
                 }
@@ -103,7 +103,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                     }
                 }
                 if (!permission) {
-                    CustomError customError = CustomError.builder().code("access.denied").message("Access denied, You are not permission").table("permission_tbl").build();
+                    CustomError customError = CustomError.builder().code("access.denied").message("Access denied, You have no permission").table("permission_tbl").build();
                     responseToClient(response, customError, HttpServletResponse.SC_FORBIDDEN);
                     return;
                 }

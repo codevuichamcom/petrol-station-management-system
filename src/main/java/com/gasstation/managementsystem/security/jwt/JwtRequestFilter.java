@@ -89,8 +89,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 String methodRequest = request.getMethod().toUpperCase();
                 Optional<Api> apiOptional = apiRepository.findByPathAndMethod(path, methodRequest);
                 if (apiOptional.isEmpty()) {
-                    CustomError customError = CustomError.builder().code("not.found").field("api").message("Api not found").table("api_tbl").build();
-                    responseToClient(response, customError, HttpServletResponse.SC_NOT_FOUND);
+                    CustomError customError = CustomError.builder().code("access.denied").message("Access denied, You are not permission").table("permission_tbl").build();
+                    responseToClient(response, customError, HttpServletResponse.SC_FORBIDDEN);
                     return;
                 }
                 Set<UserType> userTypeList = apiOptional.get().getUserTypeList();
@@ -104,7 +104,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 }
                 if (!permission) {
                     CustomError customError = CustomError.builder().code("access.denied").message("Access denied, You are not permission").table("permission_tbl").build();
-                    responseToClient(response, customError, HttpServletResponse.SC_UNAUTHORIZED);
+                    responseToClient(response, customError, HttpServletResponse.SC_FORBIDDEN);
                     return;
                 }
             }

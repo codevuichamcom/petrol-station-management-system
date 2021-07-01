@@ -123,14 +123,4 @@ public class OptionalValidate {
         }
     }
 
-    public Api getUrlByApiAndMethod(String url, String method) throws CustomNotFoundException {
-        Optional<Api> apiOptional = apiRepository.findByPathAndMethod(url, method);
-        if (apiOptional.isPresent()) {
-            return apiOptional.get();
-        } else {
-            throw new CustomNotFoundException(CustomError.builder()
-                    .code("not.found").field("(url,method)").message("Url and method is not exist").table("api_table").build());
-        }
-    }
-
 }

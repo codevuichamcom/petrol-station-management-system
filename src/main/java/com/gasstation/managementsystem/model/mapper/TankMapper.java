@@ -20,7 +20,7 @@ public class TankMapper {
                 .name(tank.getName())
                 .volume(tank.getVolume())
                 .remain(tank.getRemain())
-                .currentPrice(tank.getCurentPrice()).build();
+                .currentPrice(tank.getCurrentPrice()).build();
 
         Station station = tank.getStation();
         if (station != null) {
@@ -44,7 +44,7 @@ public class TankMapper {
                 .name(tankDTOCreate.getName())
                 .volume(tankDTOCreate.getVolume())
                 .remain(tankDTOCreate.getRemain())
-                .curentPrice(tankDTOCreate.getCurrentPrice())
+                .currentPrice(tankDTOCreate.getCurrentPrice())
                 .build();
     }
 

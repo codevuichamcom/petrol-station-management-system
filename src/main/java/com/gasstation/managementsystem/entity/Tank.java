@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "tank_tbl")
+@Table(name = "tank_tbl", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "station_id"})})
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -27,7 +27,7 @@ public class Tank {
     private double remain = 0;
 
     @Column(nullable = false)
-    private double curentPrice = 0;
+    private double currentPrice = 0;
 
     @OneToMany(mappedBy = "tank", cascade = CascadeType.ALL)
     private List<FuelImportBill> fuelImportBillList; //Danh sách phiếu nhập của bể này

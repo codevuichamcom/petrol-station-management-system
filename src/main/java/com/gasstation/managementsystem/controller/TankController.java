@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,7 +31,7 @@ public class TankController {
         if (pageSize != null) {
             return tankService.findAll(PageRequest.of(pageIndex - 1, pageSize));
         }
-        return tankService.findAll();
+        return tankService.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
     @Operation(summary = "Find tank by id")

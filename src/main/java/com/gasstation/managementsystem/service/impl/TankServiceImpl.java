@@ -4,6 +4,7 @@ import com.gasstation.managementsystem.entity.Fuel;
 import com.gasstation.managementsystem.entity.Station;
 import com.gasstation.managementsystem.entity.Tank;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
+import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.dto.tank.TankDTO;
 import com.gasstation.managementsystem.model.dto.tank.TankDTOCreate;
 import com.gasstation.managementsystem.model.dto.tank.TankDTOUpdate;
@@ -14,10 +15,12 @@ import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,8 +46,8 @@ public class TankServiceImpl implements TankService {
     }
 
     @Override
-    public HashMap<String, Object> findAll() {
-        return listTankToMap(tankRepository.findAll());
+    public HashMap<String, Object> findAll(Sort sort) {
+        return listTankToMap(tankRepository.findAll(sort));
     }
 
     @Override
@@ -54,6 +57,7 @@ public class TankServiceImpl implements TankService {
 
     @Override
     public TankDTO create(TankDTOCreate tankDTOCreate) throws CustomNotFoundException {
+        checkDuplicate(tankDTOCreate.getName(), tankDTOCreate.getStationId());
         Station station = optionalValidate.getStationById(tankDTOCreate.getStationId());
         Fuel fuel = optionalValidate.getFuelById(tankDTOCreate.getFuelId());
         Tank tank = TankMapper.toTank(tankDTOCreate);
@@ -63,20 +67,40 @@ public class TankServiceImpl implements TankService {
         return TankMapper.toTankDTO(tank);
     }
 
+    private void checkDuplicate(String name, Integer stationId) throws CustomNotFoundException {
+        if (name != null && stationId != null) {
+            Optional<Tank> tankOptional = tankRepository.findByNameAndStationId(name, stationId);
+            if (tankOptional.isPresent()) {
+                throw new CustomNotFoundException(CustomError.builder()
+                        .code("not.found").field("(name,stationId)").message("Name and stationId is not exist").table("api_table").build());
+            }
+        }
+    }
+
     @Override
     public TankDTO update(int id, TankDTOUpdate tankDTOUpdate) throws CustomNotFoundException {
-        Tank tank = optionalValidate.getTankById(id);
-        TankMapper.copyNonNullToTank(tank, tankDTOUpdate);
+        Tank oldTank = optionalValidate.getTankById(id);
+        String name = tankDTOUpdate.getName();
+        Integer stationId = tankDTOUpdate.getStationId();
+        if (name != null && name.equals(oldTank.getName())) {
+            name = null;
+        }
+        if (stationId != null && oldTank.getStation() != null
+                && stationId != oldTank.getStation().getId()) {
+            stationId = null;
+        }
+        checkDuplicate(name, stationId);
+        TankMapper.copyNonNullToTank(oldTank, tankDTOUpdate);
         if (tankDTOUpdate.getStationId() != null) {
             Station station = optionalValidate.getStationById(tankDTOUpdate.getStationId());
-            tank.setStation(station);
+            oldTank.setStation(station);
         }
         if (tankDTOUpdate.getFuelId() != null) {
             Fuel fuel = optionalValidate.getFuelById(tankDTOUpdate.getFuelId());
-            tank.setFuel(fuel);
+            oldTank.setFuel(fuel);
         }
-        tank = tankRepository.save(tank);
-        return TankMapper.toTankDTO(tank);
+        oldTank = tankRepository.save(oldTank);
+        return TankMapper.toTankDTO(oldTank);
     }
 
 

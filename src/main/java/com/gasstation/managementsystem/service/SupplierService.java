@@ -1,19 +1,25 @@
 package com.gasstation.managementsystem.service;
 
-import com.gasstation.managementsystem.entity.Supplier;
-import com.gasstation.managementsystem.model.dto.SupplierDTO;
-import org.springframework.data.domain.Page;
+import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
+import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
+import com.gasstation.managementsystem.model.dto.supplier.SupplierDTO;
+import com.gasstation.managementsystem.model.dto.supplier.SupplierDTOCreate;
+import com.gasstation.managementsystem.model.dto.supplier.SupplierDTOUpdate;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.HashMap;
-import java.util.List;
 
 public interface SupplierService {
-    public HashMap<String,Object> findAll(Pageable pageable);
+    HashMap<String, Object> findAll(Pageable pageable);
 
-    public SupplierDTO findById(int id);
+    HashMap<String, Object> findAll(Sort sort);
 
-    public SupplierDTO save(Supplier supplier);
+    SupplierDTO findById(int id) throws CustomNotFoundException;
 
-    public SupplierDTO delete(int id);
+    SupplierDTO create(SupplierDTOCreate supplierDTOCreate) throws CustomDuplicateFieldException;
+
+    SupplierDTO update(int id, SupplierDTOUpdate supplierDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException;
+
+    SupplierDTO delete(int id) throws CustomNotFoundException;
 }

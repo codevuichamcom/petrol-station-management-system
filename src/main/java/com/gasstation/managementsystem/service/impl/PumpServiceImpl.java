@@ -1,6 +1,7 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.Pump;
+import com.gasstation.managementsystem.entity.Tank;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTOCreate;
@@ -12,6 +13,7 @@ import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -44,8 +46,8 @@ public class PumpServiceImpl implements PumpService {
     }
 
     @Override
-    public HashMap<String, Object> findAll() {
-        return listPumpToMap(pumpRepository.findAll());
+    public HashMap<String, Object> findAll(Sort sort) {
+        return listPumpToMap(pumpRepository.findAll(sort));
     }
 
     @Override
@@ -54,8 +56,10 @@ public class PumpServiceImpl implements PumpService {
     }
 
     @Override
-    public PumpDTO create(PumpDTOCreate pumpDTOCreate) {
+    public PumpDTO create(PumpDTOCreate pumpDTOCreate) throws CustomNotFoundException {
         Pump pump = PumpMapper.toPump(pumpDTOCreate);
+        Tank tank = optionalValidate.getTankById(pumpDTOCreate.getTankId());
+        pump.setTank(tank);
         pump = pumpRepository.save(pump);
         return PumpMapper.toPumpDTO(pump);
     }
@@ -64,7 +68,11 @@ public class PumpServiceImpl implements PumpService {
     public PumpDTO update(int id, PumpDTOUpdate pumpDTOUpdate) throws CustomNotFoundException {
         Pump pump = optionalValidate.getPumpById(id);
         PumpMapper.copyNonNullToFuel(pump, pumpDTOUpdate);
-        pumpRepository.save(pump);
+        if (pumpDTOUpdate.getTankId() != null) {
+            Tank tank = optionalValidate.getTankById(id);
+            pump.setTank(tank);
+        }
+        pump = pumpRepository.save(pump);
         return PumpMapper.toPumpDTO(pump);
     }
 

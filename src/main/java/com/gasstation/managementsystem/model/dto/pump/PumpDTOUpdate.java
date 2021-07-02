@@ -10,4 +10,5 @@ import lombok.*;
 public class PumpDTOUpdate {
     private String name;
     private String note;
+    private Integer tankId;
 }

@@ -3,6 +3,7 @@ package com.gasstation.managementsystem.service.impl;
 import com.gasstation.managementsystem.entity.Fuel;
 import com.gasstation.managementsystem.entity.Station;
 import com.gasstation.managementsystem.entity.Tank;
+import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.dto.tank.TankDTO;
@@ -56,7 +57,7 @@ public class TankServiceImpl implements TankService {
     }
 
     @Override
-    public TankDTO create(TankDTOCreate tankDTOCreate) throws CustomNotFoundException {
+    public TankDTO create(TankDTOCreate tankDTOCreate) throws CustomNotFoundException, CustomDuplicateFieldException {
         checkDuplicate(tankDTOCreate.getName(), tankDTOCreate.getStationId());
         Station station = optionalValidate.getStationById(tankDTOCreate.getStationId());
         Fuel fuel = optionalValidate.getFuelById(tankDTOCreate.getFuelId());
@@ -67,18 +68,18 @@ public class TankServiceImpl implements TankService {
         return TankMapper.toTankDTO(tank);
     }
 
-    private void checkDuplicate(String name, Integer stationId) throws CustomNotFoundException {
+    private void checkDuplicate(String name, Integer stationId) throws CustomDuplicateFieldException {
         if (name != null && stationId != null) {
             Optional<Tank> tankOptional = tankRepository.findByNameAndStationId(name, stationId);
             if (tankOptional.isPresent()) {
-                throw new CustomNotFoundException(CustomError.builder()
-                        .code("not.found").field("(name,stationId)").message("Name and stationId is not exist").table("api_table").build());
+                throw new CustomDuplicateFieldException(CustomError.builder()
+                        .code("duplicate").field("(name,stationId)").message("Name and stationId is duplicate").table("tank_table").build());
             }
         }
     }
 
     @Override
-    public TankDTO update(int id, TankDTOUpdate tankDTOUpdate) throws CustomNotFoundException {
+    public TankDTO update(int id, TankDTOUpdate tankDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         Tank oldTank = optionalValidate.getTankById(id);
         String name = tankDTOUpdate.getName();
         Integer stationId = tankDTOUpdate.getStationId();

@@ -22,6 +22,7 @@ public class OptionalValidate {
     private final ShiftRepository shiftRepository;
     private final CardRepository cardRepository;
     private final ApiRepository apiRepository;
+    private final SupplierRepository supplierRepository;
 
 
     public User getUserById(int id) throws CustomNotFoundException {
@@ -120,6 +121,16 @@ public class OptionalValidate {
         } else {
             throw new CustomNotFoundException(CustomError.builder()
                     .code("not.found").field("id").message("Api is not exist").table("api_table").build());
+        }
+    }
+
+    public Supplier getSupplierById(int id) throws CustomNotFoundException {
+        Optional<Supplier> supplierOptional = supplierRepository.findById(id);
+        if (supplierOptional.isPresent()) {
+            return supplierOptional.get();
+        } else {
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found").field("id").message("Supplier is not exist").table("supplier_table").build());
         }
     }
 

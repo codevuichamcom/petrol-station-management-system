@@ -4,14 +4,19 @@ import com.gasstation.managementsystem.entity.Pump;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTOCreate;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTOUpdate;
+import com.gasstation.managementsystem.model.dto.tank.TankDTO;
 import com.gasstation.managementsystem.utils.NullAwareBeanUtilsBean;
 import org.apache.commons.beanutils.BeanUtilsBean;
 
 public class PumpMapper {
     public static PumpDTO toPumpDTO(Pump pump) {
+        TankDTO tankDTO = pump.getTank() != null ? TankDTO.builder()
+                .id(pump.getId())
+                .name(pump.getName()).build() : null;
         return PumpDTO.builder()
                 .id(pump.getId())
                 .name(pump.getName())
+                .tank(tankDTO)
                 .note(pump.getNote()).build();
     }
 

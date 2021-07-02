@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.controller;
 
+import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.tank.TankDTO;
 import com.gasstation.managementsystem.model.dto.tank.TankDTOCreate;
@@ -42,13 +43,13 @@ public class TankController {
 
     @Operation(summary = "Create new tank")
     @PostMapping("/tanks")
-    public TankDTO create(@Valid @RequestBody TankDTOCreate tankDTOCreate) throws CustomNotFoundException {
+    public TankDTO create(@Valid @RequestBody TankDTOCreate tankDTOCreate) throws CustomNotFoundException, CustomDuplicateFieldException {
         return tankService.create(tankDTOCreate);
     }
 
     @Operation(summary = "Update tank by id")
     @PutMapping("/tanks/{id}")
-    public TankDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody TankDTOUpdate tankDTOUpdate) throws CustomNotFoundException {
+    public TankDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody TankDTOUpdate tankDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         return tankService.update(id, tankDTOUpdate);
     }
 

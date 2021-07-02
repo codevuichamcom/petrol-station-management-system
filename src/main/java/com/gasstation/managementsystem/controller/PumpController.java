@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,7 +30,7 @@ public class PumpController {
         if (pageSize != null) {
             return pumpService.findAll(PageRequest.of(pageIndex - 1, pageSize));
         }
-        return pumpService.findAll();
+        return pumpService.findAll(Sort.by(Sort.Direction.ASC, "id"));
 
     }
 
@@ -41,7 +42,7 @@ public class PumpController {
 
     @Operation(summary = "Create new pump")
     @PostMapping("/pumps")
-    public PumpDTO create(@Valid @RequestBody PumpDTOCreate pumpDTOCreate) {
+    public PumpDTO create(@Valid @RequestBody PumpDTOCreate pumpDTOCreate) throws CustomNotFoundException {
         return pumpService.create(pumpDTOCreate);
     }
 

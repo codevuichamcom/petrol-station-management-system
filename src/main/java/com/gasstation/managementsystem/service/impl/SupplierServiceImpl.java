@@ -46,7 +46,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public HashMap<String, Object> findAll(Sort sort) {
-        return listSupplierToMap(supplierRepository.findAll());
+        return listSupplierToMap(supplierRepository.findAll(sort));
     }
 
     @Override

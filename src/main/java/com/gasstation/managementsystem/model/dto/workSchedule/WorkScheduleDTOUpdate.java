@@ -1,4 +1,4 @@
-package com.gasstation.managementsystem.model.dto.shift;
+package com.gasstation.managementsystem.model.dto.workSchedule;
 
 import lombok.*;
 
@@ -9,8 +9,9 @@ import java.util.Date;
 @Getter
 @Setter
 @Builder
-public class ShiftDTOUpdate {
-    private String name;
+public class WorkScheduleDTOUpdate {
+    private Integer employeeId;
+    private Integer shiftId;
     private Date startTime;
     private Date endTime;
 }

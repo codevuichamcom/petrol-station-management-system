@@ -21,11 +21,11 @@ public class Shift {
     private String name;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.TIME)
     private Date startTime = new Date();
 
     @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.TIME)
     private Date endTime = new Date();
 
     @OneToMany(mappedBy = "shift", cascade = CascadeType.ALL)

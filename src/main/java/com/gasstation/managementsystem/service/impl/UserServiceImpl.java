@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
             userDuplicate = userRepository.findByIdentityCardNumber(identityCardNumber);
             if (userDuplicate != null) {
                 throw new CustomDuplicateFieldException(CustomError.builder().code("duplicate")
-                        .field("indentityCardNumber").message("Duplicate field").build());
+                        .field("identityCardNumber").message("Duplicate field").build());
             }
         }
         if (phone != null) {

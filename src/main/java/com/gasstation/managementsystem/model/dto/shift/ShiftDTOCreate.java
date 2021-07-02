@@ -1,10 +1,10 @@
 package com.gasstation.managementsystem.model.dto.shift;
 
-import com.gasstation.managementsystem.model.dto.station.StationDTO;
-import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,8 +12,11 @@ import javax.validation.constraints.NotNull;
 @Setter
 @Builder
 public class ShiftDTOCreate {
+    @NotBlank(message = "Name is mandatory")
+    private String name;
     @NotNull(message = "Start time is mandatory")
-    private Long startTime;
+    private Date startTime;
     @NotNull(message = "End time is mandatory")
-    private Long endTime;
+    private Date endTime;
 }
+

@@ -23,6 +23,7 @@ public class OptionalValidate {
     private final CardRepository cardRepository;
     private final ApiRepository apiRepository;
     private final SupplierRepository supplierRepository;
+    private final EmployeeRepository employeeRepository;
 
 
     public User getUserById(int id) throws CustomNotFoundException {
@@ -131,6 +132,16 @@ public class OptionalValidate {
         } else {
             throw new CustomNotFoundException(CustomError.builder()
                     .code("not.found").field("id").message("Supplier is not exist").table("supplier_table").build());
+        }
+    }
+
+    public Employee getEmployeeById(int id) throws CustomNotFoundException {
+        Optional<Employee> employeeOptional = employeeRepository.findById(id);
+        if (employeeOptional.isPresent()) {
+            return employeeOptional.get();
+        } else {
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found").field("id").message("Employee is not exist").table("employee_table").build());
         }
     }
 

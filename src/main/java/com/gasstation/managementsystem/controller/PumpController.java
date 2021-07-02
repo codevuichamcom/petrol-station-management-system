@@ -1,10 +1,12 @@
 package com.gasstation.managementsystem.controller;
 
+import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTOCreate;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTOUpdate;
 import com.gasstation.managementsystem.service.PumpService;
+import com.gasstation.managementsystem.utils.AccountHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +24,17 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class PumpController {
     private final PumpService pumpService;
+    private final AccountHelper accountHelper;
 
     @Operation(summary = "View All pump")
     @GetMapping("/pumps")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
                                           @RequestParam(name = "pageSize", required = false) Integer pageSize) {
         if (pageSize != null) {
-            return pumpService.findAll(PageRequest.of(pageIndex - 1, pageSize));
+            return pumpService.findAll(PageRequest.of(pageIndex - 1, pageSize), Sort.by(Sort.Direction.ASC, "id"));
+        }
+        if (accountHelper.isOwner()) {
+            return pumpService.findAllByOwnerId(UserType.OWNER, Sort.by(Sort.Direction.ASC, "id"));
         }
         return pumpService.findAll(Sort.by(Sort.Direction.ASC, "id"));
 

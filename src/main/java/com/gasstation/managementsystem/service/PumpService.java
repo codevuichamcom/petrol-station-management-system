@@ -10,9 +10,11 @@ import org.springframework.data.domain.Sort;
 import java.util.HashMap;
 
 public interface PumpService {
-    HashMap<String, Object> findAll(Pageable pageable);
+    HashMap<String, Object> findAll(Pageable pageable, Sort sort);
 
     HashMap<String, Object> findAll(Sort sort);
+
+    HashMap<String, Object> findAllByOwnerId(int ownerId, Sort sort);
 
     PumpDTO findById(int id) throws CustomNotFoundException;
 
@@ -21,4 +23,5 @@ public interface PumpService {
     PumpDTO update(int id, PumpDTOUpdate pumpDTOUpdate) throws CustomNotFoundException;
 
     PumpDTO delete(int id) throws CustomNotFoundException;
+
 }

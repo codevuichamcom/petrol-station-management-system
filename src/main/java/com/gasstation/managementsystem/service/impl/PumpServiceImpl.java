@@ -37,7 +37,7 @@ public class PumpServiceImpl implements PumpService {
     }
 
     @Override
-    public HashMap<String, Object> findAll(Pageable pageable) {
+    public HashMap<String, Object> findAll(Pageable pageable, Sort sort) {
         Page<Pump> pumps = pumpRepository.findAll(pageable);
         HashMap<String, Object> map = listPumpToMap(pumps.getContent());
         map.put("totalElement", pumps.getTotalElements());
@@ -48,6 +48,11 @@ public class PumpServiceImpl implements PumpService {
     @Override
     public HashMap<String, Object> findAll(Sort sort) {
         return listPumpToMap(pumpRepository.findAll(sort));
+    }
+
+    @Override
+    public HashMap<String, Object> findAllByOwnerId(int ownerId, Sort sort) {
+        return listPumpToMap(pumpRepository.findAllByOwnerId(ownerId, sort));
     }
 
     @Override

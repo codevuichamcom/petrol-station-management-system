@@ -26,4 +26,12 @@ public class AccountHelper {
         User user = getUserLogin();
         return (user != null) ? user.getUserType() : null;
     }
+
+    public boolean isAdmin() {
+        return getUserTypeOfUserLogin().getId() == UserType.ADMIN;
+    }
+
+    public boolean isOwner() {
+        return getUserTypeOfUserLogin().getId() == UserType.OWNER;
+    }
 }

@@ -49,6 +49,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                     @NotNull FilterChain chain) throws ServletException, IOException {
 
         String url = request.getRequestURI();
+        String methodRequest = request.getMethod().toUpperCase();
         if (listDontAuthorization.stream().anyMatch(o -> o.equals(url))) {
             chain.doFilter(request, response);
             return;
@@ -79,14 +80,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             User user = userRepository.findByUsername(username);
             UserType userType = user.getUserType();
-            if (userType.getId() != UserType.ADMIN) {
+            if (needCheckPermission(userType, url, methodRequest)) {
                 String path = request.getRequestURI().toLowerCase();
                 if (path.matches("^(/\\w+)+/\\d+$")) {
                     path = path.substring(0, path.lastIndexOf('/'));
                 }
 
-
-                String methodRequest = request.getMethod().toUpperCase();
                 Optional<Api> apiOptional = apiRepository.findByPathAndMethod(path, methodRequest);
                 if (apiOptional.isEmpty()) {
                     CustomError customError = CustomError.builder().code("access.denied").message("Access denied, You have no permission").table("permission_tbl").build();
@@ -128,6 +127,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }
         chain.doFilter(request, response);
+    }
+
+    private boolean needCheckPermission(UserType userType, String url, String method) {
+        return userType.getId() != UserType.ADMIN && !url.equalsIgnoreCase("/api/v1/apis") && !method.equalsIgnoreCase("GET");
     }
 
     private void responseToClient(HttpServletResponse response, CustomError customError, int httpStatus) throws IOException {

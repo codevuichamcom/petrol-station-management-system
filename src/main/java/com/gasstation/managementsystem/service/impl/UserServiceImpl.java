@@ -126,7 +126,9 @@ public class UserServiceImpl implements UserService {
             phone = null;
         }
         String email = userDTOUpdate.getEmail();
-        if (email != null && email.equals(oldUser.getEmail())) {
+        if (email == null) {
+            oldUser.setEmail(null);
+        } else if (email.equals(oldUser.getEmail())) {
             email = null;
         }
         checkDuplicateField(null, identityCardNumber, phone, email);

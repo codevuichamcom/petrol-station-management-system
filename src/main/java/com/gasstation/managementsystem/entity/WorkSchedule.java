@@ -15,7 +15,7 @@ import java.util.Date;
 @Builder
 public class WorkSchedule {
     @EmbeddedId
-    private WorkSchedulePrimary id;
+    private WorkSchedulePrimary id = new WorkSchedulePrimary();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("employeeId")

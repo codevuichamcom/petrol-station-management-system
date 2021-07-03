@@ -17,9 +17,9 @@ import java.util.Set;
 public class UserType {
     public static final int ADMIN = 1;
     public static final int OWNER = 2;
-    public static final int EMPLOYEE = 3;
+    //    public static final int EMPLOYEE = 3;
     public static final int CUSTOMER = 4;
-    public static final int SUPPLIER = 5;
+    //    public static final int SUPPLIER = 5;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

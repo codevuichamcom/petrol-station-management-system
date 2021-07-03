@@ -41,7 +41,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private final UserRepository userRepository;
 
     private final ApiRepository apiRepository;
-    private final List<String> listDontAuthorization = Arrays.asList("/api/v1/user-types", "/api/v1/login", "/api/v1/refresh-token");
+    private final List<String> listDontAuthorization = Arrays.asList("/api/v1/user-types", "/api/v1/login", "/api/v1/profile", "/api/v1/refresh-token");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

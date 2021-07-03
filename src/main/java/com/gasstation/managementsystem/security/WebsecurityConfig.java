@@ -50,7 +50,7 @@ public class WebsecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        String[] listPermitAll = new String[]{"/api/v1/login", "/api/v1/refresh-token", "/api/v1/user-types"};
+        String[] listPermitAll = new String[]{"/api/v1/login", "/api/v1/profile", "/api/v1/refresh-token", "/api/v1/user-types"};
         // We don't need CSRF for this example
         httpSecurity.csrf().disable().cors().and()
                 // dont authenticate this particular request

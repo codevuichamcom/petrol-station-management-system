@@ -1,12 +1,15 @@
 package com.gasstation.managementsystem.controller;
 
 import com.gasstation.managementsystem.entity.Api;
+import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.api.ApiDTO;
 import com.gasstation.managementsystem.model.dto.api.ApiDTOCreate;
 import com.gasstation.managementsystem.model.dto.api.ApiDTOUpdate;
+import com.gasstation.managementsystem.repository.ApiRepository;
 import com.gasstation.managementsystem.service.ApiService;
+import com.gasstation.managementsystem.utils.AccountHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -27,16 +30,23 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ApiController {
     private final ApiService apiService;
+    private final ApiRepository apiRepository;
+    private final AccountHelper accountHelper;
     private final RequestMappingHandlerMapping requestMappingHandlerMapping;
 
     @Operation(summary = "View All api")
     @GetMapping("/apis")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
                                           @RequestParam(name = "pageSize", required = false) Integer pageSize) {
+
         if (pageSize != null) {
             return apiService.findAll(PageRequest.of(pageIndex - 1, pageSize));
         }
-        return apiService.findAll();
+        UserType userType = accountHelper.getUserTypeOfUserLogin();
+        if (userType.getId() == UserType.ADMIN) {
+            return apiService.findAll();
+        }
+        return apiService.findAllByUserTypeId(userType.getId());
     }
 
     @Operation(summary = "Find api by id")
@@ -53,7 +63,7 @@ public class ApiController {
 
 
     private boolean isRouteIgnore(String route) {
-        List<String> listRouteIgnore = Arrays.asList("refresh-token", "swagger-ui.html", "user-types", "api", "endpoints");
+        List<String> listRouteIgnore = Arrays.asList("refresh-token", "swagger-ui.html", "user-types", "api", "endpoints", "login", "profile");
         return listRouteIgnore.stream().anyMatch(route::startsWith);
     }
 
@@ -62,11 +72,36 @@ public class ApiController {
     }
 
     @PostMapping("endpoints")
-    public void getEndpoints() {
+    public void updateEndPoints() {
         apiService.deleteAll();
+        List<ApiDTOCreate> apiDTOCreateList = getAllEndPoints();
+        apiService.saveAll(apiDTOCreateList);
+    }
+
+    @PutMapping("endpoints")
+    public void resetEndPoints() {
+        List<ApiDTOCreate> apiDTOCreateList = getAllEndPoints();
+        List<Api> apiList = apiRepository.findAll();
+        List<ApiDTOCreate> listInsert = new ArrayList<>();
+        for (ApiDTOCreate create : apiDTOCreateList) {
+            boolean insert = true;
+            for (Api api : apiList) {
+                if (create.getMethod().equalsIgnoreCase(api.getMethod()) && (Api.PREFIX + create.getPath()).equalsIgnoreCase(api.getPath())) {
+                    insert = false;
+                    break;
+                }
+            }
+            if (insert) {
+                listInsert.add(create);
+            }
+        }
+        apiService.saveAll(listInsert);
+    }
+
+    private List<ApiDTOCreate> getAllEndPoints() {
+        List<ApiDTOCreate> apiDTOCreateList = new ArrayList<>();
         Map<RequestMappingInfo, HandlerMethod> map = requestMappingHandlerMapping
                 .getHandlerMethods();
-        List<ApiDTOCreate> apiDTOCreateList = new ArrayList<>();
         map.forEach((key, value) -> {
             String all = key.toString();
             String[] parts = all.split("\\s+");
@@ -94,7 +129,8 @@ public class ApiController {
                 }
             }
         });
-        apiService.saveAll(apiDTOCreateList.stream().sorted((o1, o2) -> {
+
+        return apiDTOCreateList.stream().sorted((o1, o2) -> {
             if (o1.getPath().compareToIgnoreCase(o2.getPath()) > 0) {
                 return 1;
             } else if (o1.getPath().compareToIgnoreCase(o2.getPath()) < 0) {
@@ -102,6 +138,6 @@ public class ApiController {
             } else {
                 return o1.getMethod().compareToIgnoreCase(o2.getMethod());
             }
-        }).collect(Collectors.toList()));
+        }).collect(Collectors.toList());
     }
 }

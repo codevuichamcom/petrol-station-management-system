@@ -15,6 +15,8 @@ public interface ApiService {
 
     HashMap<String, Object> findAll();
 
+    HashMap<String, Object> findAllByUserTypeId(int userTypeId);
+
     ApiDTO findById(int id) throws CustomNotFoundException;
 
     ApiDTO create(ApiDTOCreate apiDTOCreate) throws CustomNotFoundException, CustomDuplicateFieldException;

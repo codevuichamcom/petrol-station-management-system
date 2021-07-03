@@ -37,10 +37,10 @@ public class ReceiptBill {
     private User creator;// Hóa đơn này do ai tạo
 
     @ManyToOne
-    @JoinColumn(name = "shift_id", nullable = false)
-    private Shift shift; //Hóa đơn này của ca nào
-
-    @ManyToOne
     @JoinColumn(name = "card_id", nullable = false)
     private Card card;
+
+    @ManyToOne
+    @JoinColumn(name = "debt_id", nullable = false)
+    private Debt debt; //Hóa đơn này của ca nào
 }

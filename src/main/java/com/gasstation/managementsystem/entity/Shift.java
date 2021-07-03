@@ -29,9 +29,6 @@ public class Shift {
     private Date endTime = new Date();
 
     @OneToMany(mappedBy = "shift", cascade = CascadeType.ALL)
-    private List<ReceiptBill> receiptBillList;//Danh sách hóa đơn nhận của ca này;
-
-    @OneToMany(mappedBy = "shift", cascade = CascadeType.ALL)
     private Set<WorkSchedule> workScheduleSet = new HashSet<>();
 
     @OneToMany(mappedBy = "shift", cascade = CascadeType.ALL)

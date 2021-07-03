@@ -3,7 +3,9 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "debt_tbl")
@@ -32,4 +34,7 @@ public class Debt {
     @ManyToOne
     @JoinColumn(name = "station_id", nullable = false)
     private Station station;
+
+    @OneToMany(mappedBy = "debt", cascade = CascadeType.ALL)
+    private List<ReceiptBill> receiptBillList = new ArrayList<>();
 }

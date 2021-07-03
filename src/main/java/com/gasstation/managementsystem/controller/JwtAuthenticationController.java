@@ -25,6 +25,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Optional;
@@ -125,15 +126,24 @@ public class JwtAuthenticationController {
 
     @Operation(summary = "delete RefreshToken")
     @DeleteMapping("/refresh-token")
-    public void delete(@Valid @RequestBody RefreshTokenDTO refreshTokenDTO) throws CustomNotFoundException {
-        String refreshTokenFromClient = refreshTokenDTO.getRefreshToken();
-        Optional<RefreshToken> refreshTokenOptional = refreshTokenRepository.findById(refreshTokenFromClient);
-        if (refreshTokenOptional.isPresent()) {
-            refreshTokenRepository.delete(refreshTokenOptional.get());
+    public void delete(HttpServletRequest request) throws CustomNotFoundException, CustomBadRequestException {
+        final String refreshTokenFromHeader = request.getHeader("RefreshToken");
+        String refreshToken;
+        if (refreshTokenFromHeader != null && refreshTokenFromHeader.startsWith("Bearer ")) {
+            refreshToken = refreshTokenFromHeader.substring(7).trim();
+            Optional<RefreshToken> refreshTokenOptional = refreshTokenRepository.findById(refreshToken);
+            if (refreshTokenOptional.isPresent()) {
+                refreshTokenRepository.delete(refreshTokenOptional.get());
+            } else {
+                throw new CustomNotFoundException(CustomError.builder()
+                        .code("not.exist").field("refreshToken").message("Refresh token not exist").build());
+            }
         } else {
-            throw new CustomNotFoundException(CustomError.builder()
-                    .code("not.exist").field("refreshToken").message("Refresh token not exist").build());
+            throw new CustomBadRequestException(CustomError.builder()
+                    .code("invalid").field("refreshToken").message("Refresh token invalid").build());
         }
+
+
     }
 
 

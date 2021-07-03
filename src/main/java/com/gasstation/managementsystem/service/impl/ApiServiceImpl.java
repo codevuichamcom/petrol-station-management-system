@@ -31,6 +31,15 @@ public class ApiServiceImpl implements ApiService {
     private HashMap<String, Object> listApiToMap(List<Api> apis) {
         List<ApiDTO> apiDTOS = apis.stream()
                 .map(ApiMapper::toApiDTO)
+                .sorted((o1, o2) -> {
+                    if (o1.getPath().compareToIgnoreCase(o2.getPath()) > 0) {
+                        return 1;
+                    } else if (o1.getPath().compareToIgnoreCase(o2.getPath()) < 0) {
+                        return -1;
+                    } else {
+                        return o1.getMethod().compareToIgnoreCase(o2.getMethod());
+                    }
+                })
                 .collect(Collectors.toList());
         HashMap<String, Object> map = new HashMap<>();
         map.put("data", apiDTOS);
@@ -49,6 +58,11 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public HashMap<String, Object> findAll() {
         return listApiToMap(apiRepository.findAll());
+    }
+
+    @Override
+    public HashMap<String, Object> findAllByUserTypeId(int userTypeId) {
+        return listApiToMap(apiRepository.findAllByUserTypeId(userTypeId));
     }
 
     @Override

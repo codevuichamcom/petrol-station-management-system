@@ -1,10 +1,6 @@
 package com.gasstation.managementsystem.model.mapper;
 
-import com.gasstation.managementsystem.entity.Fuel;
-import com.gasstation.managementsystem.entity.Station;
 import com.gasstation.managementsystem.entity.Tank;
-import com.gasstation.managementsystem.model.dto.fuel.FuelDTO;
-import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import com.gasstation.managementsystem.model.dto.tank.TankDTO;
 import com.gasstation.managementsystem.model.dto.tank.TankDTOCreate;
 import com.gasstation.managementsystem.model.dto.tank.TankDTOUpdate;
@@ -22,19 +18,7 @@ public class TankMapper {
                 .remain(tank.getRemain())
                 .currentPrice(tank.getCurrentPrice()).build();
 
-        Station station = tank.getStation();
-        if (station != null) {
-            tankDTO.setStation(StationDTO.builder()
-                    .id(station.getId())
-                    .name(station.getName())
-                    .address(station.getAddress()).build());
-        }
-        Fuel fuel = tank.getFuel();
-        if (fuel != null) {
-            tankDTO.setFuel(FuelDTO.builder()
-                    .id(fuel.getId())
-                    .name(fuel.getName()).build());
-        }
+        PumpMapper.setStationAndFuel(tank, tankDTO);
         return tankDTO;
     }
 

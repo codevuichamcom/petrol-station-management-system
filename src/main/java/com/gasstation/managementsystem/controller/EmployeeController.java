@@ -1,12 +1,15 @@
 package com.gasstation.managementsystem.controller;
 
 import com.gasstation.managementsystem.entity.Api;
+import com.gasstation.managementsystem.entity.User;
+import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.employee.EmployeeDTO;
 import com.gasstation.managementsystem.model.dto.employee.EmployeeDTOCreate;
 import com.gasstation.managementsystem.model.dto.employee.EmployeeDTOUpdate;
 import com.gasstation.managementsystem.service.EmployeeService;
+import com.gasstation.managementsystem.utils.AccountHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ import java.util.HashMap;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
+    private final AccountHelper accountHelper;
 
     @Operation(summary = "View All employee")
     @GetMapping("/employees")
@@ -33,7 +37,15 @@ public class EmployeeController {
         if (pageSize != null) {
             return employeeService.findAll(PageRequest.of(pageIndex - 1, pageSize, Sort.by(Sort.Direction.DESC, "id")));
         }
-        return employeeService.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        User user = accountHelper.getUserLogin();
+        UserType userType = user.getUserType();
+        switch (userType.getId()) {
+            case UserType.ADMIN:
+                return employeeService.findAll(Sort.by(Sort.Direction.ASC, "id"));
+            case UserType.OWNER:
+                return employeeService.findAllByOwnerId(user.getId(), Sort.by(Sort.Direction.ASC, "id"));
+        }
+        return new HashMap<>();
     }
 
     @Operation(summary = "Find employee by id")

@@ -33,11 +33,15 @@ public class PumpController {
         if (pageSize != null) {
             return pumpService.findAll(PageRequest.of(pageIndex - 1, pageSize), Sort.by(Sort.Direction.ASC, "id"));
         }
-        if (accountHelper.isOwner()) {
-            return pumpService.findAllByOwnerId(UserType.OWNER, Sort.by(Sort.Direction.ASC, "id"));
-        }
-        return pumpService.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        UserType userType = accountHelper.getUserTypeOfUserLogin();
+        switch (userType.getId()) {
+            case UserType.ADMIN:
+                return pumpService.findAll(Sort.by(Sort.Direction.ASC, "id"));
+            case UserType.OWNER:
+                return pumpService.findAllByOwnerId(UserType.OWNER, Sort.by(Sort.Direction.ASC, "id"));
 
+        }
+        return new HashMap<>();
     }
 
     @Operation(summary = "Find pump by id")

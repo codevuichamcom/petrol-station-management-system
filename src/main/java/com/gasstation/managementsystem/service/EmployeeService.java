@@ -15,6 +15,8 @@ public interface EmployeeService {
 
     HashMap<String, Object> findAll(Sort sort);
 
+    HashMap<String, Object> findAllByOwnerId(int ownerId, Sort sort);
+
     EmployeeDTO findById(int id) throws CustomNotFoundException;
 
     EmployeeDTO create(EmployeeDTOCreate employeeDTOCreate) throws CustomDuplicateFieldException, CustomNotFoundException;

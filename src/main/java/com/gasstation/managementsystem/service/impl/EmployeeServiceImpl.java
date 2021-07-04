@@ -10,7 +10,6 @@ import com.gasstation.managementsystem.model.dto.employee.EmployeeDTOCreate;
 import com.gasstation.managementsystem.model.dto.employee.EmployeeDTOUpdate;
 import com.gasstation.managementsystem.model.mapper.EmployeeMapper;
 import com.gasstation.managementsystem.repository.EmployeeRepository;
-import com.gasstation.managementsystem.repository.WorkScheduleRepository;
 import com.gasstation.managementsystem.service.EmployeeService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
-    private final WorkScheduleRepository workScheduleRepository;
     private final OptionalValidate optionalValidate;
 
     private HashMap<String, Object> listEmployeeToMap(List<Employee> employees) {
@@ -52,6 +50,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public HashMap<String, Object> findAll(Sort sort) {
         return listEmployeeToMap(employeeRepository.findAll(sort));
+    }
+
+    @Override
+    public HashMap<String, Object> findAllByOwnerId(int ownerId, Sort sort) {
+        return listEmployeeToMap(employeeRepository.findAllByOwnerId(ownerId, sort));
     }
 
     @Override
@@ -78,7 +81,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             }
         }
         if (identityCardNumber != null) {
-            Optional<Employee> employee = employeeRepository.findByPhone(phone);
+            Optional<Employee> employee = employeeRepository.findByIdentityCardNumber(identityCardNumber);
             if (employee.isPresent()) {
                 throw new CustomDuplicateFieldException(CustomError.builder().code("duplicate")
                         .field("identityCardNumber").message("Duplicate field").build());
@@ -100,8 +103,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         checkDuplicate(phone, identityCardNumber);
         EmployeeMapper.copyNonNullToEmployee(oldEmployee, employeeDTOUpdate);
-        Station station = optionalValidate.getStationById(employeeDTOUpdate.getStationId());
-        oldEmployee.setStation(station);
+        if (employeeDTOUpdate.getStationId() != null) {
+            Station station = optionalValidate.getStationById(employeeDTOUpdate.getStationId());
+            oldEmployee.setStation(station);
+        }
         oldEmployee = employeeRepository.save(oldEmployee);
         return EmployeeMapper.toEmployeeDTO(oldEmployee);
     }

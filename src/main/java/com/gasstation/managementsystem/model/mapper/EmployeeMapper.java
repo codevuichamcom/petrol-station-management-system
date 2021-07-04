@@ -21,7 +21,7 @@ public class EmployeeMapper {
                 .name(employee.getName())
                 .address(employee.getAddress())
                 .phone(employee.getPhone())
-                .gender(employee.isGender())
+                .gender(employee.getGender())
                 .dateOfBirth(DateTimeHelper.formatDate(employee.getDateOfBirth(), "yyyy-MM-dd"))
                 .identityCardNumber(employee.getIdentityCardNumber())
                 .station(stationDTO).build();

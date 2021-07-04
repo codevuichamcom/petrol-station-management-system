@@ -29,7 +29,7 @@ public class Employee {
     private String phone;
 
     @Column(nullable = false)
-    private boolean gender = true;
+    private Boolean gender = true;
 
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)

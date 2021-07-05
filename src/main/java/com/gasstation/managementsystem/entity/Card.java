@@ -54,11 +54,11 @@ public class Card {
 
     @ManyToOne
     @JoinColumn(name = "activate_user_id", nullable = false)
-    private User userActive; //Ai active thẻ này
+    private User activateUser; //Ai active thẻ này
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
-    private User userInfo;//Người nào sử dụng thẻ này
+    private User customer;//Người nào sử dụng thẻ này
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
     private List<ReceiptBill> receiptBillList = new ArrayList<>();

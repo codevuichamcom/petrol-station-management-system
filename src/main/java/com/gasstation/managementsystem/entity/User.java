@@ -59,10 +59,10 @@ public class User {
     @JoinColumn(name = "user_type_id", nullable = false)
     private UserType userType;
 
-    @OneToMany(mappedBy = "userActive", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Card> cardListActiveByMe;//Danh sách active bởi tài khoản này
 
-    @OneToMany(mappedBy = "userInfo", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Card> cardList;//Danh sách thẻ của người này
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

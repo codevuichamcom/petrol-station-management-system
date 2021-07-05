@@ -13,8 +13,6 @@ import java.util.List;
 @Builder
 @ToString
 public class ApiDTOCreate {
-    @NotBlank(message = "Name is mandatory")
-    private String name;
     @NotBlank(message = "Method is mandatory")
     private String method;
     @NotBlank(message = "Path is mandatory")

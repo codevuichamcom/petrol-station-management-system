@@ -25,7 +25,6 @@ public class ApiMapper {
         path = path.replaceAll(Api.PREFIX, "");
         return ApiDTO.builder()
                 .id(api.getId())
-                .name(api.getName())
                 .method(api.getMethod())
                 .path(path)
                 .accessibleUserTypes(userTypeDTOList).build();
@@ -34,7 +33,6 @@ public class ApiMapper {
     public static Api toApi(ApiDTOCreate apiDTOCreate) {
         if (apiDTOCreate == null) return null;
         return Api.builder()
-                .name(apiDTOCreate.getName())
                 .method(apiDTOCreate.getMethod())
                 .path(Api.PREFIX + apiDTOCreate.getPath())
                 .build();

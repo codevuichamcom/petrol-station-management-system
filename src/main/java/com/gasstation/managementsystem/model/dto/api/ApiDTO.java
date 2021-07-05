@@ -14,8 +14,6 @@ import java.util.List;
 public class ApiDTO {
     private int id;
 
-    private String name;
-
     private String method;
 
     private String path;

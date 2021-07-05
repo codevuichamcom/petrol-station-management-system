@@ -34,7 +34,7 @@ public class ReceiptBillController {
     }
 
     @Operation(summary = "Create new ReceiptBill")
-    @PostMapping("/rreceipt-bills")
+    @PostMapping("/receipt-bills")
     public ReceiptBillDTO create(@Valid @RequestBody ReceiptBill receiptBill) {
         return ReceiptBillService.save(receiptBill);
     }

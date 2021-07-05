@@ -11,7 +11,5 @@ import java.util.List;
 @Builder
 
 public class ApiDTOUpdate {
-    private String name;
-
     private List<Integer> accessibleUserTypes;
 }

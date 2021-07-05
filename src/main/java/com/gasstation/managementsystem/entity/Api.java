@@ -20,9 +20,6 @@ public class Api {
     private int id;
 
     @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
     private String method;
 
     @Column(nullable = false)

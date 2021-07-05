@@ -107,27 +107,20 @@ public class ApiController {
             String[] parts = all.split("\\s+");
             String method = parts[0].replace("{", "").trim();
             String path = parts[1].replace("[", "").replace("]}", "").replace("/{id}", "").trim();
-            String name = value.getMethod().getName();
-            name += path.substring(path.lastIndexOf("/") + 1);
-            String route = path.substring(path.lastIndexOf("/") + 1);
-            if (method.equalsIgnoreCase("GET")) {
-                name = "View " + route;
-            } else if (method.equalsIgnoreCase("POST")) {
-                name = "Create new " + route;
-            } else if (method.equalsIgnoreCase("PUT")) {
-                name = "Update " + route;
-            } else if (method.equalsIgnoreCase("DELETE")) {
-                name = "Delete " + route;
-            }
 
-            if (!method.equals("")) {
-                String methodName = value.getMethod().getName(); //vd getOne
-                if (!isMethodIgnore(methodName) && !isRouteIgnore(route)) {
-                    apiDTOCreateList.add(ApiDTOCreate.builder()
-                            .name(name).method(method).path("/" + route)
-                            .build());
+            if (path.matches("/api/v1/.+")) {
+                String route = path.split("[/]")[3];
+
+                if (!method.equals("")) {
+                    String methodName = value.getMethod().getName(); //vd getOne
+                    if (!isMethodIgnore(methodName) && !isRouteIgnore(route)) {
+                        apiDTOCreateList.add(ApiDTOCreate.builder()
+                                .method(method).path("/" + route)
+                                .build());
+                    }
                 }
             }
+
         });
 
         return apiDTOCreateList.stream().sorted((o1, o2) -> {

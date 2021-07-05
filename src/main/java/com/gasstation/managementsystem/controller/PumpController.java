@@ -1,6 +1,7 @@
 package com.gasstation.managementsystem.controller;
 
 import com.gasstation.managementsystem.entity.UserType;
+import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTOCreate;
@@ -52,13 +53,13 @@ public class PumpController {
 
     @Operation(summary = "Create new pump")
     @PostMapping("/pumps")
-    public PumpDTO create(@Valid @RequestBody PumpDTOCreate pumpDTOCreate) throws CustomNotFoundException {
+    public PumpDTO create(@Valid @RequestBody PumpDTOCreate pumpDTOCreate) throws CustomNotFoundException, CustomDuplicateFieldException {
         return pumpService.create(pumpDTOCreate);
     }
 
     @Operation(summary = "Update pump by id")
     @PutMapping("/pumps/{id}")
-    public PumpDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody PumpDTOUpdate pumpDTOUpdate) throws CustomNotFoundException {
+    public PumpDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody PumpDTOUpdate pumpDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         return pumpService.update(id, pumpDTOUpdate);
     }
 

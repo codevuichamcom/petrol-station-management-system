@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.service;
 
+import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTOCreate;
@@ -18,9 +19,9 @@ public interface PumpService {
 
     PumpDTO findById(int id) throws CustomNotFoundException;
 
-    PumpDTO create(PumpDTOCreate pumpDTOCreate) throws CustomNotFoundException;
+    PumpDTO create(PumpDTOCreate pumpDTOCreate) throws CustomNotFoundException, CustomDuplicateFieldException;
 
-    PumpDTO update(int id, PumpDTOUpdate pumpDTOUpdate) throws CustomNotFoundException;
+    PumpDTO update(int id, PumpDTOUpdate pumpDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException;
 
     PumpDTO delete(int id) throws CustomNotFoundException;
 

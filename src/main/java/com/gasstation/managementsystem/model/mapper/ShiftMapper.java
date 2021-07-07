@@ -27,7 +27,7 @@ public class ShiftMapper {
                 .endTime(shiftDTOCreate.getEndTime()).build();
     }
 
-    public static void copyNonNullToTank(Shift shift, ShiftDTOUpdate shiftDTOUpdate) {
+    public static void copyNonNullToShift(Shift shift, ShiftDTOUpdate shiftDTOUpdate) {
         try {
             BeanUtilsBean notNull = new NullAwareBeanUtilsBean();
             notNull.copyProperties(shift, shiftDTOUpdate);

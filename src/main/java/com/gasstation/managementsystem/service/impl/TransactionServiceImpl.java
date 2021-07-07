@@ -27,7 +27,7 @@ public class TransactionServiceImpl implements TransactionService {
     private HashMap<String, Object> listPumpCodeToMap(List<com.gasstation.managementsystem.entity.Transaction> transactions) {
         List<Transaction> pumpCodeDTOS = new ArrayList<>();
         for (com.gasstation.managementsystem.entity.Transaction transaction : transactions) {
-            pumpCodeDTOS.add(TransactionMapper.toPumpCodeDTO(transaction));
+            pumpCodeDTOS.add(TransactionMapper.toTransactionDTO(transaction));
         }
         HashMap<String, Object> map = new HashMap<>();
         map.put("data", pumpCodeDTOS);
@@ -50,28 +50,28 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Transaction findById(int id) throws CustomNotFoundException {
-        return TransactionMapper.toPumpCodeDTO(optionalValidate.getPumpCodeById(id));
+        return TransactionMapper.toTransactionDTO(optionalValidate.getPumpCodeById(id));
     }
 
     @Override
     public Transaction create(TransactionDTOCreate transactionDTOCreate) throws CustomNotFoundException {
-        com.gasstation.managementsystem.entity.Transaction transaction = TransactionMapper.toPumpCode(transactionDTOCreate);
+        com.gasstation.managementsystem.entity.Transaction transaction = TransactionMapper.toTransaction(transactionDTOCreate);
         Card card = optionalValidate.getCardById(transactionDTOCreate.getCardId());
         transaction.setCard(card);
         transaction = transactionRepository.save(transaction);
-        return TransactionMapper.toPumpCodeDTO(transaction);
+        return TransactionMapper.toTransactionDTO(transaction);
     }
 
     @Override
     public Transaction update(int id, TransactionDTOUpdate transactionDTOUpdate) throws CustomNotFoundException {
         com.gasstation.managementsystem.entity.Transaction transaction = optionalValidate.getPumpCodeById(id);
-        TransactionMapper.copyNonNullToFuel(transaction, transactionDTOUpdate);
+        TransactionMapper.copyNonNullToTransaction(transaction, transactionDTOUpdate);
         Integer cardId = transactionDTOUpdate.getCardId();
         if (cardId != null) {
             transaction.setCard(optionalValidate.getCardById(cardId));
         }
         transaction = transactionRepository.save(transaction);
-        return TransactionMapper.toPumpCodeDTO(transaction);
+        return TransactionMapper.toTransactionDTO(transaction);
     }
 
 
@@ -79,6 +79,6 @@ public class TransactionServiceImpl implements TransactionService {
     public Transaction delete(int id) throws CustomNotFoundException {
         com.gasstation.managementsystem.entity.Transaction transaction = optionalValidate.getPumpCodeById(id);
         transactionRepository.delete(transaction);
-        return TransactionMapper.toPumpCodeDTO(transaction);
+        return TransactionMapper.toTransactionDTO(transaction);
     }
 }

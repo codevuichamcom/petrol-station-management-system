@@ -87,7 +87,6 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public ApiDTO update(int id, ApiDTOUpdate apiDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         Api oldApi = optionalValidate.getApiById(id);
-        ApiMapper.copyNonNullToApi(oldApi, apiDTOUpdate);
         List<Integer> userTypeIds = apiDTOUpdate.getAccessibleUserTypes();
         if (userTypeIds != null) {
             Set<UserType> userTypeList = new HashSet<>();

@@ -8,7 +8,7 @@ import com.gasstation.managementsystem.utils.NullAwareBeanUtilsBean;
 import org.apache.commons.beanutils.BeanUtilsBean;
 
 public class TransactionMapper {
-    public static Transaction toPumpCodeDTO(com.gasstation.managementsystem.entity.Transaction transaction) {
+    public static Transaction toTransactionDTO(com.gasstation.managementsystem.entity.Transaction transaction) {
         return Transaction.builder()
                 .id(transaction.getId())
                 .time(DateTimeHelper.toUnixTime(transaction.getTime()))
@@ -16,14 +16,14 @@ public class TransactionMapper {
                 .unitPrice(transaction.getUnitPrice()).build();
     }
 
-    public static com.gasstation.managementsystem.entity.Transaction toPumpCode(TransactionDTOCreate transactionDTOCreate) {
+    public static com.gasstation.managementsystem.entity.Transaction toTransaction(TransactionDTOCreate transactionDTOCreate) {
         return com.gasstation.managementsystem.entity.Transaction.builder()
                 .time(DateTimeHelper.toDate(transactionDTOCreate.getTime()))
                 .volume(transactionDTOCreate.getVolume())
                 .unitPrice(transactionDTOCreate.getUnitPrice()).build();
     }
 
-    public static void copyNonNullToFuel(com.gasstation.managementsystem.entity.Transaction transaction, TransactionDTOUpdate transactionDTOUpdate) {
+    public static void copyNonNullToTransaction(com.gasstation.managementsystem.entity.Transaction transaction, TransactionDTOUpdate transactionDTOUpdate) {
         try {
             BeanUtilsBean notNull = new NullAwareBeanUtilsBean();
             notNull.copyProperties(transaction, transactionDTOUpdate);

@@ -27,11 +27,11 @@ public class WorkScheduleMapper {
     }
 
     public static void copyNonNullToWorkSchedule(WorkSchedule workSchedule, WorkScheduleDTOUpdate workScheduleDTOUpdate) {
-        try {
-            BeanUtilsBean notNull = new NullAwareBeanUtilsBean();
-            notNull.copyProperties(workSchedule, workScheduleDTOUpdate);
-        } catch (Exception ex) {
-            ex.printStackTrace(System.out);
+        if (workScheduleDTOUpdate.getStartTime() != null) {
+            workSchedule.setStartDate(workScheduleDTOUpdate.getStartTime());
+        }
+        if (workScheduleDTOUpdate.getEndTime() != null) {
+            workSchedule.setEndDate(workScheduleDTOUpdate.getEndTime());
         }
     }
 }

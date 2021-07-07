@@ -27,7 +27,7 @@ public class TankMapper {
         return Tank.builder()
                 .name(tankDTOCreate.getName())
                 .volume(tankDTOCreate.getVolume())
-                .remain(tankDTOCreate.getRemain())
+                .remain(0)
                 .currentPrice(tankDTOCreate.getCurrentPrice())
                 .build();
     }

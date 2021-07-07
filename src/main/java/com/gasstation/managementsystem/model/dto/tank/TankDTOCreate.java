@@ -16,8 +16,6 @@ public class TankDTOCreate {
     private String name;
     @NotNull(message = "Volume is mandatory")
     private Double volume;
-    @NotNull(message = "Remain is mandatory")
-    private Double remain;
     @NotNull(message = "Current price is mandatory")
     private Double currentPrice;
     @NotNull(message = "stationId is mandatory")

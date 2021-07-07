@@ -30,7 +30,7 @@ public class Tank {
     private double currentPrice = 0;
 
     @OneToMany(mappedBy = "tank", cascade = CascadeType.ALL)
-    private List<FuelImportBill> fuelImportBillList; //Danh sách phiếu nhập của bể này
+    private List<FuelImport> fuelImportList; //Danh sách phiếu nhập của bể này
 
     @ManyToOne
     @JoinColumn(name = "fuel_id", nullable = false) //join với fuel_tbl

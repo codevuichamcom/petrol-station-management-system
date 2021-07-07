@@ -36,6 +36,6 @@ public class Expense {
     private Station station; //CHi phí này của trạm nào
 
     @ManyToOne
-    @JoinColumn(name = "fuel_import_bill_id", nullable = false)
-    private FuelImportBill fuelImportBill; //Chi phí này của hóa đơn nhập nhiên liệu nào
+    @JoinColumn(name = "fuel_import_id", nullable = false)
+    private FuelImport fuelImport; //Chi phí này của hóa đơn nhập nhiên liệu nào
 }

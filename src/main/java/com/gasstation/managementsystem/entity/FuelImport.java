@@ -8,13 +8,13 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "fuel_import_bill_tbl")
+@Table(name = "fuel_import_tbl")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
-public class FuelImportBill {
+public class FuelImport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -51,7 +51,7 @@ public class FuelImportBill {
     @JoinColumn(name = "tank_id", nullable = false) //join với tank_tbl
     private Tank tank; // Phiếu nhập nhiên liệu này thuộc bể nào
 
-    @OneToMany(mappedBy = "fuelImportBill", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "fuelImport", cascade = CascadeType.ALL)
     private List<Expense> expenseList = new ArrayList<>();//Danh sách chi phí của hóa đơn này
 
 }

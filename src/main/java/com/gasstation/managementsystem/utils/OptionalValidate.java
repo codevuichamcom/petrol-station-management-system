@@ -26,6 +26,8 @@ public class OptionalValidate {
     private final SupplierRepository supplierRepository;
     private final EmployeeRepository employeeRepository;
     private final WorkScheduleRepository workScheduleRepository;
+    private final FuelImportRepository fuelImportRepository;
+    private final ExpenseRepository expenseRepository;
 
 
     public User getUserById(int id) throws CustomNotFoundException {
@@ -156,6 +158,26 @@ public class OptionalValidate {
             throw new CustomNotFoundException(CustomError.builder()
                     .code("not.found").message("Not found employee or shift")
                     .table("work_schedule_tbl").build());
+        }
+    }
+
+    public FuelImport getFuelImportById(int id) throws CustomNotFoundException {
+        Optional<FuelImport> fuelImportOptional = fuelImportRepository.findById(id);
+        if (fuelImportOptional.isPresent()) {
+            return fuelImportOptional.get();
+        } else {
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found").field("id").message("Fuel import is not exist").table("fuel_import_table").build());
+        }
+    }
+
+    public Expense getExpenseById(int id) throws CustomNotFoundException {
+        Optional<Expense> expenseOptional = expenseRepository.findById(id);
+        if (expenseOptional.isPresent()) {
+            return expenseOptional.get();
+        } else {
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found").field("id").message("Expense is not exist").table("expense_table").build());
         }
     }
 

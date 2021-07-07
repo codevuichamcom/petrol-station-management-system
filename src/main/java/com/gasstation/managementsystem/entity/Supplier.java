@@ -31,7 +31,7 @@ public class Supplier {
     private String note;
 
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
-    private List<FuelImportBill> fuelImportBillList = new ArrayList<>();// Danh sách phiếu nhập nhiên liệu của chuỗi cung ứng này
+    private List<FuelImport> fuelImportList = new ArrayList<>();// Danh sách phiếu nhập nhiên liệu của chuỗi cung ứng này
 
 
 }

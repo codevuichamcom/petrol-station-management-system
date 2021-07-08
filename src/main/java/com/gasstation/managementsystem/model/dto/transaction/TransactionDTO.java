@@ -1,18 +1,18 @@
 package com.gasstation.managementsystem.model.dto.transaction;
 
+import com.gasstation.managementsystem.model.dto.card.CardDTO;
 import lombok.*;
-
-import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
-public class TransactionDTOUpdate {
-    private Date time;
+public class TransactionDTO {
+    private int id;
+    private Long time;
     private Double volume;
     private Double unitPrice;
-    private Integer cardId;
+    private CardDTO card;
 
 }

@@ -2,7 +2,7 @@ package com.gasstation.managementsystem.controller;
 
 
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
-import com.gasstation.managementsystem.model.dto.transaction.Transaction;
+import com.gasstation.managementsystem.model.dto.transaction.TransactionDTO;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOCreate;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOUpdate;
 import com.gasstation.managementsystem.service.TransactionService;
@@ -32,25 +32,25 @@ public class TransactionController {
 
     @Operation(summary = "Find Transaction by id")
     @GetMapping("/transactions/{id}")
-    public Transaction getOne(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
+    public TransactionDTO getOne(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
         return transactionService.findById(id);
     }
 
     @Operation(summary = "Create new Transaction")
     @PostMapping("/transactions")
-    public Transaction create(@Valid @RequestBody TransactionDTOCreate transactionDTOCreate) throws CustomNotFoundException {
+    public TransactionDTO create(@Valid @RequestBody TransactionDTOCreate transactionDTOCreate) throws CustomNotFoundException {
         return transactionService.create(transactionDTOCreate);
     }
 
     @Operation(summary = "Update Transaction by id")
     @PutMapping("/transactions/{id}")
-    public Transaction update(@PathVariable(name = "id") Integer id, @Valid @RequestBody TransactionDTOUpdate transactionDTOUpdate) throws CustomNotFoundException {
+    public TransactionDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody TransactionDTOUpdate transactionDTOUpdate) throws CustomNotFoundException {
         return transactionService.update(id, transactionDTOUpdate);
     }
 
     @Operation(summary = "Delete Transaction by id")
     @DeleteMapping("/transactions/{id}")
-    public Transaction delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
+    public TransactionDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
         return transactionService.delete(id);
     }
 }

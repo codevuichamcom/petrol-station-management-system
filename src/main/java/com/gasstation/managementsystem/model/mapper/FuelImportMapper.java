@@ -27,7 +27,6 @@ public class FuelImportMapper {
                 .volume(fuelImport.getVolume())
                 .unitPrice(fuelImport.getUnitPrice())
                 .paid(fuelImport.getPaid())
-                .liability(fuelImport.getLiability())
                 .vatPercent(fuelImport.getVatPercent())
                 .note(fuelImport.getNote())
                 .tank(tankDTO)
@@ -42,7 +41,6 @@ public class FuelImportMapper {
                 .volume(fuelImportDTOCreate.getVolume())
                 .unitPrice(fuelImportDTOCreate.getUnitPrice())
                 .paid(fuelImportDTOCreate.getPaid())
-                .liability(fuelImportDTOCreate.getLiability())
                 .vatPercent(fuelImportDTOCreate.getVatPercent())
                 .note(fuelImportDTOCreate.getNote())
                 .build();

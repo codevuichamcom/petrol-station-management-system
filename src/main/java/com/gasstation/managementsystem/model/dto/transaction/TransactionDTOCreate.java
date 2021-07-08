@@ -1,9 +1,9 @@
 package com.gasstation.managementsystem.model.dto.transaction;
 
-import com.gasstation.managementsystem.utils.DateTimeHelper;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class TransactionDTOCreate {
     @NotNull(message = "time is mandatory")
-    private Long time = DateTimeHelper.getCurrentUnixTime();
+    private Date time;
     @NotNull(message = "number of litter is mandatory")
     private Double volume;
     @NotNull(message = "pricePerLitter is mandatory")

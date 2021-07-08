@@ -15,7 +15,6 @@ public class FuelImportDTOUpdate {
     private Double volume;
     private Double unitPrice;
     private Double paid;
-    private Double liability;
     private Double vatPercent;
     private String note;
     private Integer tankId;

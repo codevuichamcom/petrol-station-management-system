@@ -55,7 +55,8 @@ public class CardMapper {
         try {
             BeanUtilsBean notNull = new NullAwareBeanUtilsBean();
             notNull.copyProperties(card, cardDTOUpdate);
-        } catch (Exception ignored) {
+        } catch (Exception ex) {
+            ex.printStackTrace(System.out);
         }
     }
 }

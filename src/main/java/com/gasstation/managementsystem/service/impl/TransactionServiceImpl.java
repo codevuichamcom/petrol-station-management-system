@@ -1,8 +1,9 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.Card;
+import com.gasstation.managementsystem.entity.Transaction;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
-import com.gasstation.managementsystem.model.dto.transaction.Transaction;
+import com.gasstation.managementsystem.model.dto.transaction.TransactionDTO;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOCreate;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOUpdate;
 import com.gasstation.managementsystem.model.mapper.TransactionMapper;
@@ -25,7 +26,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final OptionalValidate optionalValidate;
 
     private HashMap<String, Object> listPumpCodeToMap(List<com.gasstation.managementsystem.entity.Transaction> transactions) {
-        List<Transaction> pumpCodeDTOS = new ArrayList<>();
+        List<TransactionDTO> pumpCodeDTOS = new ArrayList<>();
         for (com.gasstation.managementsystem.entity.Transaction transaction : transactions) {
             pumpCodeDTOS.add(TransactionMapper.toTransactionDTO(transaction));
         }
@@ -49,13 +50,13 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction findById(int id) throws CustomNotFoundException {
+    public TransactionDTO findById(int id) throws CustomNotFoundException {
         return TransactionMapper.toTransactionDTO(optionalValidate.getPumpCodeById(id));
     }
 
     @Override
-    public Transaction create(TransactionDTOCreate transactionDTOCreate) throws CustomNotFoundException {
-        com.gasstation.managementsystem.entity.Transaction transaction = TransactionMapper.toTransaction(transactionDTOCreate);
+    public TransactionDTO create(TransactionDTOCreate transactionDTOCreate) throws CustomNotFoundException {
+        Transaction transaction = TransactionMapper.toTransaction(transactionDTOCreate);
         Card card = optionalValidate.getCardById(transactionDTOCreate.getCardId());
         transaction.setCard(card);
         transaction = transactionRepository.save(transaction);
@@ -63,8 +64,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction update(int id, TransactionDTOUpdate transactionDTOUpdate) throws CustomNotFoundException {
-        com.gasstation.managementsystem.entity.Transaction transaction = optionalValidate.getPumpCodeById(id);
+    public TransactionDTO update(int id, TransactionDTOUpdate transactionDTOUpdate) throws CustomNotFoundException {
+        Transaction transaction = optionalValidate.getPumpCodeById(id);
         TransactionMapper.copyNonNullToTransaction(transaction, transactionDTOUpdate);
         Integer cardId = transactionDTOUpdate.getCardId();
         if (cardId != null) {
@@ -76,8 +77,8 @@ public class TransactionServiceImpl implements TransactionService {
 
 
     @Override
-    public Transaction delete(int id) throws CustomNotFoundException {
-        com.gasstation.managementsystem.entity.Transaction transaction = optionalValidate.getPumpCodeById(id);
+    public TransactionDTO delete(int id) throws CustomNotFoundException {
+        Transaction transaction = optionalValidate.getPumpCodeById(id);
         transactionRepository.delete(transaction);
         return TransactionMapper.toTransactionDTO(transaction);
     }

@@ -35,9 +35,6 @@ public class FuelImport {
     @Column(nullable = false)
     private double paid = 0;
 
-    @Column(nullable = false)
-    private double liability = 0;
-
     private String note;
 
     @Column(nullable = false)

@@ -15,11 +15,11 @@ import org.apache.commons.beanutils.BeanUtilsBean;
 public class ExpenseMapper {
 
     public static ExpenseDTO toExpenseDTO(Expense expense) {
+        if (expense == null) return null;
         Station station = expense.getStation();
         FuelImport fuelImport = expense.getFuelImport();
         StationDTO stationDTO = (station != null) ? StationDTO.builder().id(station.getId()).name(station.getName()).build() : null;
-        FuelImportDTO fuelImportDTO = (fuelImport != null) ? FuelImportDTO.builder().build() : null;
-
+        FuelImportDTO fuelImportDTO = (fuelImport != null) ? FuelImportDTO.builder().id(fuelImport.getId()).name(fuelImport.getName()).build() : null;
         return ExpenseDTO.builder()
                 .id(expense.getId())
                 .reason(expense.getReason())

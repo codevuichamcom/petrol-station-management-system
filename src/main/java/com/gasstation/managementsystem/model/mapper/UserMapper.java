@@ -11,6 +11,7 @@ import org.apache.commons.beanutils.BeanUtilsBean;
 
 public class UserMapper {
     public static User toUser(UserDTOCreate userDTOCreate) {
+        if (userDTOCreate == null) return null;
         return User.builder()
                 .identityCardNumber(userDTOCreate.getIdentityCardNumber())
                 .username(userDTOCreate.getUsername())
@@ -52,5 +53,4 @@ public class UserMapper {
             ex.printStackTrace(System.out);
         }
     }
-
 }

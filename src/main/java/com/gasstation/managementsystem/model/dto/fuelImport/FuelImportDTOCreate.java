@@ -27,9 +27,6 @@ public class FuelImportDTOCreate {
     @NotNull(message = "Paid is mandatory")
     private Double paid;
 
-    @NotNull(message = "Liability is mandatory")
-    private Double liability;
-
     @NotNull(message = "VAT percent is mandatory")
     private Double vatPercent;
 

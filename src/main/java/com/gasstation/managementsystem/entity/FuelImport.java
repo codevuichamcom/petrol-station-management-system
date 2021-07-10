@@ -48,7 +48,7 @@ public class FuelImport {
     @JoinColumn(name = "tank_id", nullable = false) //join với tank_tbl
     private Tank tank; // Phiếu nhập nhiên liệu này thuộc bể nào
 
-    @OneToMany(mappedBy = "fuelImport", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "fuelImport")
     private List<Expense> expenseList = new ArrayList<>();//Danh sách chi phí của hóa đơn này
 
 }

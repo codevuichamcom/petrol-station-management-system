@@ -26,7 +26,7 @@ public class UserType {
     @Column(nullable = false)
     private String type;
 
-    @OneToMany(mappedBy = "userType", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userType")
     private List<User> userList;//Dánh sách user có thuộc type này
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "userTypeList")

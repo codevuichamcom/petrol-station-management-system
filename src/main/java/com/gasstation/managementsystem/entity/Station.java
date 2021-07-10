@@ -29,22 +29,22 @@ public class Station {
     private Double latitude;//vĩ độ
 
 
-    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "station")
     private List<Tank> tankList;//Danh sách các bể của trạm này
 
-    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "station")
     private List<PriceChangeHistory> priceChangeHistoryList;//Danh sách đổi giá của trạm này
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;//Chủ Tạm là ai
 
-    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "station")
     private List<Debt> debtList;
 
-    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "station")
     private List<Expense> expenseList; //Danh sách chi của trạm này
 
-    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "station")
     private List<Employee> employeeList = new ArrayList<>();//danh sách nhân viên của trạm này
 }

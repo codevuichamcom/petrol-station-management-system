@@ -1,6 +1,7 @@
 package com.gasstation.managementsystem.controller;
 
 import com.gasstation.managementsystem.entity.UserType;
+import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.userType.UserTypeDTO;
 import com.gasstation.managementsystem.service.UserTypeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,7 +34,7 @@ public class UserTypeController {
 
     @Operation(summary = "Find userType by id")
     @GetMapping("/user-types/{id}")
-    public UserTypeDTO getOne(@PathVariable(name = "id") Integer id) {
+    public UserTypeDTO getOne(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
         return userTypeService.findById(id);
     }
 
@@ -52,7 +53,7 @@ public class UserTypeController {
 
     @Operation(summary = "Delete userType by id")
     @DeleteMapping("/user-types/{id}")
-    public UserTypeDTO delete(@PathVariable(name = "id") Integer id) {
+    public UserTypeDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
         return userTypeService.delete(id);
     }
 }

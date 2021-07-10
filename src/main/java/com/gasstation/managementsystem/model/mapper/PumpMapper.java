@@ -15,6 +15,7 @@ import org.apache.commons.beanutils.BeanUtilsBean;
 
 public class PumpMapper {
     public static PumpDTO toPumpDTO(Pump pump) {
+        if (pump == null) return null;
         Tank tank = pump.getTank();
         TankDTO tankDTO = null;
         if (tank != null) {
@@ -49,6 +50,7 @@ public class PumpMapper {
     }
 
     public static Pump toPump(PumpDTOCreate pumpDTOCreate) {
+        if (pumpDTOCreate == null) return null;
         return Pump.builder()
                 .name(pumpDTOCreate.getName())
                 .note(pumpDTOCreate.getNote()).build();

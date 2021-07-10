@@ -12,6 +12,6 @@ import java.util.Date;
 public class WorkScheduleDTOUpdate {
     private Integer employeeId;
     private Integer shiftId;
-    private Date startTime;
-    private Date endTime;
+    private Date startDate;
+    private Date endDate;
 }

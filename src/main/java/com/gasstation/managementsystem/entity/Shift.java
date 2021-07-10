@@ -28,9 +28,9 @@ public class Shift {
     @Temporal(TemporalType.TIME)
     private Date endTime = new Date();
 
-    @OneToMany(mappedBy = "shift", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "shift")
     private Set<WorkSchedule> workScheduleSet = new HashSet<>();
 
-    @OneToMany(mappedBy = "shift", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "shift")
     private List<HandOverShip> handOverShipList = new ArrayList<>();
 }

@@ -27,7 +27,6 @@ public class Pump {
     @JoinColumn(name = "tank_id") //join with tank_tbl
     private Tank tank;
 
-    @OneToMany(mappedBy = "pump", cascade = CascadeType.ALL)
-    private List<HandOverShip> handOverShipList = new ArrayList<>();
-
+    @OneToMany(mappedBy = "pump")
+    private List<Transaction> transactionList = new ArrayList<>();
 }

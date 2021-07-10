@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class WorkScheduleImpl implements WorkScheduleService {
+public class WorkScheduleServiceImpl implements WorkScheduleService {
     private final WorkScheduleRepository workScheduleRepository;
     private final OptionalValidate optionalValidate;
 

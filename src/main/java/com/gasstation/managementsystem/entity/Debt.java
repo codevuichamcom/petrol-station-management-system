@@ -35,6 +35,6 @@ public class Debt {
     @JoinColumn(name = "station_id", nullable = false)
     private Station station;
 
-    @OneToMany(mappedBy = "debt", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "debt")
     private List<ReceiptBill> receiptBillList = new ArrayList<>();
 }

@@ -29,7 +29,7 @@ public class Fuel {
     @Column(nullable = false)
     private String type = "Xăng";
 
-    @OneToMany(mappedBy = "fuel", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "fuel")
     private List<Tank> tankList;
 
 }

@@ -29,7 +29,7 @@ public class Tank {
     @Column(nullable = false)
     private double currentPrice = 0;
 
-    @OneToMany(mappedBy = "tank", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tank")
     private List<FuelImport> fuelImportList; //Danh sách phiếu nhập của bể này
 
     @ManyToOne
@@ -40,10 +40,10 @@ public class Tank {
     @JoinColumn(name = "station_id", nullable = false)//join với station_tbl
     private Station station; //Bể này của Trạm nào
 
-    @OneToMany(mappedBy = "tank", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tank")
     private List<Pump> pumpList;//Danh sách vòi bơm của bể này
 
-    @OneToMany(mappedBy = "tank", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tank")
     private List<PriceChangeHistory> priceChangeHistoryList;// Danh sách những lần đổ giá của bể này
 
 }

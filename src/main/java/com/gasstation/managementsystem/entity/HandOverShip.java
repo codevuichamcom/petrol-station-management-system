@@ -3,7 +3,9 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "hand_over_shift_tbl")
@@ -27,14 +29,10 @@ public class HandOverShip {
     private String note;
 
     @ManyToOne
-    @JoinColumn(name = "pump_id")
-    private Pump pump;
-
-    @ManyToOne
     @JoinColumn(name = "shift_id")
     private Shift shift;
 
-    @ManyToOne
-    @JoinColumn(name = "transaction_id")
-    private Transaction transaction;
+    @OneToMany(mappedBy = "handOverShip")
+    private List<Transaction> transactionList = new ArrayList<>();
+
 }

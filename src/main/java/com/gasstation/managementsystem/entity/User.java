@@ -46,25 +46,25 @@ public class User {
 
     private boolean active = false;
 
-    @OneToMany(mappedBy = "editor", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "editor")
     private List<PriceChangeHistory> priceChangeHistoryList;//Danh sách những giá do người dùng này đổi
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner")
     private List<Station> stationList;//Danh sách các trạm của người này
 
-    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "creator")
     private List<ReceiptBill> receiptBillList;//Danh sách hóa đơn nhận của người này
 
     @ManyToOne
     @JoinColumn(name = "user_type_id", nullable = false)
     private UserType userType;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer")
     private List<Card> cardListActiveByMe;//Danh sách active bởi tài khoản này
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer")
     private List<Card> cardList;//Danh sách thẻ của người này
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private List<RefreshToken> refreshTokenList = new ArrayList<>();
 }

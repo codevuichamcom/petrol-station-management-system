@@ -9,6 +9,7 @@ import org.apache.commons.beanutils.BeanUtilsBean;
 
 public class FuelMapper {
     public static FuelDTO toFuelDTO(Fuel fuel) {
+        if (fuel == null) return null;
         return FuelDTO.builder()
                 .id(fuel.getId())
                 .name(fuel.getName())
@@ -18,6 +19,7 @@ public class FuelMapper {
     }
 
     public static Fuel toFuel(FuelDTOCreate fuelDTOCreate) {
+        if (fuelDTOCreate == null) return null;
         return Fuel.builder()
                 .name(fuelDTOCreate.getName())
                 .unit(fuelDTOCreate.getUnit())

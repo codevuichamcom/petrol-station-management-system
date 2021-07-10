@@ -42,6 +42,6 @@ public class Employee {
     @JoinColumn(name = "station_id")
     private Station station; //nhân viên này thuộc trạm nào
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "employee")
     private Set<WorkSchedule> workScheduleSet = new HashSet<>();
 }

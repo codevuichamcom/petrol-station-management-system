@@ -49,7 +49,7 @@ public class Card {
     @Temporal(TemporalType.DATE)
     private Date activeDate;
 
-    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "card")
     private List<Transaction> transactionList;//Danh sách mã bơm trả bằng thẻ này
 
     @ManyToOne
@@ -60,9 +60,9 @@ public class Card {
     @JoinColumn(name = "customer_id", nullable = false)
     private User customer;//Người nào sử dụng thẻ này
 
-    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "card")
     private List<ReceiptBill> receiptBillList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "card")
     private List<Debt> debtList = new ArrayList<>();
 }

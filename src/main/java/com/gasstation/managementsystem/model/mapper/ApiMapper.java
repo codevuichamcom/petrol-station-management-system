@@ -15,9 +15,12 @@ public class ApiMapper {
     public static ApiDTO toApiDTO(Api api) {
         if (api == null) return null;
         Set<UserType> userTypes = api.getUserTypeList();
-        List<UserTypeDTO> userTypeDTOList = userTypes.stream()
-                .map(UserTypeMapper::toUserTypeDTO)
-                .collect(Collectors.toList());
+        List<UserTypeDTO> userTypeDTOList = null;
+        if (userTypes != null) {
+            userTypeDTOList = userTypes.stream()
+                    .map(UserTypeMapper::toUserTypeDTO)
+                    .collect(Collectors.toList());
+        }
         String path = api.getPath();
         path = path.replaceAll(Api.PREFIX, "");
         return ApiDTO.builder()

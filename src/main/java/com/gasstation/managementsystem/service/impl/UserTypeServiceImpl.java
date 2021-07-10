@@ -1,10 +1,12 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.UserType;
+import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.userType.UserTypeDTO;
 import com.gasstation.managementsystem.model.mapper.UserTypeMapper;
 import com.gasstation.managementsystem.repository.UserTypeRepository;
 import com.gasstation.managementsystem.service.UserTypeService;
+import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +20,9 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserTypeImpl implements UserTypeService {
+public class UserTypeServiceImpl implements UserTypeService {
     private final UserTypeRepository userTypeRepository;
+    private final OptionalValidate optionalValidate;
 
     private HashMap<String, Object> listUserTypeToMap(List<UserType> userTypes) {
         List<UserTypeDTO> userTypeDTOS = new ArrayList<>();
@@ -48,8 +51,8 @@ public class UserTypeImpl implements UserTypeService {
 
 
     @Override
-    public UserTypeDTO findById(int id) {
-        return UserTypeMapper.toUserTypeDTO(userTypeRepository.findById(id).get());
+    public UserTypeDTO findById(int id) throws CustomNotFoundException {
+        return UserTypeMapper.toUserTypeDTO(optionalValidate.getUserTypeById(id));
     }
 
     @Override
@@ -59,8 +62,8 @@ public class UserTypeImpl implements UserTypeService {
     }
 
     @Override
-    public UserTypeDTO delete(int id) {
-        UserType userType = userTypeRepository.findById(id).get();
+    public UserTypeDTO delete(int id) throws CustomNotFoundException {
+        UserType userType = optionalValidate.getUserTypeById(id);
         userTypeRepository.delete(userType);
         return UserTypeMapper.toUserTypeDTO(userType);
     }

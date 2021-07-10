@@ -33,6 +33,12 @@ public class Transaction {
     @JoinColumn(name = "card_id")
     private Card card;//Thanh toán bằng thẻ nào
 
-    @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL)
-    private List<HandOverShip> handOverShipList = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "pump_id")
+    private Pump pump;
+
+    @ManyToOne
+    @JoinColumn(name = "hand_over_ship_id")
+    private HandOverShip handOverShip;
+
 }

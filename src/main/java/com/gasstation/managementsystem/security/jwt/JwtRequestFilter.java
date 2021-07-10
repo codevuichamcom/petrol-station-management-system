@@ -136,6 +136,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             return false;
         if (url.equalsIgnoreCase("/api/v1/apis") && method.equalsIgnoreCase("GET"))
             return false;
+        if (url.equalsIgnoreCase("/api/v1/profile") && method.equalsIgnoreCase("GET"))
+            return false;
         return userType.getId() != UserType.ADMIN;
     }
 

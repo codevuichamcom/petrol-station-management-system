@@ -89,13 +89,13 @@ public class OptionalValidate {
         }
     }
 
-    public Transaction getPumpCodeById(int id) throws CustomNotFoundException {
+    public Transaction getTransactionById(int id) throws CustomNotFoundException {
         Optional<Transaction> pumpCodeOptional = transactionRepository.findById(id);
         if (pumpCodeOptional.isPresent()) {
             return pumpCodeOptional.get();
         } else {
             throw new CustomNotFoundException(CustomError.builder()
-                    .code("not.found").field("id").message("Pump Code is not exist").table("pump_code_table").build());
+                    .code("not.found").field("id").message("Transaction is not exist").table("transaction_table").build());
         }
     }
 

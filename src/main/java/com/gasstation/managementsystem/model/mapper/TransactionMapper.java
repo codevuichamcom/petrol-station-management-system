@@ -21,6 +21,7 @@ public class TransactionMapper {
                         .name(card.getCustomer().getName())
                         .build()).build() : null;
         return TransactionDTO.builder()
+                .id(transaction.getId())
                 .time(DateTimeHelper.toUnixTime(transaction.getTime()))
                 .volume(transaction.getVolume())
                 .unitPrice(transaction.getUnitPrice())

@@ -62,7 +62,12 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public HashMap<String, Object> findAllByUserTypeId(int userTypeId) {
-        return listApiToMap(apiRepository.findAllByUserTypeId(userTypeId));
+        List<Api> apiList = apiRepository.findAllByUserTypeId(userTypeId);
+        if (userTypeId == UserType.OWNER) {
+            apiList.add(Api.builder().id(-1).path("/api/v1/shifts").method("GET").build());
+            apiList.add(Api.builder().id(-1).path("/api/v1/fuels").method("GET").build());
+        }
+        return listApiToMap(apiList);
     }
 
     @Override

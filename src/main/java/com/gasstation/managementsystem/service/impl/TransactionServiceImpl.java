@@ -25,20 +25,20 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final OptionalValidate optionalValidate;
 
-    private HashMap<String, Object> listPumpCodeToMap(List<com.gasstation.managementsystem.entity.Transaction> transactions) {
-        List<TransactionDTO> pumpCodeDTOS = new ArrayList<>();
+    private HashMap<String, Object> listTransactionToMap(List<com.gasstation.managementsystem.entity.Transaction> transactions) {
+        List<TransactionDTO> transactionDTOS = new ArrayList<>();
         for (com.gasstation.managementsystem.entity.Transaction transaction : transactions) {
-            pumpCodeDTOS.add(TransactionMapper.toTransactionDTO(transaction));
+            transactionDTOS.add(TransactionMapper.toTransactionDTO(transaction));
         }
         HashMap<String, Object> map = new HashMap<>();
-        map.put("data", pumpCodeDTOS);
+        map.put("data", transactionDTOS);
         return map;
     }
 
     @Override
     public HashMap<String, Object> findAll(Pageable pageable) {
         Page<com.gasstation.managementsystem.entity.Transaction> pumpCodes = transactionRepository.findAll(pageable);
-        HashMap<String, Object> map = listPumpCodeToMap(pumpCodes.getContent());
+        HashMap<String, Object> map = listTransactionToMap(pumpCodes.getContent());
         map.put("totalElement", pumpCodes.getTotalElements());
         map.put("totalPage", pumpCodes.getTotalPages());
         return map;
@@ -46,12 +46,12 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public HashMap<String, Object> findAll() {
-        return listPumpCodeToMap(transactionRepository.findAll());
+        return listTransactionToMap(transactionRepository.findAll());
     }
 
     @Override
     public TransactionDTO findById(int id) throws CustomNotFoundException {
-        return TransactionMapper.toTransactionDTO(optionalValidate.getPumpCodeById(id));
+        return TransactionMapper.toTransactionDTO(optionalValidate.getTransactionById(id));
     }
 
     @Override
@@ -65,7 +65,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionDTO update(int id, TransactionDTOUpdate transactionDTOUpdate) throws CustomNotFoundException {
-        Transaction transaction = optionalValidate.getPumpCodeById(id);
+        Transaction transaction = optionalValidate.getTransactionById(id);
         TransactionMapper.copyNonNullToTransaction(transaction, transactionDTOUpdate);
         Integer cardId = transactionDTOUpdate.getCardId();
         if (cardId != null) {
@@ -78,7 +78,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionDTO delete(int id) throws CustomNotFoundException {
-        Transaction transaction = optionalValidate.getPumpCodeById(id);
+        Transaction transaction = optionalValidate.getTransactionById(id);
         transactionRepository.delete(transaction);
         return TransactionMapper.toTransactionDTO(transaction);
     }

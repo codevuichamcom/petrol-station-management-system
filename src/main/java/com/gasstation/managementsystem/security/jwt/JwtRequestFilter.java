@@ -130,7 +130,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     }
 
     private boolean needCheckPermission(UserType userType, String url, String method) {
-        return userType.getId() != UserType.ADMIN && !url.equalsIgnoreCase("/api/v1/apis") && !method.equalsIgnoreCase("GET");
+        if (url.equalsIgnoreCase("/api/v1/shifts") && method.equalsIgnoreCase("GET") && userType.getId() == UserType.OWNER)
+            return false;
+        if (url.equalsIgnoreCase("/api/v1/fuels") && method.equalsIgnoreCase("GET") && userType.getId() == UserType.OWNER)
+            return false;
+        if (url.equalsIgnoreCase("/api/v1/apis") && method.equalsIgnoreCase("GET"))
+            return false;
+        return userType.getId() != UserType.ADMIN;
     }
 
     private void responseToClient(HttpServletResponse response, CustomError customError, int httpStatus) throws IOException {

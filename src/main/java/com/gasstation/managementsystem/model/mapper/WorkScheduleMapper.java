@@ -1,6 +1,10 @@
 package com.gasstation.managementsystem.model.mapper;
 
+import com.gasstation.managementsystem.entity.Employee;
+import com.gasstation.managementsystem.entity.Shift;
 import com.gasstation.managementsystem.entity.WorkSchedule;
+import com.gasstation.managementsystem.model.dto.employee.EmployeeDTO;
+import com.gasstation.managementsystem.model.dto.shift.ShiftDTO;
 import com.gasstation.managementsystem.model.dto.workSchedule.WorkScheduleDTO;
 import com.gasstation.managementsystem.model.dto.workSchedule.WorkScheduleDTOCreate;
 import com.gasstation.managementsystem.model.dto.workSchedule.WorkScheduleDTOUpdate;
@@ -12,9 +16,13 @@ public class WorkScheduleMapper {
 
     public static WorkScheduleDTO toWorkScheduleDTO(WorkSchedule workSchedule) {
         if (workSchedule == null) return null;
+        Employee employee = workSchedule.getEmployee();
+        Shift shift = workSchedule.getShift();
+        EmployeeDTO employeeDTO = employee != null ? EmployeeDTO.builder().id(employee.getId()).name(employee.getName()).build() : null;
+        ShiftDTO shiftDTO = shift != null ? ShiftDTO.builder().id(shift.getId()).name(shift.getName()).build() : null;
         return WorkScheduleDTO.builder()
-                .employeeId(workSchedule.getEmployee().getId())
-                .shiftId(workSchedule.getShift().getId())
+                .employee(employeeDTO)
+                .shift(shiftDTO)
                 .startDate(DateTimeHelper.formatDate(workSchedule.getStartDate(), "yyyy-MM-dd"))
                 .endDate(DateTimeHelper.formatDate(workSchedule.getEndDate(), "yyyy-MM-dd")).build();
     }

@@ -1,7 +1,6 @@
 package com.gasstation.managementsystem.utils;
 
 import com.gasstation.managementsystem.entity.*;
-import com.gasstation.managementsystem.entity.primaryCombine.WorkSchedulePrimary;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.repository.*;
@@ -150,14 +149,13 @@ public class OptionalValidate {
         }
     }
 
-    public WorkSchedule getWorkScheduleByEmployeeIdAndShiftId(int employeeId, int shiftId) throws CustomNotFoundException {
-        WorkSchedulePrimary primary = WorkSchedulePrimary.builder().employeeId(employeeId).shiftId(shiftId).build();
-        Optional<WorkSchedule> workScheduleOptional = workScheduleRepository.findById(primary);
+    public WorkSchedule getWorkScheduleById(int id) throws CustomNotFoundException {
+        Optional<WorkSchedule> workScheduleOptional = workScheduleRepository.findById(id);
         if (workScheduleOptional.isPresent()) {
             return workScheduleOptional.get();
         } else {
             throw new CustomNotFoundException(CustomError.builder()
-                    .code("not.found").message("Not found employee or shift")
+                    .code("not.found").message("Not found work schedule id")
                     .table("work_schedule_tbl").build());
         }
     }

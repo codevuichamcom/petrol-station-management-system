@@ -3,7 +3,9 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "shift_tbl") //ca bơm
@@ -29,7 +31,7 @@ public class Shift {
     private Date endTime = new Date();
 
     @OneToMany(mappedBy = "shift")
-    private Set<WorkSchedule> workScheduleSet = new HashSet<>();
+    private List<WorkSchedule> workScheduleList = new ArrayList<>();
 
     @OneToMany(mappedBy = "shift")
     private List<HandOverShift> handOverShiftList = new ArrayList<>();

@@ -9,6 +9,7 @@ import com.gasstation.managementsystem.service.WorkScheduleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,15 +27,18 @@ public class WorkScheduleController {
 
     @Operation(summary = "View All work schedule")
     @GetMapping("/work-schedules")
-    public HashMap<String, Object> getAll() {
+    public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
+                                          @RequestParam(name = "pageSize", required = false) Integer pageSize) {
+        if (pageSize != null) {
+            return workScheduleService.findAll(PageRequest.of(pageIndex - 1, pageIndex, Sort.by(Sort.Direction.DESC, "id")));
+        }
         return workScheduleService.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
     @Operation(summary = "Find work schedule by id")
-    @GetMapping("/work-schedules/employees/{employeeId}/shifts/{shiftId}")
-    public WorkScheduleDTO getOne(@PathVariable(name = "employeeId") Integer employeeId,
-                                  @PathVariable(name = "shiftId") Integer shiftId) throws CustomNotFoundException {
-        return workScheduleService.findById(employeeId, shiftId);
+    @GetMapping("/work-schedules/{id}")
+    public WorkScheduleDTO getOne(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
+        return workScheduleService.findById(id);
     }
 
     @Operation(summary = "Create new work schedule")
@@ -44,18 +48,16 @@ public class WorkScheduleController {
     }
 
     @Operation(summary = "Update work schedule by id")
-    @PutMapping("/work-schedules/employees/{employeeId}/shifts/{shiftId}")
-    public WorkScheduleDTO update(@PathVariable(name = "employeeId") Integer employeeId,
-                                  @PathVariable(name = "shiftId") Integer shiftId,
+    @PutMapping("/work-schedules/{id}")
+    public WorkScheduleDTO update(@PathVariable(name = "id") Integer id,
                                   @Valid @RequestBody WorkScheduleDTOUpdate workScheduleDTOUpdate) throws CustomNotFoundException {
-        return workScheduleService.update(employeeId, shiftId, workScheduleDTOUpdate);
+        return workScheduleService.update(id, workScheduleDTOUpdate);
     }
 
     @Operation(summary = "Delete tank by id")
-    @DeleteMapping("/work-schedules/employees/{employeeId}/shifts/{shiftId}")
-    public WorkScheduleDTO delete(@PathVariable(name = "employeeId") Integer employeeId,
-                                  @PathVariable(name = "shiftId") Integer shiftId) throws CustomNotFoundException {
-        return workScheduleService.delete(employeeId, shiftId);
+    @DeleteMapping("/work-schedules/{id}")
+    public WorkScheduleDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
+        return workScheduleService.delete(id);
     }
 
 }

@@ -10,7 +10,6 @@ import java.util.Date;
 @Setter
 @Builder
 public class WorkScheduleDTOUpdate {
-    private Integer employeeId;
     private Integer shiftId;
     private Date startDate;
     private Date endDate;

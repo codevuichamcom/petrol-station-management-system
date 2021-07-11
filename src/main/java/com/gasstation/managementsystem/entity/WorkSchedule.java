@@ -1,6 +1,5 @@
 package com.gasstation.managementsystem.entity;
 
-import com.gasstation.managementsystem.entity.primaryCombine.WorkSchedulePrimary;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,15 +13,17 @@ import java.util.Date;
 @Setter
 @Builder
 public class WorkSchedule {
-    @EmbeddedId
-    private WorkSchedulePrimary id = new WorkSchedulePrimary();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("employeeId")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("shiftId")
+    @ManyToOne
+    @JoinColumn(name = "shift_id")
     private Shift shift;
 
     @Column(nullable = false)

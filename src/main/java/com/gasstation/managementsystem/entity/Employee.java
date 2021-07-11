@@ -3,9 +3,9 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "employee_tbl")
@@ -43,5 +43,5 @@ public class Employee {
     private Station station; //nhân viên này thuộc trạm nào
 
     @OneToMany(mappedBy = "employee")
-    private Set<WorkSchedule> workScheduleSet = new HashSet<>();
+    private List<WorkSchedule> workScheduleList = new ArrayList<>();
 }

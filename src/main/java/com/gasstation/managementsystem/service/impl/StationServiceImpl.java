@@ -16,11 +16,8 @@ import com.gasstation.managementsystem.repository.UserRepository;
 import com.gasstation.managementsystem.service.StationService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,18 +41,8 @@ public class StationServiceImpl implements StationService {
     }
 
     @Override
-    public HashMap<String, Object> findAll(Pageable pageable, Principal principal) {
-        User user = userRepository.findByUsername(principal.getName());
-        Page<Station> stations = stationRepository.findByOwnerId(user.getId(), pageable);
-        HashMap<String, Object> map = listStationToMap(stations.getContent());
-        map.put("totalElement", stations.getTotalElements());
-        map.put("totalPage", stations.getTotalPages());
-        return map;
-    }
-
-    @Override
-    public HashMap<String, Object> findAll(Principal principal) {
-        User user = userRepository.findByUsername(principal.getName());
+    public HashMap<String, Object> findAll(String username) {
+        User user = userRepository.findByUsername(username);
         List<Station> stations = new ArrayList<>();
         int userTypeId = user.getUserType().getId();
         switch (userTypeId) {

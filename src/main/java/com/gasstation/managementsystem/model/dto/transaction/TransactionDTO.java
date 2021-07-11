@@ -1,6 +1,8 @@
 package com.gasstation.managementsystem.model.dto.transaction;
 
 import com.gasstation.managementsystem.model.dto.card.CardDTO;
+import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTO;
+import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
 import lombok.*;
 
 import java.util.Objects;
@@ -15,7 +17,10 @@ public class TransactionDTO {
     private Long time;
     private Double volume;
     private Double unitPrice;
+    private String uuid;
     private CardDTO card;
+    private PumpDTO pump;
+    private HandOverShiftDTO handOverShift;
 
     @Override
     public boolean equals(Object o) {

@@ -27,7 +27,7 @@ public class ShiftMapper {
     }
 
     public static void copyNonNullToShift(Shift shift, ShiftDTOUpdate shiftDTOUpdate) {
-        String name = shift.getName();
+        String name = shiftDTOUpdate.getName();
         String startTime = shiftDTOUpdate.getStartTime();
         String endTime = shiftDTOUpdate.getEndTime();
         if (name != null) {

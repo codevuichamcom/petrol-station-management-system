@@ -13,15 +13,15 @@ import java.util.Objects;
 public class WorkScheduleDTO {
     private int employeeId;
     private int shiftId;
-    private String startTime;
-    private String endTime;
+    private String startDate;
+    private String endDate;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WorkScheduleDTO that = (WorkScheduleDTO) o;
-        return employeeId == that.employeeId && shiftId == that.shiftId && Objects.equals(startTime, that.startTime) && Objects.equals(endTime, that.endTime);
+        return employeeId == that.employeeId && shiftId == that.shiftId && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate);
     }
 
 }

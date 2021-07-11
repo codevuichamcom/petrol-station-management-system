@@ -15,15 +15,15 @@ public class WorkScheduleMapper {
         return WorkScheduleDTO.builder()
                 .employeeId(workSchedule.getEmployee().getId())
                 .shiftId(workSchedule.getShift().getId())
-                .startTime(DateTimeHelper.formatDate(workSchedule.getStartDate(), "yyyy-MM-dd"))
-                .endTime(DateTimeHelper.formatDate(workSchedule.getEndDate(), "yyyy-MM-dd")).build();
+                .startDate(DateTimeHelper.formatDate(workSchedule.getStartDate(), "yyyy-MM-dd"))
+                .endDate(DateTimeHelper.formatDate(workSchedule.getEndDate(), "yyyy-MM-dd")).build();
     }
 
     public static WorkSchedule toWorkSchedule(WorkScheduleDTOCreate workScheduleDTOCreate) {
         if (workScheduleDTOCreate == null) return null;
         return WorkSchedule.builder()
-                .startDate(workScheduleDTOCreate.getStartTime())
-                .endDate(workScheduleDTOCreate.getEndTime()).build();
+                .startDate(workScheduleDTOCreate.getStartDate())
+                .endDate(workScheduleDTOCreate.getEndDate()).build();
     }
 
     public static void copyNonNullToWorkSchedule(WorkSchedule workSchedule, WorkScheduleDTOUpdate workScheduleDTOUpdate) {

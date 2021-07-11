@@ -46,6 +46,12 @@ public class ApiExceptionHandler {
         return ex.getErrorHashMap();
     }
 
+    @ExceptionHandler(CustomInternalServerException.class)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    public Map<String, CustomError> internalServer(CustomInternalServerException ex) {
+        return ex.getErrorHashMap();
+    }
+
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage notExistException(Exception ex) {

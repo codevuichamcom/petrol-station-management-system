@@ -1,10 +1,10 @@
 package com.gasstation.managementsystem.controller;
 
 
+import com.gasstation.managementsystem.exception.custom.CustomInternalServerException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTO;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOCreate;
-import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOUpdate;
 import com.gasstation.managementsystem.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -30,27 +31,11 @@ public class TransactionController {
         return transactionService.findAll(PageRequest.of(pageIndex - 1, pageSize));
     }
 
-    @Operation(summary = "Find Transaction by id")
-    @GetMapping("/transactions/{id}")
-    public TransactionDTO getOne(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
-        return transactionService.findById(id);
-    }
 
     @Operation(summary = "Create new Transaction")
     @PostMapping("/transactions")
-    public TransactionDTO create(@Valid @RequestBody TransactionDTOCreate transactionDTOCreate) throws CustomNotFoundException {
-        return transactionService.create(transactionDTOCreate);
+    public List<TransactionDTO> create(@Valid @RequestBody List<TransactionDTOCreate> transactionDTOCreates) throws CustomNotFoundException, CustomInternalServerException {
+        return transactionService.create(transactionDTOCreates);
     }
 
-    @Operation(summary = "Update Transaction by id")
-    @PutMapping("/transactions/{id}")
-    public TransactionDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody TransactionDTOUpdate transactionDTOUpdate) throws CustomNotFoundException {
-        return transactionService.update(id, transactionDTOUpdate);
-    }
-
-    @Operation(summary = "Delete Transaction by id")
-    @DeleteMapping("/transactions/{id}")
-    public TransactionDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
-        return transactionService.delete(id);
-    }
 }

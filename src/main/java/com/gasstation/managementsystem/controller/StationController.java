@@ -10,7 +10,6 @@ import com.gasstation.managementsystem.service.StationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,13 +27,8 @@ public class StationController {
 
     @Operation(summary = "View All Station")
     @GetMapping("/stations")
-    public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
-                                          @RequestParam(name = "pageSize", required = false) Integer pageSize,
-                                          Principal principal) {
-        if (pageSize != null) {
-            return stationService.findAll(PageRequest.of(pageIndex - 1, pageSize), principal);
-        }
-        return stationService.findAll(principal);
+    public HashMap<String, Object> getAll(Principal principal) {
+        return stationService.findAll(principal.getName());
     }
 
     @Operation(summary = "Find Station by id")

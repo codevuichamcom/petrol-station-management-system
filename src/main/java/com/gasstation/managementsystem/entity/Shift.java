@@ -32,5 +32,9 @@ public class Shift {
     private Set<WorkSchedule> workScheduleSet = new HashSet<>();
 
     @OneToMany(mappedBy = "shift")
-    private List<HandOverShip> handOverShipList = new ArrayList<>();
+    private List<HandOverShift> handOverShiftList = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "station_id")
+    private Station station;
 }

@@ -16,7 +16,7 @@ public class WorkScheduleDTOCreate {
     @NotNull(message = "Shift id is mandatory")
     private Integer shiftId;
     @NotNull(message = "Start time id is mandatory")
-    private Date startTime;
+    private Date startDate;
     @NotNull(message = "End Time id is mandatory")
-    private Date endTime;
+    private Date endDate;
 }

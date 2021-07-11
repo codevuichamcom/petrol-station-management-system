@@ -1,11 +1,11 @@
 package com.gasstation.managementsystem.service.impl;
 
-import com.gasstation.managementsystem.entity.Card;
 import com.gasstation.managementsystem.entity.Transaction;
+import com.gasstation.managementsystem.exception.custom.CustomInternalServerException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
+import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTO;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOCreate;
-import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOUpdate;
 import com.gasstation.managementsystem.model.mapper.TransactionMapper;
 import com.gasstation.managementsystem.repository.TransactionRepository;
 import com.gasstation.managementsystem.service.TransactionService;
@@ -14,20 +14,23 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final OptionalValidate optionalValidate;
 
-    private HashMap<String, Object> listTransactionToMap(List<com.gasstation.managementsystem.entity.Transaction> transactions) {
+    private HashMap<String, Object> listTransactionToMap(List<Transaction> transactions) {
         List<TransactionDTO> transactionDTOS = new ArrayList<>();
-        for (com.gasstation.managementsystem.entity.Transaction transaction : transactions) {
+        for (Transaction transaction : transactions) {
             transactionDTOS.add(TransactionMapper.toTransactionDTO(transaction));
         }
         HashMap<String, Object> map = new HashMap<>();
@@ -45,41 +48,20 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public HashMap<String, Object> findAll() {
-        return listTransactionToMap(transactionRepository.findAll());
-    }
-
-    @Override
-    public TransactionDTO findById(int id) throws CustomNotFoundException {
-        return TransactionMapper.toTransactionDTO(optionalValidate.getTransactionById(id));
-    }
-
-    @Override
-    public TransactionDTO create(TransactionDTOCreate transactionDTOCreate) throws CustomNotFoundException {
-        Transaction transaction = TransactionMapper.toTransaction(transactionDTOCreate);
-        Card card = optionalValidate.getCardById(transactionDTOCreate.getCardId());
-        transaction.setCard(card);
-        transaction = transactionRepository.save(transaction);
-        return TransactionMapper.toTransactionDTO(transaction);
-    }
-
-    @Override
-    public TransactionDTO update(int id, TransactionDTOUpdate transactionDTOUpdate) throws CustomNotFoundException {
-        Transaction transaction = optionalValidate.getTransactionById(id);
-        TransactionMapper.copyNonNullToTransaction(transaction, transactionDTOUpdate);
-        Integer cardId = transactionDTOUpdate.getCardId();
-        if (cardId != null) {
-            transaction.setCard(optionalValidate.getCardById(cardId));
+    public List<TransactionDTO> create(List<TransactionDTOCreate> transactionDTOCreates) throws CustomNotFoundException, CustomInternalServerException {
+        List<Transaction> transactionList = new ArrayList<>();
+        for (TransactionDTOCreate T : transactionDTOCreates) {
+            Transaction transaction = TransactionMapper.toTransaction(T);
+            transaction.setCard(optionalValidate.getCardById(T.getCardId()));
+            transaction.setPump(optionalValidate.getPumpById(T.getPumpId()));
+            transaction.setHandOverShift(optionalValidate.getHandOverShiftById(T.getHandOverShiftId()));
+            transactionList.add(transaction);
         }
-        transaction = transactionRepository.save(transaction);
-        return TransactionMapper.toTransactionDTO(transaction);
-    }
-
-
-    @Override
-    public TransactionDTO delete(int id) throws CustomNotFoundException {
-        Transaction transaction = optionalValidate.getTransactionById(id);
-        transactionRepository.delete(transaction);
-        return TransactionMapper.toTransactionDTO(transaction);
+        try {
+            transactionList = transactionRepository.saveAll(transactionList);
+        } catch (Exception ex) {
+            throw new CustomInternalServerException(CustomError.builder().code("save.fail").message("Save List Transaction fail").build());
+        }
+        return transactionList.stream().map(TransactionMapper::toTransactionDTO).collect(Collectors.toList());
     }
 }

@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class HandOverShip {
+public class HandOverShift {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -23,8 +23,11 @@ public class HandOverShip {
     private String status;
 
     @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date createdDate;
+
     @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
+    private Date closeShiftDate;
 
     private String note;
 
@@ -32,7 +35,7 @@ public class HandOverShip {
     @JoinColumn(name = "shift_id")
     private Shift shift;
 
-    @OneToMany(mappedBy = "handOverShip")
+    @OneToMany(mappedBy = "handOverShift")
     private List<Transaction> transactionList = new ArrayList<>();
 
 }

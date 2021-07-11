@@ -28,6 +28,7 @@ public class OptionalValidate {
     private final WorkScheduleRepository workScheduleRepository;
     private final FuelImportRepository fuelImportRepository;
     private final ExpenseRepository expenseRepository;
+    private final HandOverShiftRepository handOverShiftRepository;
 
 
     public User getUserById(int id) throws CustomNotFoundException {
@@ -178,6 +179,16 @@ public class OptionalValidate {
         } else {
             throw new CustomNotFoundException(CustomError.builder()
                     .code("not.found").field("id").message("Expense is not exist").table("expense_table").build());
+        }
+    }
+
+    public HandOverShift getHandOverShiftById(int id) throws CustomNotFoundException {
+        Optional<HandOverShift> handOverShiftOptional = handOverShiftRepository.findById(id);
+        if (handOverShiftOptional.isPresent()) {
+            return handOverShiftOptional.get();
+        } else {
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found").field("id").message("Hand over shift is not exist").table("hand_over_shift_table").build());
         }
     }
 

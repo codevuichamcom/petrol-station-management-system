@@ -47,4 +47,7 @@ public class Station {
 
     @OneToMany(mappedBy = "station")
     private List<Employee> employeeList = new ArrayList<>();//danh sách nhân viên của trạm này
+
+    @OneToMany(mappedBy = "station")
+    private List<Shift> shiftList = new ArrayList<>();
 }

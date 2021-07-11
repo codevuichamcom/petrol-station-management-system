@@ -10,11 +10,11 @@ public class DateTimeHelper {
     }
 
     public static long toUnixTime(Date date) {
-        return date.getTime();
+        return date.getTime() / 1000L;
     }
 
     public static Date toDate(long time) {
-        return new Date(time);
+        return new Date(time * 1000);
     }
 
     public static Date toDate(String dateStr, String format) {

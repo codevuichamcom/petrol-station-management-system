@@ -3,9 +3,7 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "transaction_tbl")
@@ -29,6 +27,9 @@ public class Transaction {
     @Column(nullable = false)
     private double unitPrice = 0;
 
+    @Column(nullable = false, unique = true)
+    private String uuid;
+
     @ManyToOne
     @JoinColumn(name = "card_id")
     private Card card;//Thanh toán bằng thẻ nào
@@ -39,6 +40,6 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "hand_over_ship_id")
-    private HandOverShip handOverShip;
+    private HandOverShift handOverShift;
 
 }

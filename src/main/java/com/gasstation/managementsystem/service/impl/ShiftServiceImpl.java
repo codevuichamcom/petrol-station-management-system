@@ -1,8 +1,6 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.Shift;
-import com.gasstation.managementsystem.entity.Station;
-import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.shift.ShiftDTO;
 import com.gasstation.managementsystem.model.dto.shift.ShiftDTOCreate;
@@ -12,8 +10,7 @@ import com.gasstation.managementsystem.repository.ShiftRepository;
 import com.gasstation.managementsystem.service.ShiftService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,19 +33,10 @@ public class ShiftServiceImpl implements ShiftService {
         return map;
     }
 
-    @Override
-    public HashMap<String, Object> findAll(Pageable pageable) {
-        Page<Shift> shifts = shiftRepository.findAll(pageable);
-
-        HashMap<String, Object> map = listShiftToMap(shifts.getContent());
-        map.put("totalElement", shifts.getTotalElements());
-        map.put("totalPage", shifts.getTotalPages());
-        return map;
-    }
 
     @Override
-    public HashMap<String, Object> findAll() {
-        return listShiftToMap(shiftRepository.findAll());
+    public HashMap<String, Object> findAll(Sort sort) {
+        return listShiftToMap(shiftRepository.findAll(sort));
     }
 
     @Override
@@ -65,23 +53,10 @@ public class ShiftServiceImpl implements ShiftService {
 
     @Override
     public ShiftDTO update(int id, ShiftDTOUpdate shiftDTOUpdate) throws CustomNotFoundException {
-//        Shift shift = optionalValidate.getShiftById(id);
-//        ShiftMapper.copyNonNullToTank(shift, shiftDTOUpdate);
-//        if (shiftDTOUpdate.getEmployeeId() != null) {
-//            User employee = optionalValidate.getUserById(shiftDTOUpdate.getEmployeeId());
-//            shift.setEmployee(employee);
-//        }
-//        if (shiftDTOUpdate.getOwnerId() != null) {
-//            User owner = optionalValidate.getUserById(shiftDTOUpdate.getOwnerId());
-//            shift.setOwner(owner);
-//        }
-//        if (shiftDTOUpdate.getStationId() != null) {
-//            Station station = optionalValidate.getStationById(shiftDTOUpdate.getStationId());
-//            shift.setStation(station);
-//        }
-//        shift = shiftRepository.save(shift);
-//        return ShiftMapper.toShiftDTO(shift);
-        return null;
+        Shift shift = optionalValidate.getShiftById(id);
+        ShiftMapper.copyNonNullToShift(shift, shiftDTOUpdate);
+        shift = shiftRepository.save(shift);
+        return ShiftMapper.toShiftDTO(shift);
     }
 
 

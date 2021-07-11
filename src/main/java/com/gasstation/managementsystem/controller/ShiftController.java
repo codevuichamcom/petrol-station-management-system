@@ -8,7 +8,7 @@ import com.gasstation.managementsystem.service.ShiftService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,36 +20,35 @@ import java.util.HashMap;
 @Tag(name = "Shift", description = "API for shift")
 @RequiredArgsConstructor
 public class ShiftController {
-    private final ShiftService ShiftService;
+    private final ShiftService shiftService;
 
     @Operation(summary = "View All Shift")
     @GetMapping("/shifts")
-    public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
-                                          @RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize) {
-        return ShiftService.findAll(PageRequest.of(pageIndex - 1, pageSize));
+    public HashMap<String, Object> getAll() {
+        return shiftService.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @Operation(summary = "Find Shift by id")
     @GetMapping("/shifts/{id}")
     public ShiftDTO getOne(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
-        return ShiftService.findById(id);
+        return shiftService.findById(id);
     }
 
     @Operation(summary = "Create new Shift")
     @PostMapping("/shifts")
     public ShiftDTO create(@Valid @RequestBody ShiftDTOCreate shiftDTOCreate) throws CustomNotFoundException {
-        return ShiftService.create(shiftDTOCreate);
+        return shiftService.create(shiftDTOCreate);
     }
 
     @Operation(summary = "Update Shift by id")
     @PutMapping("/shifts/{id}")
     public ShiftDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody ShiftDTOUpdate shiftDTOUpdate) throws CustomNotFoundException {
-        return ShiftService.update(id, shiftDTOUpdate);
+        return shiftService.update(id, shiftDTOUpdate);
     }
 
     @Operation(summary = "Delete Shift by id")
     @DeleteMapping("/shifts/{id}")
     public ShiftDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
-        return ShiftService.delete(id);
+        return shiftService.delete(id);
     }
 }

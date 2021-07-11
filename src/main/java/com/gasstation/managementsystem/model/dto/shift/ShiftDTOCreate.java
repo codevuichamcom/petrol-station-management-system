@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,8 +14,8 @@ public class ShiftDTOCreate {
     @NotBlank(message = "Name is mandatory")
     private String name;
     @NotNull(message = "Start time is mandatory")
-    private Date startTime;
+    private String startTime;
     @NotNull(message = "End time is mandatory")
-    private Date endTime;
+    private String endTime;
 }
 

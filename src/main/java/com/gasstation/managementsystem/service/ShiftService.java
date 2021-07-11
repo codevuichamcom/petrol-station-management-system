@@ -4,14 +4,13 @@ import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.shift.ShiftDTO;
 import com.gasstation.managementsystem.model.dto.shift.ShiftDTOCreate;
 import com.gasstation.managementsystem.model.dto.shift.ShiftDTOUpdate;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.HashMap;
 
 public interface ShiftService {
-    HashMap<String, Object> findAll(Pageable pageable);
 
-    HashMap<String, Object> findAll();
+    HashMap<String, Object> findAll(Sort sort);
 
     ShiftDTO findById(int id) throws CustomNotFoundException;
 

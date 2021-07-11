@@ -2,8 +2,6 @@ package com.gasstation.managementsystem.model.dto.shift;
 
 import lombok.*;
 
-import java.util.Date;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -11,6 +9,6 @@ import java.util.Date;
 @Builder
 public class ShiftDTOUpdate {
     private String name;
-    private Date startTime;
-    private Date endTime;
+    private String startTime;
+    private String endTime;
 }

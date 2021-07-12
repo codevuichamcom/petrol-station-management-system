@@ -2,17 +2,24 @@ package com.gasstation.managementsystem.model.mapper;
 
 import com.gasstation.managementsystem.entity.Shift;
 import com.gasstation.managementsystem.entity.Station;
+import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.model.dto.shift.ShiftDTO;
 import com.gasstation.managementsystem.model.dto.shift.ShiftDTOCreate;
 import com.gasstation.managementsystem.model.dto.shift.ShiftDTOUpdate;
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
+import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.utils.DateTimeHelper;
 
 public class ShiftMapper {
     public static ShiftDTO toShiftDTO(Shift shift) {
         if (shift == null) return null;
         Station station = shift.getStation();
-        StationDTO stationDTO = station != null ? StationDTO.builder().id(station.getId()).name(station.getName()).build() : null;
+        User owner = station.getOwner();
+        StationDTO stationDTO = station != null ? StationDTO.builder()
+                .id(station.getId()).name(station.getName())
+                .address(station.getAddress())
+                .owner(UserDTO.builder().id(owner.getId()).name(owner.getName()).build())
+                .build() : null;
         return ShiftDTO.builder()
                 .id(shift.getId())
                 .name(shift.getName())

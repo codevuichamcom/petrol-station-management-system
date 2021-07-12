@@ -190,4 +190,14 @@ public class OptionalValidate {
         }
     }
 
+    public HandOverShift getHandOverShiftByPumpIdNotClose(int id) throws CustomNotFoundException {
+        Optional<HandOverShift> handOverShiftOptional = handOverShiftRepository.findByPumpIdNotClose(id);
+        if (handOverShiftOptional.isPresent()) {
+            return handOverShiftOptional.get();
+        } else {
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found").field("id").message("Hand over shift is not exist").table("hand_over_shift_table").build());
+        }
+    }
+
 }

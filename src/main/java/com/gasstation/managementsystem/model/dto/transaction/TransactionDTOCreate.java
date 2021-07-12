@@ -24,7 +24,5 @@ public class TransactionDTOCreate {
     private Integer cardId;
     @NotNull(message = "Pump ìd is mandatory")
     private Integer pumpId;
-    @NotNull(message = "Hand over shift ìd is mandatory")
-    private Integer handOverShiftId;
 
 }

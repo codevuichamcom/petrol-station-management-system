@@ -19,8 +19,6 @@ public class HandOverShift {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
-    private String status;
 
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
@@ -34,6 +32,10 @@ public class HandOverShift {
     @ManyToOne
     @JoinColumn(name = "shift_id", nullable = false)
     private Shift shift;
+
+    @ManyToOne
+    @JoinColumn(name = "pump_id",nullable = false)
+    private Pump pump;
 
     @OneToMany(mappedBy = "handOverShift")
     private List<Transaction> transactionList = new ArrayList<>();

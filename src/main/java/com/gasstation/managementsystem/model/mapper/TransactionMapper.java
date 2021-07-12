@@ -2,11 +2,9 @@ package com.gasstation.managementsystem.model.mapper;
 
 import com.gasstation.managementsystem.entity.Card;
 import com.gasstation.managementsystem.entity.HandOverShift;
-import com.gasstation.managementsystem.entity.Pump;
 import com.gasstation.managementsystem.entity.Transaction;
 import com.gasstation.managementsystem.model.dto.card.CardDTO;
 import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTO;
-import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
 import com.gasstation.managementsystem.model.dto.shift.ShiftDTO;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTO;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOCreate;
@@ -17,14 +15,12 @@ public class TransactionMapper {
     public static TransactionDTO toTransactionDTO(Transaction transaction) {
         if (transaction == null) return null;
         Card card = transaction.getCard();
-        Pump pump = transaction.getPump();
         HandOverShift handOverShift = transaction.getHandOverShift();
         CardDTO cardDTO = card != null ? CardDTO.builder().id(card.getId())
                 .customer(UserDTO.builder()
                         .id(card.getCustomer().getId())
                         .name(card.getCustomer().getName())
                         .build()).build() : null;
-        PumpDTO pumpDTO = pump != null ? PumpDTO.builder().id(pump.getId()).name(pump.getName()).build() : null;
         HandOverShiftDTO handOverShiftDTO = handOverShift != null ? HandOverShiftDTO.builder().id(handOverShift.getId())
                 .shift(ShiftDTO.builder().id(handOverShift.getShift().getId()).name(handOverShift.getShift().getName()).build())
                 .build() : null;
@@ -35,7 +31,6 @@ public class TransactionMapper {
                 .unitPrice(transaction.getUnitPrice())
                 .uuid(transaction.getUuid())
                 .card(cardDTO)
-                .pump(pumpDTO)
                 .handOverShift(handOverShiftDTO)
                 .build();
     }

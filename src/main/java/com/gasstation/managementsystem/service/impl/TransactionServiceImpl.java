@@ -52,9 +52,11 @@ public class TransactionServiceImpl implements TransactionService {
         List<Transaction> transactionList = new ArrayList<>();
         for (TransactionDTOCreate T : transactionDTOCreates) {
             Transaction transaction = TransactionMapper.toTransaction(T);
-            transaction.setCard(optionalValidate.getCardById(T.getCardId()));
-            transaction.setPump(optionalValidate.getPumpById(T.getPumpId()));
-            transaction.setHandOverShift(optionalValidate.getHandOverShiftById(T.getHandOverShiftId()));
+            Integer cardId = T.getCardId();
+            if (cardId != null) {
+                transaction.setCard(optionalValidate.getCardById(cardId));
+            }
+            transaction.setHandOverShift(optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId()));
             transactionList.add(transaction);
         }
         try {

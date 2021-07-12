@@ -34,9 +34,6 @@ public class Transaction {
     @JoinColumn(name = "card_id")
     private Card card;//Thanh toán bằng thẻ nào
 
-    @ManyToOne
-    @JoinColumn(name = "pump_id")
-    private Pump pump;
 
     @ManyToOne
     @JoinColumn(name = "hand_over_ship_id")

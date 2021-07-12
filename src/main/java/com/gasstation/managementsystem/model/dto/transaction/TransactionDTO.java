@@ -19,7 +19,6 @@ public class TransactionDTO {
     private Double unitPrice;
     private String uuid;
     private CardDTO card;
-    private PumpDTO pump;
     private HandOverShiftDTO handOverShift;
 
     @Override

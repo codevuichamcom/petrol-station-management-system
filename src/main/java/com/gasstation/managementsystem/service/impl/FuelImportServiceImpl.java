@@ -1,6 +1,7 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.FuelImport;
+import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.fuelImport.FuelImportDTO;
 import com.gasstation.managementsystem.model.dto.fuelImport.FuelImportDTOCreate;
@@ -8,6 +9,7 @@ import com.gasstation.managementsystem.model.dto.fuelImport.FuelImportDTOUpdate;
 import com.gasstation.managementsystem.model.mapper.FuelImportMapper;
 import com.gasstation.managementsystem.repository.FuelImportRepository;
 import com.gasstation.managementsystem.service.FuelImportService;
+import com.gasstation.managementsystem.utils.AccountHelper;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 public class FuelImportServiceImpl implements FuelImportService {
     private final FuelImportRepository fuelImportRepository;
     private final OptionalValidate optionalValidate;
+    private final AccountHelper accountHelper;
 
     private HashMap<String, Object> listFuelImportToMap(List<FuelImport> tanks) {
         List<FuelImportDTO> fuelImportDTOS = tanks.stream().map(FuelImportMapper::toFuelImportDTO).collect(Collectors.toList());
@@ -58,6 +61,9 @@ public class FuelImportServiceImpl implements FuelImportService {
         FuelImport fuelImport = FuelImportMapper.toFuelImport(fuelImportDTOCreate);
         fuelImport.setTank(optionalValidate.getTankById(fuelImportDTOCreate.getTankId()));
         fuelImport.setSupplier(optionalValidate.getSupplierById(fuelImportDTOCreate.getSupplierId()));
+        User creator = accountHelper.getUserLogin();
+        fuelImport.setCreator(creator);
+        fuelImport.setFuel(optionalValidate.getFuelById(fuelImportDTOCreate.getFuelId()));
         fuelImport = fuelImportRepository.save(fuelImport);
         return FuelImportMapper.toFuelImportDTO(fuelImport);
     }
@@ -68,11 +74,15 @@ public class FuelImportServiceImpl implements FuelImportService {
         FuelImportMapper.copyNonNullToFuelImport(oldFuelImport, fuelImportDTOUpdate);
         Integer tankId = fuelImportDTOUpdate.getTankId();
         Integer supplierId = fuelImportDTOUpdate.getSupplierId();
+        Integer fuelId = fuelImportDTOUpdate.getFuelId();
         if (tankId != null) {
             oldFuelImport.setTank(optionalValidate.getTankById(tankId));
         }
         if (supplierId != null) {
             oldFuelImport.setSupplier(optionalValidate.getSupplierById(supplierId));
+        }
+        if (fuelId != null) {
+            oldFuelImport.setFuel(optionalValidate.getFuelById(fuelId));
         }
         oldFuelImport = fuelImportRepository.save(oldFuelImport);
         return FuelImportMapper.toFuelImportDTO(oldFuelImport);

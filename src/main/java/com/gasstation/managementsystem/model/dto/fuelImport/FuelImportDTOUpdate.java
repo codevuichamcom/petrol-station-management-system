@@ -19,4 +19,5 @@ public class FuelImportDTOUpdate {
     private String note;
     private Integer tankId;
     private Integer supplierId;
+    private Integer fuelId;
 }

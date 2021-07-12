@@ -1,7 +1,9 @@
 package com.gasstation.managementsystem.model.dto.fuelImport;
 
+import com.gasstation.managementsystem.model.dto.fuel.FuelDTO;
 import com.gasstation.managementsystem.model.dto.supplier.SupplierDTO;
 import com.gasstation.managementsystem.model.dto.tank.TankDTO;
+import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import lombok.*;
 
 import java.util.Objects;
@@ -22,6 +24,8 @@ public class FuelImportDTO {
     private String note;
     private TankDTO tank;
     private SupplierDTO supplier;
+    private UserDTO creator;
+    private FuelDTO fuel;
 
     @Override
     public boolean equals(Object o) {

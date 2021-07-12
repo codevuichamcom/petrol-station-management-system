@@ -3,6 +3,7 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,5 +32,8 @@ public class Fuel {
 
     @OneToMany(mappedBy = "fuel")
     private List<Tank> tankList;
+
+    @OneToMany(mappedBy = "fuel")
+    private List<FuelImport> fuelImportList = new ArrayList<>();
 
 }

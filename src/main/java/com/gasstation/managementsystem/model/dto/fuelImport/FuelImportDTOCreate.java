@@ -37,4 +37,7 @@ public class FuelImportDTOCreate {
 
     @NotNull(message = "Supplier id is mandatory")
     private Integer supplierId;
+
+    @NotNull(message = "Fuel id is mandatory")
+    private Integer fuelId;
 }

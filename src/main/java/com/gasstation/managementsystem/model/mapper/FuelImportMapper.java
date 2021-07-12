@@ -1,13 +1,13 @@
 package com.gasstation.managementsystem.model.mapper;
 
-import com.gasstation.managementsystem.entity.FuelImport;
-import com.gasstation.managementsystem.entity.Supplier;
-import com.gasstation.managementsystem.entity.Tank;
+import com.gasstation.managementsystem.entity.*;
+import com.gasstation.managementsystem.model.dto.fuel.FuelDTO;
 import com.gasstation.managementsystem.model.dto.fuelImport.FuelImportDTO;
 import com.gasstation.managementsystem.model.dto.fuelImport.FuelImportDTOCreate;
 import com.gasstation.managementsystem.model.dto.fuelImport.FuelImportDTOUpdate;
 import com.gasstation.managementsystem.model.dto.supplier.SupplierDTO;
 import com.gasstation.managementsystem.model.dto.tank.TankDTO;
+import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.NullAwareBeanUtilsBean;
 import org.apache.commons.beanutils.BeanUtilsBean;
@@ -18,6 +18,10 @@ public class FuelImportMapper {
         if (fuelImport == null) return null;
         Tank tank = fuelImport.getTank();
         Supplier supplier = fuelImport.getSupplier();
+        User creator = fuelImport.getCreator();
+        Fuel fuel = fuelImport.getFuel();
+        UserDTO creatorDTO = creator != null ? UserDTO.builder().id(creator.getId()).name(creator.getName()).build() : null;
+        FuelDTO fuelDTO = fuel != null ? FuelDTO.builder().id(fuel.getId()).name(fuel.getName()).build() : null;
         TankDTO tankDTO = tank != null ? TankDTO.builder().id(tank.getId()).name(tank.getName()).build() : null;
         SupplierDTO supplierDTO = supplier != null ? SupplierDTO.builder().id(supplier.getId()).name(supplier.getName()).build() : null;
         return FuelImportDTO.builder()
@@ -30,7 +34,9 @@ public class FuelImportMapper {
                 .vatPercent(fuelImport.getVatPercent())
                 .note(fuelImport.getNote())
                 .tank(tankDTO)
-                .supplier(supplierDTO).build();
+                .supplier(supplierDTO)
+                .creator(creatorDTO)
+                .fuel(fuelDTO).build();
     }
 
     public static FuelImport toFuelImport(FuelImportDTOCreate fuelImportDTOCreate) {

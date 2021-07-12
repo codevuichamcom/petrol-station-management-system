@@ -24,7 +24,7 @@ public class WorkScheduleMapper {
             User owner = station.getOwner();
             employeeDTO = EmployeeDTO.builder()
                     .id(employee.getId())
-                    .name(shift.getName())
+                    .name(employee.getName())
                     .station(StationDTO.builder()
                             .id(station.getId())
                             .name(station.getName())

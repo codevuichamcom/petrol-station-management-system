@@ -11,4 +11,5 @@ public class ShiftDTOUpdate {
     private String name;
     private String startTime;
     private String endTime;
+    private Integer stationId;
 }

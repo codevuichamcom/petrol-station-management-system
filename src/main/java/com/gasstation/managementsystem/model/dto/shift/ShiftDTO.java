@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.model.dto.shift;
 
+import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import lombok.*;
 
 import java.util.Objects;
@@ -14,6 +15,7 @@ public class ShiftDTO {
     private String name;
     private String startTime;
     private String endTime;
+    private StationDTO station;
 
     @Override
     public boolean equals(Object o) {

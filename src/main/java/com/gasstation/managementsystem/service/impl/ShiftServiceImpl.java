@@ -48,6 +48,7 @@ public class ShiftServiceImpl implements ShiftService {
     public ShiftDTO create(ShiftDTOCreate shiftDTOCreate) throws CustomNotFoundException {
         Shift shift = ShiftMapper.toShift(shiftDTOCreate);
         shift = shiftRepository.save(shift);
+        shift.setStation(optionalValidate.getStationById(shiftDTOCreate.getStationId()));
         return ShiftMapper.toShiftDTO(shift);
     }
 
@@ -55,6 +56,10 @@ public class ShiftServiceImpl implements ShiftService {
     public ShiftDTO update(int id, ShiftDTOUpdate shiftDTOUpdate) throws CustomNotFoundException {
         Shift shift = optionalValidate.getShiftById(id);
         ShiftMapper.copyNonNullToShift(shift, shiftDTOUpdate);
+        Integer stationId = shiftDTOUpdate.getStationId();
+        if (stationId != null) {
+            shift.setStation(optionalValidate.getStationById(stationId));
+        }
         shift = shiftRepository.save(shift);
         return ShiftMapper.toShiftDTO(shift);
     }

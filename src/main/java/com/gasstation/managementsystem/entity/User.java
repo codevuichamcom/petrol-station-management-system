@@ -3,7 +3,9 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "user_tbl")
@@ -67,4 +69,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<RefreshToken> refreshTokenList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "creator")
+    private List<FuelImport> fuelImportList = new ArrayList<>();
 }

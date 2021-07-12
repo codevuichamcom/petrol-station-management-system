@@ -17,5 +17,7 @@ public class ShiftDTOCreate {
     private String startTime;
     @NotNull(message = "End time is mandatory")
     private String endTime;
+    @NotNull(message = "End time is mandatory")
+    private Integer stationId;
 }
 

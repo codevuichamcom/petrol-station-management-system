@@ -32,7 +32,7 @@ public class HandOverShift {
     private String note;
 
     @ManyToOne
-    @JoinColumn(name = "shift_id")
+    @JoinColumn(name = "shift_id", nullable = false)
     private Shift shift;
 
     @OneToMany(mappedBy = "handOverShift")

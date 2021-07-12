@@ -39,7 +39,7 @@ public class Employee {
     private String identityCardNumber;
 
     @ManyToOne
-    @JoinColumn(name = "station_id")
+    @JoinColumn(name = "station_id", nullable = false)
     private Station station; //nhân viên này thuộc trạm nào
 
     @OneToMany(mappedBy = "employee")

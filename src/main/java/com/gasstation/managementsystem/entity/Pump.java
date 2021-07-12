@@ -24,7 +24,7 @@ public class Pump {
     private String note;
 
     @ManyToOne
-    @JoinColumn(name = "tank_id") //join with tank_tbl
+    @JoinColumn(name = "tank_id", nullable = false) //join with tank_tbl
     private Tank tank;
 
     @OneToMany(mappedBy = "pump")

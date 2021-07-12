@@ -36,7 +36,7 @@ public class Station {
     private List<PriceChangeHistory> priceChangeHistoryList;//Danh sách đổi giá của trạm này
 
     @ManyToOne
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner_id", nullable = false)
     private User owner;//Chủ Tạm là ai
 
     @OneToMany(mappedBy = "station")

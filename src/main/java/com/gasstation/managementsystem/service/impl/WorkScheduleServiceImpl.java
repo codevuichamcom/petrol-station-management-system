@@ -66,6 +66,10 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
     public WorkScheduleDTO update(int id, WorkScheduleDTOUpdate workScheduleDTOUpdate) throws CustomNotFoundException {
         WorkSchedule workSchedule = optionalValidate.getWorkScheduleById(id);
         WorkScheduleMapper.copyNonNullToWorkSchedule(workSchedule, workScheduleDTOUpdate);
+        Integer shiftId = workScheduleDTOUpdate.getShiftId();
+        if (shiftId != null) {
+            workSchedule.setShift(optionalValidate.getShiftById(shiftId));
+        }
         workSchedule = workScheduleRepository.save(workSchedule);
         return WorkScheduleMapper.toWorkScheduleDTO(workSchedule);
 

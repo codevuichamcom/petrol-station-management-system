@@ -37,6 +37,6 @@ public class Shift {
     private List<HandOverShift> handOverShiftList = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "station_id")
+    @JoinColumn(name = "station_id", nullable = false)
     private Station station;
 }

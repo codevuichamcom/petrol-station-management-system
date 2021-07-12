@@ -56,7 +56,7 @@ public class TransactionServiceImpl implements TransactionService {
             if (cardId != null) {
                 transaction.setCard(optionalValidate.getCardById(cardId));
             }
-            transaction.setHandOverShift(optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId()));
+            transaction.setHandOverShift(optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(), transaction.getTime()));
             transactionList.add(transaction);
         }
         try {

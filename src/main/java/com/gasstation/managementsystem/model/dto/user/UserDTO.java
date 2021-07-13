@@ -11,7 +11,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Builder
-
+@ToString
 public class UserDTO {
     private int id;
     private String username;

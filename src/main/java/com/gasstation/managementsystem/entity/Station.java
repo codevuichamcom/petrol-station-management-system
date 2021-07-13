@@ -13,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@ToString
 public class Station {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

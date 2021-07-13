@@ -8,6 +8,7 @@ import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import java.util.Date;
+import java.util.Objects;
 
 
 @AllArgsConstructor
@@ -15,7 +16,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Builder
-
+@ToString
 public class UserDTOUpdate {
 
     @Schema(description = "Password must contain at least 8 characters and include both letters and numbers", example = "1234567a")
@@ -55,5 +56,13 @@ public class UserDTOUpdate {
 
     @Positive(message = "User type id is positive integer")
     private Integer userTypeId;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDTOUpdate that = (UserDTOUpdate) o;
+        return Objects.equals(password, that.password) && Objects.equals(identityCardNumber, that.identityCardNumber) && Objects.equals(name, that.name) && Objects.equals(gender, that.gender) && Objects.equals(dateOfBirth, that.dateOfBirth) && Objects.equals(address, that.address) && Objects.equals(phone, that.phone) && Objects.equals(email, that.email) && Objects.equals(note, that.note) && Objects.equals(active, that.active) && Objects.equals(userTypeId, that.userTypeId);
+    }
 
 }

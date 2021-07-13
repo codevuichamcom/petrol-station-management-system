@@ -5,12 +5,14 @@ import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
+@ToString
 public class TransactionDTOCreate {
     @NotNull(message = "time is mandatory")
     @Schema(description = "unix time")
@@ -25,4 +27,11 @@ public class TransactionDTOCreate {
     @NotNull(message = "Pump ìd is mandatory")
     private Integer pumpId;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TransactionDTOCreate that = (TransactionDTOCreate) o;
+        return Objects.equals(time, that.time) && Objects.equals(volume, that.volume) && Objects.equals(unitPrice, that.unitPrice) && Objects.equals(cardId, that.cardId);
+    }
 }

@@ -63,7 +63,7 @@ public class ApiController {
 
 
     private boolean isRouteIgnore(String route) {
-        List<String> listRouteIgnore = Arrays.asList("refresh-token", "swagger-ui.html", "user-types", "api", "endpoints", "login", "profile","shifts","fuels");
+        List<String> listRouteIgnore = Arrays.asList("refresh-token", "swagger-ui.html", "user-types", "api", "endpoints", "login", "profile");
         return listRouteIgnore.stream().anyMatch(route::startsWith);
     }
 

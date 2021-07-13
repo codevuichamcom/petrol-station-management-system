@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
+import java.util.Objects;
 
 
 @AllArgsConstructor
@@ -66,5 +67,12 @@ public class UserDTOCreate {
     @NotNull(message = "User type id is mandatory")
     private Integer userTypeId;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDTOCreate that = (UserDTOCreate) o;
+        return Objects.equals(username, that.username) && Objects.equals(password, that.password) && Objects.equals(identityCardNumber, that.identityCardNumber) && Objects.equals(name, that.name) && Objects.equals(gender, that.gender) && Objects.equals(dateOfBirth, that.dateOfBirth) && Objects.equals(address, that.address) && Objects.equals(phone, that.phone) && Objects.equals(email, that.email) && Objects.equals(note, that.note) && Objects.equals(userTypeId, that.userTypeId);
+    }
 
 }

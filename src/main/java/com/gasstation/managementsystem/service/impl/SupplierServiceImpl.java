@@ -67,9 +67,8 @@ public class SupplierServiceImpl implements SupplierService {
         Optional<Supplier> supplier = supplierRepository.findByPhone(phone);
         if (supplier.isPresent()) {
             throw new CustomDuplicateFieldException(CustomError.builder()
-                    .code("duplicate").field("phone").message("Phone is dupplicate").table("supplier_table").build());
+                    .code("duplicate").field("phone").message("Phone is duplicate").table("supplier_table").build());
         }
-
     }
 
     @Override

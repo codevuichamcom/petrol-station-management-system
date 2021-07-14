@@ -10,12 +10,10 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public class DateTimeHelper {
-    public static long getCurrentUnixTime() {
-        return new Date().getTime();
-    }
 
-    public static long toUnixTime(Date date) {
-        return date.getTime() / 1000L;
+    public static long toUnixTime(String dateTime, String format) {
+        LocalDateTime localDateTime = LocalDateTime.parse(dateTime, DateTimeFormatter.ofPattern(format));
+        return localDateTime.atZone(TimeZone.getDefault().toZoneId()).toEpochSecond();
     }
 
     public static LocalDateTime toDateTime(long unix) {
@@ -34,19 +32,30 @@ public class DateTimeHelper {
         return new SimpleDateFormat(format).format(date);
     }
 
-    public static long toSecond(String time) {
-        LocalTime localTime = LocalTime.parse(time);
+    public static long toSecond(String timeStr) {
+        LocalTime localTime = LocalTime.parse(timeStr);
         return localTime.getHour() * 60 * 60 + localTime.getMinute() * 60 + localTime.getSecond();
     }
 
-    public static String toHourMinuteStr(long second) {
-        long hh = second / 3600;
-        long mm = (second % 3600) / 60;
-        return hh + ":" + mm;
+    public static String formatTime(long second, String format) {
+        int hh = (int) (second / 3600);
+        int mm = (int) ((second % 3600) / 60);
+        int ss = (int) ((second % 3600) % 60);
+
+        LocalTime localTime = LocalTime.of(hh, mm, ss);
+        return DateTimeFormatter.ofPattern(format).format(localTime);
     }
 
-    public static String toDayMonthYearStr(long unix) {
+    public static String formatTime(long second) {
+        return formatTime(second, "HH:mm");
+    }
+
+    public static String formatDate(long unix, String format) {
         LocalDateTime localDateTime = toDateTime(unix);
-        return DateTimeFormatter.ofPattern("yyyy-MM-dd").format(localDateTime);
+        return DateTimeFormatter.ofPattern(format).format(localDateTime);
+    }
+
+    public static String formatDate(long unix) {
+        return formatDate(unix, "yyyy-MM-dd");
     }
 }

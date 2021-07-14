@@ -24,8 +24,8 @@ public class ShiftMapper {
                 .id(shift.getId())
                 .name(shift.getName())
                 .station(stationDTO)
-                .startTime(DateTimeHelper.toHourMinuteStr(shift.getStartTime()))
-                .endTime(DateTimeHelper.toHourMinuteStr(shift.getEndTime()))
+                .startTime(DateTimeHelper.formatTime(shift.getStartTime()))
+                .endTime(DateTimeHelper.formatTime(shift.getEndTime()))
                 .build();
     }
 

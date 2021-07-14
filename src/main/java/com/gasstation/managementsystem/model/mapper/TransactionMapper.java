@@ -29,7 +29,7 @@ public class TransactionMapper {
                 .build();
         return TransactionDTO.builder()
                 .id(transaction.getId())
-                .time(DateTimeHelper.toDayMonthYearStr(transaction.getTime()))
+                .time(DateTimeHelper.formatDate(transaction.getTime(),"yyyy-MM-dd HH:mm:ss"))
                 .volume(transaction.getVolume())
                 .unitPrice(transaction.getUnitPrice())
                 .uuid(transaction.getUuid())

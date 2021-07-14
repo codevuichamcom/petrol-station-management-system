@@ -38,8 +38,8 @@ public class WorkScheduleMapper {
         ShiftDTO shiftDTO = shift != null ? ShiftDTO.builder()
                 .id(shift.getId())
                 .name(shift.getName())
-                .startTime(DateTimeHelper.toHourMinuteStr(shift.getStartTime()))
-                .endTime(DateTimeHelper.toHourMinuteStr(shift.getEndTime())).build() : null;
+                .startTime(DateTimeHelper.formatTime(shift.getStartTime()))
+                .endTime(DateTimeHelper.formatTime(shift.getEndTime())).build() : null;
         return WorkScheduleDTO.builder()
                 .id(workSchedule.getId())
                 .employee(employeeDTO)

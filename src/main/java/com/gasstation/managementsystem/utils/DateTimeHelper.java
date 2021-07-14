@@ -2,8 +2,12 @@ package com.gasstation.managementsystem.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class DateTimeHelper {
     public static long getCurrentUnixTime() {
@@ -14,8 +18,8 @@ public class DateTimeHelper {
         return date.getTime() / 1000L;
     }
 
-    public static Date toDate(long time) {
-        return new Date(time * 1000L);
+    public static LocalDateTime toDateTime(long unix) {
+        return LocalDateTime.ofInstant(Instant.ofEpochSecond(unix), TimeZone.getDefault().toZoneId());
     }
 
     public static Date toDate(String dateStr, String format) {
@@ -39,5 +43,10 @@ public class DateTimeHelper {
         long hh = second / 3600;
         long mm = (second % 3600) / 60;
         return hh + ":" + mm;
+    }
+
+    public static String toDayMonthYearStr(long unix) {
+        LocalDateTime localDateTime = toDateTime(unix);
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd").format(localDateTime);
     }
 }

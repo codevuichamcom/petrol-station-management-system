@@ -3,7 +3,6 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "transaction_tbl")
@@ -18,8 +17,7 @@ public class Transaction {
     private int id;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date time = new Date();
+    private long time; //unix time
 
     @Column(nullable = false)
     private double volume = 0;

@@ -2,7 +2,6 @@ package com.gasstation.managementsystem.model.dto.transaction;
 
 import com.gasstation.managementsystem.model.dto.card.CardDTO;
 import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTO;
-import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
 import lombok.*;
 
 import java.util.Objects;
@@ -15,7 +14,7 @@ import java.util.Objects;
 @ToString
 public class TransactionDTO {
     private int id;
-    private Long time;
+    private String time;
     private Double volume;
     private Double unitPrice;
     private String uuid;

@@ -18,7 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,9 +60,10 @@ public class TransactionServiceImpl implements TransactionService {
             if (cardId != null) {
                 transaction.setCard(optionalValidate.getCardById(cardId));
             }
-            String date = DateTimeHelper.formatDate(transaction.getTime(), "yyyy-MM-dd");
-            String time = DateTimeHelper.formatDate(transaction.getTime(), "HH:mm:ss");
-            transaction.setHandOverShift(optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(), Date.valueOf(date), Time.valueOf(time)));
+            LocalDateTime localDateTime = DateTimeHelper.toDateTime(T.getTime());
+            String date = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(localDateTime);
+            long seconds = localDateTime.getHour() * 3600 + localDateTime.getMinute() * 60 + localDateTime.getSecond();
+            transaction.setHandOverShift(optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(), Date.valueOf(date), seconds));
             transactionList.add(transaction);
         }
         try {

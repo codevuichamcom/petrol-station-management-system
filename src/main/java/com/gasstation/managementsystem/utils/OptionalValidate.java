@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
-import java.sql.Time;
 import java.util.Optional;
 
 @Component
@@ -192,8 +191,8 @@ public class OptionalValidate {
         }
     }
 
-    public HandOverShift getHandOverShiftByPumpIdNotClose(int id, Date date, Time time) throws CustomNotFoundException {
-        Optional<HandOverShift> handOverShiftOptional = handOverShiftRepository.findByPumpIdNotClose(id, date, time);
+    public HandOverShift getHandOverShiftByPumpIdNotClose(int id, Date date, long seconds) throws CustomNotFoundException {
+        Optional<HandOverShift> handOverShiftOptional = handOverShiftRepository.findByPumpIdNotClose(id, date, seconds);
         if (handOverShiftOptional.isPresent()) {
             return handOverShiftOptional.get();
         } else {

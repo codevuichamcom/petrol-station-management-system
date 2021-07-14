@@ -23,13 +23,13 @@ public class TransactionMapper {
                         .name(card.getCustomer().getName())
                         .build()).build() : null;
         Shift shift = handOverShift.getShift();
-        HandOverShiftDTO handOverShiftDTO = handOverShift != null ? HandOverShiftDTO.builder()
+        HandOverShiftDTO handOverShiftDTO = HandOverShiftDTO.builder()
                 .id(handOverShift.getId())
                 .shift(ShiftDTO.builder().id(shift.getId()).name(shift.getName()).build())
-                .build() : null;
+                .build();
         return TransactionDTO.builder()
                 .id(transaction.getId())
-                .time(DateTimeHelper.toUnixTime(transaction.getTime()))
+                .time(DateTimeHelper.toDayMonthYearStr(transaction.getTime()))
                 .volume(transaction.getVolume())
                 .unitPrice(transaction.getUnitPrice())
                 .uuid(transaction.getUuid())
@@ -41,7 +41,7 @@ public class TransactionMapper {
     public static Transaction toTransaction(TransactionDTOCreate transactionDTOCreate) {
         if (transactionDTOCreate == null) return null;
         return Transaction.builder()
-                .time(DateTimeHelper.toDate(transactionDTOCreate.getTime()))
+                .time(transactionDTOCreate.getTime())
                 .volume(transactionDTOCreate.getVolume())
                 .unitPrice(transactionDTOCreate.getUnitPrice())
                 .uuid(transactionDTOCreate.getUuid())

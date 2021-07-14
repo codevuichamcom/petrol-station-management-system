@@ -78,8 +78,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public HashMap<String, Object> findAll() {
-        List<User> users = userRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
-        return listUserToMap(users);
+        return listUserToMap(userRepository.findAll(Sort.by(Sort.Direction.DESC, "id")));
     }
 
     @Override

@@ -14,7 +14,7 @@ public class DateTimeHelper {
     }
 
     public static Date toDate(long time) {
-        return new Date(time * 1000);
+        return new Date(time * 1000L);
     }
 
     public static Date toDate(String dateStr, String format) {

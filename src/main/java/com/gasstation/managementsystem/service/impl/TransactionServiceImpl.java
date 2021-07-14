@@ -9,6 +9,7 @@ import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOCreat
 import com.gasstation.managementsystem.model.mapper.TransactionMapper;
 import com.gasstation.managementsystem.repository.TransactionRepository;
 import com.gasstation.managementsystem.service.TransactionService;
+import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,7 +59,9 @@ public class TransactionServiceImpl implements TransactionService {
             if (cardId != null) {
                 transaction.setCard(optionalValidate.getCardById(cardId));
             }
-            transaction.setHandOverShift(optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(), transaction.getTime()));
+            String date = DateTimeHelper.formatDate(transaction.getTime(), "yyyy-MM-dd");
+            String time = DateTimeHelper.formatDate(transaction.getTime(), "HH:mm:ss");
+            transaction.setHandOverShift(optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(), Date.valueOf(date), Time.valueOf(time)));
             transactionList.add(transaction);
         }
         try {

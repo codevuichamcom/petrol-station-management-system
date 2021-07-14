@@ -24,8 +24,8 @@ public class ShiftMapper {
                 .id(shift.getId())
                 .name(shift.getName())
                 .station(stationDTO)
-                .startTime(DateTimeHelper.formatDate(shift.getStartTime(), "HH:mm"))
-                .endTime(DateTimeHelper.formatDate(shift.getEndTime(), "HH:mm"))
+                .startTime(DateTimeHelper.toHourMinuteStr(shift.getStartTime()))
+                .endTime(DateTimeHelper.toHourMinuteStr(shift.getEndTime()))
                 .build();
     }
 
@@ -33,8 +33,8 @@ public class ShiftMapper {
         if (shiftDTOCreate == null) return null;
         return Shift.builder()
                 .name(shiftDTOCreate.getName())
-                .startTime(DateTimeHelper.toDate(shiftDTOCreate.getStartTime(), "HH:mm"))
-                .endTime(DateTimeHelper.toDate(shiftDTOCreate.getEndTime(), "HH:mm")).build();
+                .startTime(DateTimeHelper.toSecond(shiftDTOCreate.getStartTime()))
+                .endTime(DateTimeHelper.toSecond(shiftDTOCreate.getEndTime())).build();
     }
 
     public static void copyNonNullToShift(Shift shift, ShiftDTOUpdate shiftDTOUpdate) {
@@ -45,10 +45,10 @@ public class ShiftMapper {
             shift.setName(name);
         }
         if (startTime != null) {
-            shift.setStartTime(DateTimeHelper.toDate(startTime, "HH:mm"));
+            shift.setStartTime(DateTimeHelper.toSecond(startTime));
         }
         if (endTime != null) {
-            shift.setEndTime(DateTimeHelper.toDate(endTime, "HH:mm"));
+            shift.setEndTime(DateTimeHelper.toSecond(endTime));
         }
     }
 }

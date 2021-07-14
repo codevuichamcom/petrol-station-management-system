@@ -11,6 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface HandOverShiftRepository extends JpaRepository<HandOverShift, Integer> {
-    @Query("select h from HandOverShift h inner join h.shift s where h.pump.id=?1 and h.createdDate=?2 and s.startTime<?3 and ?3<s.endTime and h.closeShiftDate IS NULL")
+    @Query("select h from HandOverShift h inner join h.shift s where h.pump.id=?1 and h.createdDate=?2 and ?3 between s.startTime and s.endTime and h.closeShiftDate IS NULL")
     Optional<HandOverShift> findByPumpIdNotClose(int pumpId, Date date, Time time);
 }

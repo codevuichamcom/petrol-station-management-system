@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -23,12 +22,10 @@ public class Shift {
     private String name;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.TIME)
-    private Date startTime = new Date();
+    private long startTime;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.TIME)
-    private Date endTime = new Date();
+    private long endTime;
 
     @OneToMany(mappedBy = "shift")
     private List<WorkSchedule> workScheduleList = new ArrayList<>();

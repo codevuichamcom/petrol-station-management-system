@@ -14,8 +14,6 @@ import com.gasstation.managementsystem.repository.TankRepository;
 import com.gasstation.managementsystem.service.TankService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,17 +38,8 @@ public class TankServiceImpl implements TankService {
     }
 
     @Override
-    public HashMap<String, Object> findAll(Pageable pageable) {
-        Page<Tank> tanks = tankRepository.findAll(pageable);
-        HashMap<String, Object> map = listTankToMap(tanks.getContent());
-        map.put("totalElement", tanks.getTotalElements());
-        map.put("totalPage", tanks.getTotalPages());
-        return map;
-    }
-
-    @Override
-    public HashMap<String, Object> findAll(Sort sort) {
-        return listTankToMap(tankRepository.findAll(sort));
+    public HashMap<String, Object> findAll() {
+        return listTankToMap(tankRepository.findAll(Sort.by(Sort.Direction.ASC, "id")));
     }
 
     @Override

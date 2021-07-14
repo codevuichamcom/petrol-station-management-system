@@ -9,7 +9,6 @@ import com.gasstation.managementsystem.service.FuelService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,14 +25,8 @@ public class FuelController {
 
     @Operation(summary = "View All fuel category")
     @GetMapping("/fuels")
-    public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
-                                          @RequestParam(name = "pageSize", required = false) Integer pageSize) {
-        if (pageSize != null) {
-            return fuelService.findAll(PageRequest.of(pageIndex - 1, pageSize));
-        } else {
-            return fuelService.findAll();
-        }
-
+    public HashMap<String, Object> getAll() {
+        return fuelService.findAll();
     }
 
     @Operation(summary = "Find fuel category by id")

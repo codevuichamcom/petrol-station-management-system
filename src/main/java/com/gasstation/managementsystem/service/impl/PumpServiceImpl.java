@@ -13,8 +13,6 @@ import com.gasstation.managementsystem.repository.PumpRepository;
 import com.gasstation.managementsystem.service.PumpService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -40,17 +38,8 @@ public class PumpServiceImpl implements PumpService {
     }
 
     @Override
-    public HashMap<String, Object> findAll(Pageable pageable, Sort sort) {
-        Page<Pump> pumps = pumpRepository.findAll(pageable);
-        HashMap<String, Object> map = listPumpToMap(pumps.getContent());
-        map.put("totalElement", pumps.getTotalElements());
-        map.put("totalPage", pumps.getTotalPages());
-        return map;
-    }
-
-    @Override
-    public HashMap<String, Object> findAll(Sort sort) {
-        return listPumpToMap(pumpRepository.findAll(sort));
+    public HashMap<String, Object> findAll() {
+        return listPumpToMap(pumpRepository.findAll(Sort.by(Sort.Direction.ASC, "id")));
     }
 
     @Override

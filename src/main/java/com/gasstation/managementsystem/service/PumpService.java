@@ -11,9 +11,8 @@ import org.springframework.data.domain.Sort;
 import java.util.HashMap;
 
 public interface PumpService {
-    HashMap<String, Object> findAll(Pageable pageable, Sort sort);
 
-    HashMap<String, Object> findAll(Sort sort);
+    HashMap<String, Object> findAll();
 
     HashMap<String, Object> findAllByOwnerId(int ownerId, Sort sort);
 

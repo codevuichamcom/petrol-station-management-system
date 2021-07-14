@@ -2,6 +2,7 @@ package com.gasstation.managementsystem.model.mapper;
 
 import com.gasstation.managementsystem.entity.Card;
 import com.gasstation.managementsystem.entity.HandOverShift;
+import com.gasstation.managementsystem.entity.Shift;
 import com.gasstation.managementsystem.entity.Transaction;
 import com.gasstation.managementsystem.model.dto.card.CardDTO;
 import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTO;
@@ -21,8 +22,10 @@ public class TransactionMapper {
                         .id(card.getCustomer().getId())
                         .name(card.getCustomer().getName())
                         .build()).build() : null;
-        HandOverShiftDTO handOverShiftDTO = handOverShift != null ? HandOverShiftDTO.builder().id(handOverShift.getId())
-                .shift(ShiftDTO.builder().id(handOverShift.getShift().getId()).name(handOverShift.getShift().getName()).build())
+        Shift shift = handOverShift.getShift();
+        HandOverShiftDTO handOverShiftDTO = handOverShift != null ? HandOverShiftDTO.builder()
+                .id(handOverShift.getId())
+                .shift(ShiftDTO.builder().id(shift.getId()).name(shift.getName()).build())
                 .build() : null;
         return TransactionDTO.builder()
                 .id(transaction.getId())
@@ -38,7 +41,7 @@ public class TransactionMapper {
     public static Transaction toTransaction(TransactionDTOCreate transactionDTOCreate) {
         if (transactionDTOCreate == null) return null;
         return Transaction.builder()
-                .time(transactionDTOCreate.getTime())
+                .time(DateTimeHelper.toDate(transactionDTOCreate.getTime()))
                 .volume(transactionDTOCreate.getVolume())
                 .unitPrice(transactionDTOCreate.getUnitPrice())
                 .uuid(transactionDTOCreate.getUuid())

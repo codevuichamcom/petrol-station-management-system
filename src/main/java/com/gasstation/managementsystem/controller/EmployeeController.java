@@ -13,8 +13,6 @@ import com.gasstation.managementsystem.utils.AccountHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,18 +30,14 @@ public class EmployeeController {
 
     @Operation(summary = "View All employee")
     @GetMapping("/employees")
-    public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
-                                          @RequestParam(name = "pageSize", required = false) Integer pageSize) {
-        if (pageSize != null) {
-            return employeeService.findAll(PageRequest.of(pageIndex - 1, pageSize, Sort.by(Sort.Direction.DESC, "id")));
-        }
+    public HashMap<String, Object> getAll() {
         User user = accountHelper.getUserLogin();
         UserType userType = user.getUserType();
         switch (userType.getId()) {
             case UserType.ADMIN:
-                return employeeService.findAll(Sort.by(Sort.Direction.ASC, "id"));
+                return employeeService.findAll();
             case UserType.OWNER:
-                return employeeService.findAllByOwnerId(user.getId(), Sort.by(Sort.Direction.ASC, "id"));
+                return employeeService.findAllByOwnerId(user.getId());
         }
         return new HashMap<>();
     }

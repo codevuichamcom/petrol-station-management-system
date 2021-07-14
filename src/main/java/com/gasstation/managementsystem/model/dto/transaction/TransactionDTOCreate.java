@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 import java.util.Objects;
 
 @AllArgsConstructor
@@ -16,7 +15,7 @@ import java.util.Objects;
 public class TransactionDTOCreate {
     @NotNull(message = "time is mandatory")
     @Schema(description = "unix time")
-    private Date time;
+    private long time;
     @NotNull(message = "number of litter is mandatory")
     private Double volume;
     @NotNull(message = "pricePerLitter is mandatory")

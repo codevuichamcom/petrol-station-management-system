@@ -8,8 +8,7 @@ import com.gasstation.managementsystem.repository.UserTypeRepository;
 import com.gasstation.managementsystem.service.UserTypeService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,18 +33,10 @@ public class UserTypeServiceImpl implements UserTypeService {
         return map;
     }
 
-    @Override
-    public HashMap<String, Object> findAll(Pageable pageable) {
-        Page<UserType> userTypes = userTypeRepository.findAll(pageable);
-        HashMap<String, Object> map = listUserTypeToMap(userTypes.getContent());
-        map.put("totalElement", userTypes.getTotalElements());
-        map.put("totalPage", userTypes.getTotalPages());
-        return map;
-    }
 
     @Override
     public HashMap<String, Object> findAll() {
-        List<UserType> userTypes = userTypeRepository.findAll();
+        List<UserType> userTypes = userTypeRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
         return listUserTypeToMap(userTypes);
     }
 

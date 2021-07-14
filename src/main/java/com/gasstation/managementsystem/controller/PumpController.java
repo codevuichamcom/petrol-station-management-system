@@ -11,7 +11,6 @@ import com.gasstation.managementsystem.utils.AccountHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,15 +28,11 @@ public class PumpController {
 
     @Operation(summary = "View All pump")
     @GetMapping("/pumps")
-    public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
-                                          @RequestParam(name = "pageSize", required = false) Integer pageSize) {
-        if (pageSize != null) {
-            return pumpService.findAll(PageRequest.of(pageIndex - 1, pageSize), Sort.by(Sort.Direction.ASC, "id"));
-        }
+    public HashMap<String, Object> getAll() {
         UserType userType = accountHelper.getUserTypeOfUserLogin();
         switch (userType.getId()) {
             case UserType.ADMIN:
-                return pumpService.findAll(Sort.by(Sort.Direction.ASC, "id"));
+                return pumpService.findAll();
             case UserType.OWNER:
                 return pumpService.findAllByOwnerId(UserType.OWNER, Sort.by(Sort.Direction.ASC, "id"));
 

@@ -13,7 +13,6 @@ import com.gasstation.managementsystem.utils.AccountHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -36,12 +35,7 @@ public class ApiController {
 
     @Operation(summary = "View All api")
     @GetMapping("/apis")
-    public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
-                                          @RequestParam(name = "pageSize", required = false) Integer pageSize) {
-
-        if (pageSize != null) {
-            return apiService.findAll(PageRequest.of(pageIndex - 1, pageSize));
-        }
+    public HashMap<String, Object> getAll() {
         UserType userType = accountHelper.getUserTypeOfUserLogin();
         if (userType.getId() == UserType.ADMIN) {
             return apiService.findAll();

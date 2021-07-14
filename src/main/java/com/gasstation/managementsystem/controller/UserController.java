@@ -1,6 +1,5 @@
 package com.gasstation.managementsystem.controller;
 
-import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
@@ -11,8 +10,6 @@ import com.gasstation.managementsystem.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,16 +25,11 @@ public class UserController {
 
     @Operation(summary = "View All user")
     @GetMapping("/users")
-    public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
-                                          @RequestParam(name = "pageSize", required = false) Integer pageSize,
-                                          @RequestParam(name = "userTypeId", required = false) Integer userTypeId) {
+    public HashMap<String, Object> getAll(@RequestParam(name = "userTypeId", required = false) Integer userTypeId) {
         if (userTypeId != null) {
             return userService.findByUserTypeId(userTypeId);
         }
-        if (pageSize != null) {
-            return userService.findAll(PageRequest.of(pageIndex - 1, pageSize));
-        }
-        return userService.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        return userService.findAll();
     }
 
     @Operation(summary = "Find user by id")

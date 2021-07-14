@@ -5,13 +5,11 @@ import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.api.ApiDTO;
 import com.gasstation.managementsystem.model.dto.api.ApiDTOCreate;
 import com.gasstation.managementsystem.model.dto.api.ApiDTOUpdate;
-import org.springframework.data.domain.Pageable;
 
 import java.util.HashMap;
 import java.util.List;
 
 public interface ApiService {
-    HashMap<String, Object> findAll(Pageable pageable);
 
     HashMap<String, Object> findAll();
 

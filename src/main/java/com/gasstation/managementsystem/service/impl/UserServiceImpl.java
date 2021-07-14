@@ -14,8 +14,6 @@ import com.gasstation.managementsystem.repository.UserRepository;
 import com.gasstation.managementsystem.service.UserService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -79,17 +77,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public HashMap<String, Object> findAll(Pageable pageable) {
-        Page<User> users = userRepository.findAll(pageable);
-        HashMap<String, Object> map = listUserToMap(users.getContent());
-        map.put("totalElement", users.getTotalElements());
-        map.put("totalPage", users.getTotalPages());
-        return map;
-    }
-
-    @Override
-    public HashMap<String, Object> findAll(Sort sort) {
-        List<User> users = userRepository.findAll(sort);
+    public HashMap<String, Object> findAll() {
+        List<User> users = userRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         return listUserToMap(users);
     }
 

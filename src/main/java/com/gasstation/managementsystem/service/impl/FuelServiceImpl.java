@@ -12,8 +12,7 @@ import com.gasstation.managementsystem.repository.FuelRepository;
 import com.gasstation.managementsystem.service.FuelService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,17 +36,8 @@ public class FuelServiceImpl implements FuelService {
     }
 
     @Override
-    public HashMap<String, Object> findAll(Pageable pageable) {
-        Page<Fuel> fuels = fuelRepository.findAll(pageable);
-        HashMap<String, Object> map = listFuelToMap(fuels.getContent());
-        map.put("totalElement", fuels.getTotalElements());
-        map.put("totalPage", fuels.getTotalPages());
-        return map;
-    }
-
-    @Override
     public HashMap<String, Object> findAll() {
-        return listFuelToMap(fuelRepository.findAll());
+        return listFuelToMap(fuelRepository.findAll(Sort.by(Sort.Direction.ASC, "id")));
     }
 
     @Override

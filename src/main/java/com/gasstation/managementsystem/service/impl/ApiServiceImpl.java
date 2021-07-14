@@ -46,14 +46,6 @@ public class ApiServiceImpl implements ApiService {
         return map;
     }
 
-    @Override
-    public HashMap<String, Object> findAll(Pageable pageable) {
-        Page<Api> apis = apiRepository.findAll(pageable);
-        HashMap<String, Object> map = listApiToMap(apis.getContent());
-        map.put("totalElement", apis.getTotalElements());
-        map.put("totalPage", apis.getTotalPages());
-        return map;
-    }
 
     @Override
     public HashMap<String, Object> findAll() {

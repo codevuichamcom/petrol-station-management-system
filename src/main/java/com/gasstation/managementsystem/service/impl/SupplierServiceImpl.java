@@ -12,8 +12,6 @@ import com.gasstation.managementsystem.repository.SupplierRepository;
 import com.gasstation.managementsystem.service.SupplierService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -35,18 +33,10 @@ public class SupplierServiceImpl implements SupplierService {
         return map;
     }
 
-    @Override
-    public HashMap<String, Object> findAll(Pageable pageable) {
-        Page<Supplier> suppliers = supplierRepository.findAll(pageable);
-        HashMap<String, Object> map = listSupplierToMap(suppliers.getContent());
-        map.put("totalElement", suppliers.getTotalElements());
-        map.put("totalPage", suppliers.getTotalPages());
-        return map;
-    }
 
     @Override
-    public HashMap<String, Object> findAll(Sort sort) {
-        return listSupplierToMap(supplierRepository.findAll(sort));
+    public HashMap<String, Object> findAll() {
+        return listSupplierToMap(supplierRepository.findAll(Sort.by(Sort.Direction.ASC, "id")));
     }
 
     @Override

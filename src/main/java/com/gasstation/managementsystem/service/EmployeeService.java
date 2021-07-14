@@ -5,17 +5,14 @@ import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.employee.EmployeeDTO;
 import com.gasstation.managementsystem.model.dto.employee.EmployeeDTOCreate;
 import com.gasstation.managementsystem.model.dto.employee.EmployeeDTOUpdate;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.HashMap;
 
 public interface EmployeeService {
-    HashMap<String, Object> findAll(Pageable pageable);
+    HashMap<String, Object> findAll();
 
-    HashMap<String, Object> findAll(Sort sort);
-
-    HashMap<String, Object> findAllByOwnerId(int ownerId, Sort sort);
+    HashMap<String, Object> findAllByOwnerId(int ownerId);
 
     EmployeeDTO findById(int id) throws CustomNotFoundException;
 

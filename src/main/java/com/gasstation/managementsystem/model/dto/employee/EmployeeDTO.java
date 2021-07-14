@@ -12,7 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
-
+@ToString
 public class EmployeeDTO {
     private int id;
     private String name;

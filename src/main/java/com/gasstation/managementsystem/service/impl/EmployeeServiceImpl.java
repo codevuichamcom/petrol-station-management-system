@@ -13,8 +13,6 @@ import com.gasstation.managementsystem.repository.EmployeeRepository;
 import com.gasstation.managementsystem.service.EmployeeService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,23 +36,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         return map;
     }
 
+
     @Override
-    public HashMap<String, Object> findAll(Pageable pageable) {
-        Page<Employee> employees = employeeRepository.findAll(pageable);
-        HashMap<String, Object> map = listEmployeeToMap(employees.getContent());
-        map.put("totalElement", employees.getTotalElements());
-        map.put("totalPage", employees.getTotalPages());
-        return map;
+    public HashMap<String, Object> findAll() {
+        return listEmployeeToMap(employeeRepository.findAll(Sort.by(Sort.Direction.ASC, "id")));
     }
 
     @Override
-    public HashMap<String, Object> findAll(Sort sort) {
-        return listEmployeeToMap(employeeRepository.findAll(sort));
-    }
-
-    @Override
-    public HashMap<String, Object> findAllByOwnerId(int ownerId, Sort sort) {
-        return listEmployeeToMap(employeeRepository.findAllByOwnerId(ownerId, sort));
+    public HashMap<String, Object> findAllByOwnerId(int ownerId) {
+        return listEmployeeToMap(employeeRepository.findAllByOwnerId(ownerId, Sort.by(Sort.Direction.ASC, "id")));
     }
 
     @Override

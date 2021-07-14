@@ -5,15 +5,13 @@ import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.supplier.SupplierDTO;
 import com.gasstation.managementsystem.model.dto.supplier.SupplierDTOCreate;
 import com.gasstation.managementsystem.model.dto.supplier.SupplierDTOUpdate;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.HashMap;
 
 public interface SupplierService {
-    HashMap<String, Object> findAll(Pageable pageable);
 
-    HashMap<String, Object> findAll(Sort sort);
+    HashMap<String, Object> findAll();
 
     SupplierDTO findById(int id) throws CustomNotFoundException;
 

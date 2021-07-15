@@ -88,8 +88,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             UserType userType = user.getUserType();
             if (needCheckPermission(userType, url, methodRequest)) {
                 String path = request.getRequestURI().toLowerCase();
-                if (path.matches("^(/\\w+)+/\\d+$")) {
-                    path = path.substring(0, path.lastIndexOf('/'));
+                if (path.matches("/api/v1/.+")) {
+                    String route = path.split("[/]")[3];
+                    path = Api.PREFIX + "/" + route;
                 }
 
                 Optional<Api> apiOptional = apiRepository.findByPathAndMethod(path, methodRequest);

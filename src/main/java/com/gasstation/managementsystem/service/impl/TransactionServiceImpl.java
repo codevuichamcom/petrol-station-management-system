@@ -1,9 +1,7 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.Transaction;
-import com.gasstation.managementsystem.exception.custom.CustomInternalServerException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
-import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTO;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOCreate;
 import com.gasstation.managementsystem.model.mapper.TransactionMapper;
@@ -12,10 +10,10 @@ import com.gasstation.managementsystem.service.TransactionService;
 import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
@@ -23,11 +21,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final OptionalValidate optionalValidate;
@@ -52,7 +48,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionDTO> create(List<TransactionDTOCreate> transactionDTOCreates) throws CustomNotFoundException, CustomInternalServerException {
+    public List<String> create(List<TransactionDTOCreate> transactionDTOCreates) throws CustomNotFoundException {
         List<Transaction> transactionList = new ArrayList<>();
         for (TransactionDTOCreate T : transactionDTOCreates) {
             Transaction transaction = TransactionMapper.toTransaction(T);
@@ -66,11 +62,19 @@ public class TransactionServiceImpl implements TransactionService {
             transaction.setHandOverShift(optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(), Date.valueOf(date), seconds));
             transactionList.add(transaction);
         }
-        try {
-            transactionList = transactionRepository.saveAll(transactionList);
-        } catch (Exception ex) {
-            throw new CustomInternalServerException(CustomError.builder().code("save.fail").message("Save List Transaction fail").build());
+
+        List<String> listUuidSync = new ArrayList<>();
+        for (Transaction transaction : transactionList) {
+            try {
+                transactionRepository.save(transaction);
+                listUuidSync.add(transaction.getUuid());
+            } catch (DataIntegrityViolationException ex) {
+                listUuidSync.add(transaction.getUuid());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
-        return transactionList.stream().map(TransactionMapper::toTransactionDTO).collect(Collectors.toList());
+
+        return listUuidSync;
     }
 }

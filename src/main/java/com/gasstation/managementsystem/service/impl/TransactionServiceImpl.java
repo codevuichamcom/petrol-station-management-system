@@ -4,6 +4,7 @@ import com.gasstation.managementsystem.entity.Transaction;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTO;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOCreate;
+import com.gasstation.managementsystem.model.dto.transaction.TransactionUuidDTO;
 import com.gasstation.managementsystem.model.mapper.TransactionMapper;
 import com.gasstation.managementsystem.repository.TransactionRepository;
 import com.gasstation.managementsystem.service.TransactionService;
@@ -48,7 +49,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<String> create(List<TransactionDTOCreate> transactionDTOCreates) throws CustomNotFoundException {
+    public List<TransactionUuidDTO> create(List<TransactionDTOCreate> transactionDTOCreates) throws CustomNotFoundException {
         List<Transaction> transactionList = new ArrayList<>();
         for (TransactionDTOCreate T : transactionDTOCreates) {
             Transaction transaction = TransactionMapper.toTransaction(T);
@@ -63,13 +64,13 @@ public class TransactionServiceImpl implements TransactionService {
             transactionList.add(transaction);
         }
 
-        List<String> listUuidSync = new ArrayList<>();
+        List<TransactionUuidDTO> listUuidSync = new ArrayList<>();
         for (Transaction transaction : transactionList) {
             try {
                 transactionRepository.save(transaction);
-                listUuidSync.add(transaction.getUuid());
+                listUuidSync.add(TransactionUuidDTO.builder().uuid(transaction.getUuid()).build());
             } catch (DataIntegrityViolationException ex) {
-                listUuidSync.add(transaction.getUuid());
+                listUuidSync.add(TransactionUuidDTO.builder().uuid(transaction.getUuid()).build());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

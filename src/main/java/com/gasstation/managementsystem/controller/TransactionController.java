@@ -3,6 +3,7 @@ package com.gasstation.managementsystem.controller;
 
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOCreate;
+import com.gasstation.managementsystem.model.dto.transaction.TransactionUuidDTO;
 import com.gasstation.managementsystem.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,8 +33,8 @@ public class TransactionController {
 
     @Operation(summary = "Create new Transaction")
     @PostMapping("/transactions")
-    public HashMap<String, Object> create(@Valid @RequestBody List<TransactionDTOCreate> transactionDTOCreates) throws CustomNotFoundException {
-        HashMap<String, Object> map = new HashMap<>();
+    public HashMap<String, List<TransactionUuidDTO>> create(@Valid @RequestBody List<TransactionDTOCreate> transactionDTOCreates) throws CustomNotFoundException {
+        HashMap<String, List<TransactionUuidDTO>> map = new HashMap<>();
         map.put("listUuidSync", transactionService.create(transactionDTOCreates));
         return map;
     }

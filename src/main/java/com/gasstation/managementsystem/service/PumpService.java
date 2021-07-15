@@ -5,8 +5,6 @@ import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTOCreate;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTOUpdate;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 import java.util.HashMap;
 
@@ -14,7 +12,9 @@ public interface PumpService {
 
     HashMap<String, Object> findAll();
 
-    HashMap<String, Object> findAllByOwnerId(int ownerId, Sort sort);
+    HashMap<String, Object> findAllByOwnerId(int ownerId);
+
+    HashMap<String, Object> findAllByStationId(int stationId);
 
     PumpDTO findById(int id) throws CustomNotFoundException;
 

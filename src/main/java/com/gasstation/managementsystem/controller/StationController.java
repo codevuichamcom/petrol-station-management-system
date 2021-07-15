@@ -6,6 +6,7 @@ import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import com.gasstation.managementsystem.model.dto.station.StationDTOCreate;
 import com.gasstation.managementsystem.model.dto.station.StationDTOUpdate;
+import com.gasstation.managementsystem.service.PumpService;
 import com.gasstation.managementsystem.service.StationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,6 +25,7 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class StationController {
     private final StationService stationService;
+    private final PumpService pumpService;
 
     @Operation(summary = "View All Station")
     @GetMapping("/stations")
@@ -35,6 +37,12 @@ public class StationController {
     @GetMapping("/stations/{id}")
     public StationDTO getOne(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
         return stationService.findById(id);
+    }
+
+    @Operation(summary = "Get All pump of station")
+    @GetMapping("/stations/{id}/pumps")
+    public HashMap<String, Object> getAllPump(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
+        return pumpService.findAllByStationId(id);
     }
 
     @Operation(summary = "Create new Station")

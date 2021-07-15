@@ -43,8 +43,13 @@ public class PumpServiceImpl implements PumpService {
     }
 
     @Override
-    public HashMap<String, Object> findAllByOwnerId(int ownerId, Sort sort) {
-        return listPumpToMap(pumpRepository.findAllByOwnerId(ownerId, sort));
+    public HashMap<String, Object> findAllByOwnerId(int ownerId) {
+        return listPumpToMap(pumpRepository.findAllByOwnerId(ownerId, Sort.by(Sort.Direction.ASC,"id")));
+    }
+
+    @Override
+    public HashMap<String, Object> findAllByStationId(int stationId) {
+        return listPumpToMap(pumpRepository.findAllByStationId(stationId, Sort.by(Sort.Direction.ASC,"id")));
     }
 
     @Override

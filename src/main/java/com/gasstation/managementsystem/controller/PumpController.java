@@ -11,7 +11,6 @@ import com.gasstation.managementsystem.utils.AccountHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,7 +33,7 @@ public class PumpController {
             case UserType.ADMIN:
                 return pumpService.findAll();
             case UserType.OWNER:
-                return pumpService.findAllByOwnerId(UserType.OWNER, Sort.by(Sort.Direction.ASC, "id"));
+                return pumpService.findAllByOwnerId(UserType.OWNER);
 
         }
         return new HashMap<>();

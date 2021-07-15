@@ -15,4 +15,7 @@ public interface PumpRepository extends JpaRepository<Pump, Integer> {
     List<Pump> findAllByOwnerId(int ownerId, Sort sort);
 
     Optional<Pump> findByNameAndTankId(String name, int tankId);
+
+    @Query("select p from Pump p inner join p.tank t where t.station.id=?1")
+    List<Pump> findAllByStationId(int stationId, Sort sort);
 }

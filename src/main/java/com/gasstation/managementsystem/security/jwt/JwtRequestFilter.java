@@ -9,6 +9,8 @@ import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.repository.ApiRepository;
 import com.gasstation.managementsystem.repository.UserRepository;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
@@ -64,6 +66,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             accessToken = requestTokenHeader.substring(7).trim();
             try {
                 username = jwtTokenUtil.getUsernameFromToken(accessToken);
+            } catch (SignatureException e) {
+                System.out.println("Invalid jwt signature");
+            } catch (MalformedJwtException e) {
+                System.out.println("Invalid JWT Token");
             } catch (IllegalArgumentException e) {
                 System.out.println("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {

@@ -5,6 +5,7 @@ import com.gasstation.managementsystem.model.dto.fuel.FuelDTO;
 import com.gasstation.managementsystem.model.dto.fuelImport.FuelImportDTO;
 import com.gasstation.managementsystem.model.dto.fuelImport.FuelImportDTOCreate;
 import com.gasstation.managementsystem.model.dto.fuelImport.FuelImportDTOUpdate;
+import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import com.gasstation.managementsystem.model.dto.supplier.SupplierDTO;
 import com.gasstation.managementsystem.model.dto.tank.TankDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
@@ -22,8 +23,20 @@ public class FuelImportMapper {
         Fuel fuel = fuelImport.getFuel();
         UserDTO creatorDTO = creator != null ? UserDTO.builder().id(creator.getId()).name(creator.getName()).build() : null;
         FuelDTO fuelDTO = fuel != null ? FuelDTO.builder().id(fuel.getId()).name(fuel.getName()).build() : null;
-        TankDTO tankDTO = tank != null ? TankDTO.builder().id(tank.getId()).name(tank.getName()).build() : null;
-        SupplierDTO supplierDTO = supplier != null ? SupplierDTO.builder().id(supplier.getId()).name(supplier.getName()).build() : null;
+        Station station = tank != null ? tank.getStation() : null;
+        User owner = station != null ? station.getOwner() : null;
+        UserDTO ownerDTO = owner != null ? UserDTO.builder().id(owner.getId()).name(owner.getName()).build() : null;
+        StationDTO stationDTO = station != null ? StationDTO.builder().id(station.getId())
+                .name(station.getName())
+                .owner(ownerDTO).build() : null;
+        TankDTO tankDTO = tank != null ? TankDTO.builder()
+                .id(tank.getId())
+                .name(tank.getName())
+                .station(stationDTO).build() : null;
+        SupplierDTO supplierDTO = supplier != null ? SupplierDTO.builder()
+                .id(supplier.getId())
+                .name(supplier.getName())
+                .phone(supplier.getPhone()).build() : null;
         return FuelImportDTO.builder()
                 .id(fuelImport.getId())
                 .name(fuelImport.getName())

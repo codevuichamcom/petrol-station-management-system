@@ -1,17 +1,17 @@
 package com.gasstation.managementsystem.service;
 
-import com.gasstation.managementsystem.entity.PriceChangeHistory;
-import com.gasstation.managementsystem.model.dto.PriceChangeHistoryDTO;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.HashMap;
 
 public interface PriceChangeHistoryService {
-    HashMap<String, Object> findAll(Pageable pageable);
+    //    HashMap<String, Object> findAll(Pageable pageable);
+    HashMap<String, Object> findAllByTankId(int tankId, Pageable pageable);
 
-    PriceChangeHistoryDTO findById(int id);
-
-    PriceChangeHistoryDTO save(PriceChangeHistory priceChangeHistory);
-
-    PriceChangeHistoryDTO delete(int id);
+//    PriceChangeHistoryDTO findById(int id);
+//
+//    PriceChangeHistoryDTO save(PriceChangeHistory priceChangeHistory);
+//
+//    PriceChangeHistoryDTO delete(int id);
 }

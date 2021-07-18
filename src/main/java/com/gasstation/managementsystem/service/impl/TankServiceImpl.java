@@ -1,8 +1,6 @@
 package com.gasstation.managementsystem.service.impl;
 
-import com.gasstation.managementsystem.entity.Fuel;
-import com.gasstation.managementsystem.entity.Station;
-import com.gasstation.managementsystem.entity.Tank;
+import com.gasstation.managementsystem.entity.*;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
@@ -10,14 +8,17 @@ import com.gasstation.managementsystem.model.dto.tank.TankDTO;
 import com.gasstation.managementsystem.model.dto.tank.TankDTOCreate;
 import com.gasstation.managementsystem.model.dto.tank.TankDTOUpdate;
 import com.gasstation.managementsystem.model.mapper.TankMapper;
+import com.gasstation.managementsystem.repository.PriceChangeHistoryRepository;
 import com.gasstation.managementsystem.repository.TankRepository;
 import com.gasstation.managementsystem.service.TankService;
+import com.gasstation.managementsystem.utils.AccountHelper;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,8 @@ import java.util.stream.Collectors;
 public class TankServiceImpl implements TankService {
     private final TankRepository tankRepository;
     private final OptionalValidate optionalValidate;
+    private final PriceChangeHistoryRepository priceChangeHistoryRepository;
+    private final AccountHelper accountHelper;
 
     private HashMap<String, Object> listTankToMap(List<Tank> tanks) {
         List<TankDTO> tankDTOS = tanks.stream().map(TankMapper::toTankDTO).collect(Collectors.toList());
@@ -82,6 +85,8 @@ public class TankServiceImpl implements TankService {
             stationId = null;
         }
         checkDuplicate(name, stationId);
+        Double newPrice = tankDTOUpdate.getCurrentPrice();
+        double oldPrice = oldTank.getCurrentPrice();
         TankMapper.copyNonNullToTank(oldTank, tankDTOUpdate);
         if (tankDTOUpdate.getStationId() != null) {
             Station station = optionalValidate.getStationById(tankDTOUpdate.getStationId());
@@ -92,6 +97,18 @@ public class TankServiceImpl implements TankService {
             oldTank.setFuel(fuel);
         }
         oldTank = tankRepository.save(oldTank);
+        if (newPrice != null && newPrice != oldPrice) {
+            User editor = accountHelper.getUserLogin();
+            PriceChangeHistory priceChangeHistory = PriceChangeHistory.builder()
+                    .date(new Date())
+                    .oldPrice(oldPrice)
+                    .newPrice(newPrice)
+                    .editor(editor)
+                    .station(oldTank.getStation())
+                    .tank(oldTank).build();
+            priceChangeHistoryRepository.save(priceChangeHistory);
+        }
+
         return TankMapper.toTankDTO(oldTank);
     }
 

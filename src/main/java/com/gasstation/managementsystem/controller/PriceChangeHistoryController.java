@@ -19,7 +19,7 @@ public class PriceChangeHistoryController {
     private final PriceChangeHistoryService priceChangeHistoryService;
 
     @Operation(summary = "View All PriceChangeHistory")
-    @GetMapping("/price-change-history")
+    @GetMapping("/price-change-histories")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
                                           @RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize,
                                           @RequestParam(name = "tankId") Integer tankId) {

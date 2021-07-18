@@ -22,7 +22,10 @@ public class PriceChangeHistory {
     private Date date = new Date();
 
     @Column(nullable = false)
-    private double price = 0;
+    private double oldPrice = 0;
+
+    @Column(nullable = false)
+    private double newPrice = 0;
 
     @ManyToOne
     @JoinColumn(name = "editor_id", nullable = false)

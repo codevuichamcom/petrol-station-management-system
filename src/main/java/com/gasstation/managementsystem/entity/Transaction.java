@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Builder
+@ToString
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,11 +31,13 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "card_id")
+    @ToString.Exclude
     private Card card;//Thanh toán bằng thẻ nào
 
 
     @ManyToOne
     @JoinColumn(name = "hand_over_ship_id")
+    @ToString.Exclude
     private HandOverShift handOverShift;
 
 }

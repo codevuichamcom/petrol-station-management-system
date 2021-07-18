@@ -5,8 +5,6 @@ import com.gasstation.managementsystem.model.dto.tank.TankDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import lombok.*;
 
-import java.sql.Date;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -15,7 +13,8 @@ import java.sql.Date;
 public class PriceChangeHistoryDTO {
     private int id;
     private String date;
-    private Double price;
+    private Double oldPrice;
+    private Double newPrice;
     private UserDTO editor;
     private StationDTO station;
     private TankDTO tank;

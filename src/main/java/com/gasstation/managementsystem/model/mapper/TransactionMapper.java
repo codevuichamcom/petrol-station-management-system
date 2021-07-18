@@ -29,7 +29,7 @@ public class TransactionMapper {
                 .build();
         return TransactionDTO.builder()
                 .id(transaction.getId())
-                .time(DateTimeHelper.formatDate(transaction.getTime(),"yyyy-MM-dd HH:mm:ss"))
+                .time(DateTimeHelper.formatDate(transaction.getTime(), "yyyy-MM-dd HH:mm:ss"))
                 .volume(transaction.getVolume())
                 .unitPrice(transaction.getUnitPrice())
                 .uuid(transaction.getUuid())
@@ -42,7 +42,7 @@ public class TransactionMapper {
         if (transactionDTOCreate == null) return null;
         return Transaction.builder()
                 .time(transactionDTOCreate.getTime())
-                .volume(transactionDTOCreate.getVolume())
+                .volume(transactionDTOCreate.getVolume() / 1000)
                 .unitPrice(transactionDTOCreate.getUnitPrice())
                 .uuid(transactionDTOCreate.getUuid())
                 .build();

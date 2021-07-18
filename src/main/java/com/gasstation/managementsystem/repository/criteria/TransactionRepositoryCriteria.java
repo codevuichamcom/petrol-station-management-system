@@ -39,7 +39,7 @@ public class TransactionRepositoryCriteria {
             query += "and t.time = :time ";
         }
         if (total != null) {
-            query += "and t.total = :total ";
+            query += "and t.unitPrice * t.volume = :total ";
         }
         if (unitPrice != null) {
             query += "and t.unitPrice = :unitPrice ";

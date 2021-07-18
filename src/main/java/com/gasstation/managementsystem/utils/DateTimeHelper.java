@@ -16,6 +16,10 @@ public class DateTimeHelper {
         return localDateTime.atZone(TimeZone.getDefault().toZoneId()).toEpochSecond();
     }
 
+    public static long getCurrentUnixTime() {
+        return Instant.now().toEpochMilli() / 1000;
+    }
+
     public static LocalDateTime toDateTime(long unix) {
         return LocalDateTime.ofInstant(Instant.ofEpochSecond(unix), TimeZone.getDefault().toZoneId());
     }

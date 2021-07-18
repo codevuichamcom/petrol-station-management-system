@@ -16,7 +16,7 @@ import java.util.List;
 public class TransactionRepositoryCriteria {
     private final EntityManager em;
 
-    public List<Transaction> getAll() {
+    public List<Transaction> findAll() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Transaction> cq = cb.createQuery(Transaction.class);
         Root<Transaction> transaction = cq.from(Transaction.class);

@@ -1,9 +1,9 @@
 package com.gasstation.managementsystem.entity;
 
+import com.gasstation.managementsystem.utils.DateTimeHelper;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "price_change_history_tbl")
@@ -18,8 +18,7 @@ public class PriceChangeHistory {
     private int id;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date date = new Date();
+    private long time = DateTimeHelper.getCurrentUnixTime();
 
     @Column(nullable = false)
     private double oldPrice = 0;

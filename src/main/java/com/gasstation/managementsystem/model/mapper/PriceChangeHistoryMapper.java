@@ -8,7 +8,6 @@ import com.gasstation.managementsystem.model.dto.priceChangeHistory.PriceChangeH
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import com.gasstation.managementsystem.model.dto.tank.TankDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
-import com.gasstation.managementsystem.utils.DateTimeHelper;
 
 public class PriceChangeHistoryMapper {
 
@@ -22,7 +21,7 @@ public class PriceChangeHistoryMapper {
         TankDTO tankDTO = tank != null ? TankDTO.builder().id(tank.getId()).name(tank.getName()).build() : null;
         return PriceChangeHistoryDTO.builder()
                 .id(priceChangeHistory.getId())
-                .date(DateTimeHelper.formatDate(priceChangeHistory.getDate(), "yyyy-MM-dd"))
+                .time(priceChangeHistory.getTime())
                 .oldPrice(priceChangeHistory.getOldPrice())
                 .newPrice(priceChangeHistory.getNewPrice())
                 .editor(editorDTO)

@@ -12,7 +12,7 @@ import lombok.*;
 @Builder
 public class PriceChangeHistoryDTO {
     private int id;
-    private String date;
+    private long time;
     private Double oldPrice;
     private Double newPrice;
     private UserDTO editor;

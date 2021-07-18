@@ -3,13 +3,12 @@ package com.gasstation.managementsystem.controller;
 
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOCreate;
+import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOFilter;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionUuidDTO;
 import com.gasstation.managementsystem.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,8 +26,27 @@ public class TransactionController {
     @Operation(summary = "View All Transaction")
     @GetMapping("/transactions")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
-                                          @RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize) {
-        return transactionService.findAll(PageRequest.of(pageIndex - 1, pageSize, Sort.by(Sort.Direction.DESC,"time")));
+                                          @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                          @RequestParam(name = "pumpIds", required = false) Integer[] pumpIds,
+                                          @RequestParam(name = "shiftIds", required = false) Integer[] shiftIds,
+                                          @RequestParam(name = "stationId", required = false) Integer[] stationIds,
+                                          @RequestParam(name = "time", required = false) Long time,
+                                          @RequestParam(name = "total", required = false) Double total,
+                                          @RequestParam(name = "unitPrice", required = false) Double unitPrice,
+                                          @RequestParam(name = "volume", required = false) Double volume) {
+        HashMap<String, String> sort = new HashMap<>();
+        TransactionDTOFilter transactionDTOFilter = TransactionDTOFilter.builder()
+                .pageIndex(pageIndex)
+                .pageSize(pageSize)
+                .pumpIds(pumpIds)
+                .shiftIds(shiftIds)
+                .stationIds(stationIds)
+                .time(time)
+                .total(total)
+                .unitPrice(unitPrice)
+                .volume(volume)
+                .sort(sort).build();
+        return transactionService.findAll(transactionDTOFilter);
     }
 
 

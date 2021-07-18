@@ -12,13 +12,13 @@ import com.gasstation.managementsystem.repository.PriceChangeHistoryRepository;
 import com.gasstation.managementsystem.repository.TankRepository;
 import com.gasstation.managementsystem.service.TankService;
 import com.gasstation.managementsystem.utils.AccountHelper;
+import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -100,7 +100,7 @@ public class TankServiceImpl implements TankService {
         if (newPrice != null && newPrice != oldPrice) {
             User editor = accountHelper.getUserLogin();
             PriceChangeHistory priceChangeHistory = PriceChangeHistory.builder()
-                    .date(new Date())
+                    .time(DateTimeHelper.getCurrentUnixTime())
                     .oldPrice(oldPrice)
                     .newPrice(newPrice)
                     .editor(editor)

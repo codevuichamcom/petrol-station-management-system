@@ -4,16 +4,16 @@ import com.gasstation.managementsystem.entity.Transaction;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTO;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOCreate;
+import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOFilter;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionUuidDTO;
 import com.gasstation.managementsystem.model.mapper.TransactionMapper;
 import com.gasstation.managementsystem.repository.TransactionRepository;
+import com.gasstation.managementsystem.repository.criteria.TransactionRepositoryCriteria;
 import com.gasstation.managementsystem.service.TransactionService;
 import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -28,6 +28,7 @@ import java.util.List;
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final OptionalValidate optionalValidate;
+    private final TransactionRepositoryCriteria transactionCriteria;
 
     private HashMap<String, Object> listTransactionToMap(List<Transaction> transactions) {
         List<TransactionDTO> transactionDTOS = new ArrayList<>();
@@ -39,13 +40,11 @@ public class TransactionServiceImpl implements TransactionService {
         return map;
     }
 
+
     @Override
-    public HashMap<String, Object> findAll(Pageable pageable) {
-        Page<com.gasstation.managementsystem.entity.Transaction> pumpCodes = transactionRepository.findAll(pageable);
-        HashMap<String, Object> map = listTransactionToMap(pumpCodes.getContent());
-        map.put("totalElement", pumpCodes.getTotalElements());
-        map.put("totalPage", pumpCodes.getTotalPages());
-        return map;
+    public HashMap<String, Object> findAll(TransactionDTOFilter transactionDTOFilter) {
+
+        return listTransactionToMap(transactionCriteria.findAll());
     }
 
     @Override

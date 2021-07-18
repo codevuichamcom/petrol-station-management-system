@@ -21,9 +21,12 @@ public class PriceChangeHistoryController {
     @Operation(summary = "View All PriceChangeHistory")
     @GetMapping("/price-change-histories")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
-                                          @RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize,
+                                          @RequestParam(name = "pageSize", required = false) Integer pageSize,
                                           @RequestParam(name = "tankId") Integer tankId) {
-        return priceChangeHistoryService.findAllByTankId(tankId, PageRequest.of(pageIndex - 1, pageSize, Sort.by(Sort.Direction.ASC, "id")));
+        if (pageSize != null) {
+            return priceChangeHistoryService.findAllByTankId(tankId, PageRequest.of(pageIndex - 1, pageSize, Sort.by(Sort.Direction.ASC, "id")));
+        }
+        return priceChangeHistoryService.findAllByTankId(tankId);
     }
 
 //    @Operation(summary = "Find priceChangeHistory by id")

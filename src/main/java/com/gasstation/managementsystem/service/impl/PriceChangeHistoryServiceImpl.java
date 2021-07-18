@@ -8,6 +8,7 @@ import com.gasstation.managementsystem.service.PriceChangeHistoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -42,6 +43,11 @@ public class PriceChangeHistoryServiceImpl implements PriceChangeHistoryService 
         map.put("totalElement", priceChangeHistories.getTotalElements());
         map.put("totalPage", priceChangeHistories.getTotalPages());
         return map;
+    }
+
+    @Override
+    public HashMap<String, Object> findAllByTankId(int tankId) {
+        return listPriceChangeHistoryToMap(priceChangeHistoryRepository.findAllByTankId(tankId, Sort.by(Sort.Direction.DESC, "time")));
     }
 
 //    @Override

@@ -43,8 +43,12 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public HashMap<String, Object> findAll(TransactionDTOFilter transactionDTOFilter) {
+        HashMap<String, Object> temp = transactionCriteria.findAll(transactionDTOFilter);
+        HashMap<String, Object> map = listTransactionToMap((List<Transaction>) temp.get("data"));
+        map.put("totalElement", temp.get("totalElement"));
+        map.put("totalPage", temp.get("totalPage"));
+        return map;
 
-        return listTransactionToMap(transactionCriteria.findAll());
     }
 
     @Override

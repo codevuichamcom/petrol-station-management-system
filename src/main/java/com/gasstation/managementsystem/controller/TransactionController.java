@@ -29,12 +29,13 @@ public class TransactionController {
                                           @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                           @RequestParam(name = "pumpIds", required = false) Integer[] pumpIds,
                                           @RequestParam(name = "shiftIds", required = false) Integer[] shiftIds,
-                                          @RequestParam(name = "stationId", required = false) Integer[] stationIds,
+                                          @RequestParam(name = "stationIds", required = false) Integer[] stationIds,
                                           @RequestParam(name = "time", required = false) Long time,
                                           @RequestParam(name = "total", required = false) Double total,
                                           @RequestParam(name = "unitPrice", required = false) Double unitPrice,
                                           @RequestParam(name = "volume", required = false) Double volume) {
         HashMap<String, String> sort = new HashMap<>();
+        sort.put("time", "DESC");
         TransactionDTOFilter transactionDTOFilter = TransactionDTOFilter.builder()
                 .pageIndex(pageIndex)
                 .pageSize(pageSize)

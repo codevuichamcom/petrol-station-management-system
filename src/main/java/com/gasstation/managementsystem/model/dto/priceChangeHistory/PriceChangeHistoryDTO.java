@@ -16,6 +16,4 @@ public class PriceChangeHistoryDTO {
     private Double oldPrice;
     private Double newPrice;
     private UserDTO editor;
-    private StationDTO station;
-    private TankDTO tank;
 }

@@ -26,14 +26,14 @@ public class TransactionMapper {
         Pump pump = handOverShift.getPump();
         Tank tank = pump.getTank();
         Station station = tank.getStation();
-        TankDTO tankDTO = tank != null ? TankDTO.builder()
+        TankDTO tankDTO = TankDTO.builder()
                 .id(tank.getId())
                 .name(tank.getName())
                 .station(StationDTO.builder()
                         .id(station.getId())
                         .name(station.getName())
                         .address(station.getAddress())
-                        .build()).build() : null;
+                        .build()).build();
         HandOverShiftDTO handOverShiftDTO = HandOverShiftDTO.builder()
                 .id(handOverShift.getId())
                 .shift(ShiftDTO.builder().id(shift.getId()).name(shift.getName()).build())

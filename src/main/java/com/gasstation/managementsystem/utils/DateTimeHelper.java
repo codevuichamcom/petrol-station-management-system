@@ -17,11 +17,11 @@ public class DateTimeHelper {
     }
 
     public static long getCurrentUnixTime() {
-        return Instant.now().toEpochMilli() / 1000;
+        return Instant.now().toEpochMilli();
     }
 
     public static LocalDateTime toDateTime(long unix) {
-        return LocalDateTime.ofInstant(Instant.ofEpochSecond(unix), TimeZone.getDefault().toZoneId());
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(unix), TimeZone.getDefault().toZoneId());
     }
 
     public static Date toDate(String dateStr, String format) {

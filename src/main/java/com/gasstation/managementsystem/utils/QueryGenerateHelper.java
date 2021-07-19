@@ -52,4 +52,16 @@ public class QueryGenerateHelper {
         params.put(key, value);
         return this;
     }
+
+    public QueryGenerateHelper sort(String field, String value) {
+        if (value == null) {
+            value = "ASC";
+        }
+        query
+                .append(" ORDER BY ")
+                .append(field)
+                .append(" ")
+                .append(value);
+        return this;
+    }
 }

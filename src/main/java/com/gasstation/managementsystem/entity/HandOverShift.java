@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -21,11 +20,9 @@ public class HandOverShift {
 
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date createdDate;
+    private long createdDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date closeShiftDate;
+    private Long closedTime;
 
     private String note;
 
@@ -34,7 +31,7 @@ public class HandOverShift {
     private Shift shift;
 
     @ManyToOne
-    @JoinColumn(name = "pump_id",nullable = false)
+    @JoinColumn(name = "pump_id", nullable = false)
     private Pump pump;
 
     @OneToMany(mappedBy = "handOverShift")

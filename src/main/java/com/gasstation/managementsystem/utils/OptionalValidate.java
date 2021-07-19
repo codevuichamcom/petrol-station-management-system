@@ -7,7 +7,6 @@ import com.gasstation.managementsystem.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.sql.Date;
 import java.util.Optional;
 
 @Component
@@ -191,8 +190,8 @@ public class OptionalValidate {
         }
     }
 
-    public HandOverShift getHandOverShiftByPumpIdNotClose(int id, Date date, long seconds) throws CustomNotFoundException {
-        Optional<HandOverShift> handOverShiftOptional = handOverShiftRepository.findByPumpIdNotClose(id, date, seconds);
+    public HandOverShift getHandOverShiftByPumpIdNotClose(int id, long createdDate, long seconds) throws CustomNotFoundException {
+        Optional<HandOverShift> handOverShiftOptional = handOverShiftRepository.findByPumpIdNotClose(id, createdDate, seconds);
         if (handOverShiftOptional.isPresent()) {
             return handOverShiftOptional.get();
         } else {

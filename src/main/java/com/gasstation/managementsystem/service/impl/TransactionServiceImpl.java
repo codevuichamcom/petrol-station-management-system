@@ -16,12 +16,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 @Service
 @RequiredArgsConstructor
@@ -61,9 +62,12 @@ public class TransactionServiceImpl implements TransactionService {
                 transaction.setCard(optionalValidate.getCardById(cardId));
             }
             LocalDateTime localDateTime = DateTimeHelper.toDateTime(T.getTime());
-            String date = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(localDateTime);
+            LocalDate localDate = LocalDate.of(localDateTime.getYear(), localDateTime.getMonth(), localDateTime.getDayOfMonth());
             long seconds = localDateTime.getHour() * 3600 + localDateTime.getMinute() * 60 + localDateTime.getSecond();
-            transaction.setHandOverShift(optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(), Date.valueOf(date), seconds));
+            transaction.setHandOverShift(optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(),
+                    LocalDateTime.of(localDate, LocalTime.MIN)
+                            .atZone(TimeZone.getDefault()
+                                    .toZoneId()).toEpochSecond() * 1000, seconds));
             transactionList.add(transaction);
         }
 

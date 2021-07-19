@@ -13,7 +13,7 @@ public class DateTimeHelper {
 
     public static long toUnixTime(String dateTime, String format) {
         LocalDateTime localDateTime = LocalDateTime.parse(dateTime, DateTimeFormatter.ofPattern(format));
-        return localDateTime.atZone(TimeZone.getDefault().toZoneId()).toEpochSecond();
+        return localDateTime.atZone(TimeZone.getDefault().toZoneId()).toEpochSecond() * 1000;
     }
 
     public static long getCurrentUnixTime() {

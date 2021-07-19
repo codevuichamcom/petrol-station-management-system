@@ -1,12 +1,12 @@
 package com.gasstation.managementsystem.model.mapper;
 
-import com.gasstation.managementsystem.entity.Card;
-import com.gasstation.managementsystem.entity.HandOverShift;
-import com.gasstation.managementsystem.entity.Shift;
-import com.gasstation.managementsystem.entity.Transaction;
+import com.gasstation.managementsystem.entity.*;
 import com.gasstation.managementsystem.model.dto.card.CardDTO;
 import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTO;
+import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
 import com.gasstation.managementsystem.model.dto.shift.ShiftDTO;
+import com.gasstation.managementsystem.model.dto.station.StationDTO;
+import com.gasstation.managementsystem.model.dto.tank.TankDTO;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTO;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOCreate;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
@@ -23,9 +23,21 @@ public class TransactionMapper {
                         .name(card.getCustomer().getName())
                         .build()).build() : null;
         Shift shift = handOverShift.getShift();
+        Pump pump = handOverShift.getPump();
+        Tank tank = pump.getTank();
+        Station station = tank.getStation();
+        TankDTO tankDTO = tank != null ? TankDTO.builder()
+                .id(tank.getId())
+                .name(tank.getName())
+                .station(StationDTO.builder()
+                        .id(station.getId())
+                        .name(station.getName())
+                        .address(station.getAddress())
+                        .build()).build() : null;
         HandOverShiftDTO handOverShiftDTO = HandOverShiftDTO.builder()
                 .id(handOverShift.getId())
                 .shift(ShiftDTO.builder().id(shift.getId()).name(shift.getName()).build())
+                .pump(PumpDTO.builder().id(pump.getId()).name(pump.getName()).tank(tankDTO).build())
                 .build();
         return TransactionDTO.builder()
                 .id(transaction.getId())

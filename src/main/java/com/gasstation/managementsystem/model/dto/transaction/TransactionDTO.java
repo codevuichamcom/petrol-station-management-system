@@ -2,6 +2,8 @@ package com.gasstation.managementsystem.model.dto.transaction;
 
 import com.gasstation.managementsystem.model.dto.card.CardDTO;
 import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTO;
+import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
+import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import lombok.*;
 
 import java.util.Objects;
@@ -20,6 +22,8 @@ public class TransactionDTO {
     private String uuid;
     private CardDTO card;
     private HandOverShiftDTO handOverShift;
+    private StationDTO station;
+    private PumpDTO pump;
 
     @Override
     public boolean equals(Object o) {

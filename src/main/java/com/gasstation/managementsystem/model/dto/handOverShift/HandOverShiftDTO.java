@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.model.dto.handOverShift;
 
+import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
 import com.gasstation.managementsystem.model.dto.shift.ShiftDTO;
 import lombok.*;
 
@@ -16,5 +17,6 @@ public class HandOverShiftDTO {
     private LocalDateTime localDateTime;
     private String note;
     private ShiftDTO shift;
+    private PumpDTO pump;
 
 }

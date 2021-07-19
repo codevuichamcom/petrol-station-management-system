@@ -2,8 +2,6 @@ package com.gasstation.managementsystem.model.dto.transaction;
 
 import lombok.*;
 
-import java.util.HashMap;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -16,8 +14,6 @@ public class TransactionDTOFilter {
     private Integer[] shiftIds;
     private Integer[] stationIds;
     private Long time;
-    private Double total;
     private Double unitPrice;
     private Double volume;
-    private HashMap<String, String> sort = new HashMap();
 }

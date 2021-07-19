@@ -34,8 +34,6 @@ public class TransactionController {
                                           @RequestParam(name = "total", required = false) Double total,
                                           @RequestParam(name = "unitPrice", required = false) Double unitPrice,
                                           @RequestParam(name = "volume", required = false) Double volume) {
-        HashMap<String, String> sort = new HashMap<>();
-        sort.put("time", "DESC");
         TransactionDTOFilter transactionDTOFilter = TransactionDTOFilter.builder()
                 .pageIndex(pageIndex)
                 .pageSize(pageSize)
@@ -43,10 +41,8 @@ public class TransactionController {
                 .shiftIds(shiftIds)
                 .stationIds(stationIds)
                 .time(time)
-                .total(total)
                 .unitPrice(unitPrice)
-                .volume(volume)
-                .sort(sort).build();
+                .volume(volume).build();
         return transactionService.findAll(transactionDTOFilter);
     }
 

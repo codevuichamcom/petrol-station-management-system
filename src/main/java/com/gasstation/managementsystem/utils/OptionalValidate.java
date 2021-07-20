@@ -195,8 +195,7 @@ public class OptionalValidate {
         if (handOverShiftOptional.isPresent()) {
             return handOverShiftOptional.get();
         } else {
-            throw new CustomNotFoundException(CustomError.builder()
-                    .code("not.found").field("id").message("Hand over shift is not exist").table("hand_over_shift_table").build());
+            return null;
         }
     }
 

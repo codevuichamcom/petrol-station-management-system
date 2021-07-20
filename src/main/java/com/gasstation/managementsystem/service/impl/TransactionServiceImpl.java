@@ -1,13 +1,19 @@
 package com.gasstation.managementsystem.service.impl;
 
+import com.gasstation.managementsystem.entity.HandOverShift;
 import com.gasstation.managementsystem.entity.Transaction;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
+import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTO;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOCreate;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOFilter;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionUuidDTO;
 import com.gasstation.managementsystem.model.mapper.TransactionMapper;
+import com.gasstation.managementsystem.repository.HandOverShiftRepository;
+import com.gasstation.managementsystem.repository.PumpRepository;
+import com.gasstation.managementsystem.repository.ShiftRepository;
 import com.gasstation.managementsystem.repository.TransactionRepository;
+import com.gasstation.managementsystem.repository.criteria.HandOverShiftRepositoryCriteria;
 import com.gasstation.managementsystem.repository.criteria.TransactionRepositoryCriteria;
 import com.gasstation.managementsystem.service.TransactionService;
 import com.gasstation.managementsystem.utils.DateTimeHelper;
@@ -30,6 +36,10 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final OptionalValidate optionalValidate;
     private final TransactionRepositoryCriteria transactionCriteria;
+    private final HandOverShiftRepositoryCriteria handOverShiftCriteria;
+    private final PumpRepository pumpRepository;
+    private final ShiftRepository shiftRepository;
+    private final HandOverShiftRepository handOverShiftRepository;
 
     private HashMap<String, Object> listTransactionToMap(List<Transaction> transactions) {
         List<TransactionDTO> transactionDTOS = new ArrayList<>();
@@ -55,6 +65,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public List<TransactionUuidDTO> create(List<TransactionDTOCreate> transactionDTOCreates) throws CustomNotFoundException {
         List<Transaction> transactionList = new ArrayList<>();
+
         for (TransactionDTOCreate T : transactionDTOCreates) {
             Transaction transaction = TransactionMapper.toTransaction(T);
             Integer cardId = T.getCardId();
@@ -64,10 +75,27 @@ public class TransactionServiceImpl implements TransactionService {
             LocalDateTime localDateTime = DateTimeHelper.toDateTime(T.getTime());
             LocalDate localDate = LocalDate.of(localDateTime.getYear(), localDateTime.getMonth(), localDateTime.getDayOfMonth());
             long seconds = localDateTime.getHour() * 3600 + localDateTime.getMinute() * 60 + localDateTime.getSecond();
-            transaction.setHandOverShift(optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(),
+
+            HandOverShift handOverShift = optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(),
                     LocalDateTime.of(localDate, LocalTime.MIN)
                             .atZone(TimeZone.getDefault()
-                                    .toZoneId()).toEpochSecond() * 1000, seconds));
+                                    .toZoneId()).toEpochSecond() * 1000, seconds);
+            if (handOverShift == null) {
+                handOverShift = handOverShiftCriteria.getHandOverShiftToday();
+                if (handOverShift == null) {
+                    createHandOverShiftForAllPump();
+                    handOverShift = optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(),
+                            LocalDateTime.of(localDate, LocalTime.MIN)
+                                    .atZone(TimeZone.getDefault()
+                                            .toZoneId()).toEpochSecond() * 1000, seconds);
+                } else {
+                    throw new CustomNotFoundException(CustomError.builder()
+                            .code("not.found").field("id").message("Hand over shift is not exist").table("hand_over_shift_table").build());
+                }
+            }
+            if (handOverShift != null) {
+                transaction.setHandOverShift(handOverShift);
+            }
             transactionList.add(transaction);
         }
 
@@ -85,4 +113,17 @@ public class TransactionServiceImpl implements TransactionService {
 
         return listUuidSync;
     }
+
+    private void createHandOverShiftForAllPump() {
+        ArrayList<HandOverShift> handOverShifts = new ArrayList<>();
+        pumpRepository.findAll().forEach(pump -> shiftRepository.findAll().forEach(shift -> {
+            HandOverShift handOverShift = HandOverShift.builder().
+                    createdDate(DateTimeHelper.getCurrentDate())
+                    .shift(shift)
+                    .pump(pump).build();
+            handOverShifts.add(handOverShift);
+        }));
+        handOverShiftRepository.saveAll(handOverShifts);
+    }
+
 }

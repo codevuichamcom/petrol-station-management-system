@@ -3,6 +3,7 @@ package com.gasstation.managementsystem.utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -18,6 +19,11 @@ public class DateTimeHelper {
 
     public static long getCurrentUnixTime() {
         return Instant.now().toEpochMilli();
+    }
+
+    public static long getCurrentDate() {
+        LocalDateTime localDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
+        return localDateTime.atZone(TimeZone.getDefault().toZoneId()).toEpochSecond() * 1000;
     }
 
     public static LocalDateTime toDateTime(long unix) {

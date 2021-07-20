@@ -31,7 +31,6 @@ public class TransactionController {
                                           @RequestParam(name = "shiftIds", required = false) Integer[] shiftIds,
                                           @RequestParam(name = "stationIds", required = false) Integer[] stationIds,
                                           @RequestParam(name = "time", required = false) Long time,
-                                          @RequestParam(name = "total", required = false) Double total,
                                           @RequestParam(name = "unitPrice", required = false) Double unitPrice,
                                           @RequestParam(name = "volume", required = false) Double volume) {
         TransactionDTOFilter transactionDTOFilter = TransactionDTOFilter.builder()

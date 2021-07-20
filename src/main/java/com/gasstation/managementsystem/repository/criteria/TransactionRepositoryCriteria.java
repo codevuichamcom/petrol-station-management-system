@@ -35,7 +35,7 @@ public class TransactionRepositoryCriteria {
                 .between("t.time", 0L, time, "time", time)
                 .between("t.unitPrice", 0.0, unitPrice, "total", unitPrice)
                 .between("t.volume", 0.0, volume, "total", volume);
-        String countQuery = query.toString().replace("select t", "select count(t.id)");
+        String countQuery = qHelper.getQuery().toString().replace("select t", "select count(t.id)");
         Query countTotal = em.createQuery(countQuery);
         qHelper.sort("t.time", "DESC");
         TypedQuery<Transaction> tQuery = em.createQuery(query.toString(), Transaction.class);

@@ -27,6 +27,17 @@ public class QueryGenerateHelper {
         return this;
     }
 
+    public QueryGenerateHelper like(String field, String key, String value) {
+        if (value == null) return this;
+        query
+                .append(" AND ")
+                .append(field)
+                .append(" LIKE ")
+                .append(" (:").append(key).append(")");
+        params.put(key, "%" + value + "%");
+        return this;
+    }
+
     public QueryGenerateHelper between(String field, Double min, Double max, String key, Double value) {
         if (value == null || value < min || value > max) return this;
         query

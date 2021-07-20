@@ -8,11 +8,13 @@ import lombok.*;
 @Setter
 @Builder
 public class HandOverShiftDTOFilter {
+    private Integer pageIndex;
+    private Integer pageSize;
     private Long createdDate;
     private Long closedTime;
     private Integer[] shiftIds;
     private Integer[] pumpIds;
     private Integer[] stationIds;
-    private Integer actorName;
+    private String actorName;
 
 }

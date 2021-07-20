@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 @Setter
 @Builder
 public class HandOverShiftDTOCreate {
-    private String note;
     @NotNull(message = "createdDate is mandatory")
     private Integer shiftId;
     @NotNull(message = "createdDate is mandatory")

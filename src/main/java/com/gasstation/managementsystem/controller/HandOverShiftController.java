@@ -3,6 +3,7 @@ package com.gasstation.managementsystem.controller;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTO;
 import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTOCreate;
+import com.gasstation.managementsystem.model.dto.station.StationDTOUpdateHandOverShift;
 import com.gasstation.managementsystem.service.HandOverShiftService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,5 +37,17 @@ public class HandOverShiftController {
     @PostMapping("/hand-over-shifts")
     public HandOverShiftDTO create(@Valid @RequestBody HandOverShiftDTOCreate handOverShiftDTOCreate) throws CustomNotFoundException {
         return handOverShiftService.create(handOverShiftDTOCreate);
+    }
+
+    @Operation(summary = "Hand Over Shift")
+    @PutMapping("/hand-over-shifts/{id}")
+    public HandOverShiftDTO update(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
+        return handOverShiftService.update(id);
+    }
+
+    @Operation(summary = "Hand Over Shift")
+    @PutMapping("/hand-over-shifts")
+    public void updateAllByStationId(@RequestBody StationDTOUpdateHandOverShift stationId) throws CustomNotFoundException {
+        handOverShiftService.updateAllByStationId(stationId);
     }
 }

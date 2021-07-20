@@ -34,6 +34,10 @@ public class HandOverShift {
     @JoinColumn(name = "pump_id", nullable = false)
     private Pump pump;
 
+    @ManyToOne
+    @JoinColumn(name = "actor_id")
+    private User actor; //người chốt ca
+
     @OneToMany(mappedBy = "handOverShift")
     private List<Transaction> transactionList = new ArrayList<>();
 

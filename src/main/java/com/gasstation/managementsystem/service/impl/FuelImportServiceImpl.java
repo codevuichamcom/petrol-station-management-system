@@ -9,7 +9,7 @@ import com.gasstation.managementsystem.model.dto.fuelImport.FuelImportDTOUpdate;
 import com.gasstation.managementsystem.model.mapper.FuelImportMapper;
 import com.gasstation.managementsystem.repository.FuelImportRepository;
 import com.gasstation.managementsystem.service.FuelImportService;
-import com.gasstation.managementsystem.utils.AccountHelper;
+import com.gasstation.managementsystem.utils.UserHelper;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public class FuelImportServiceImpl implements FuelImportService {
     private final FuelImportRepository fuelImportRepository;
     private final OptionalValidate optionalValidate;
-    private final AccountHelper accountHelper;
+    private final UserHelper userHelper;
 
     private HashMap<String, Object> listFuelImportToMap(List<FuelImport> tanks) {
         List<FuelImportDTO> fuelImportDTOS = tanks.stream().map(FuelImportMapper::toFuelImportDTO).collect(Collectors.toList());
@@ -61,7 +61,7 @@ public class FuelImportServiceImpl implements FuelImportService {
         FuelImport fuelImport = FuelImportMapper.toFuelImport(fuelImportDTOCreate);
         fuelImport.setTank(optionalValidate.getTankById(fuelImportDTOCreate.getTankId()));
         fuelImport.setSupplier(optionalValidate.getSupplierById(fuelImportDTOCreate.getSupplierId()));
-        User creator = accountHelper.getUserLogin();
+        User creator = userHelper.getUserLogin();
         fuelImport.setCreator(creator);
         fuelImport.setFuel(optionalValidate.getFuelById(fuelImportDTOCreate.getFuelId()));
         fuelImport = fuelImportRepository.save(fuelImport);

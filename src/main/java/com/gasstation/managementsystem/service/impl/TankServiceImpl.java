@@ -11,7 +11,7 @@ import com.gasstation.managementsystem.model.mapper.TankMapper;
 import com.gasstation.managementsystem.repository.PriceChangeHistoryRepository;
 import com.gasstation.managementsystem.repository.TankRepository;
 import com.gasstation.managementsystem.service.TankService;
-import com.gasstation.managementsystem.utils.AccountHelper;
+import com.gasstation.managementsystem.utils.UserHelper;
 import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class TankServiceImpl implements TankService {
     private final TankRepository tankRepository;
     private final OptionalValidate optionalValidate;
     private final PriceChangeHistoryRepository priceChangeHistoryRepository;
-    private final AccountHelper accountHelper;
+    private final UserHelper userHelper;
 
     private HashMap<String, Object> listTankToMap(List<Tank> tanks) {
         List<TankDTO> tankDTOS = tanks.stream().map(TankMapper::toTankDTO).collect(Collectors.toList());
@@ -98,7 +98,7 @@ public class TankServiceImpl implements TankService {
         }
         oldTank = tankRepository.save(oldTank);
         if (newPrice != null && newPrice != oldPrice) {
-            User editor = accountHelper.getUserLogin();
+            User editor = userHelper.getUserLogin();
             PriceChangeHistory priceChangeHistory = PriceChangeHistory.builder()
                     .time(DateTimeHelper.getCurrentUnixTime())
                     .oldPrice(oldPrice)

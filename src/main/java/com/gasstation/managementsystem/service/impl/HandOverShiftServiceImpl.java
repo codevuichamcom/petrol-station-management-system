@@ -4,11 +4,13 @@ import com.gasstation.managementsystem.entity.HandOverShift;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTO;
 import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTOCreate;
-import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTOUpdate;
+import com.gasstation.managementsystem.model.dto.station.StationDTOUpdateHandOverShift;
 import com.gasstation.managementsystem.model.mapper.HandOverShiftMapper;
 import com.gasstation.managementsystem.repository.HandOverShiftRepository;
 import com.gasstation.managementsystem.service.HandOverShiftService;
+import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.OptionalValidate;
+import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,7 @@ import java.util.stream.Collectors;
 public class HandOverShiftServiceImpl implements HandOverShiftService {
     private final HandOverShiftRepository handOverShiftRepository;
     private final OptionalValidate optionalValidate;
+    private final UserHelper userHelper;
 
     private HashMap<String, Object> listHandOverShiftToMap(List<HandOverShift> tanks) {
         List<HandOverShiftDTO> tankDTOS = tanks.stream().map(HandOverShiftMapper::toHandOverShiftDTO).collect(Collectors.toList());
@@ -48,7 +51,7 @@ public class HandOverShiftServiceImpl implements HandOverShiftService {
 
     @Override
     public HandOverShiftDTO create(HandOverShiftDTOCreate handOverShiftDTOCreate) throws CustomNotFoundException {
-        HandOverShift handOverShift = HandOverShiftMapper.toHandOverShift(handOverShiftDTOCreate);
+        HandOverShift handOverShift = new HandOverShift();
         LocalDateTime localDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0, 0));
         handOverShift.setCreatedDate(localDateTime.atZone(TimeZone.getDefault().toZoneId()).toEpochSecond() * 1000);
         handOverShift.setShift(optionalValidate.getShiftById(handOverShiftDTOCreate.getShiftId()));
@@ -58,13 +61,25 @@ public class HandOverShiftServiceImpl implements HandOverShiftService {
     }
 
     @Override
-    public HandOverShiftDTO update(int id, HandOverShiftDTOUpdate handOverShiftDTOUpdate) {
-        return null;
+    public HandOverShiftDTO update(int id) throws CustomNotFoundException {
+        HandOverShift oldHandOverShift = optionalValidate.getHandOverShiftById(id);
+        oldHandOverShift.setClosedTime(DateTimeHelper.getCurrentUnixTime());
+        oldHandOverShift.setActor(userHelper.getUserLogin());
+        return HandOverShiftMapper.toHandOverShiftDTO(oldHandOverShift);
     }
 
     @Override
-    public HandOverShiftDTO delete(int id) {
-        return null;
+    public void updateAllByStationId(StationDTOUpdateHandOverShift stationDTOUpdateHandOverShift) throws CustomNotFoundException {
+        int stationId = stationDTOUpdateHandOverShift.getId();
+        optionalValidate.getStationById(stationId);
+        List<HandOverShift> handOverShifts = handOverShiftRepository.findAllByStationId(stationId);
+        if (handOverShifts != null && handOverShifts.size() != 0) {
+            for (HandOverShift handOverShift : handOverShifts) {
+                handOverShift.setClosedTime(DateTimeHelper.getCurrentUnixTime());
+                handOverShift.setActor(userHelper.getUserLogin());
+            }
+            handOverShiftRepository.saveAll(handOverShifts);
+        }
     }
 
 

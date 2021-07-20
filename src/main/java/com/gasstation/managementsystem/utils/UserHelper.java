@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class AccountHelper {
+public class UserHelper {
     private final UserRepository userRepository;
 
     public User getUserLogin() {

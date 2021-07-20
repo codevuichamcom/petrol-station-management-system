@@ -2,6 +2,7 @@ package com.gasstation.managementsystem.model.dto.handOverShift;
 
 import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
 import com.gasstation.managementsystem.model.dto.shift.ShiftDTO;
+import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import lombok.*;
 
 @AllArgsConstructor
@@ -12,9 +13,9 @@ import lombok.*;
 public class HandOverShiftDTO {
     private int id;
     private Long createdDate;
-    private Long closeShiftDate;
-    private String note;
+    private Long closedTime;
     private ShiftDTO shift;
     private PumpDTO pump;
+    private UserDTO actor;
 
 }

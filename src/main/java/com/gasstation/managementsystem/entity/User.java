@@ -73,4 +73,7 @@ public class User {
 
     @OneToMany(mappedBy = "creator")
     private List<FuelImport> fuelImportList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "actor")
+    private List<HandOverShift> handOverShiftList = new ArrayList<>();
 }

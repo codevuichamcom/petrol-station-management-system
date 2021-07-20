@@ -9,7 +9,7 @@ import com.gasstation.managementsystem.model.dto.api.ApiDTOCreate;
 import com.gasstation.managementsystem.model.dto.api.ApiDTOUpdate;
 import com.gasstation.managementsystem.repository.ApiRepository;
 import com.gasstation.managementsystem.service.ApiService;
-import com.gasstation.managementsystem.utils.AccountHelper;
+import com.gasstation.managementsystem.utils.UserHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -30,13 +30,13 @@ import java.util.stream.Collectors;
 public class ApiController {
     private final ApiService apiService;
     private final ApiRepository apiRepository;
-    private final AccountHelper accountHelper;
+    private final UserHelper userHelper;
     private final RequestMappingHandlerMapping requestMappingHandlerMapping;
 
     @Operation(summary = "View All api")
     @GetMapping("/apis")
     public HashMap<String, Object> getAll() {
-        UserType userType = accountHelper.getUserTypeOfUserLogin();
+        UserType userType = userHelper.getUserTypeOfUserLogin();
         if (userType.getId() == UserType.ADMIN) {
             return apiService.findAll();
         }

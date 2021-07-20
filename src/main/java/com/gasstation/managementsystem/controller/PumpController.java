@@ -7,7 +7,7 @@ import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTOCreate;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTOUpdate;
 import com.gasstation.managementsystem.service.PumpService;
-import com.gasstation.managementsystem.utils.AccountHelper;
+import com.gasstation.managementsystem.utils.UserHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +23,12 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class PumpController {
     private final PumpService pumpService;
-    private final AccountHelper accountHelper;
+    private final UserHelper userHelper;
 
     @Operation(summary = "View All pump")
     @GetMapping("/pumps")
     public HashMap<String, Object> getAll() {
-        UserType userType = accountHelper.getUserTypeOfUserLogin();
+        UserType userType = userHelper.getUserTypeOfUserLogin();
         switch (userType.getId()) {
             case UserType.ADMIN:
                 return pumpService.findAll();

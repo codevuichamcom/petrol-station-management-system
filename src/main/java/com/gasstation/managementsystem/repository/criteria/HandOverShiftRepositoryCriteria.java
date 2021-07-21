@@ -29,27 +29,10 @@ public class HandOverShiftRepositoryCriteria {
                 .in("p.id", "pumpIds", filter.getPumpIds())
                 .like("h.actor.name", "actorName", filter.getActorName());
         String countQuery = qHelper.getQuery().toString().replace("select h", "select count(h.id)");
-        Query countTotal = em.createQuery(countQuery);
+        Query countTotalQuery = em.createQuery(countQuery);
         qHelper.sort("h.createdDate", "DESC");
         TypedQuery<HandOverShift> tQuery = em.createQuery(qHelper.getQuery().toString(), HandOverShift.class);
-        qHelper.getParams().forEach((k, v) -> {
-            tQuery.setParameter(k, v);
-            countTotal.setParameter(k, v);
-        });
-        Integer pageIndex = filter.getPageIndex();
-        Integer pageSize = filter.getPageSize();
-        long totalElement = (long) countTotal.getSingleResult();
-        long totalPage = totalElement / pageSize;
-        if (totalElement % pageSize != 0) {
-            totalPage++;
-        }
-        tQuery.setFirstResult((pageIndex - 1) * pageSize);
-        tQuery.setMaxResults(pageSize);
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("data", tQuery.getResultList());
-        map.put("totalElement", totalElement);
-        map.put("totalPage", totalPage);
-        return map;
+        return qHelper.paging(tQuery, countTotalQuery, filter.getPageIndex(), filter.getPageSize());
     }
 
     public HandOverShift getHandOverShiftToday() {

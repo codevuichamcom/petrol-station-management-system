@@ -16,46 +16,21 @@ import java.util.HashMap;
 public class TransactionRepositoryCriteria {
     private final EntityManager em;
 
-    public HashMap<String, Object> findAll(TransactionDTOFilter transactionDTOFilter) {
+    public HashMap<String, Object> findAll(TransactionDTOFilter filter) {
         StringBuilder query = new StringBuilder("select t from Transaction t inner join t.handOverShift h ")
                 .append("inner join h.pump p inner join p.tank tank where 1=1 ");
-        Integer[] pumpIds = transactionDTOFilter.getPumpIds();
-        Integer[] shiftIds = transactionDTOFilter.getShiftIds();
-        Integer[] stationIds = transactionDTOFilter.getStationIds();
-        Long time = transactionDTOFilter.getTime();
-        Double unitPrice = transactionDTOFilter.getUnitPrice();
-        Double volume = transactionDTOFilter.getVolume();
-
         QueryGenerateHelper qHelper = new QueryGenerateHelper();
         qHelper.setQuery(query);
-        qHelper.in("p.id", "pumpIds", pumpIds)
-                .in("h.shift.id", "shiftIds", shiftIds)
-                .in("h.shift.id", "shiftIds", shiftIds)
-                .in("tank.station.id", "stationIds", stationIds)
-                .between("t.time", 0L, time, "time", time)
-                .between("t.unitPrice", 0.0, unitPrice, "total", unitPrice)
-                .between("t.volume", 0.0, volume, "total", volume);
+        qHelper.in("p.id", "pumpIds", filter.getPumpIds())
+                .in("h.shift.id", "shiftIds", filter.getShiftIds())
+                .in("tank.station.id", "stationIds", filter.getStationIds())
+                .between("t.time", 0L, filter.getTime(), "time", filter.getTime())
+                .between("t.unitPrice", 0.0, filter.getUnitPrice(), "total", filter.getUnitPrice())
+                .between("t.volume", 0.0, filter.getVolume(), "volume", filter.getVolume());
         String countQuery = qHelper.getQuery().toString().replace("select t", "select count(t.id)");
-        Query countTotal = em.createQuery(countQuery);
+        Query countTotalQuery = em.createQuery(countQuery);
         qHelper.sort("t.time", "DESC");
         TypedQuery<Transaction> tQuery = em.createQuery(query.toString(), Transaction.class);
-        qHelper.getParams().forEach((k, v) -> {
-            tQuery.setParameter(k, v);
-            countTotal.setParameter(k, v);
-        });
-        Integer pageIndex = transactionDTOFilter.getPageIndex();
-        Integer pageSize = transactionDTOFilter.getPageSize();
-        long totalElement = (long) countTotal.getSingleResult();
-        long totalPage = totalElement / pageSize;
-        if (totalElement % pageSize != 0) {
-            totalPage++;
-        }
-        tQuery.setFirstResult((pageIndex - 1) * pageSize);
-        tQuery.setMaxResults(pageSize);
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("data", tQuery.getResultList());
-        map.put("totalElement", totalElement);
-        map.put("totalPage", totalPage);
-        return map;
+        return qHelper.paging(tQuery, countTotalQuery, filter.getPageIndex(), filter.getPageSize());
     }
 }

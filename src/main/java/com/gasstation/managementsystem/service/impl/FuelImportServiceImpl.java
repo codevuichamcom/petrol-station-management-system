@@ -9,8 +9,8 @@ import com.gasstation.managementsystem.model.dto.fuelImport.FuelImportDTOUpdate;
 import com.gasstation.managementsystem.model.mapper.FuelImportMapper;
 import com.gasstation.managementsystem.repository.FuelImportRepository;
 import com.gasstation.managementsystem.service.FuelImportService;
-import com.gasstation.managementsystem.utils.UserHelper;
 import com.gasstation.managementsystem.utils.OptionalValidate;
+import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,8 +47,8 @@ public class FuelImportServiceImpl implements FuelImportService {
     }
 
     @Override
-    public HashMap<String, Object> findAll(Sort sort) {
-        return listFuelImportToMap(fuelImportRepository.findAll(sort));
+    public HashMap<String, Object> findAll() {
+        return listFuelImportToMap(fuelImportRepository.findAllFuelImport(Sort.by(Sort.Direction.DESC, "id")));
     }
 
     @Override

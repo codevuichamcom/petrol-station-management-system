@@ -31,7 +31,7 @@ public class FuelImportController {
         if (pageSize != null) {
             return fuelImportService.findAll(PageRequest.of(pageIndex - 1, pageSize, Sort.by(Sort.Direction.DESC, "id")));
         }
-        return fuelImportService.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        return fuelImportService.findAll();
     }
 
     @Operation(summary = "Find import bill by id")

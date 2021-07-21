@@ -2,6 +2,8 @@ package com.gasstation.managementsystem.utils;
 
 import lombok.*;
 
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -74,5 +76,24 @@ public class QueryGenerateHelper {
                 .append(" ")
                 .append(value);
         return this;
+    }
+
+    public HashMap<String, Object> paging(TypedQuery<?> tQuery, Query countTotalQuery, Integer pageIndex, Integer pageSize) {
+        params.forEach((k, v) -> {
+            tQuery.setParameter(k, v);
+            countTotalQuery.setParameter(k, v);
+        });
+        long totalElement = (long) countTotalQuery.getSingleResult();
+        long totalPage = totalElement / pageSize;
+        if (totalElement % pageSize != 0) {
+            totalPage++;
+        }
+        tQuery.setFirstResult((pageIndex - 1) * pageSize);
+        tQuery.setMaxResults(pageSize);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("data", tQuery.getResultList());
+        map.put("totalElement", totalElement);
+        map.put("totalPage", totalPage);
+        return map;
     }
 }

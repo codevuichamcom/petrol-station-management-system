@@ -4,6 +4,7 @@ import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import lombok.*;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,7 +13,7 @@ import java.util.Objects;
 @Builder
 
 public class CardDTO {
-    private int id;
+    private UUID id;
     private String driverPhone;
     private String driverName;
     private String licensePalates;

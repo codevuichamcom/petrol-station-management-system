@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,7 +23,7 @@ public class TransactionDTOCreate {
     private Double unitPrice;
     @NotNull(message = "pricePerLitter is mandatory")
     private String uuid;
-    private Integer cardId;
+    private UUID cardId;
     @NotNull(message = "Pump ìd is mandatory")
     private Integer pumpId;
 

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -37,7 +38,7 @@ public class CardController {
 
     @Operation(summary = "Find card by id")
     @GetMapping("/cards/{id}")
-    public CardDTO getOne(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
+    public CardDTO getOne(@PathVariable(name = "id") UUID id) throws CustomNotFoundException {
         return cardService.findById(id);
     }
 
@@ -49,13 +50,13 @@ public class CardController {
 
     @Operation(summary = "Update card by id")
     @PutMapping("/cards/{id}")
-    public CardDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody CardDTOUpdate cardDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
+    public CardDTO update(@PathVariable(name = "id") UUID id, @Valid @RequestBody CardDTOUpdate cardDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         return cardService.update(id, cardDTOUpdate);
     }
 
     @Operation(summary = "Delete card by id")
     @DeleteMapping("/cards/{id}")
-    public CardDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
+    public CardDTO delete(@PathVariable(name = "id") UUID id) throws CustomNotFoundException {
         return cardService.delete(id);
     }
 }

@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,7 +54,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public CardDTO findById(int id) throws CustomNotFoundException {
+    public CardDTO findById(UUID id) throws CustomNotFoundException {
         return CardMapper.toCardDTO(optionalValidate.getCardById(id));
     }
 
@@ -79,7 +80,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public CardDTO update(int id, CardDTOUpdate cardDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
+    public CardDTO update(UUID id, CardDTOUpdate cardDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         Card oldCard = optionalValidate.getCardById(id);
         String phone = cardDTOUpdate.getDriverPhone();
         if (needCheckDuplicate(phone, oldCard)) {
@@ -107,7 +108,7 @@ public class CardServiceImpl implements CardService {
 
 
     @Override
-    public CardDTO delete(int id) throws CustomNotFoundException {
+    public CardDTO delete(UUID id) throws CustomNotFoundException {
         Card card = optionalValidate.getCardById(id);
         cardRepository.delete(card);
         return CardMapper.toCardDTO(card);

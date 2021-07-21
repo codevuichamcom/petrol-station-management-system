@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -109,7 +110,7 @@ public class OptionalValidate {
         }
     }
 
-    public Card getCardById(int id) throws CustomNotFoundException {
+    public Card getCardById(UUID id) throws CustomNotFoundException {
         Optional<Card> cardOptional = cardRepository.findById(id);
         if (cardOptional.isPresent()) {
             return cardOptional.get();

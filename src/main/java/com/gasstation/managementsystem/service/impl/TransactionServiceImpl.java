@@ -25,10 +25,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -68,7 +65,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         for (TransactionDTOCreate T : transactionDTOCreates) {
             Transaction transaction = TransactionMapper.toTransaction(T);
-            Integer cardId = T.getCardId();
+            UUID cardId = T.getCardId();
             if (cardId != null) {
                 transaction.setCard(optionalValidate.getCardById(cardId));
             }

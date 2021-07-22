@@ -5,6 +5,7 @@ import com.gasstation.managementsystem.model.dto.expense.ExpenseDTO;
 import com.gasstation.managementsystem.model.dto.expense.ExpenseDTOCreate;
 import com.gasstation.managementsystem.model.dto.expense.ExpenseDTOUpdate;
 import com.gasstation.managementsystem.service.ExpenseService;
+import com.gasstation.managementsystem.utils.csv.CSVExpenseHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +13,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -56,5 +61,14 @@ public class ExpenseController {
     @DeleteMapping("/expenses/{id}")
     public ExpenseDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
         return expenseService.delete(id);
+    }
+
+    @GetMapping("/expenses/export-csv")
+    public void downloadCSV(HttpServletResponse response) throws IOException {
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; file=expenses.csv");
+        HashMap<String, Object> map = expenseService.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        List<ExpenseDTO> expenseDTOList = map.containsKey("data") ? (List<ExpenseDTO>) map.get("data") : new ArrayList<>();
+        CSVExpenseHelper.writeExpenseToCSV(response.getWriter(), expenseDTOList);
     }
 }

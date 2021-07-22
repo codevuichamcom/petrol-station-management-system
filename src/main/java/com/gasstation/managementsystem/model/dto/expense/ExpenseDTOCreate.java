@@ -19,8 +19,8 @@ public class ExpenseDTOCreate {
     @NotNull(message = "Date is mandatory")
     private Date date;
     private String note;
-    @NotBlank(message = "Station id is mandatory")
+    @NotNull(message = "Station id is mandatory")
     private Integer stationId;
-    @NotBlank(message = "Fuel import id is mandatory")
+    @NotNull(message = "Fuel import id is mandatory")
     private Integer fuelImportId;
 }

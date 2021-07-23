@@ -65,6 +65,7 @@ public class ExpenseController {
 
     @GetMapping("/expenses/export-csv")
     public void downloadCSV(HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
         response.setContentType("text/csv");
         response.setHeader("Content-Disposition", "attachment; file=expenses.csv");
         HashMap<String, Object> map = expenseService.findAll(Sort.by(Sort.Direction.DESC, "id"));

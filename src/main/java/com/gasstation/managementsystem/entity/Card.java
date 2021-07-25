@@ -62,7 +62,7 @@ public class Card {
     private User customer;//Người nào sử dụng thẻ này
 
     @OneToMany(mappedBy = "card")
-    private List<ReceiptBill> receiptBillList = new ArrayList<>();
+    private List<Receipt> receiptList = new ArrayList<>();
 
     @OneToMany(mappedBy = "card")
     private List<Debt> debtList = new ArrayList<>();

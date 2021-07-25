@@ -36,5 +36,5 @@ public class Debt {
     private Station station;
 
     @OneToMany(mappedBy = "debt")
-    private List<ReceiptBill> receiptBillList = new ArrayList<>();
+    private List<Receipt> receiptList = new ArrayList<>();
 }

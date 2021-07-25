@@ -1,55 +1,50 @@
 package com.gasstation.managementsystem.service.impl;
 
-import com.gasstation.managementsystem.entity.ReceiptBill;
-import com.gasstation.managementsystem.model.dto.ReceiptBillDTO;
-import com.gasstation.managementsystem.repository.ReceiptBillRepository;
+import com.gasstation.managementsystem.entity.Receipt;
+import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
+import com.gasstation.managementsystem.model.dto.receipt.ReceiptDTO;
+import com.gasstation.managementsystem.model.dto.receipt.ReceiptDTOCreate;
+import com.gasstation.managementsystem.model.mapper.ReceiptMapper;
+import com.gasstation.managementsystem.repository.ReceiptRepository;
 import com.gasstation.managementsystem.service.ReceiptBillService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.gasstation.managementsystem.utils.OptionalValidate;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ReceiptBillServiceImpl implements ReceiptBillService {
-    @Autowired
-    ReceiptBillRepository receiptBillRepository;
+    private final ReceiptRepository receiptRepository;
+    private final OptionalValidate optionalValidate;
 
-    @Override
-    public HashMap<String, Object> findAll(Pageable pageable) {
-        Page<ReceiptBill> receiptBills = receiptBillRepository.findAll(pageable);
-        List<ReceiptBillDTO> receiptBillDTOS = new ArrayList<>();
-        for (ReceiptBill receiptBill : receiptBills) {
-            receiptBillDTOS.add(new ReceiptBillDTO(receiptBill));
-        }
+    private HashMap<String, Object> listReceiptToMap(List<Receipt> receipts) {
+        List<ReceiptDTO> receiptDTOS = receipts.stream().map(ReceiptMapper::toReceiptDTO).collect(Collectors.toList());
         HashMap<String, Object> map = new HashMap<>();
-        map.put("data", receiptBillDTOS);
-        map.put("totalElement", receiptBills.getTotalElements());
-        map.put("totalPage", receiptBills.getTotalPages());
+        map.put("data", receiptDTOS);
         return map;
     }
 
     @Override
-    public ReceiptBillDTO findById(int id) {
-        return new ReceiptBillDTO(receiptBillRepository.findById(id).get());
+    public HashMap<String, Object> findAll() {
+        return listReceiptToMap(receiptRepository.findAll(Sort.by(Sort.Direction.DESC, "date")));
     }
 
     @Override
-    public ReceiptBillDTO save(ReceiptBill receiptBill) {
-        receiptBillRepository.save(receiptBill);
-        return new ReceiptBillDTO(receiptBill);
+    public ReceiptDTO findById(int id) throws CustomNotFoundException {
+        return ReceiptMapper.toReceiptDTO(optionalValidate.getReceiptById(id));
     }
 
     @Override
-    public ReceiptBillDTO delete(int id) {
-        ReceiptBill receiptBill = receiptBillRepository.findById(id).get();
-        if (receiptBill != null) {
-            receiptBillRepository.delete(receiptBill);
-            return new ReceiptBillDTO(receiptBill);
-        }
-        return null;
+    public ReceiptDTO create(ReceiptDTOCreate receiptDTOCreate) throws CustomNotFoundException {
+        Receipt receipt = ReceiptMapper.toReceipt(receiptDTOCreate);
+        receipt.setCreator(optionalValidate.getUserById(receiptDTOCreate.getCreatorId()));
+        receipt.setCard(optionalValidate.getCardById(receiptDTOCreate.getCardId()));
+        receipt = receiptRepository.save(receipt);
+        return ReceiptMapper.toReceiptDTO(receipt);
     }
 }

@@ -3,23 +3,21 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
-@Table(name = "receipt_bill_tbl")
+@Table(name = "receipt_tbl")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
-public class ReceiptBill {
+public class Receipt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date date = new Date();
+    private long date;
 
     @Column(nullable = false)
     private String reason;

@@ -1,18 +1,15 @@
 package com.gasstation.managementsystem.service;
 
-import com.gasstation.managementsystem.entity.ReceiptBill;
-import com.gasstation.managementsystem.model.dto.ReceiptBillDTO;
-import org.springframework.data.domain.Pageable;
+import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
+import com.gasstation.managementsystem.model.dto.receipt.ReceiptDTO;
+import com.gasstation.managementsystem.model.dto.receipt.ReceiptDTOCreate;
 
 import java.util.HashMap;
-import java.util.List;
 
 public interface ReceiptBillService {
-    public HashMap<String,Object> findAll(Pageable pageable);
+    HashMap<String, Object> findAll();
 
-    public ReceiptBillDTO findById(int id);
+    ReceiptDTO findById(int id) throws CustomNotFoundException;
 
-    public ReceiptBillDTO save(ReceiptBill receiptBill);
-
-    public ReceiptBillDTO delete(int id);
+    ReceiptDTO create(ReceiptDTOCreate receiptDTOCreate) throws CustomNotFoundException;
 }

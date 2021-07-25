@@ -29,6 +29,7 @@ public class OptionalValidate {
     private final FuelImportRepository fuelImportRepository;
     private final ExpenseRepository expenseRepository;
     private final HandOverShiftRepository handOverShiftRepository;
+    private final ReceiptRepository receiptRepository;
 
 
     public User getUserById(int id) throws CustomNotFoundException {
@@ -191,12 +192,18 @@ public class OptionalValidate {
         }
     }
 
-    public HandOverShift getHandOverShiftByPumpIdNotClose(int id, long createdDate, long seconds) throws CustomNotFoundException {
+    public HandOverShift getHandOverShiftByPumpIdNotClose(int id, long createdDate, long seconds) {
         Optional<HandOverShift> handOverShiftOptional = handOverShiftRepository.findByPumpIdNotClose(id, createdDate, seconds);
-        if (handOverShiftOptional.isPresent()) {
-            return handOverShiftOptional.get();
+        return handOverShiftOptional.orElse(null);
+    }
+
+    public Receipt getReceiptById(int id) throws CustomNotFoundException {
+        Optional<Receipt> receiptOptional = receiptRepository.findById(id);
+        if (receiptOptional.isPresent()) {
+            return receiptOptional.get();
         } else {
-            return null;
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found").field("id").message("receipt is not exist").table("receipt_table").build());
         }
     }
 

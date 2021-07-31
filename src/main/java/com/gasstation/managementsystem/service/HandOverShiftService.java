@@ -14,8 +14,6 @@ public interface HandOverShiftService {
 
     HandOverShiftDTO findById(int id) throws CustomNotFoundException;
 
-    HandOverShiftDTO create(HandOverShiftDTOCreate handOverShiftDTOCreate) throws CustomNotFoundException;
-
     HandOverShiftDTO update(int id) throws CustomNotFoundException;
 
     void updateAllByStationId(StationDTOUpdateHandOverShift stationDTOUpdateHandOverShift) throws CustomNotFoundException;

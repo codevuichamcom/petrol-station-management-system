@@ -16,5 +16,6 @@ public class HandOverShiftDTOFilter {
     private Integer[] pumpIds;
     private Integer[] stationIds;
     private String actorName;
+    private String [] statuses;
 
 }

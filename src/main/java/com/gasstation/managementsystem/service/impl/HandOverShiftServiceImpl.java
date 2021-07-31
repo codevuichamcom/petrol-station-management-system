@@ -3,7 +3,6 @@ package com.gasstation.managementsystem.service.impl;
 import com.gasstation.managementsystem.entity.HandOverShift;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTO;
-import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTOCreate;
 import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTOFilter;
 import com.gasstation.managementsystem.model.dto.station.StationDTOUpdateHandOverShift;
 import com.gasstation.managementsystem.model.mapper.HandOverShiftMapper;
@@ -17,12 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,17 +48,6 @@ public class HandOverShiftServiceImpl implements HandOverShiftService {
     @Override
     public HandOverShiftDTO findById(int id) throws CustomNotFoundException {
         return HandOverShiftMapper.toHandOverShiftDTO(optionalValidate.getHandOverShiftById(id));
-    }
-
-    @Override
-    public HandOverShiftDTO create(HandOverShiftDTOCreate handOverShiftDTOCreate) throws CustomNotFoundException {
-        HandOverShift handOverShift = new HandOverShift();
-        LocalDateTime localDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0, 0));
-        handOverShift.setCreatedDate(localDateTime.atZone(TimeZone.getDefault().toZoneId()).toEpochSecond() * 1000);
-        handOverShift.setShift(optionalValidate.getShiftById(handOverShiftDTOCreate.getShiftId()));
-        handOverShift.setPump(optionalValidate.getPumpById(handOverShiftDTOCreate.getPumpId()));
-        handOverShift = handOverShiftRepository.save(handOverShift);
-        return HandOverShiftMapper.toHandOverShiftDTO(handOverShift);
     }
 
     @Override

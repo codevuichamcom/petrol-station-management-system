@@ -96,4 +96,32 @@ public class QueryGenerateHelper {
         map.put("totalPage", totalPage);
         return map;
     }
+
+    public QueryGenerateHelper isNULL(String field) {
+        query
+                .append(" ")
+                .append(field)
+                .append(" IS ")
+                .append(" NULL ");
+        return this;
+    }
+
+    public QueryGenerateHelper isNotNULL(String field) {
+        query
+                .append(" ")
+                .append(field)
+                .append(" IS NOT ")
+                .append(" NULL ");
+        return this;
+    }
+
+    public QueryGenerateHelper or() {
+        query.append(" OR ");
+        return this;
+    }
+
+    public QueryGenerateHelper and() {
+        query.append(" AND ");
+        return this;
+    }
 }

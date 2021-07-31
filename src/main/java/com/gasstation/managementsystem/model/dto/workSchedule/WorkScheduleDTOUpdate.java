@@ -2,7 +2,6 @@ package com.gasstation.managementsystem.model.dto.workSchedule;
 
 import lombok.*;
 
-import java.util.Date;
 import java.util.Objects;
 
 @AllArgsConstructor
@@ -12,8 +11,8 @@ import java.util.Objects;
 @Builder
 public class WorkScheduleDTOUpdate {
     private Integer shiftId;
-    private Date startDate;
-    private Date endDate;
+    private Long startDate;
+    private Long endDate;
 
     @Override
     public boolean equals(Object o) {

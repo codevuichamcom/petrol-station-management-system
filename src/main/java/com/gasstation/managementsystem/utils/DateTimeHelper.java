@@ -42,12 +42,13 @@ public class DateTimeHelper {
         return new SimpleDateFormat(format).format(date);
     }
 
-    public static long toSecond(String timeStr) {
+    public static long toMilliSecond(String timeStr) {
         LocalTime localTime = LocalTime.parse(timeStr);
-        return localTime.getHour() * 60 * 60 + localTime.getMinute() * 60 + localTime.getSecond();
+        return localTime.getHour() * 60 * 60 + localTime.getMinute() * 60 + localTime.getSecond() * 1000;
     }
 
-    public static String formatTime(long second, String format) {
+    public static String formatTime(long milliSeconds, String format) {
+        long second = milliSeconds / 1000;
         int hh = (int) (second / 3600);
         int mm = (int) ((second % 3600) / 60);
         int ss = (int) ((second % 3600) % 60);

@@ -44,8 +44,8 @@ public class WorkScheduleMapper {
                 .id(workSchedule.getId())
                 .employee(employeeDTO)
                 .shift(shiftDTO)
-                .startDate(DateTimeHelper.formatDate(workSchedule.getStartDate(), "yyyy-MM-dd"))
-                .endDate(DateTimeHelper.formatDate(workSchedule.getEndDate(), "yyyy-MM-dd")).build();
+                .startDate(workSchedule.getStartDate())
+                .endDate(workSchedule.getEndDate()).build();
     }
 
     public static WorkSchedule toWorkSchedule(WorkScheduleDTOCreate workScheduleDTOCreate) {

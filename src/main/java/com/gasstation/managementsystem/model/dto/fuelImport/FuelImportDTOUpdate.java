@@ -11,10 +11,10 @@ import java.util.Date;
 @Builder
 public class FuelImportDTOUpdate {
     private String name;
-    private Date date;
+    private Long createdDate;
     private Double volume;
     private Double unitPrice;
-    private Double paid;
+    private Double amountPaid;
     private Double vatPercent;
     private String note;
     private Integer tankId;

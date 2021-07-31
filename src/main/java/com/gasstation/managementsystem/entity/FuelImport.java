@@ -1,10 +1,10 @@
 package com.gasstation.managementsystem.entity;
 
+import com.gasstation.managementsystem.utils.DateTimeHelper;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -23,8 +23,7 @@ public class FuelImport {
     private String name;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date date = new Date();
+    private long createdDate = DateTimeHelper.getCurrentDate();
 
     @Column(nullable = false)
     private double volume = 0;
@@ -33,7 +32,7 @@ public class FuelImport {
     private double unitPrice = 0;
 
     @Column(nullable = false)
-    private double paid = 0;
+    private double amountPaid = 0;
 
     private String note;
 

@@ -33,8 +33,8 @@ public class ShiftMapper {
         if (shiftDTOCreate == null) return null;
         return Shift.builder()
                 .name(shiftDTOCreate.getName())
-                .startTime(DateTimeHelper.toSecond(shiftDTOCreate.getStartTime()))
-                .endTime(DateTimeHelper.toSecond(shiftDTOCreate.getEndTime())).build();
+                .startTime(DateTimeHelper.toMilliSecond(shiftDTOCreate.getStartTime()))
+                .endTime(DateTimeHelper.toMilliSecond(shiftDTOCreate.getEndTime())).build();
     }
 
     public static void copyNonNullToShift(Shift shift, ShiftDTOUpdate shiftDTOUpdate) {
@@ -45,10 +45,10 @@ public class ShiftMapper {
             shift.setName(name);
         }
         if (startTime != null) {
-            shift.setStartTime(DateTimeHelper.toSecond(startTime));
+            shift.setStartTime(DateTimeHelper.toMilliSecond(startTime));
         }
         if (endTime != null) {
-            shift.setEndTime(DateTimeHelper.toSecond(endTime));
+            shift.setEndTime(DateTimeHelper.toMilliSecond(endTime));
         }
     }
 }

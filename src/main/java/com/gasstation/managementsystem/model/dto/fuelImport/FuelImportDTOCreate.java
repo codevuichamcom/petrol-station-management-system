@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,7 +15,7 @@ public class FuelImportDTOCreate {
     private String name;
 
     @NotNull(message = "Date is mandatory")
-    private Date date;
+    private Long createdDate;
 
     @NotNull(message = "Volume is mandatory")
     private Double volume;
@@ -25,7 +24,7 @@ public class FuelImportDTOCreate {
     private Double unitPrice;
 
     @NotNull(message = "Paid is mandatory")
-    private Double paid;
+    private Double amountPaid;
 
     @NotNull(message = "VAT percent is mandatory")
     private Double vatPercent;

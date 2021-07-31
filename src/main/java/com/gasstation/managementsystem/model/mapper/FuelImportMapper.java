@@ -9,7 +9,6 @@ import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import com.gasstation.managementsystem.model.dto.supplier.SupplierDTO;
 import com.gasstation.managementsystem.model.dto.tank.TankDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
-import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.NullAwareBeanUtilsBean;
 import org.apache.commons.beanutils.BeanUtilsBean;
 
@@ -40,10 +39,10 @@ public class FuelImportMapper {
         return FuelImportDTO.builder()
                 .id(fuelImport.getId())
                 .name(fuelImport.getName())
-                .date(DateTimeHelper.formatDate(fuelImport.getDate(), "yyyy-MM-dd"))
+                .createdDate(fuelImport.getCreatedDate())
                 .volume(fuelImport.getVolume())
                 .unitPrice(fuelImport.getUnitPrice())
-                .paid(fuelImport.getPaid())
+                .amountPaid(fuelImport.getAmountPaid())
                 .vatPercent(fuelImport.getVatPercent())
                 .note(fuelImport.getNote())
                 .tank(tankDTO)
@@ -56,10 +55,10 @@ public class FuelImportMapper {
         if (fuelImportDTOCreate == null) return null;
         return FuelImport.builder()
                 .name(fuelImportDTOCreate.getName())
-                .date(fuelImportDTOCreate.getDate())
+                .createdDate(fuelImportDTOCreate.getCreatedDate())
                 .volume(fuelImportDTOCreate.getVolume())
                 .unitPrice(fuelImportDTOCreate.getUnitPrice())
-                .paid(fuelImportDTOCreate.getPaid())
+                .amountPaid(fuelImportDTOCreate.getAmountPaid())
                 .vatPercent(fuelImportDTOCreate.getVatPercent())
                 .note(fuelImportDTOCreate.getNote())
                 .build();

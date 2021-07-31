@@ -71,12 +71,12 @@ public class TransactionServiceImpl implements TransactionService {
             }
             LocalDateTime localDateTime = DateTimeHelper.toDateTime(T.getTime());
             LocalDate localDate = LocalDate.of(localDateTime.getYear(), localDateTime.getMonth(), localDateTime.getDayOfMonth());
-            long seconds = localDateTime.getHour() * 3600 + localDateTime.getMinute() * 60 + localDateTime.getSecond();
+            long milliSeconds = localDateTime.getHour() * 3600 + localDateTime.getMinute() * 60 + localDateTime.getSecond()*1000;
 
             HandOverShift handOverShift = optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(),
                     LocalDateTime.of(localDate, LocalTime.MIN)
                             .atZone(TimeZone.getDefault()
-                                    .toZoneId()).toEpochSecond() * 1000, seconds);
+                                    .toZoneId()).toEpochSecond() * 1000, milliSeconds);
             if (handOverShift == null) {
                 handOverShift = handOverShiftCriteria.getHandOverShiftToday();
                 if (handOverShift == null) {
@@ -84,7 +84,7 @@ public class TransactionServiceImpl implements TransactionService {
                     handOverShift = optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(),
                             LocalDateTime.of(localDate, LocalTime.MIN)
                                     .atZone(TimeZone.getDefault()
-                                            .toZoneId()).toEpochSecond() * 1000, seconds);
+                                            .toZoneId()).toEpochSecond() * 1000, milliSeconds);
                 } else {
                     throw new CustomNotFoundException(CustomError.builder()
                             .code("not.found").field("id").message("Hand over shift is not exist").table("hand_over_shift_table").build());

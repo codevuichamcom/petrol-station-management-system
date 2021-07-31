@@ -14,8 +14,8 @@ public class WorkScheduleDTO {
     private int id;
     private EmployeeDTO employee;
     private ShiftDTO shift;
-    private String startDate;
-    private String endDate;
+    private Long startDate;
+    private Long endDate;
 
 
 }

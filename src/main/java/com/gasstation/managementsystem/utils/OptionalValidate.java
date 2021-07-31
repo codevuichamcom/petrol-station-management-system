@@ -192,8 +192,8 @@ public class OptionalValidate {
         }
     }
 
-    public HandOverShift getHandOverShiftByPumpIdNotClose(int id, long createdDate, long seconds) {
-        Optional<HandOverShift> handOverShiftOptional = handOverShiftRepository.findByPumpIdNotClose(id, createdDate, seconds);
+    public HandOverShift getHandOverShiftByPumpIdNotClose(int id, long createdDate, long milliSeconds) {
+        Optional<HandOverShift> handOverShiftOptional = handOverShiftRepository.findByPumpIdNotClose(id, createdDate, milliSeconds);
         return handOverShiftOptional.orElse(null);
     }
 

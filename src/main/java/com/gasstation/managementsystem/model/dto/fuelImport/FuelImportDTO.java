@@ -16,10 +16,10 @@ import java.util.Objects;
 public class FuelImportDTO {
     private int id;
     private String name;
-    private String date;
+    private Long createdDate;
     private Double volume;
     private Double unitPrice;
-    private Double paid;
+    private Double amountPaid;
     private Double vatPercent;
     private String note;
     private TankDTO tank;
@@ -32,6 +32,6 @@ public class FuelImportDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FuelImportDTO that = (FuelImportDTO) o;
-        return id == that.id && Objects.equals(name, that.name) && Objects.equals(date, that.date) && Objects.equals(volume, that.volume) && Objects.equals(unitPrice, that.unitPrice) && Objects.equals(paid, that.paid) && Objects.equals(vatPercent, that.vatPercent) && Objects.equals(note, that.note) && Objects.equals(tank, that.tank) && Objects.equals(supplier, that.supplier);
+        return id == that.id && Objects.equals(name, that.name) && Objects.equals(createdDate, that.createdDate) && Objects.equals(volume, that.volume) && Objects.equals(unitPrice, that.unitPrice) && Objects.equals(amountPaid, that.amountPaid) && Objects.equals(vatPercent, that.vatPercent) && Objects.equals(note, that.note) && Objects.equals(tank, that.tank) && Objects.equals(supplier, that.supplier) && Objects.equals(creator, that.creator) && Objects.equals(fuel, that.fuel);
     }
 }

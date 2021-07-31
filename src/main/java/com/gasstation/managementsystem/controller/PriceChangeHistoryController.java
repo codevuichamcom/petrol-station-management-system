@@ -28,29 +28,4 @@ public class PriceChangeHistoryController {
         }
         return priceChangeHistoryService.findAllByTankId(tankId);
     }
-
-//    @Operation(summary = "Find priceChangeHistory by id")
-//    @GetMapping("/price-change-history/{id}")
-//    public PriceChangeHistoryDTO getOne(@PathVariable(name = "id") Integer id) {
-//        return priceChangeHistoryService.findById(id);
-//    }
-//
-//    @Operation(summary = "Create new priceChangeHistory")
-//    @PostMapping("/price-change-history")
-//    public PriceChangeHistoryDTO create(@Valid @RequestBody PriceChangeHistory priceChangeHistory) {
-//        return priceChangeHistoryService.save(priceChangeHistory);
-//    }
-//
-//    @Operation(summary = "Update priceChangeHistory by id")
-//    @PutMapping("/price-change-history/{id}")
-//    public PriceChangeHistoryDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody PriceChangeHistory priceChangeHistory) {
-//        priceChangeHistory.setId(id);
-//        return priceChangeHistoryService.save(priceChangeHistory);
-//    }
-//
-//    @Operation(summary = "Delete priceChangeHistory by id")
-//    @DeleteMapping("/price-change-history/{id}")
-//    public PriceChangeHistoryDTO delete(@PathVariable(name = "id") Integer id) {
-//        return priceChangeHistoryService.delete(id);
-//    }
 }

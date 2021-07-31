@@ -1,9 +1,9 @@
 package com.gasstation.managementsystem.entity;
 
+import com.gasstation.managementsystem.utils.DateTimeHelper;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "expense_tbl")
@@ -18,9 +18,8 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Temporal(TemporalType.DATE)
     @Column(nullable = false)
-    private Date date;
+    private long createdDate = DateTimeHelper.getCurrentDate();
 
     @Column(nullable = false)
     private String note;

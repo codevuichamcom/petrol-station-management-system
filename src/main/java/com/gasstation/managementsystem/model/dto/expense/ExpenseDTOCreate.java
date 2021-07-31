@@ -17,7 +17,7 @@ public class ExpenseDTOCreate {
     @NotNull(message = "Amount is mandatory")
     private Double amount;
     @NotNull(message = "Date is mandatory")
-    private Date date;
+    private Long createdDate;
     private String note;
     @NotNull(message = "Station id is mandatory")
     private Integer stationId;

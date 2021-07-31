@@ -36,7 +36,7 @@ public class Transaction {
 
 
     @ManyToOne
-    @JoinColumn(name = "hand_over_ship_id")//todo
+    @JoinColumn(name = "hand_over_shift_id", nullable = false)
     @ToString.Exclude
     private HandOverShift handOverShift;
 

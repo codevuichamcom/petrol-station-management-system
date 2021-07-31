@@ -29,12 +29,10 @@ public class WorkSchedule {
     private Shift shift;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date startDate;
+    private long startDate;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date endDate;
+    private long endDate;
 
     @Override
     public boolean equals(Object o) {

@@ -3,7 +3,6 @@ package com.gasstation.managementsystem.model.dto.workSchedule;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,7 +15,7 @@ public class WorkScheduleDTOCreate {
     @NotNull(message = "Shift id is mandatory")
     private Integer shiftId;
     @NotNull(message = "Start time id is mandatory")
-    private Date startDate;
+    private Long startDate;
     @NotNull(message = "End Time id is mandatory")
-    private Date endDate;
+    private Long endDate;
 }

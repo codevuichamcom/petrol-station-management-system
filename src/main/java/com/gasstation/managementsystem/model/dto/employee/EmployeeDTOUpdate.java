@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.Pattern;
-import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +18,7 @@ public class EmployeeDTOUpdate {
     @Pattern(regexp = "^[0-9]{10,11}$", message = "Phone just include 10 or 11 digit")
     private String phone;
     private Boolean gender;
-    private Date dateOfBirth;
+    private Long dateOfBirth;
     @Schema(example = "123456789", description = "Identity card number is composed of 9, 10, 12 or 13 digits")
     @Pattern(regexp = "^[0-9]{9}|[0-9]{10}|[0-9]{12}|[0-9]{13}$", message = "Identity card number is composed of 9, 10, 12 or 13 digits")
     private String identityCardNumber;

@@ -6,7 +6,6 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,8 +28,8 @@ public class EmployeeDTOCreate {
     @NotNull(message = "Name is mandatory")
     private Boolean gender;
 
-    @NotNull(message = "Name is mandatory")
-    private Date dateOfBirth;
+    @NotNull(message = "Date of birth is mandatory")
+    private Long dateOfBirth;
 
     @Schema(example = "123456789", description = "Identity card number is composed of 9, 10, 12 or 13 digits")
     @NotBlank(message = "Identity card number is mandatory")

@@ -5,7 +5,6 @@ import com.gasstation.managementsystem.model.dto.employee.EmployeeDTO;
 import com.gasstation.managementsystem.model.dto.employee.EmployeeDTOCreate;
 import com.gasstation.managementsystem.model.dto.employee.EmployeeDTOUpdate;
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
-import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.NullAwareBeanUtilsBean;
 import org.apache.commons.beanutils.BeanUtilsBean;
 
@@ -22,7 +21,7 @@ public class EmployeeMapper {
                 .address(employee.getAddress())
                 .phone(employee.getPhone())
                 .gender(employee.getGender())
-                .dateOfBirth(DateTimeHelper.formatDate(employee.getDateOfBirth(), "yyyy-MM-dd"))
+                .dateOfBirth(employee.getDateOfBirth())
                 .identityCardNumber(employee.getIdentityCardNumber())
                 .station(stationDTO).build();
     }

@@ -18,7 +18,7 @@ public class UserDTO {
     private String identityCardNumber;//số chứng minh nhân dân
     private String name;
     private Boolean gender;
-    private String dateOfBirth;
+    private Long dateOfBirth;
     private String address;
     private String phone;
     private String email;

@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -32,8 +31,7 @@ public class Employee {
     private Boolean gender = true;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date dateOfBirth;
+    private long dateOfBirth;
 
     @Column(nullable = false, unique = true)
     private String identityCardNumber;

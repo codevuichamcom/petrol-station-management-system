@@ -36,7 +36,7 @@ public class UserDTOUpdate {
 
     @Schema(description = "Must be in past")
     @Past(message = "Must be in past")
-    private Date dateOfBirth;
+    private Long dateOfBirth;
 
     @Schema(example = "Hà Nội", description = "Length greater than 3")
     @Length(min = 3, message = "Address has length greater than 3")

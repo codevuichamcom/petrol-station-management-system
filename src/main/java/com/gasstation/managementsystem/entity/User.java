@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -33,8 +32,8 @@ public class User {
 
     private boolean gender = false;
 
-    @Temporal(TemporalType.DATE)
-    private Date dateOfBirth;
+    @Column(nullable = false)
+    private long dateOfBirth;
 
     @Column(nullable = false)
     private String address;

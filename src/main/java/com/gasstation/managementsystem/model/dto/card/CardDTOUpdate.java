@@ -2,8 +2,6 @@ package com.gasstation.managementsystem.model.dto.card;
 
 import lombok.*;
 
-import java.util.Date;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -18,9 +16,9 @@ public class CardDTOUpdate {
     private Double availableBalance;
     private Double outstandingBalance;
     private Double debtLimit;
-    private Date limitSetDate;
-    private Date issuedDate;
-    private Date activeDate;
+    private Long limitSetDate;
+    private Long issuedDate;
+    private Long activeDate;
     private Integer activateUserId;
     private Integer customerId;
 

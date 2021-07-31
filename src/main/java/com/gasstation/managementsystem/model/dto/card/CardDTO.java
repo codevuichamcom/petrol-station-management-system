@@ -21,9 +21,9 @@ public class CardDTO {
     private Double availableBalance;
     private Double outstandingBalance;
     private Double debtLimit;
-    private String limitSetDate;
-    private String issuedDate;
-    private String activeDate;
+    private Long limitSetDate;
+    private Long issuedDate;
+    private Long activeDate;
     private UserDTO activateUser;
     private UserDTO customer;
 

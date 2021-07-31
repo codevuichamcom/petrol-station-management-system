@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,22 +38,17 @@ public class Card {
     @Column(nullable = false)
     private double debtLimit = 0;
 
-    @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date limitSetDate = new Date();
+    private long limitSetDate;
 
-    @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date issuedDate;
+    private long issuedDate;
 
-    @Temporal(TemporalType.DATE)
-    private Date activeDate;
+    private long activeDate;
 
     @OneToMany(mappedBy = "card")
     private List<Transaction> transactionList;//Danh sách mã bơm trả bằng thẻ này
 
     @ManyToOne
-    @JoinColumn(name = "activate_user_id", nullable = false)
+    @JoinColumn(name = "activate_user_id")
     private User activateUser; //Ai active thẻ này
 
     @ManyToOne

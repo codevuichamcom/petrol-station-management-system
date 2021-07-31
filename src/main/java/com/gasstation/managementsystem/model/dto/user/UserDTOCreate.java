@@ -45,7 +45,7 @@ public class UserDTOCreate {
 
     @Schema(description = "Must be in past")
     @Past(message = "Must be in past")
-    private Date dateOfBirth;
+    private Long dateOfBirth;
 
     @Schema(example = "Hà Nội", description = "Length greater than 3")
     @NotBlank(message = "Address is mandatory")

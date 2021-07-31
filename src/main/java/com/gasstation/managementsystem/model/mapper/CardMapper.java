@@ -6,7 +6,6 @@ import com.gasstation.managementsystem.model.dto.card.CardDTO;
 import com.gasstation.managementsystem.model.dto.card.CardDTOCreate;
 import com.gasstation.managementsystem.model.dto.card.CardDTOUpdate;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
-import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.NullAwareBeanUtilsBean;
 import org.apache.commons.beanutils.BeanUtilsBean;
 
@@ -27,9 +26,9 @@ public class CardMapper {
                 .availableBalance(card.getAvailableBalance())
                 .outstandingBalance(card.getOutstandingBalance())
                 .debtLimit(card.getDebtLimit())
-                .limitSetDate(DateTimeHelper.formatDate(card.getLimitSetDate(), "yyyy-MM-dd"))
-                .issuedDate(DateTimeHelper.formatDate(card.getIssuedDate(), "yyyy-MM-dd"))
-                .activeDate(DateTimeHelper.formatDate(card.getActiveDate(), "yyyy-MM-dd"))
+                .limitSetDate(card.getLimitSetDate())
+                .issuedDate(card.getIssuedDate())
+                .activeDate(card.getActiveDate())
                 .activateUser(activateUserDTO)
                 .customer(customerDTO)
                 .build();

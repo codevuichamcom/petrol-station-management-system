@@ -1,11 +1,9 @@
 package com.gasstation.managementsystem.model.dto.employee;
 
-import com.gasstation.managementsystem.entity.WorkSchedule;
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import lombok.*;
 
 import java.util.Objects;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +17,7 @@ public class EmployeeDTO {
     private String address;
     private String phone;
     private Boolean gender;
-    private String dateOfBirth;
+    private Long dateOfBirth;
     private String identityCardNumber;
     private StationDTO station;
 

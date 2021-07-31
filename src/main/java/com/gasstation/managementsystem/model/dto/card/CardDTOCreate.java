@@ -5,7 +5,6 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,11 +29,11 @@ public class CardDTOCreate {
     @NotNull(message = "Debt Limit is mandatory")
     private Double debtLimit;
     @NotNull(message = "limit Set Date is mandatory")
-    private Date limitSetDate;
+    private Long limitSetDate;
     @NotNull(message = "Issued Date is mandatory")
-    private Date issuedDate;
+    private Long issuedDate;
     @NotNull(message = "Active Date is mandatory")
-    private Date activeDate;
+    private Long activeDate;
     @NotNull(message = "Activate User Id is mandatory")
     private Integer activateUserId;
     @NotNull(message = "Customer id is mandatory")

@@ -5,11 +5,28 @@ import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTOCreate;
 import com.gasstation.managementsystem.model.dto.user.UserDTOUpdate;
-import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.NullAwareBeanUtilsBean;
 import org.apache.commons.beanutils.BeanUtilsBean;
 
 public class UserMapper {
+
+    public static UserDTO toUserDTO(User user) {
+        if (user == null) return null;
+        return UserDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .identityCardNumber(user.getIdentityCardNumber())
+                .name(user.getName())
+                .gender(user.isGender())
+                .dateOfBirth(user.getDateOfBirth())
+                .address(user.getAddress())
+                .phone(user.getPhone())
+                .email(user.getEmail())
+                .note(user.getNote())
+                .active(user.isActive())
+                .userType(UserTypeMapper.toUserTypeDTO(user.getUserType())).build();
+    }
+
     public static User toUser(UserDTOCreate userDTOCreate) {
         if (userDTOCreate == null) return null;
         return User.builder()
@@ -25,24 +42,6 @@ public class UserMapper {
                 .note(userDTOCreate.getNote())
                 .active(true)
                 .userType(UserType.builder().id(userDTOCreate.getUserTypeId()).build()).build();
-    }
-
-
-    public static UserDTO toUserDTO(User user) {
-        if (user == null) return null;
-        return UserDTO.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .identityCardNumber(user.getIdentityCardNumber())
-                .name(user.getName())
-                .gender(user.isGender())
-                .dateOfBirth(DateTimeHelper.formatDate(user.getDateOfBirth(), "yyyy-MM-dd"))
-                .address(user.getAddress())
-                .phone(user.getPhone())
-                .email(user.getEmail())
-                .note(user.getNote())
-                .active(user.isActive())
-                .userType(UserTypeMapper.toUserTypeDTO(user.getUserType())).build();
     }
 
     public static void copyToUser(User user, UserDTOUpdate userDTOUpdate) {

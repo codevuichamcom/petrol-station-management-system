@@ -24,48 +24,58 @@ public class HandOverShiftRepositoryCriteria {
         QueryGenerateHelper qHelper = new QueryGenerateHelper();
         qHelper.setQuery(query);
         String[] statuses = filter.getStatuses();
-        Map<String, String> statusMap = new HashMap<>();
-        if (statuses != null && statuses.length != 0) {
-            for (String status : statuses) {
-                if (status.trim().equalsIgnoreCase("UNCLOSE")) {
-                    statusMap.put("UNCLOSE", "UNCLOSE");
-                }
-                if (status.trim().equalsIgnoreCase("CLOSED")) {
-                    statusMap.put("CLOSED", "CLOSED");
-                }
-            }
-        }
+        Map<String, String> statusMap = toMap(statuses);
+
         qHelper.between("h.createdDate", 0L, filter.getCreatedDate(), "createdDate", filter.getCreatedDate())
                 .in("t.station.id", "stationIds", filter.getStationIds())
                 .in("h.shift.id", "shiftIds", filter.getShiftIds())
                 .in("p.id", "pumpIds", filter.getPumpIds())
                 .like("h.actor.name", "actorName", filter.getActorName());
         boolean isOr = false;
-        if (statusMap.containsKey("UNCLOSE")) {
-            qHelper.and().isNULL("h.closedTime");
-            isOr = true;
-        }
-        if (statusMap.containsKey("CLOSED")) {
-            if (isOr) {
-                qHelper.or();
-            } else {
-                qHelper.and();
-            }
-
-            qHelper.getQuery().append(" ( ");
-            qHelper.isNotNULL("h.closedTime")
-                    .between("h.closedTime", 0L, filter.getClosedTime(), "closedTime", filter.getClosedTime());
-            qHelper.getQuery().append(" ) ");
-        }
-        if(statuses==null||statuses.length==0){
+        if (statuses == null || statuses.length == 0) {
             qHelper.between("h.closedTime", 0L, filter.getClosedTime(), "closedTime", filter.getClosedTime());
+        } else {
+            if (statusMap.containsKey(HandOverShiftDTOFilter.STATUS_UNCLOSE)) {
+                qHelper.and().openBracket().isNULL("h.closedTime");
+                isOr = true;
+            }
+            if (statusMap.containsKey(HandOverShiftDTOFilter.STATUS_CLOSED)) {
+                if (isOr) {
+                    qHelper.or();
+                } else {
+                    qHelper.and();
+                }
+                qHelper.openBracket()
+                        .isNotNULL("h.closedTime")
+                        .between("h.closedTime", 0L, filter.getClosedTime(), "closedTime", filter.getClosedTime())
+                        .closeBracket();
+            }
+            if (isOr) {
+                qHelper.closeBracket();
+            }
         }
+
+
         String countQuery = qHelper.getQuery().toString().replace("select h", "select count(h.id)");
         Query countTotalQuery = em.createQuery(countQuery);
         qHelper.sort("h.createdDate", "DESC");
         TypedQuery<HandOverShift> tQuery = em.createQuery(qHelper.getQuery().toString(), HandOverShift.class);
-        System.out.println("Query" + qHelper.getQuery());
         return qHelper.paging(tQuery, countTotalQuery, filter.getPageIndex(), filter.getPageSize());
+    }
+
+    private Map<String, String> toMap(String[] statuses) {
+        Map<String, String> map = new HashMap<>();
+        if (statuses != null && statuses.length != 0) {
+            for (String status : statuses) {
+                if (status.trim().equalsIgnoreCase(HandOverShiftDTOFilter.STATUS_UNCLOSE)) {
+                    map.put(HandOverShiftDTOFilter.STATUS_UNCLOSE, "UNCLOSE");
+                }
+                if (status.trim().equalsIgnoreCase(HandOverShiftDTOFilter.STATUS_CLOSED)) {
+                    map.put(HandOverShiftDTOFilter.STATUS_CLOSED, "CLOSED");
+                }
+            }
+        }
+        return map;
     }
 
     public HandOverShift getHandOverShiftToday() {

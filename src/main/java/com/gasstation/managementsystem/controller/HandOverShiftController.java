@@ -58,7 +58,7 @@ public class HandOverShiftController {
 
     @Operation(summary = "Hand Over Shift")
     @PutMapping("/hand-over-shifts")
-    public void updateAllByStationId(@RequestBody StationDTOUpdateHandOverShift stationId) throws CustomNotFoundException {
+    public void updateAllByStationId(@RequestParam(name = "stationId")Integer stationId) throws CustomNotFoundException {
         handOverShiftService.updateAllByStationId(stationId);
     }
 }

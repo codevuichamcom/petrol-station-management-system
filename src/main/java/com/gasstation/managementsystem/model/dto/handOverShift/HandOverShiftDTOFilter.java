@@ -8,6 +8,8 @@ import lombok.*;
 @Setter
 @Builder
 public class HandOverShiftDTOFilter {
+    public static final String STATUS_CLOSED = "CLOSED";
+    public static final String STATUS_UNCLOSE = "UNCLOSE";
     private Integer pageIndex;
     private Integer pageSize;
     private Long createdDate;
@@ -16,6 +18,6 @@ public class HandOverShiftDTOFilter {
     private Integer[] pumpIds;
     private Integer[] stationIds;
     private String actorName;
-    private String [] statuses;
+    private String[] statuses;
 
 }

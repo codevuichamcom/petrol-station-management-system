@@ -11,7 +11,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-
+@ToString
 public class CardDTO {
     private UUID id;
     private String driverPhone;
@@ -32,7 +32,6 @@ public class CardDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CardDTO cardDTO = (CardDTO) o;
-        return id == cardDTO.id && Objects.equals(driverPhone, cardDTO.driverPhone) && Objects.equals(driverName, cardDTO.driverName) && Objects.equals(licensePalates, cardDTO.licensePalates) && Objects.equals(initialDebt, cardDTO.initialDebt) && Objects.equals(availableBalance, cardDTO.availableBalance) && Objects.equals(outstandingBalance, cardDTO.outstandingBalance) && Objects.equals(debtLimit, cardDTO.debtLimit) && Objects.equals(limitSetDate, cardDTO.limitSetDate) && Objects.equals(issuedDate, cardDTO.issuedDate) && Objects.equals(activeDate, cardDTO.activeDate) && Objects.equals(activateUser, cardDTO.activateUser) && Objects.equals(customer, cardDTO.customer);
+        return Objects.equals(id, cardDTO.id) && Objects.equals(driverPhone, cardDTO.driverPhone) && Objects.equals(driverName, cardDTO.driverName) && Objects.equals(licensePalates, cardDTO.licensePalates) && Objects.equals(initialDebt, cardDTO.initialDebt) && Objects.equals(availableBalance, cardDTO.availableBalance) && Objects.equals(outstandingBalance, cardDTO.outstandingBalance) && Objects.equals(debtLimit, cardDTO.debtLimit) && Objects.equals(limitSetDate, cardDTO.limitSetDate) && Objects.equals(issuedDate, cardDTO.issuedDate) && Objects.equals(activeDate, cardDTO.activeDate) && Objects.equals(activateUser, cardDTO.activateUser) && Objects.equals(customer, cardDTO.customer);
     }
-
 }

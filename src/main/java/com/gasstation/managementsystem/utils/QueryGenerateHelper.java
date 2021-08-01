@@ -124,4 +124,13 @@ public class QueryGenerateHelper {
         query.append(" AND ");
         return this;
     }
+    public QueryGenerateHelper openBracket() {
+        query.append(" ( ");
+        return this;
+    }
+
+    public QueryGenerateHelper closeBracket() {
+        query.append(" ) ");
+        return this;
+    }
 }

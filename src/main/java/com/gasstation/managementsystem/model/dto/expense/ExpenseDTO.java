@@ -11,6 +11,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Builder
+@ToString
 public class ExpenseDTO {
     private int id;
     private String reason;
@@ -27,5 +28,4 @@ public class ExpenseDTO {
         ExpenseDTO that = (ExpenseDTO) o;
         return id == that.id && Objects.equals(reason, that.reason) && Objects.equals(amount, that.amount) && Objects.equals(createdDate, that.createdDate) && Objects.equals(note, that.note) && Objects.equals(station, that.station) && Objects.equals(fuelImport, that.fuelImport);
     }
-
 }

@@ -4,7 +4,6 @@ import com.gasstation.managementsystem.entity.HandOverShift;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTO;
 import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTOFilter;
-import com.gasstation.managementsystem.model.dto.station.StationDTOUpdateHandOverShift;
 import com.gasstation.managementsystem.model.mapper.HandOverShiftMapper;
 import com.gasstation.managementsystem.repository.HandOverShiftRepository;
 import com.gasstation.managementsystem.repository.criteria.HandOverShiftRepositoryCriteria;
@@ -29,8 +28,9 @@ public class HandOverShiftServiceImpl implements HandOverShiftService {
     private final OptionalValidate optionalValidate;
     private final UserHelper userHelper;
 
-    private HashMap<String, Object> listHandOverShiftToMap(List<HandOverShift> tanks) {
-        List<HandOverShiftDTO> tankDTOS = tanks.stream().map(HandOverShiftMapper::toHandOverShiftDTO).collect(Collectors.toList());
+    private HashMap<String, Object> listHandOverShiftToMap(List<HandOverShift> handOverShifts) {
+        if (handOverShifts == null) return new HashMap<>();
+        List<HandOverShiftDTO> tankDTOS = handOverShifts.stream().map(HandOverShiftMapper::toHandOverShiftDTO).collect(Collectors.toList());
         HashMap<String, Object> map = new HashMap<>();
         map.put("data", tankDTOS);
         return map;
@@ -59,17 +59,18 @@ public class HandOverShiftServiceImpl implements HandOverShiftService {
     }
 
     @Override
-    public void updateAllByStationId(StationDTOUpdateHandOverShift stationDTOUpdateHandOverShift) throws CustomNotFoundException {
-        int stationId = stationDTOUpdateHandOverShift.getStationId();
+    public HashMap<String, Object> updateAllByStationId(int stationId) throws CustomNotFoundException {
         optionalValidate.getStationById(stationId);
         List<HandOverShift> handOverShifts = handOverShiftRepository.findAllByStationId(stationId);
         if (handOverShifts != null && handOverShifts.size() != 0) {
+            long currentTime = DateTimeHelper.getCurrentUnixTime();
             for (HandOverShift handOverShift : handOverShifts) {
-                handOverShift.setClosedTime(DateTimeHelper.getCurrentUnixTime());
+                handOverShift.setClosedTime(currentTime);
                 handOverShift.setActor(userHelper.getUserLogin());
             }
             handOverShiftRepository.saveAll(handOverShifts);
         }
+        return listHandOverShiftToMap(handOverShifts);
     }
 
 

@@ -30,6 +30,7 @@ public class OptionalValidate {
     private final ExpenseRepository expenseRepository;
     private final HandOverShiftRepository handOverShiftRepository;
     private final ReceiptRepository receiptRepository;
+    private final DebtRepository debtRepository;
 
 
     public User getUserById(int id) throws CustomNotFoundException {
@@ -157,7 +158,7 @@ public class OptionalValidate {
             return workScheduleOptional.get();
         } else {
             throw new CustomNotFoundException(CustomError.builder()
-                    .code("not.found").message("Not found work schedule id")
+                    .code("not.found").message("Work schedule is not exist")
                     .table("work_schedule_tbl").build());
         }
     }
@@ -204,6 +205,16 @@ public class OptionalValidate {
         } else {
             throw new CustomNotFoundException(CustomError.builder()
                     .code("not.found").field("id").message("receipt is not exist").table("receipt_table").build());
+        }
+    }
+
+    public Debt getDebtById(int id) throws CustomNotFoundException {
+        Optional<Debt> debtOptional = debtRepository.findById(id);
+        if (debtOptional.isPresent()) {
+            return debtOptional.get();
+        } else {
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found").field("id").message("debt is not exist").table("debt_table").build());
         }
     }
 

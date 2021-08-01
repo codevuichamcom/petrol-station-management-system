@@ -6,7 +6,7 @@ import com.gasstation.managementsystem.model.dto.receipt.ReceiptDTOCreate;
 
 import java.util.HashMap;
 
-public interface ReceiptBillService {
+public interface ReceiptService {
     HashMap<String, Object> findAll();
 
     ReceiptDTO findById(int id) throws CustomNotFoundException;

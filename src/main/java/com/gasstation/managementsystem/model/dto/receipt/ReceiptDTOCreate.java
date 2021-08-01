@@ -12,9 +12,6 @@ import java.util.UUID;
 @Setter
 @Builder
 public class ReceiptDTOCreate {
-    @NotNull(message = "Date is mandatory")
-    private Long date;
-
     @NotBlank(message = "Reason is mandatory")
     private String reason;
 
@@ -27,9 +24,9 @@ public class ReceiptDTOCreate {
     @NotBlank(message = "Note is mandatory")
     private String note;
 
-    @NotNull(message = "Creator Id is mandatory")
-    private Integer creatorId;
-
     @NotNull(message = "Card Id is mandatory")
     private UUID cardId;
+
+    @NotNull(message = "Debt Id is mandatory")
+    private Integer debtId;
 }

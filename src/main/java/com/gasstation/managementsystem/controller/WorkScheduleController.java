@@ -54,7 +54,7 @@ public class WorkScheduleController {
         return workScheduleService.update(id, workScheduleDTOUpdate);
     }
 
-    @Operation(summary = "Delete tank by id")
+    @Operation(summary = "Delete work schedule by id")
     @DeleteMapping("/work-schedules/{id}")
     public WorkScheduleDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
         return workScheduleService.delete(id);

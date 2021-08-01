@@ -17,7 +17,7 @@ public class Receipt {
     private int id;
 
     @Column(nullable = false)
-    private long date;
+    private Long createdDate;
 
     @Column(nullable = false)
     private String reason;

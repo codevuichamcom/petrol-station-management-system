@@ -7,12 +7,14 @@ import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.api.ApiDTO;
 import com.gasstation.managementsystem.model.dto.api.ApiDTOCreate;
 import com.gasstation.managementsystem.model.dto.api.ApiDTOUpdate;
+import com.gasstation.managementsystem.model.mapper.ApiMapper;
 import com.gasstation.managementsystem.repository.ApiRepository;
 import com.gasstation.managementsystem.service.ApiService;
 import com.gasstation.managementsystem.utils.UserHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -57,7 +59,7 @@ public class ApiController {
 
 
     private boolean isRouteIgnore(String route) {
-        List<String> listRouteIgnore = Arrays.asList("refresh-token", "swagger-ui.html", "user-types", "api", "endpoints", "login", "profile","fuels","shifts");
+        List<String> listRouteIgnore = Arrays.asList("refresh-token", "swagger-ui.html", "user-types", "api", "endpoints", "login", "profile", "fuels", "shifts");
         return listRouteIgnore.stream().anyMatch(route::startsWith);
     }
 
@@ -89,7 +91,15 @@ public class ApiController {
                 listInsert.add(create);
             }
         }
-        apiService.saveAll(listInsert);
+        for (ApiDTOCreate apiDTOCreate : listInsert) {
+            try {
+                Api api = ApiMapper.toApi(apiDTOCreate);
+                apiRepository.save(api);
+            } catch (DataIntegrityViolationException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+
     }
 
     private List<ApiDTOCreate> getAllEndPoints() {

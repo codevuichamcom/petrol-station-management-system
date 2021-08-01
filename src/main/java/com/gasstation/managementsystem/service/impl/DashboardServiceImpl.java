@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 @Service
 @RequiredArgsConstructor
-public class DashboardImpl implements DashboardService {
+public class DashboardServiceImpl implements DashboardService {
     private final DashboardRepositoryCriteria dashboardCriteria;
 
     @Override

@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -21,11 +20,7 @@ public class Debt {
     private int id;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date time = new Date();
-
-    @Column(nullable = false)
-    private double amount = 0;
+    private Double amount = 0d;
 
     @ManyToOne
     @JoinColumn(name = "card_id", nullable = false)

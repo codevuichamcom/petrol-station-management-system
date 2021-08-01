@@ -35,7 +35,7 @@ import java.util.Optional;
 @CrossOrigin
 @Tag(name = "Authentication", description = "API for Authentication")
 @RequiredArgsConstructor
-public class JwtAuthenticationController {
+public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
 
     private final JwtTokenUtil jwtTokenUtil;
@@ -55,7 +55,7 @@ public class JwtAuthenticationController {
 
         if (!userDTO.getActive()) {
             throw new CustomUnauthorizedException(CustomError.builder().code("unauthorized")
-                    .message("Access denied, you are deactive").build());
+                    .message("Access denied, you are deactivate").build());
         }
 
         final String accessToken = jwtTokenUtil.generateToken(userDTO.getUsername(), JwtTokenUtil.ACCESS_TOKEN_EXPIRED);
@@ -67,7 +67,7 @@ public class JwtAuthenticationController {
     }
 
 
-    @Operation(summary = "View profile of user logined")
+    @Operation(summary = "View profile of user logged in")
     @GetMapping("/profile")
     public UserDTO profile(Principal principal) {
         return userService.findByUserName(principal.getName());

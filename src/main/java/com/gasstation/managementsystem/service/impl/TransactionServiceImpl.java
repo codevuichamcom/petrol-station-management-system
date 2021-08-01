@@ -1,7 +1,6 @@
 package com.gasstation.managementsystem.service.impl;
 
-import com.gasstation.managementsystem.entity.HandOverShift;
-import com.gasstation.managementsystem.entity.Transaction;
+import com.gasstation.managementsystem.entity.*;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTO;
@@ -9,10 +8,7 @@ import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOCreat
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOFilter;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionUuidDTO;
 import com.gasstation.managementsystem.model.mapper.TransactionMapper;
-import com.gasstation.managementsystem.repository.HandOverShiftRepository;
-import com.gasstation.managementsystem.repository.PumpRepository;
-import com.gasstation.managementsystem.repository.ShiftRepository;
-import com.gasstation.managementsystem.repository.TransactionRepository;
+import com.gasstation.managementsystem.repository.*;
 import com.gasstation.managementsystem.repository.criteria.HandOverShiftRepositoryCriteria;
 import com.gasstation.managementsystem.repository.criteria.TransactionRepositoryCriteria;
 import com.gasstation.managementsystem.service.TransactionService;
@@ -37,6 +33,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final PumpRepository pumpRepository;
     private final ShiftRepository shiftRepository;
     private final HandOverShiftRepository handOverShiftRepository;
+    private final DebtRepository debtRepository;
 
     private HashMap<String, Object> listTransactionToMap(List<Transaction> transactions) {
         List<TransactionDTO> transactionDTOS = new ArrayList<>();
@@ -67,11 +64,19 @@ public class TransactionServiceImpl implements TransactionService {
             Transaction transaction = TransactionMapper.toTransaction(T);
             UUID cardId = T.getCardId();
             if (cardId != null) {
-                transaction.setCard(optionalValidate.getCardById(cardId));
+                Card card = optionalValidate.getCardById(cardId);
+                transaction.setCard(card);
+                Pump pump = optionalValidate.getPumpById(T.getPumpId());
+                Station station = pump.getTank().getStation();
+                Debt debt = Debt.builder()
+                        .amount(T.getUnitPrice() * T.getVolume())
+                        .card(card)
+                        .station(station).build();
+                debtRepository.save(debt);
             }
             LocalDateTime localDateTime = DateTimeHelper.toDateTime(T.getTime());
             LocalDate localDate = LocalDate.of(localDateTime.getYear(), localDateTime.getMonth(), localDateTime.getDayOfMonth());
-            long milliSeconds = localDateTime.getHour() * 3600 + localDateTime.getMinute() * 60 + localDateTime.getSecond()*1000;
+            long milliSeconds = (localDateTime.getHour() * 3600 + localDateTime.getMinute() * 60 + localDateTime.getSecond()) * 1000;
 
             HandOverShift handOverShift = optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(),
                     LocalDateTime.of(localDate, LocalTime.MIN)

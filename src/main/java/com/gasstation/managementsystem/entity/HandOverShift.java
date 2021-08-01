@@ -20,11 +20,9 @@ public class HandOverShift {
 
 
     @Column(nullable = false)
-    private long createdDate;
+    private Long createdDate;
 
     private Long closedTime;
-
-    private String note;
 
     @ManyToOne
     @JoinColumn(name = "shift_id", nullable = false)
@@ -35,8 +33,8 @@ public class HandOverShift {
     private Pump pump;
 
     @ManyToOne
-    @JoinColumn(name = "actor_id")
-    private User actor; //người chốt ca
+    @JoinColumn(name = "executor_id")
+    private User executor; //người chốt ca
 
     @OneToMany(mappedBy = "handOverShift")
     private List<Transaction> transactionList = new ArrayList<>();

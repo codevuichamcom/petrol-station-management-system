@@ -16,6 +16,6 @@ public class HandOverShiftDTO {
     private Long closedTime;
     private ShiftDTO shift;
     private PumpDTO pump;
-    private UserDTO actor;
+    private UserDTO executor;
 
 }

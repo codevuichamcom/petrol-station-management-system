@@ -30,7 +30,7 @@ public class HandOverShiftRepositoryCriteria {
                 .in("t.station.id", "stationIds", filter.getStationIds())
                 .in("h.shift.id", "shiftIds", filter.getShiftIds())
                 .in("p.id", "pumpIds", filter.getPumpIds())
-                .like("h.actor.name", "actorName", filter.getActorName());
+                .like("h.executor.name", "executorName", filter.getExecutorName());
         boolean isOr = false;
         if (statuses == null || statuses.length == 0) {
             qHelper.between("h.closedTime", 0L, filter.getClosedTime(), "closedTime", filter.getClosedTime());

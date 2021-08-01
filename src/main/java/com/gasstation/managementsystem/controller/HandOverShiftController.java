@@ -3,7 +3,6 @@ package com.gasstation.managementsystem.controller;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTO;
 import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTOFilter;
-import com.gasstation.managementsystem.model.dto.station.StationDTOUpdateHandOverShift;
 import com.gasstation.managementsystem.service.HandOverShiftService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,7 +28,7 @@ public class HandOverShiftController {
                                           @RequestParam(name = "shiftIds", required = false) Integer[] shiftIds,
                                           @RequestParam(name = "pumpIds", required = false) Integer[] pumpIds,
                                           @RequestParam(name = "stationIds", required = false) Integer[] stationIds,
-                                          @RequestParam(name = "actorName", required = false) String actorName,
+                                          @RequestParam(name = "executorName", required = false) String executorName,
                                           @RequestParam(name = "statuses", required = false) String[] statuses) {
         HandOverShiftDTOFilter filter = HandOverShiftDTOFilter.builder()
                 .pageIndex(pageIndex)
@@ -39,7 +38,7 @@ public class HandOverShiftController {
                 .shiftIds(shiftIds)
                 .pumpIds(pumpIds)
                 .stationIds(stationIds)
-                .actorName(actorName)
+                .executorName(executorName)
                 .statuses(statuses).build();
         return handOverShiftService.findAll(filter);
     }
@@ -58,7 +57,7 @@ public class HandOverShiftController {
 
     @Operation(summary = "Hand Over Shift")
     @PutMapping("/hand-over-shifts")
-    public void updateAllByStationId(@RequestParam(name = "stationId")Integer stationId) throws CustomNotFoundException {
-        handOverShiftService.updateAllByStationId(stationId);
+    public HashMap<String,Object> updateAllByStationId(@RequestParam(name = "stationId")Integer stationId) throws CustomNotFoundException {
+        return handOverShiftService.updateAllByStationId(stationId);
     }
 }

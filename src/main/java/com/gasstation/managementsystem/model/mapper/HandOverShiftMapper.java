@@ -25,7 +25,7 @@ public class HandOverShiftMapper {
         Station station = tank != null ? tank.getStation() : null;
         StationDTO stationDTO = station != null ? StationDTO.builder().id(station.getId()).name(station.getName()).address(station.getAddress()).build() : null;
         TankDTO tankDTO = tank != null ? TankDTO.builder().id(tank.getId()).name(tank.getName()).fuel(fuelDTO).station(stationDTO).build() : null;
-        User actor = handOverShift.getActor();
+        User actor = handOverShift.getExecutor();
         UserDTO actorDTO = actor != null ? UserDTO.builder().id(actor.getId()).name(actor.getName()).build() : null;
         PumpDTO pumpDTO = pump != null ? PumpDTO.builder()
                 .id(handOverShift.getId())
@@ -38,7 +38,7 @@ public class HandOverShiftMapper {
                 .closedTime(handOverShift.getClosedTime())
                 .shift(shiftDTO)
                 .pump(pumpDTO)
-                .actor(actorDTO)
+                .executor(actorDTO)
                 .build();
     }
 }

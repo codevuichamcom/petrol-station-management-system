@@ -44,7 +44,7 @@ public class DateTimeHelper {
 
     public static long toMilliSecond(String timeStr) {
         LocalTime localTime = LocalTime.parse(timeStr);
-        return localTime.getHour() * 60 * 60 + localTime.getMinute() * 60 + localTime.getSecond() * 1000;
+        return (localTime.getHour() * 60 * 60 + localTime.getMinute() * 60 + localTime.getSecond()) * 1000;
     }
 
     public static String formatTime(long milliSeconds, String format) {

@@ -2,8 +2,6 @@ package com.gasstation.managementsystem.model.dto.debt;
 
 import lombok.*;
 
-import java.util.UUID;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -11,7 +9,7 @@ import java.util.UUID;
 @Builder
 @ToString
 public class DebtDTOSummary {
-    private UUID cardId;
+    private String cardId;
     private Integer stationId;
     private String stationName;
     private String stationAddress;

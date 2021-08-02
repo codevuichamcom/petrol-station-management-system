@@ -3,8 +3,10 @@ package com.gasstation.managementsystem.service.impl;
 import com.gasstation.managementsystem.entity.Debt;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.debt.DebtDTO;
+import com.gasstation.managementsystem.model.dto.debt.DebtDTOSummaryFilter;
 import com.gasstation.managementsystem.model.mapper.DebtMapper;
 import com.gasstation.managementsystem.repository.DebtRepository;
+import com.gasstation.managementsystem.repository.criteria.DebtRepositoryCriteria;
 import com.gasstation.managementsystem.service.DebtService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DebtServiceImpl implements DebtService {
     private final DebtRepository debtRepository;
+    private final DebtRepositoryCriteria debtCriteria;
     private final OptionalValidate optionalValidate;
 
     private HashMap<String, Object> listDebtToMap(List<Debt> debts) {
@@ -31,8 +34,8 @@ public class DebtServiceImpl implements DebtService {
     }
 
     @Override
-    public HashMap<String, Object> findAll() {
-        return listDebtToMap(debtRepository.findAll(Sort.by(Sort.Direction.DESC, "id")));
+    public HashMap<String, Object> summary(DebtDTOSummaryFilter filter) {
+        return debtCriteria.summary(filter);
     }
 
     @Override

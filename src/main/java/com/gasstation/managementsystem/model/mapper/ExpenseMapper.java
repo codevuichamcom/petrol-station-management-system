@@ -19,8 +19,14 @@ public class ExpenseMapper {
         if (expense == null) return null;
         Station station = expense.getStation();
         FuelImport fuelImport = expense.getFuelImport();
-        StationDTO stationDTO = (station != null) ? StationDTO.builder().id(station.getId()).name(station.getName()).build() : null;
-        FuelImportDTO fuelImportDTO = (fuelImport != null) ? FuelImportDTO.builder().id(fuelImport.getId()).name(fuelImport.getName()).build() : null;
+        StationDTO stationDTO = (station != null) ? StationDTO.builder()
+                .id(station.getId())
+                .name(station.getName())
+                .address(station.getAddress()).build() : null;
+        FuelImportDTO fuelImportDTO = (fuelImport != null) ? FuelImportDTO.builder()
+                .id(fuelImport.getId())
+                .name(fuelImport.getName())
+                .createdDate(fuelImport.getCreatedDate()).build() : null;
         User creator = expense.getCreator();
         UserDTO creatorDTO = creator != null ? UserDTO.builder().id(creator.getId()).name(creator.getName()).build() : null;
         return ExpenseDTO.builder()

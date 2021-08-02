@@ -2,6 +2,7 @@ package com.gasstation.managementsystem.controller;
 
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.debt.DebtDTO;
+import com.gasstation.managementsystem.model.dto.debt.DebtDTOSummaryFilter;
 import com.gasstation.managementsystem.service.DebtService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,8 +21,9 @@ public class DebtController {
 
     @Operation(summary = "View All debt")
     @GetMapping("/debts")
-    public HashMap<String, Object> getAll() {
-        return debtService.findAll();
+    public HashMap<String, Object> summary() {
+        DebtDTOSummaryFilter filter = DebtDTOSummaryFilter.builder().build();
+        return debtService.summary(filter);
 
     }
 

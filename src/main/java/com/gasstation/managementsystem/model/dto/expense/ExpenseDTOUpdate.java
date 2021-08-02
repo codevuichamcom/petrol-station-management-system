@@ -10,8 +10,6 @@ import lombok.*;
 public class ExpenseDTOUpdate {
     private String reason;
     private Double amount;
-    private Long createdDate;
-    private String note;
     private Integer stationId;
     private Integer fuelImportId;
 }

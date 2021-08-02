@@ -57,7 +57,9 @@ public class ExpenseServiceImpl implements ExpenseService {
     public ExpenseDTO create(ExpenseDTOCreate expenseDTOCreate) throws CustomNotFoundException {
         Expense expense = ExpenseMapper.toExpense(expenseDTOCreate);
         expense.setStation(optionalValidate.getStationById(expenseDTOCreate.getStationId()));
-        expense.setFuelImport(optionalValidate.getFuelImportById(expenseDTOCreate.getFuelImportId()));
+        if (expenseDTOCreate.getFuelImportId() != null) {
+            expense.setFuelImport(optionalValidate.getFuelImportById(expenseDTOCreate.getFuelImportId()));
+        }
         expense.setCreator(userHelper.getUserLogin());
         expense = expenseRepository.save(expense);
         return ExpenseMapper.toExpenseDTO(expense);

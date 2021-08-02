@@ -10,6 +10,7 @@ import com.gasstation.managementsystem.model.dto.expense.ExpenseDTOUpdate;
 import com.gasstation.managementsystem.model.dto.fuelImport.FuelImportDTO;
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
+import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.NullAwareBeanUtilsBean;
 import org.apache.commons.beanutils.BeanUtilsBean;
 
@@ -45,7 +46,7 @@ public class ExpenseMapper {
         return Expense.builder()
                 .reason(expenseDTOCreate.getReason())
                 .amount(expenseDTOCreate.getAmount())
-                .createdDate(expenseDTOCreate.getCreatedDate())
+                .createdDate(DateTimeHelper.getCurrentDate())
                 .build();
     }
 

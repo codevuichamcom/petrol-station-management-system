@@ -55,8 +55,10 @@ public class User {
     private List<Station> stationList;//Danh sách các trạm của người này
 
     @OneToMany(mappedBy = "creator")
-    private List<Receipt> receiptList;//Danh sách hóa đơn nhận của người này
+    private List<Receipt> receiptList;//Danh sách hóa đơn nhận do người này tạo
 
+    @OneToMany(mappedBy = "creator")
+    private List<Expense> expenseList;//danh sách chi phí do người này tạo
     @ManyToOne
     @JoinColumn(name = "user_type_id", nullable = false)
     private UserType userType;

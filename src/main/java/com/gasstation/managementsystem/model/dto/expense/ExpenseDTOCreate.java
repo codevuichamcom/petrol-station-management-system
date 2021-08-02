@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,4 +22,5 @@ public class ExpenseDTOCreate {
     private Integer stationId;
     @NotNull(message = "Fuel import id is mandatory")
     private Integer fuelImportId;
+
 }

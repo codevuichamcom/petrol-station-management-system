@@ -9,6 +9,7 @@ import com.gasstation.managementsystem.model.mapper.ExpenseMapper;
 import com.gasstation.managementsystem.repository.ExpenseRepository;
 import com.gasstation.managementsystem.service.ExpenseService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
+import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 public class ExpenseServiceImpl implements ExpenseService {
     private final ExpenseRepository expenseRepository;
     private final OptionalValidate optionalValidate;
+    private final UserHelper userHelper;
 
     private HashMap<String, Object> listExpenseToMap(List<Expense> expenses) {
         List<ExpenseDTO> expenseDTOS = expenses.stream().map(ExpenseMapper::toExpenseDTO).collect(Collectors.toList());
@@ -56,6 +58,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         Expense expense = ExpenseMapper.toExpense(expenseDTOCreate);
         expense.setStation(optionalValidate.getStationById(expenseDTOCreate.getStationId()));
         expense.setFuelImport(optionalValidate.getFuelImportById(expenseDTOCreate.getFuelImportId()));
+        expense.setCreator(userHelper.getUserLogin());
         expense = expenseRepository.save(expense);
         return ExpenseMapper.toExpenseDTO(expense);
     }

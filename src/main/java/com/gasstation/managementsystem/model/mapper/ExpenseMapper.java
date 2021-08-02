@@ -24,7 +24,6 @@ public class ExpenseMapper {
                 .reason(expense.getReason())
                 .amount(expense.getAmount())
                 .createdDate(expense.getCreatedDate())
-                .note(expense.getNote())
                 .station(stationDTO)
                 .fuelImport(fuelImportDTO)
                 .build();
@@ -36,7 +35,6 @@ public class ExpenseMapper {
                 .reason(expenseDTOCreate.getReason())
                 .amount(expenseDTOCreate.getAmount())
                 .createdDate(expenseDTOCreate.getCreatedDate())
-                .note(expenseDTOCreate.getNote())
                 .build();
     }
 

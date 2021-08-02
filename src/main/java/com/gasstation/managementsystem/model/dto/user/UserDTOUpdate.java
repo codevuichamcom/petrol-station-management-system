@@ -4,10 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
-import java.util.Date;
 import java.util.Objects;
 
 
@@ -35,7 +33,6 @@ public class UserDTOUpdate {
     private Boolean gender;
 
     @Schema(description = "Must be in past")
-    @Past(message = "Must be in past")
     private Long dateOfBirth;
 
     @Schema(example = "Hà Nội", description = "Length greater than 3")

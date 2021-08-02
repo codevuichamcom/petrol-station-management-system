@@ -25,8 +25,6 @@ public class Receipt {
     @Column(nullable = false)
     private double discount = 0;
 
-    private String note;
-
     @Column(nullable = false)
     private double amount = 0;
 

@@ -6,9 +6,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
-import java.util.Date;
 import java.util.Objects;
 
 
@@ -44,7 +42,6 @@ public class UserDTOCreate {
     private Boolean gender;
 
     @Schema(description = "Must be in past")
-    @Past(message = "Must be in past")
     private Long dateOfBirth;
 
     @Schema(example = "Hà Nội", description = "Length greater than 3")

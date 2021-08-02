@@ -30,7 +30,11 @@ public class ReceiptServiceImpl implements ReceiptService {
     private final UserHelper userHelper;
 
     private HashMap<String, Object> listReceiptToMap(List<Receipt> receipts) {
-        List<ReceiptDTO> receiptDTOS = receipts.stream().map(ReceiptMapper::toReceiptDTO).collect(Collectors.toList());
+        List<ReceiptDTO> receiptDTOS = receipts.stream().map(receipt -> {
+            ReceiptDTO receiptDTO = ReceiptMapper.toReceiptDTO(receipt);
+            receiptDTO.getDebt().setTransaction(null);
+            return receiptDTO;
+        }).collect(Collectors.toList());
         HashMap<String, Object> map = new HashMap<>();
         map.put("data", receiptDTOS);
         return map;

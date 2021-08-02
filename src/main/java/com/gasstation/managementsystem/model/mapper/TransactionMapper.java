@@ -10,7 +10,6 @@ import com.gasstation.managementsystem.model.dto.tank.TankDTO;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTO;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOCreate;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
-import com.gasstation.managementsystem.utils.DateTimeHelper;
 
 public class TransactionMapper {
     public static TransactionDTO toTransactionDTO(Transaction transaction) {
@@ -41,7 +40,7 @@ public class TransactionMapper {
                 .build();
         return TransactionDTO.builder()
                 .id(transaction.getId())
-                .time(DateTimeHelper.formatDate(transaction.getTime(), "yyyy-MM-dd HH:mm:ss"))
+                .time(transaction.getTime())
                 .volume(transaction.getVolume())
                 .unitPrice(transaction.getUnitPrice())
                 .uuid(transaction.getUuid())

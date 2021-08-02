@@ -16,7 +16,7 @@ import java.util.Objects;
 @ToString
 public class TransactionDTO {
     private int id;
-    private String time;
+    private Long time;
     private Double volume;
     private Double unitPrice;
     private String uuid;

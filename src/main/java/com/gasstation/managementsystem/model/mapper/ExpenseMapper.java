@@ -3,11 +3,13 @@ package com.gasstation.managementsystem.model.mapper;
 import com.gasstation.managementsystem.entity.Expense;
 import com.gasstation.managementsystem.entity.FuelImport;
 import com.gasstation.managementsystem.entity.Station;
+import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.model.dto.expense.ExpenseDTO;
 import com.gasstation.managementsystem.model.dto.expense.ExpenseDTOCreate;
 import com.gasstation.managementsystem.model.dto.expense.ExpenseDTOUpdate;
 import com.gasstation.managementsystem.model.dto.fuelImport.FuelImportDTO;
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
+import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.utils.NullAwareBeanUtilsBean;
 import org.apache.commons.beanutils.BeanUtilsBean;
 
@@ -19,6 +21,8 @@ public class ExpenseMapper {
         FuelImport fuelImport = expense.getFuelImport();
         StationDTO stationDTO = (station != null) ? StationDTO.builder().id(station.getId()).name(station.getName()).build() : null;
         FuelImportDTO fuelImportDTO = (fuelImport != null) ? FuelImportDTO.builder().id(fuelImport.getId()).name(fuelImport.getName()).build() : null;
+        User creator = expense.getCreator();
+        UserDTO creatorDTO = creator != null ? UserDTO.builder().id(creator.getId()).name(creator.getName()).build() : null;
         return ExpenseDTO.builder()
                 .id(expense.getId())
                 .reason(expense.getReason())
@@ -26,6 +30,7 @@ public class ExpenseMapper {
                 .createdDate(expense.getCreatedDate())
                 .station(stationDTO)
                 .fuelImport(fuelImportDTO)
+                .creator(creatorDTO)
                 .build();
     }
 

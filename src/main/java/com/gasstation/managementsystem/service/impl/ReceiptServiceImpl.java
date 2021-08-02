@@ -57,7 +57,7 @@ public class ReceiptServiceImpl implements ReceiptService {
         receipt.setDebt(debt);
         receipt = receiptRepository.save(receipt);
 
-        debt.setAmount(debt.getAmount() - receipt.getAmount());
+        debt.setAccountsPayable(debt.getAccountsPayable() - receipt.getAmount());
         debtRepository.save(debt);
         return ReceiptMapper.toReceiptDTO(receipt);
     }

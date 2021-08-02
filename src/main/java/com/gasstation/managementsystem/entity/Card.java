@@ -29,20 +29,20 @@ public class Card {
     private String licensePalates;
 
     @Column(nullable = false)
-    private double initialDebt = 0;
+    private Double initialDebt;
     @Column(nullable = false)
-    private double availableBalance = 0;
+    private Double availableBalance;
     @Column(nullable = false)
-    private double outstandingBalance = 0;
+    private Double accountsPayable;
 
     @Column(nullable = false)
-    private double debtLimit = 0;
+    private Double debtLimit;
 
-    private long limitSetDate;
+    private Long limitSetDate;
 
-    private long issuedDate;
+    private Long issuedDate;
 
-    private long activeDate;
+    private Long activeDate;
 
     @OneToMany(mappedBy = "card")
     private List<Transaction> transactionList;//Danh sách mã bơm trả bằng thẻ này
@@ -57,7 +57,4 @@ public class Card {
 
     @OneToMany(mappedBy = "card")
     private List<Receipt> receiptList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "card")
-    private List<Debt> debtList = new ArrayList<>();
 }

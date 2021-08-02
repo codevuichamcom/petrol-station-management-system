@@ -15,8 +15,8 @@ import java.util.List;
 @ToString
 public class DebtDTO {
     private int id;
-    private Double amount;
+    private Double accountsPayable;
     private CardDTO card;
     private StationDTO station;
-    private List<TransactionDTO> transactions;
+    private TransactionDTO transaction;
 }

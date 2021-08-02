@@ -19,7 +19,7 @@ public class CardDTO {
     private String licensePalates;
     private Double initialDebt;
     private Double availableBalance;
-    private Double outstandingBalance;
+    private Double accountsPayable;
     private Double debtLimit;
     private Long limitSetDate;
     private Long issuedDate;
@@ -32,6 +32,6 @@ public class CardDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CardDTO cardDTO = (CardDTO) o;
-        return Objects.equals(id, cardDTO.id) && Objects.equals(driverPhone, cardDTO.driverPhone) && Objects.equals(driverName, cardDTO.driverName) && Objects.equals(licensePalates, cardDTO.licensePalates) && Objects.equals(initialDebt, cardDTO.initialDebt) && Objects.equals(availableBalance, cardDTO.availableBalance) && Objects.equals(outstandingBalance, cardDTO.outstandingBalance) && Objects.equals(debtLimit, cardDTO.debtLimit) && Objects.equals(limitSetDate, cardDTO.limitSetDate) && Objects.equals(issuedDate, cardDTO.issuedDate) && Objects.equals(activeDate, cardDTO.activeDate) && Objects.equals(activateUser, cardDTO.activateUser) && Objects.equals(customer, cardDTO.customer);
+        return Objects.equals(id, cardDTO.id) && Objects.equals(driverPhone, cardDTO.driverPhone) && Objects.equals(driverName, cardDTO.driverName) && Objects.equals(licensePalates, cardDTO.licensePalates) && Objects.equals(initialDebt, cardDTO.initialDebt) && Objects.equals(availableBalance, cardDTO.availableBalance) && Objects.equals(accountsPayable, cardDTO.accountsPayable) && Objects.equals(debtLimit, cardDTO.debtLimit) && Objects.equals(limitSetDate, cardDTO.limitSetDate) && Objects.equals(issuedDate, cardDTO.issuedDate) && Objects.equals(activeDate, cardDTO.activeDate) && Objects.equals(activateUser, cardDTO.activateUser) && Objects.equals(customer, cardDTO.customer);
     }
 }

@@ -25,7 +25,7 @@ public class CardDTOCreate {
     @NotNull(message = "Available Balance is mandatory")
     private Double availableBalance;
     @NotNull(message = "Outstanding Balance is mandatory")
-    private Double outstandingBalance;
+    private Double accountsPayable;
     @NotNull(message = "Debt Limit is mandatory")
     private Double debtLimit;
     @NotNull(message = "limit Set Date is mandatory")

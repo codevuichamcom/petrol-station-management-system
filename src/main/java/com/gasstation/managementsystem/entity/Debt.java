@@ -20,15 +20,11 @@ public class Debt {
     private int id;
 
     @Column(nullable = false)
-    private Double amount = 0d;
+    private Double accountsPayable = 0d;
 
-    @ManyToOne
-    @JoinColumn(name = "card_id", nullable = false)
-    private Card card;
-
-    @ManyToOne
-    @JoinColumn(name = "station_id", nullable = false)
-    private Station station;
+    @OneToOne
+    @JoinColumn(name = "transaction_id")
+    private Transaction transaction;
 
     @OneToMany(mappedBy = "debt")
     private List<Receipt> receiptList = new ArrayList<>();

@@ -19,7 +19,7 @@ public class ReceiptMapper {
         Card card = receipt.getCard();
         CardDTO cardDTO = card != null ? CardDTO.builder().id(card.getId()).build() : null;
         Debt debt = receipt.getDebt();
-        DebtDTO debtDTO = debt != null ? DebtDTO.builder().id(debt.getId()).amount(debt.getAmount()).build() : null;
+        DebtDTO debtDTO = debt != null ? DebtDTO.builder().id(debt.getId()).accountsPayable(debt.getAccountsPayable()).build() : null;
         return ReceiptDTO.builder()
                 .id(receipt.getId())
                 .createdDate(receipt.getCreatedDate())

@@ -40,4 +40,7 @@ public class Transaction {
     @ToString.Exclude
     private HandOverShift handOverShift;
 
+    @OneToOne(mappedBy = "transaction")
+    private Debt debt;
+
 }

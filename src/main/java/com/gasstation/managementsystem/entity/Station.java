@@ -41,9 +41,6 @@ public class Station {
     private User owner;//Chủ Tạm là ai
 
     @OneToMany(mappedBy = "station")
-    private List<Debt> debtList;
-
-    @OneToMany(mappedBy = "station")
     private List<Expense> expenseList; //Danh sách chi của trạm này
 
     @OneToMany(mappedBy = "station")

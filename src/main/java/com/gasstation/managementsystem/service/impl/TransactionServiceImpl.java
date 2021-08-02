@@ -1,6 +1,9 @@
 package com.gasstation.managementsystem.service.impl;
 
-import com.gasstation.managementsystem.entity.*;
+import com.gasstation.managementsystem.entity.Card;
+import com.gasstation.managementsystem.entity.Debt;
+import com.gasstation.managementsystem.entity.HandOverShift;
+import com.gasstation.managementsystem.entity.Transaction;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTO;
@@ -34,6 +37,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final ShiftRepository shiftRepository;
     private final HandOverShiftRepository handOverShiftRepository;
     private final DebtRepository debtRepository;
+    private final CardRepository cardRepository;
 
     private HashMap<String, Object> listTransactionToMap(List<Transaction> transactions) {
         List<TransactionDTO> transactionDTOS = new ArrayList<>();
@@ -66,13 +70,6 @@ public class TransactionServiceImpl implements TransactionService {
             if (cardId != null) {
                 Card card = optionalValidate.getCardById(cardId);
                 transaction.setCard(card);
-                Pump pump = optionalValidate.getPumpById(T.getPumpId());
-                Station station = pump.getTank().getStation();
-                Debt debt = Debt.builder()
-                        .amount(T.getUnitPrice() * T.getVolume())
-                        .card(card)
-                        .station(station).build();
-                debtRepository.save(debt);
             }
             LocalDateTime localDateTime = DateTimeHelper.toDateTime(T.getTime());
             LocalDate localDate = LocalDate.of(localDateTime.getYear(), localDateTime.getMonth(), localDateTime.getDayOfMonth());
@@ -105,6 +102,23 @@ public class TransactionServiceImpl implements TransactionService {
         for (Transaction transaction : transactionList) {
             try {
                 transactionRepository.save(transaction);
+                Card card = transaction.getCard();
+                if (card != null) {
+                    double totalMoneyTransaction = transaction.getUnitPrice() * transaction.getVolume();
+
+                    double accountsPayable = totalMoneyTransaction - card.getAvailableBalance();
+                    if (accountsPayable <= 0) {
+                        card.setAvailableBalance(card.getAvailableBalance() - totalMoneyTransaction);
+                    } else {
+                        card.setAvailableBalance(0d);
+                        card.setAccountsPayable(card.getAccountsPayable() + accountsPayable);
+                        Debt debt = Debt.builder()
+                                .accountsPayable(accountsPayable)
+                                .transaction(transaction).build();
+                        debtRepository.save(debt);
+                    }
+                    cardRepository.save(card);
+                }
                 listUuidSync.add(TransactionUuidDTO.builder().uuid(transaction.getUuid()).build());
             } catch (DataIntegrityViolationException ex) {
                 listUuidSync.add(TransactionUuidDTO.builder().uuid(transaction.getUuid()).build());
@@ -118,13 +132,16 @@ public class TransactionServiceImpl implements TransactionService {
 
     private void createHandOverShiftForAllPump() {
         ArrayList<HandOverShift> handOverShifts = new ArrayList<>();
-        pumpRepository.findAll().forEach(pump -> shiftRepository.findAll().forEach(shift -> {
-            HandOverShift handOverShift = HandOverShift.builder().
-                    createdDate(DateTimeHelper.getCurrentDate())
-                    .shift(shift)
-                    .pump(pump).build();
-            handOverShifts.add(handOverShift);
-        }));
+        pumpRepository.findAll().forEach(pump -> {
+            int stationId = pump.getTank().getStation().getId();
+            shiftRepository.findAllShiftByStationId(stationId).forEach(shift -> {
+                HandOverShift handOverShift = HandOverShift.builder().
+                        createdDate(DateTimeHelper.getCurrentDate())
+                        .shift(shift)
+                        .pump(pump).build();
+                handOverShifts.add(handOverShift);
+            });
+        });
         handOverShiftRepository.saveAll(handOverShifts);
     }
 

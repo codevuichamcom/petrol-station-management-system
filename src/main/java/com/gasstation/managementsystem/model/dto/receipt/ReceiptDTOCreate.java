@@ -18,9 +18,6 @@ public class ReceiptDTOCreate {
     @NotNull(message = "Amount is mandatory")
     private Double amount;
 
-    @NotNull(message = "Discount is mandatory")
-    private Double discount;
-
     @NotNull(message = "Card Id is mandatory")
     private UUID cardId;
 

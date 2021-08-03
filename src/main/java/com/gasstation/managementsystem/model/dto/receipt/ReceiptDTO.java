@@ -15,7 +15,6 @@ public class ReceiptDTO {
     private Long createdDate;
     private String reason;
     private Double amount;
-    private Double discount;
     private UserDTO creator;
     private CardDTO card;
     private DebtDTO debt;

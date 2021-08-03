@@ -23,9 +23,6 @@ public class Receipt {
     private String reason;
 
     @Column(nullable = false)
-    private double discount = 0;
-
-    @Column(nullable = false)
     private double amount = 0;
 
     @ManyToOne

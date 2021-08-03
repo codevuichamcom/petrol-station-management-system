@@ -22,9 +22,9 @@ public class CardDTOCreate {
     private String licensePlate;
     @NotNull(message = "Available Balance is mandatory")
     private Double availableBalance;
-    @NotNull(message = "Debt Limit is mandatory")
     private Double debtLimit;
     private Integer customerId;
+    private Integer activateUserId;
     private Boolean active;
 
 }

@@ -25,6 +25,7 @@ public class CardDTO {
     private Long createdDate;
     private Boolean active;
     private UserDTO activateUser;
+    private UserDTO creator;
     private UserDTO customer;
 
 

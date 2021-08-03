@@ -55,8 +55,12 @@ public class Card {
     private User activatedUser; //Ai active thẻ này
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
+    @JoinColumn(name = "customer_id")
     private User customer;//Người nào sử dụng thẻ này
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    private User creator;
 
     @OneToMany(mappedBy = "card")
     private List<Receipt> receiptList = new ArrayList<>();

@@ -16,8 +16,10 @@ public class CardMapper {
         if (card == null) return null;
         User activateUser = card.getActivatedUser();
         User customer = card.getCustomer();
+        User creator = card.getCreator();
         UserDTO activateUserDTO = activateUser != null ? UserDTO.builder().id(activateUser.getId()).name(activateUser.getName()).build() : null;
         UserDTO customerDTO = customer != null ? UserDTO.builder().id(customer.getId()).name(customer.getName()).build() : null;
+        UserDTO creatorDTO = creator != null ? UserDTO.builder().id(creator.getId()).name(creator.getName()).build() : null;
         return CardDTO.builder()
                 .id(card.getId())
                 .driverPhone(card.getDriverPhone())
@@ -32,12 +34,17 @@ public class CardMapper {
                 .active(card.getActive())
                 .activateUser(activateUserDTO)
                 .customer(customerDTO)
+                .creator(creatorDTO)
                 .build();
     }
 
     public static Card toCard(CardDTOCreate cardDTOCreate) {
         if (cardDTOCreate == null) return null;
         Boolean active = cardDTOCreate.getActive();
+        Double debtLimit = cardDTOCreate.getDebtLimit();
+        if (debtLimit == null) {
+            debtLimit = 0d;
+        }
         if (active == null) active = false;
         return Card.builder()
                 .driverPhone(cardDTOCreate.getDriverPhone())
@@ -46,7 +53,7 @@ public class CardMapper {
                 .initialDebt(0d)
                 .availableBalance(cardDTOCreate.getAvailableBalance())
                 .accountsPayable(0d)
-                .debtLimit(cardDTOCreate.getDebtLimit())
+                .debtLimit(debtLimit)
                 .limitSetDate(DateTimeHelper.getCurrentDate())
                 .createdDate(DateTimeHelper.getCurrentDate())
                 .active(active)

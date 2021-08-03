@@ -77,4 +77,7 @@ public class User {
 
     @OneToMany(mappedBy = "executor")
     private List<HandOverShift> handOverShiftList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "creator")
+    private List<Card> cardListCreatorByMe = new ArrayList<>();
 }

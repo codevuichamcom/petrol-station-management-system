@@ -59,9 +59,12 @@ public class CardServiceImpl implements CardService {
     public CardDTO create(CardDTOCreate cardDTOCreate) throws CustomDuplicateFieldException, CustomNotFoundException {
         checkDuplicate(cardDTOCreate.getDriverPhone());
         Card card = CardMapper.toCard(cardDTOCreate);
-        card.setActivatedUser(userHelper.getUserLogin());
+        card.setCreator(userHelper.getUserLogin());
         if (cardDTOCreate.getCustomerId() != null) {
             card.setCustomer(optionalValidate.getUserById(cardDTOCreate.getCustomerId()));
+        }
+        if (cardDTOCreate.getActivateUserId() != null) {
+            card.setActivatedUser(optionalValidate.getUserById(cardDTOCreate.getActivateUserId()));
         }
         card = cardRepository.save(card);
         return CardMapper.toCardDTO(card);
@@ -88,6 +91,9 @@ public class CardServiceImpl implements CardService {
         if (customerId != null) {
             User customer = optionalValidate.getUserById(customerId);
             oldCard.setCustomer(customer);
+        }
+        if (cardDTOUpdate.getActivateUserId() != null) {
+            oldCard.setActivatedUser(optionalValidate.getUserById(cardDTOUpdate.getActivateUserId()));
         }
         oldCard = cardRepository.save(oldCard);
         return CardMapper.toCardDTO(oldCard);

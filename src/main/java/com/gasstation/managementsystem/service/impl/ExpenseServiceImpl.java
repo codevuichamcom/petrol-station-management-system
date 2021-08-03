@@ -4,16 +4,15 @@ import com.gasstation.managementsystem.entity.Expense;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.expense.ExpenseDTO;
 import com.gasstation.managementsystem.model.dto.expense.ExpenseDTOCreate;
+import com.gasstation.managementsystem.model.dto.expense.ExpenseDTOFilter;
 import com.gasstation.managementsystem.model.dto.expense.ExpenseDTOUpdate;
 import com.gasstation.managementsystem.model.mapper.ExpenseMapper;
 import com.gasstation.managementsystem.repository.ExpenseRepository;
+import com.gasstation.managementsystem.repository.criteria.ExpenseRepositoryCriteria;
 import com.gasstation.managementsystem.service.ExpenseService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -26,26 +25,15 @@ public class ExpenseServiceImpl implements ExpenseService {
     private final ExpenseRepository expenseRepository;
     private final OptionalValidate optionalValidate;
     private final UserHelper userHelper;
+    private final ExpenseRepositoryCriteria expenseCriteria;
 
-    private HashMap<String, Object> listExpenseToMap(List<Expense> expenses) {
-        List<ExpenseDTO> expenseDTOS = expenses.stream().map(ExpenseMapper::toExpenseDTO).collect(Collectors.toList());
+    @Override
+    public HashMap<String, Object> findAll(ExpenseDTOFilter filter) {
+        List<Expense> expenseList = (List<Expense>) expenseCriteria.findAll(filter).get("data");
+        List<ExpenseDTO> expenseDTOS = expenseList.stream().map(ExpenseMapper::toExpenseDTO).collect(Collectors.toList());
         HashMap<String, Object> map = new HashMap<>();
         map.put("data", expenseDTOS);
         return map;
-    }
-
-    @Override
-    public HashMap<String, Object> findAll(Pageable pageable) {
-        Page<Expense> expenses = expenseRepository.findAll(pageable);
-        HashMap<String, Object> map = listExpenseToMap(expenses.getContent());
-        map.put("totalElement", expenses.getTotalElements());
-        map.put("totalPage", expenses.getTotalPages());
-        return map;
-    }
-
-    @Override
-    public HashMap<String, Object> findAll(Sort sort) {
-        return listExpenseToMap(expenseRepository.findAll(sort));
     }
 
     @Override

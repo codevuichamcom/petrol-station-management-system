@@ -21,7 +21,7 @@ public class ReceiptMapper {
         UserDTO creatorDTO = creator != null ? UserDTO.builder().id(creator.getId()).name(creator.getName()).build() : null;
         Card card = receipt.getCard();
         User customer = card != null ? card.getCustomer() : null;
-        UserDTO customerDTO = customer != null ? UserDTO.builder().id(customer.getId()).name(customer.getName()).build() : null;
+        UserDTO customerDTO = customer != null ? UserDTO.builder().id(customer.getId()).name(customer.getName()).phone(customer.getPhone()).build() : null;
         CardDTO cardDTO = card != null ? CardDTO.builder().id(card.getId()).customer(customerDTO).build() : null;
         Debt debt = receipt.getDebt();
         Transaction transaction = debt != null ? debt.getTransaction() : null;

@@ -1,6 +1,8 @@
 package com.gasstation.managementsystem.repository.criteria;
 
+import com.gasstation.managementsystem.entity.Debt;
 import com.gasstation.managementsystem.model.dto.card.CardDTO;
+import com.gasstation.managementsystem.model.dto.debt.DebtDTOFilter;
 import com.gasstation.managementsystem.model.dto.debt.DebtDTOSummary;
 import com.gasstation.managementsystem.model.dto.debt.DebtDTOSummaryFilter;
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +24,20 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class DebtRepositoryCriteria {
     private final EntityManager em;
+
+    public HashMap<String, Object> getDetail(DebtDTOFilter filter) {
+        StringBuilder query = new StringBuilder("select d from Debt d where 1=1");
+        QueryGenerateHelper qHelper = new QueryGenerateHelper();
+        qHelper.setQuery(query);
+        qHelper.equal("d.transaction.card.id", "cardId", filter.getCardId())
+                .equal("d.transaction.handOverShift.pump.tank.station.id", "stationId", filter.getStationId());
+
+        TypedQuery<Debt> tQuery = em.createQuery(query.toString(), Debt.class);
+        qHelper.setValueToParams(tQuery);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("data", tQuery.getResultList());
+        return map;
+    }
 
     public HashMap<String, Object> summary(DebtDTOSummaryFilter filter) {
         StringBuilder query = new StringBuilder("select * from debt_summary ds where 1=1 ");
@@ -35,7 +52,7 @@ public class DebtRepositoryCriteria {
         Query queryExecutor = em.createNativeQuery(query.toString());
         String countQuery = qHelper.getQuery().toString().replace("*", "count(*)");
         Query countTotalQuery = em.createNativeQuery(countQuery);
-        qHelper.setParam(queryExecutor).setParam(countTotalQuery);
+        qHelper.setValueToParams(queryExecutor).setValueToParams(countTotalQuery);
 
         long totalElement = ((BigInteger) countTotalQuery.getSingleResult()).longValue();
 

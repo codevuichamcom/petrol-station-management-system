@@ -13,7 +13,6 @@ import lombok.*;
 @ToString
 public class DebtDTO {
     private int id;
-    private Double accountsPayable;
     private CardDTO card;
     private StationDTO station;
     private TransactionDTO transaction;

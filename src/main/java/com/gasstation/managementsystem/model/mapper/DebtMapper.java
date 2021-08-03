@@ -27,7 +27,6 @@ public class DebtMapper {
                 .volume(transaction.getVolume()).build();
         return DebtDTO.builder()
                 .id(debt.getId())
-                .accountsPayable(debt.getAccountsPayable())
                 .card(cardDTO)
                 .station(stationDTO)
                 .transaction(transactionDTO).build();

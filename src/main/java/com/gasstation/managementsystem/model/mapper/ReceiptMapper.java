@@ -54,7 +54,6 @@ public class ReceiptMapper {
                 .handOverShift(handOverShiftDTO).build() : null;
         DebtDTO debtDTO = debt != null ? DebtDTO.builder()
                 .id(debt.getId())
-                .accountsPayable(debt.getAccountsPayable())
                 .transaction(transactionDTO).build() : null;
 
         return ReceiptDTO.builder()

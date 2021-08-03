@@ -15,7 +15,7 @@ public class DebtMapper {
     public static DebtDTO toDebtDTO(Debt debt) {
         Card card = debt.getTransaction().getCard();
         User customer = card != null ? card.getCustomer() : null;
-        UserDTO customerDTO = customer != null ? UserDTO.builder().id(customer.getId()).name(customer.getName()).build() : null;
+        UserDTO customerDTO = customer != null ? UserDTO.builder().id(customer.getId()).name(customer.getName()).phone(customer.getPhone()).build() : null;
         CardDTO cardDTO = card != null ? CardDTO.builder().id(card.getId()).customer(customerDTO).build() : null;
         Station station = debt.getTransaction().getHandOverShift().getShift().getStation();
         StationDTO stationDTO = station != null ? StationDTO.builder()
@@ -43,6 +43,8 @@ public class DebtMapper {
         TransactionDTO transactionDTO = TransactionDTO.builder()
                 .id(transaction.getId())
                 .time(transaction.getTime())
+                .volume(transaction.getVolume())
+                .unitPrice(transaction.getUnitPrice())
                 .handOverShift(handOverShiftDTO).build();
         return DebtDTO.builder()
                 .id(debt.getId())

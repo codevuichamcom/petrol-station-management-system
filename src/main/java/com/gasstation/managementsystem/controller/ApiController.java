@@ -68,14 +68,21 @@ public class ApiController {
     }
 
     @PostMapping("endpoints")
-    public void updateEndPoints() {
+    public void resetEndPoints() {
         apiService.deleteAll();
         List<ApiDTOCreate> apiDTOCreateList = getAllEndPoints();
-        apiService.saveAll(apiDTOCreateList);
+        for (ApiDTOCreate apiDTOCreate : apiDTOCreateList) {
+            try {
+                Api api = ApiMapper.toApi(apiDTOCreate);
+                apiRepository.save(api);
+            } catch (DataIntegrityViolationException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
     }
 
     @PutMapping("endpoints")
-    public void resetEndPoints() {
+    public void updateEndPoints() {
         List<ApiDTOCreate> apiDTOCreateList = getAllEndPoints();
         List<Api> apiList = apiRepository.findAll();
         List<ApiDTOCreate> listInsert = new ArrayList<>();

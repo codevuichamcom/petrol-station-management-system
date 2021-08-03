@@ -27,7 +27,7 @@ public class DebtController {
                                            @RequestParam(name = "stationIds", required = false) Integer[] stationIds,
                                            @RequestParam(name = "customerName", required = false) String customerName,
                                            @RequestParam(name = "customerPhone", required = false) String customerPhone,
-                                           @RequestParam(name = "totalMoney", required = false) Double totalMoney) {
+                                           @RequestParam(name = "totalAccountsPayable", required = false) Double totalAccountsPayable) {
         DebtDTOSummaryFilter filter = DebtDTOSummaryFilter.builder()
                 .pageIndex(pageIndex)
                 .pageSize(pageSize)
@@ -35,7 +35,7 @@ public class DebtController {
                 .stationIds(stationIds)
                 .customerName(customerName)
                 .customerPhone(customerPhone)
-                .totalMoney(totalMoney).build();
+                .totalAccountsPayable(totalAccountsPayable).build();
         return debtService.summary(filter);
 
     }

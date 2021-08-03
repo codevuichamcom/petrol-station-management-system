@@ -13,5 +13,5 @@ import lombok.*;
 public class DebtDTOSummary {
     private CardDTO card;
     private StationDTO station;
-    private Double totalMoney;
+    private Double totalAccountsPayable;
 }

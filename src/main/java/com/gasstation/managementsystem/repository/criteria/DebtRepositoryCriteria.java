@@ -30,7 +30,7 @@ public class DebtRepositoryCriteria {
                 .in("ds.station_id", "stationIds", filter.getStationIds())
                 .like("ds.customer_name", "customerName", filter.getCustomerName())
                 .like("ds.customer_phone", "customerPhone", filter.getCustomerPhone())
-                .between("ds.total_money", 0d, filter.getTotalMoney(), "totalMoney", filter.getTotalMoney());
+                .between("ds.total_accounts_payable", 0d, filter.getTotalAccountsPayable(), "totalAccountsPayable", filter.getTotalAccountsPayable());
 
         Query queryExecutor = em.createNativeQuery(query.toString());
         String countQuery = qHelper.getQuery().toString().replace("*", "count(*)");
@@ -60,7 +60,7 @@ public class DebtRepositoryCriteria {
                             .id((Integer) objects[1])
                             .name((String) objects[2])
                             .address((String) objects[3]).build())
-                    .totalMoney((Double) objects[7])
+                    .totalAccountsPayable((Double) objects[7])
                     .build();
             debtDTOSummaryList.add(debtDTOSummary);
         });

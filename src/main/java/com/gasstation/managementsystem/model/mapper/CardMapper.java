@@ -48,7 +48,7 @@ public class CardMapper {
                 .accountsPayable(0d)
                 .debtLimit(cardDTOCreate.getDebtLimit())
                 .limitSetDate(DateTimeHelper.getCurrentDate())
-                .createdDate(cardDTOCreate.getCreatedDate())
+                .createdDate(DateTimeHelper.getCurrentDate())
                 .active(active)
                 .build();
     }

@@ -24,7 +24,6 @@ public class CardDTOCreate {
     private Double availableBalance;
     @NotNull(message = "Debt Limit is mandatory")
     private Double debtLimit;
-    private Long createdDate;
     private Integer activateUserId;
     private Integer customerId;
     private Boolean active;

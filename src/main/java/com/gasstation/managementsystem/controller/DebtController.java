@@ -21,8 +21,21 @@ public class DebtController {
 
     @Operation(summary = "View All debt")
     @GetMapping("/debts")
-    public HashMap<String, Object> summary() {
-        DebtDTOSummaryFilter filter = DebtDTOSummaryFilter.builder().build();
+    public HashMap<String, Object> summary(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
+                                           @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                           @RequestParam(name = "cardId", required = false) String cardId,
+                                           @RequestParam(name = "stationIds", required = false) Integer[] stationIds,
+                                           @RequestParam(name = "customerName", required = false) String customerName,
+                                           @RequestParam(name = "customerPhone", required = false) String customerPhone,
+                                           @RequestParam(name = "totalMoney", required = false) Double totalMoney) {
+        DebtDTOSummaryFilter filter = DebtDTOSummaryFilter.builder()
+                .pageIndex(pageIndex)
+                .pageSize(pageSize)
+                .cardId(cardId)
+                .stationIds(stationIds)
+                .customerName(customerName)
+                .customerPhone(customerPhone)
+                .totalMoney(totalMoney).build();
         return debtService.summary(filter);
 
     }

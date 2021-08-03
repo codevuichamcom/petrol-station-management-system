@@ -6,6 +6,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -78,6 +79,23 @@ public class QueryGenerateHelper {
         return this;
     }
 
+    public QueryGenerateHelper setParam(Query query) {
+        params.forEach(query::setParameter);
+        return this;
+    }
+
+    public HashMap<String, Object> paging(Integer pageSize, long totalElement, List listResult) {
+        long totalPage = totalElement / pageSize;
+        if (totalElement % pageSize != 0) {
+            totalPage++;
+        }
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("data", listResult);
+        map.put("totalElement", totalElement);
+        map.put("totalPage", totalPage);
+        return map;
+    }
+
     public HashMap<String, Object> paging(TypedQuery<?> tQuery, Query countTotalQuery, Integer pageIndex, Integer pageSize) {
         params.forEach((k, v) -> {
             tQuery.setParameter(k, v);
@@ -124,6 +142,7 @@ public class QueryGenerateHelper {
         query.append(" AND ");
         return this;
     }
+
     public QueryGenerateHelper openBracket() {
         query.append(" ( ");
         return this;

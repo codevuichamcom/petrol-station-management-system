@@ -1,15 +1,21 @@
 package com.gasstation.managementsystem.repository.criteria;
 
+import com.gasstation.managementsystem.model.dto.card.CardDTO;
 import com.gasstation.managementsystem.model.dto.debt.DebtDTOSummary;
 import com.gasstation.managementsystem.model.dto.debt.DebtDTOSummaryFilter;
+import com.gasstation.managementsystem.model.dto.station.StationDTO;
+import com.gasstation.managementsystem.model.dto.user.UserDTO;
+import com.gasstation.managementsystem.utils.QueryGenerateHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -17,26 +23,47 @@ public class DebtRepositoryCriteria {
     private final EntityManager em;
 
     public HashMap<String, Object> summary(DebtDTOSummaryFilter filter) {
-        String query = "select * from debt_summary";
-        Query queryExecutor = em.createNativeQuery(query);
+        StringBuilder query = new StringBuilder("select * from debt_summary ds where 1=1 ");
+        QueryGenerateHelper qHelper = new QueryGenerateHelper();
+        qHelper.setQuery(query);
+        qHelper.like("ds.card_id", "cardIds", filter.getCardId())
+                .in("ds.station_id", "stationIds", filter.getStationIds())
+                .like("ds.customer_name", "customerName", filter.getCustomerName())
+                .like("ds.customer_phone", "customerPhone", filter.getCustomerPhone())
+                .between("ds.total_money", 0d, filter.getTotalMoney(), "totalMoney", filter.getTotalMoney());
 
-        List<Object[]> listResult = queryExecutor.getResultList();
+        Query queryExecutor = em.createNativeQuery(query.toString());
+        String countQuery = qHelper.getQuery().toString().replace("*", "count(*)");
+        Query countTotalQuery = em.createNativeQuery(countQuery);
+        qHelper.setParam(queryExecutor).setParam(countTotalQuery);
+
+        long totalElement = ((BigInteger) countTotalQuery.getSingleResult()).longValue();
+
+        List<DebtDTOSummary> debtDTOSummaryList = mapToListDebtDTOSummary(queryExecutor, filter.getPageIndex(), filter.getPageSize());
+        return qHelper.paging(filter.getPageSize(), totalElement, debtDTOSummaryList);
+    }
+
+    private List<DebtDTOSummary> mapToListDebtDTOSummary(Query queryExecutor, Integer pageIndex, Integer pageSize) {
+        queryExecutor.setFirstResult((pageIndex - 1) * pageSize);
+        queryExecutor.setMaxResults(pageSize);
         List<DebtDTOSummary> debtDTOSummaryList = new ArrayList<>();
+        List<Object[]> listResult = queryExecutor.getResultList();
         listResult.forEach(objects -> {
             DebtDTOSummary debtDTOSummary = DebtDTOSummary.builder()
-                    .cardId((String) objects[0])
-                    .stationId((Integer) objects[1])
-                    .stationName((String) objects[2])
-                    .stationAddress((String) objects[3])
-                    .customerId((Integer) objects[4])
-                    .customerName((String) objects[5])
-                    .customerPhone((String) objects[6])
+                    .card(CardDTO.builder()
+                            .id(UUID.fromString((String) objects[0]))
+                            .customer(UserDTO.builder()
+                                    .id((Integer) objects[4])
+                                    .name((String) objects[5])
+                                    .phone((String) objects[6]).build()).build())
+                    .station(StationDTO.builder()
+                            .id((Integer) objects[1])
+                            .name((String) objects[2])
+                            .address((String) objects[3]).build())
                     .totalMoney((Double) objects[7])
                     .build();
             debtDTOSummaryList.add(debtDTOSummary);
         });
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("data", debtDTOSummaryList);
-        return map;
+        return debtDTOSummaryList;
     }
 }

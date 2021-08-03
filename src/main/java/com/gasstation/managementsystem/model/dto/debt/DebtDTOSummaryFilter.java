@@ -9,5 +9,11 @@ import lombok.*;
 @Builder
 @ToString
 public class DebtDTOSummaryFilter {
-    private int id;
+    private Integer pageIndex;
+    private Integer pageSize;
+    private String cardId;
+    private Integer[] stationIds;
+    private String customerName;
+    private String customerPhone;
+    private Double totalMoney;
 }

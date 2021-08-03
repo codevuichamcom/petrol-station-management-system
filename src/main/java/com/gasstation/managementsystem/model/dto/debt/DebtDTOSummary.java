@@ -1,5 +1,7 @@
 package com.gasstation.managementsystem.model.dto.debt;
 
+import com.gasstation.managementsystem.model.dto.card.CardDTO;
+import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import lombok.*;
 
 @AllArgsConstructor
@@ -9,12 +11,7 @@ import lombok.*;
 @Builder
 @ToString
 public class DebtDTOSummary {
-    private String cardId;
-    private Integer stationId;
-    private String stationName;
-    private String stationAddress;
-    private Integer customerId;
-    private String customerName;
-    private String customerPhone;
+    private CardDTO card;
+    private StationDTO station;
     private Double totalMoney;
 }

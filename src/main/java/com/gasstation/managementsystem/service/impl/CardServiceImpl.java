@@ -14,6 +14,7 @@ import com.gasstation.managementsystem.repository.CardRepository;
 import com.gasstation.managementsystem.repository.criteria.CardRepositoryCriteria;
 import com.gasstation.managementsystem.service.CardService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
+import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,7 @@ public class CardServiceImpl implements CardService {
     private final CardRepository cardRepository;
     private final CardRepositoryCriteria cardCriteria;
     private final OptionalValidate optionalValidate;
+    private final UserHelper userHelper;
 
     private HashMap<String, Object> listCardToMap(List<Card> cards) {
         List<CardDTO> cardDTOS = cards.stream().map(CardMapper::toCardDTO).collect(Collectors.toList());
@@ -57,10 +59,10 @@ public class CardServiceImpl implements CardService {
     public CardDTO create(CardDTOCreate cardDTOCreate) throws CustomDuplicateFieldException, CustomNotFoundException {
         checkDuplicate(cardDTOCreate.getDriverPhone());
         Card card = CardMapper.toCard(cardDTOCreate);
-        User activateUser = optionalValidate.getUserById(cardDTOCreate.getActivateUserId());
-        User customer = optionalValidate.getUserById(cardDTOCreate.getCustomerId());
-        card.setActivatedUser(activateUser);
-        card.setCustomer(customer);
+        card.setActivatedUser(userHelper.getUserLogin());
+        if (cardDTOCreate.getCustomerId() != null) {
+            card.setCustomer(optionalValidate.getUserById(cardDTOCreate.getCustomerId()));
+        }
         card = cardRepository.save(card);
         return CardMapper.toCardDTO(card);
     }
@@ -82,12 +84,7 @@ public class CardServiceImpl implements CardService {
             checkDuplicate(phone);
         }
         CardMapper.copyNonNullToCard(oldCard, cardDTOUpdate);
-        Integer activateUserId = cardDTOUpdate.getActivateUserId();
         Integer customerId = cardDTOUpdate.getCustomerId();
-        if (activateUserId != null) {
-            User activeUser = optionalValidate.getUserById(activateUserId);
-            oldCard.setActivatedUser(activeUser);
-        }
         if (customerId != null) {
             User customer = optionalValidate.getUserById(customerId);
             oldCard.setCustomer(customer);

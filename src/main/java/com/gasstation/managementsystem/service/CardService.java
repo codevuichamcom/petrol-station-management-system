@@ -4,17 +4,14 @@ import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldExce
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.card.CardDTO;
 import com.gasstation.managementsystem.model.dto.card.CardDTOCreate;
+import com.gasstation.managementsystem.model.dto.card.CardDTOFilter;
 import com.gasstation.managementsystem.model.dto.card.CardDTOUpdate;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 import java.util.HashMap;
 import java.util.UUID;
 
 public interface CardService {
-    HashMap<String, Object> findAll(Pageable pageable);
-
-    HashMap<String, Object> findAll(Sort sort);
+    HashMap<String, Object> findAll(CardDTOFilter filter);
 
     CardDTO findById(UUID id) throws CustomNotFoundException;
 

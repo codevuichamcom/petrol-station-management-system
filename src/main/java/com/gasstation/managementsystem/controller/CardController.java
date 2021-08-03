@@ -4,13 +4,12 @@ import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldExce
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.card.CardDTO;
 import com.gasstation.managementsystem.model.dto.card.CardDTOCreate;
+import com.gasstation.managementsystem.model.dto.card.CardDTOFilter;
 import com.gasstation.managementsystem.model.dto.card.CardDTOUpdate;
 import com.gasstation.managementsystem.service.CardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,11 +28,23 @@ public class CardController {
     @Operation(summary = "View All card")
     @GetMapping("/cards")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
-                                          @RequestParam(name = "pageSize", required = false) Integer pageSize) {
-        if (pageSize != null) {
-            return cardService.findAll(PageRequest.of(pageIndex - 1, pageSize, Sort.by(Sort.Direction.ASC, "id")));
-        }
-        return cardService.findAll(Sort.by(Sort.Direction.ASC, "id"));
+                                          @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                          @RequestParam(name = "accountsPayable", required = false) Double accountsPayable,
+                                          @RequestParam(name = "statuses", required = false) String[] statuses,
+                                          @RequestParam(name = "createdDate", required = false) Long createdDate,
+                                          @RequestParam(name = "activateUserName", required = false) String activateUserName,
+                                          @RequestParam(name = "customerName", required = false) String customerName,
+                                          @RequestParam(name = "licensePlate", required = false) String licensePlate) {
+        CardDTOFilter filter = CardDTOFilter.builder()
+                .pageIndex(pageIndex)
+                .pageSize(pageSize)
+                .accountsPayable(accountsPayable)
+                .statuses(statuses)
+                .createdDate(createdDate)
+                .activateUserName(activateUserName)
+                .customerName(customerName)
+                .licensePlate(licensePlate).build();
+        return cardService.findAll(filter);
     }
 
     @Operation(summary = "Find card by id")

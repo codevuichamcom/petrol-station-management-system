@@ -19,24 +19,14 @@ public class CardDTOCreate {
     @NotBlank(message = "Driver name is mandatory")
     private String driverName;
     @NotBlank(message = "License Palates is mandatory")
-    private String licensePalates;
-    @NotNull(message = "Initial Debt is mandatory")
-    private Double initialDebt;
+    private String licensePlate;
     @NotNull(message = "Available Balance is mandatory")
     private Double availableBalance;
-    @NotNull(message = "Outstanding Balance is mandatory")
-    private Double accountsPayable;
     @NotNull(message = "Debt Limit is mandatory")
     private Double debtLimit;
-    @NotNull(message = "limit Set Date is mandatory")
-    private Long limitSetDate;
-    @NotNull(message = "Issued Date is mandatory")
-    private Long issuedDate;
-    @NotNull(message = "Active Date is mandatory")
-    private Long activeDate;
-    @NotNull(message = "Activate User Id is mandatory")
+    private Long createdDate;
     private Integer activateUserId;
-    @NotNull(message = "Customer id is mandatory")
     private Integer customerId;
+    private Boolean active;
 
 }

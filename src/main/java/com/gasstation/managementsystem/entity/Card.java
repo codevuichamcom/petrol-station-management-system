@@ -26,12 +26,14 @@ public class Card {
     private String driverName;
 
     @Column(nullable = false)
-    private String licensePalates;
+    private String licensePlate;
 
     @Column(nullable = false)
     private Double initialDebt;
+
     @Column(nullable = false)
     private Double availableBalance;
+
     @Column(nullable = false)
     private Double accountsPayable;
 
@@ -40,16 +42,17 @@ public class Card {
 
     private Long limitSetDate;
 
-    private Long issuedDate;
+    private Long createdDate;
 
-    private Long activeDate;
+    @Column(nullable = false)
+    private Boolean active;
 
     @OneToMany(mappedBy = "card")
     private List<Transaction> transactionList;//Danh sách mã bơm trả bằng thẻ này
 
     @ManyToOne
     @JoinColumn(name = "activate_user_id")
-    private User activateUser; //Ai active thẻ này
+    private User activatedUser; //Ai active thẻ này
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)

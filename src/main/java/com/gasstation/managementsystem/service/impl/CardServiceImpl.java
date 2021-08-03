@@ -7,15 +7,14 @@ import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.dto.card.CardDTO;
 import com.gasstation.managementsystem.model.dto.card.CardDTOCreate;
+import com.gasstation.managementsystem.model.dto.card.CardDTOFilter;
 import com.gasstation.managementsystem.model.dto.card.CardDTOUpdate;
 import com.gasstation.managementsystem.model.mapper.CardMapper;
 import com.gasstation.managementsystem.repository.CardRepository;
+import com.gasstation.managementsystem.repository.criteria.CardRepositoryCriteria;
 import com.gasstation.managementsystem.service.CardService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +29,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CardServiceImpl implements CardService {
     private final CardRepository cardRepository;
+    private final CardRepositoryCriteria cardCriteria;
     private final OptionalValidate optionalValidate;
 
     private HashMap<String, Object> listCardToMap(List<Card> cards) {
@@ -40,17 +40,12 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public HashMap<String, Object> findAll(Pageable pageable) {
-        Page<Card> card = cardRepository.findAll(pageable);
-        HashMap<String, Object> map = listCardToMap(card.getContent());
-        map.put("totalElement", card.getTotalElements());
-        map.put("totalPage", card.getTotalPages());
+    public HashMap<String, Object> findAll(CardDTOFilter filter) {
+        HashMap<String, Object> temp = cardCriteria.findAll(filter);
+        HashMap<String, Object> map = listCardToMap((List<Card>) temp.get("data"));
+        map.put("totalElement", temp.get("totalElement"));
+        map.put("totalPage", temp.get("totalPage"));
         return map;
-    }
-
-    @Override
-    public HashMap<String, Object> findAll(Sort sort) {
-        return listCardToMap(cardRepository.findAll(sort));
     }
 
     @Override
@@ -64,7 +59,7 @@ public class CardServiceImpl implements CardService {
         Card card = CardMapper.toCard(cardDTOCreate);
         User activateUser = optionalValidate.getUserById(cardDTOCreate.getActivateUserId());
         User customer = optionalValidate.getUserById(cardDTOCreate.getCustomerId());
-        card.setActivateUser(activateUser);
+        card.setActivatedUser(activateUser);
         card.setCustomer(customer);
         card = cardRepository.save(card);
         return CardMapper.toCardDTO(card);
@@ -91,7 +86,7 @@ public class CardServiceImpl implements CardService {
         Integer customerId = cardDTOUpdate.getCustomerId();
         if (activateUserId != null) {
             User activeUser = optionalValidate.getUserById(activateUserId);
-            oldCard.setActivateUser(activeUser);
+            oldCard.setActivatedUser(activeUser);
         }
         if (customerId != null) {
             User customer = optionalValidate.getUserById(customerId);

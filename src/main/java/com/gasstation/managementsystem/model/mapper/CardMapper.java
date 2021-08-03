@@ -18,7 +18,7 @@ public class CardMapper {
         User customer = card.getCustomer();
         User creator = card.getCreator();
         UserDTO activateUserDTO = activateUser != null ? UserDTO.builder().id(activateUser.getId()).name(activateUser.getName()).build() : null;
-        UserDTO customerDTO = customer != null ? UserDTO.builder().id(customer.getId()).name(customer.getName()).build() : null;
+        UserDTO customerDTO = customer != null ? UserDTO.builder().id(customer.getId()).name(customer.getName()).phone(activateUser.getPhone()).build() : null;
         UserDTO creatorDTO = creator != null ? UserDTO.builder().id(creator.getId()).name(creator.getName()).build() : null;
         return CardDTO.builder()
                 .id(card.getId())

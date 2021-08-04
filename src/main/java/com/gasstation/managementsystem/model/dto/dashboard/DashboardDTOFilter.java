@@ -8,7 +8,12 @@ import lombok.*;
 @Setter
 @Builder
 public class DashboardDTOFilter {
-    private int stationId;
-    private long startTime;
-    private long endTime;
+    private Integer fuelId;
+    private String fuelName;
+    private Integer stationId;
+    private String stationName;
+    private String stationAddress;
+    private Double totalRevenue;
+    private Double totalDebt;
+    private Double totalMoney;
 }

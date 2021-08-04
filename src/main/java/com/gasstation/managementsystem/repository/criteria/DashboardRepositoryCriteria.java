@@ -33,7 +33,8 @@ public class DashboardRepositoryCriteria {
             Dashboard revenue = Dashboard.builder()
                     .fuelId((Integer) objects[0])
                     .fuelName((String) objects[1])
-                    .revenue((Double) objects[2]).build();
+//                    .revenue((Double) objects[2])
+                    .build();
             revenueList.add(revenue);
         });
         HashMap<String, Object> map = new HashMap<>();

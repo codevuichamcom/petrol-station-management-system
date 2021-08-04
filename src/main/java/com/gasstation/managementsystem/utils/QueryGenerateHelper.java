@@ -1,6 +1,7 @@
 package com.gasstation.managementsystem.utils;
 
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -31,7 +32,7 @@ public class QueryGenerateHelper {
     }
 
     public QueryGenerateHelper like(String field, String key, String value) {
-        if (value == null) return this;
+        if (StringUtils.isEmpty(value)) return this;
         query
                 .append(" AND ")
                 .append(field)

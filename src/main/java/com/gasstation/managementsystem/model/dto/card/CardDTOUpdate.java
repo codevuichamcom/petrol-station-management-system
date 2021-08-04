@@ -13,7 +13,7 @@ public class CardDTOUpdate {
     private String driverName;
     private String licensePlate;
     private Double initialDebt;
-    private Double availableBalance;
+    private Double payInAmount;
     private Double debtLimit;
     private Boolean active;
 }

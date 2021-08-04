@@ -1,5 +1,7 @@
 package com.gasstation.managementsystem.model.dto.dashboard;
 
+import com.gasstation.managementsystem.model.dto.fuel.FuelDTO;
+import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import lombok.*;
 
 @NoArgsConstructor
@@ -8,7 +10,9 @@ import lombok.*;
 @Setter
 @Builder
 public class DashboardDTO {
-    private Integer fuelId;
-    private String fuelName;
-    private Double revenue;
+    private FuelDTO fuel;
+    private StationDTO station;
+    private Double totalRevenue;
+    private Double totalDebt;
+    private Double totalMoney;
 }

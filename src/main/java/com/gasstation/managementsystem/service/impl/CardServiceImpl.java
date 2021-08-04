@@ -93,7 +93,7 @@ public class CardServiceImpl implements CardService {
 
     private boolean needCheckDuplicate(String licensePlate, Card oldCard) {
         if (licensePlate == null) return false;
-        return !licensePlate.equalsIgnoreCase(oldCard.getDriverPhone());
+        return !licensePlate.equalsIgnoreCase(oldCard.getLicensePlate());
     }
 
 

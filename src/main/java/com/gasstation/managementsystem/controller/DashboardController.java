@@ -20,8 +20,12 @@ public class DashboardController {
 
     @Operation(summary = "Statistics")
     @GetMapping("/dashboard")
-    public HashMap<String, Object> getAll(@RequestParam(name = "stationId") Integer stationId) {
-        DashboardDTOFilter filter = DashboardDTOFilter.builder().stationId(stationId).build();
+    public HashMap<String, Object> getAll(@RequestParam(name = "startTime") Long startTime,
+                                          @RequestParam(name = "endTime") Long endTime,
+                                          @RequestParam(name = "stationId") Integer stationId) {
+        DashboardDTOFilter filter = DashboardDTOFilter.builder()
+                .startTime(startTime)
+                .endTime(endTime).stationId(stationId).build();
         return dashboardService.statistic(filter);
     }
 }

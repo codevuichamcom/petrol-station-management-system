@@ -17,28 +17,46 @@ public class DashboardRepositoryCriteria {
     private final EntityManager em;
 
     public HashMap<String, Object> statistic(DashboardDTOFilter filter) {
-        Query revenueTypedQuery = em.createNativeQuery("select ft.id as fuelId, ft.name as fuelName, coalesce(sum(tran.volume * tran.volume), 0) as revenue\n" +
-                "from transaction_tbl tran\n" +
-                "         right join hand_over_shift_tbl host on host.id = tran.hand_over_ship_id\n" +
-                "         right join pump_tbl pt on pt.id = host.pump_id\n" +
-                "         right join tank_tbl tt on tt.id = pt.tank_id\n" +
-                "         right join fuel_tbl ft on ft.id = tt.fuel_id\n" +
-                "where station_id = :stationId\n" +
-                "group by ft.id, ft.name");
-        revenueTypedQuery.setParameter("stationId", filter.getStationId());
+        Query nativeQuery = em.createNativeQuery("SELECT ft.id                                                                                     as fuel_id,\n" +
+                "       ft.name                                                                                   AS fuel_name,\n" +
+                "       st.id                                                                                     AS station_id,\n" +
+                "       st.name                                                                                   AS station_name,\n" +
+                "       st.address                                                                                AS station_address,\n" +
+                "       coalesce(sum(tran.volume * tran.unit_price), 0)                                           as total_revenue,\n" +
+                "       coalesce(sum(dt.accounts_payable), 0)                                                     as total_debt,\n" +
+                "       (coalesce(sum(tran.volume * tran.unit_price), 0) - coalesce(sum(dt.accounts_payable), 0)) as total_money\n" +
+                "FROM transaction_tbl tran\n" +
+                "         right join debt_tbl dt on tran.id = dt.transaction_id\n" +
+                "         RIGHT JOIN hand_over_shift_tbl host ON host.id = tran.hand_over_shift_id\n" +
+                "         RIGHT JOIN pump_tbl pt ON pt.id = host.pump_id\n" +
+                "         RIGHT JOIN tank_tbl tt ON tt.id = pt.tank_id\n" +
+                "         right join station_tbl st on st.id = tt.station_id\n" +
+                "         RIGHT JOIN fuel_tbl ft ON ft.id = tt.fuel_id\n" +
+                "where tran.time between :startTime and :endTime\n" +
+                "   or tran.time is null\n" +
+                "GROUP BY ft.id, ft.name, st.id, st.name, st.address\n" +
+                "having st.id = :stationId");
+        nativeQuery.setParameter("startTime", filter.getStartTime());
+        nativeQuery.setParameter("endTime", filter.getEndTime());
+        nativeQuery.setParameter("stationId", filter.getStationId());
 
-        List<Object[]> listResult = revenueTypedQuery.getResultList();
-        List<Dashboard> revenueList = new ArrayList<>();
+        List<Object[]> listResult = nativeQuery.getResultList();
+        List<Dashboard> dashboards = new ArrayList<>();
         listResult.forEach(objects -> {
             Dashboard revenue = Dashboard.builder()
                     .fuelId((Integer) objects[0])
                     .fuelName((String) objects[1])
-//                    .revenue((Double) objects[2])
+                    .stationId((Integer) objects[2])
+                    .stationName((String) objects[3])
+                    .stationAddress((String) objects[4])
+                    .totalRevenue((Double) objects[5])
+                    .totalDebt((Double) objects[6])
+                    .totalMoney((Double) objects[7])
                     .build();
-            revenueList.add(revenue);
+            dashboards.add(revenue);
         });
         HashMap<String, Object> map = new HashMap<>();
-        map.put("data", revenueList);
+        map.put("data", dashboards);
         return map;
     }
 }

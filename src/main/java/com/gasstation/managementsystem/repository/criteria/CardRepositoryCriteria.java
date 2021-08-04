@@ -18,7 +18,7 @@ public class CardRepositoryCriteria {
     private final EntityManager em;
 
     public HashMap<String, Object> findAll(CardDTOFilter filter) {
-        StringBuilder query = new StringBuilder("select c from Card c left join c.customer cus where 1=1");
+        StringBuilder query = new StringBuilder("select c from Card  c left outer join c.customer cus where 1=1");
         QueryGenerateHelper qHelper = new QueryGenerateHelper();
         qHelper.setQuery(query);
         String[] statuses = filter.getStatuses();

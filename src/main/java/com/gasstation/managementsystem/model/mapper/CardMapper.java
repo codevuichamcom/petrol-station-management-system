@@ -14,11 +14,9 @@ public class CardMapper {
 
     public static CardDTO toCardDTO(Card card) {
         if (card == null) return null;
-        User activateUser = card.getActivatedUser();
         User customer = card.getCustomer();
         User creator = card.getCreator();
-        UserDTO activateUserDTO = activateUser != null ? UserDTO.builder().id(activateUser.getId()).name(activateUser.getName()).build() : null;
-        UserDTO customerDTO = customer != null ? UserDTO.builder().id(customer.getId()).name(customer.getName()).phone(activateUser.getPhone()).build() : null;
+        UserDTO customerDTO = customer != null ? UserDTO.builder().id(customer.getId()).name(customer.getName()).phone(customer.getPhone()).build() : null;
         UserDTO creatorDTO = creator != null ? UserDTO.builder().id(creator.getId()).name(creator.getName()).build() : null;
         return CardDTO.builder()
                 .id(card.getId())
@@ -32,7 +30,6 @@ public class CardMapper {
                 .limitSetDate(card.getLimitSetDate())
                 .createdDate(card.getCreatedDate())
                 .active(card.getActive())
-                .activateUser(activateUserDTO)
                 .customer(customerDTO)
                 .creator(creatorDTO)
                 .build();
@@ -51,7 +48,7 @@ public class CardMapper {
                 .driverName(cardDTOCreate.getDriverName())
                 .licensePlate(cardDTOCreate.getLicensePlate())
                 .initialDebt(0d)
-                .availableBalance(cardDTOCreate.getAvailableBalance())
+                .availableBalance(0d)
                 .accountsPayable(0d)
                 .debtLimit(debtLimit)
                 .limitSetDate(DateTimeHelper.getCurrentDate())

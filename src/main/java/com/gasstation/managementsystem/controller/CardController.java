@@ -32,7 +32,6 @@ public class CardController {
                                           @RequestParam(name = "accountsPayable", required = false) Double accountsPayable,
                                           @RequestParam(name = "statuses", required = false) String[] statuses,
                                           @RequestParam(name = "createdDate", required = false) Long createdDate,
-                                          @RequestParam(name = "activateUserName", required = false) String activateUserName,
                                           @RequestParam(name = "customerName", required = false) String customerName,
                                           @RequestParam(name = "licensePlate", required = false) String licensePlate) {
         CardDTOFilter filter = CardDTOFilter.builder()
@@ -41,7 +40,6 @@ public class CardController {
                 .accountsPayable(accountsPayable)
                 .statuses(statuses)
                 .createdDate(createdDate)
-                .activateUserName(activateUserName)
                 .customerName(customerName)
                 .licensePlate(licensePlate).build();
         return cardService.findAll(filter);

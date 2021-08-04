@@ -63,9 +63,6 @@ public class User {
     @JoinColumn(name = "user_type_id", nullable = false)
     private UserType userType;
 
-    @OneToMany(mappedBy = "activatedUser")
-    private List<Card> cardListActiveByMe;//Danh sách active bởi tài khoản này
-
     @OneToMany(mappedBy = "customer")
     private List<Card> cardList;//Danh sách thẻ của người này
 

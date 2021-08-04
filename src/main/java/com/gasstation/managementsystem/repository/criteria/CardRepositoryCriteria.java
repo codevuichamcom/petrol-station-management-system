@@ -26,7 +26,6 @@ public class CardRepositoryCriteria {
 
         qHelper.between("c.accountsPayable", 0d, filter.getAccountsPayable(), "accountsPayable", filter.getAccountsPayable())
                 .between("c.createdDate", 0l, filter.getCreatedDate(), "createdDate", filter.getCreatedDate())
-                .like("au.name", "activateUserName", filter.getActivateUserName())
                 .like("cus.name", "customerName", filter.getCustomerName())
                 .like("c.licensePlate", "licensePlate", filter.getLicensePlate());
         boolean isOr = false;

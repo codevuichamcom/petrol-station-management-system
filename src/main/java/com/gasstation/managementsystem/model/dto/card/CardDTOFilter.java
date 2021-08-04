@@ -16,7 +16,6 @@ public class CardDTOFilter {
     private Double accountsPayable;
     private String[] statuses;
     private Long createdDate;
-    private String activateUserName;
     private String customerName;
     private String licensePlate;
 }

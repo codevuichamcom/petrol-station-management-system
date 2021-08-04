@@ -1,7 +1,6 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.Card;
-import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
@@ -57,51 +56,40 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardDTO create(CardDTOCreate cardDTOCreate) throws CustomDuplicateFieldException, CustomNotFoundException {
-        checkDuplicate(cardDTOCreate.getDriverPhone());
+        checkDuplicate(cardDTOCreate.getLicensePlate());
         Card card = CardMapper.toCard(cardDTOCreate);
         card.setCreator(userHelper.getUserLogin());
         if (cardDTOCreate.getCustomerId() != null) {
             card.setCustomer(optionalValidate.getUserById(cardDTOCreate.getCustomerId()));
         }
-        if (cardDTOCreate.getActivateUserId() != null) {
-            card.setActivatedUser(optionalValidate.getUserById(cardDTOCreate.getActivateUserId()));
-        }
         card = cardRepository.save(card);
         return CardMapper.toCardDTO(card);
     }
 
-    private void checkDuplicate(String driverPhone) throws CustomDuplicateFieldException {
-        if (driverPhone == null) return;
-        Optional<Card> cardOptional = cardRepository.findByDriverPhone(driverPhone);
+    private void checkDuplicate(String licensePalate) throws CustomDuplicateFieldException {
+        if (licensePalate == null) return;
+        Optional<Card> cardOptional = cardRepository.findByLicensePlate(licensePalate);
         if (cardOptional.isPresent()) {
             throw new CustomDuplicateFieldException(CustomError.builder()
-                    .code("duplicate").field("phone").message("Phone is duplicate").table("card_table").build());
+                    .code("duplicate").field("licensePalate").message("License Palate is duplicate").table("card_table").build());
         }
     }
 
     @Override
     public CardDTO update(UUID id, CardDTOUpdate cardDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         Card oldCard = optionalValidate.getCardById(id);
-        String phone = cardDTOUpdate.getDriverPhone();
-        if (needCheckDuplicate(phone, oldCard)) {
-            checkDuplicate(phone);
+        String licensePalate = cardDTOUpdate.getLicensePlate();
+        if (needCheckDuplicate(licensePalate, oldCard)) {
+            checkDuplicate(licensePalate);
         }
         CardMapper.copyNonNullToCard(oldCard, cardDTOUpdate);
-        Integer customerId = cardDTOUpdate.getCustomerId();
-        if (customerId != null) {
-            User customer = optionalValidate.getUserById(customerId);
-            oldCard.setCustomer(customer);
-        }
-        if (cardDTOUpdate.getActivateUserId() != null) {
-            oldCard.setActivatedUser(optionalValidate.getUserById(cardDTOUpdate.getActivateUserId()));
-        }
         oldCard = cardRepository.save(oldCard);
         return CardMapper.toCardDTO(oldCard);
     }
 
-    private boolean needCheckDuplicate(String phone, Card oldCard) {
-        if (phone == null) return false;
-        return !phone.equalsIgnoreCase(oldCard.getDriverPhone());
+    private boolean needCheckDuplicate(String licensePlate, Card oldCard) {
+        if (licensePlate == null) return false;
+        return !licensePlate.equalsIgnoreCase(oldCard.getDriverPhone());
     }
 
 

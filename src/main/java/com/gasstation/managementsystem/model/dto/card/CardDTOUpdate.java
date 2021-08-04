@@ -17,8 +17,5 @@ public class CardDTOUpdate {
     private Double accountsPayable;
     private Double debtLimit;
     private Long limitSetDate;
-    private Integer customerId;
-    private Integer activateUserId;
     private Boolean active;
-
 }

@@ -19,13 +19,11 @@ public class Card {
     @GeneratedValue
     private UUID id;
 
-    @Column(nullable = false, unique = true)
     private String driverPhone;
 
-    @Column(nullable = false)
     private String driverName;
 
-    @Column(nullable = false)
+    @Column(unique = true)
     private String licensePlate;
 
     @Column(nullable = false)
@@ -49,10 +47,6 @@ public class Card {
 
     @OneToMany(mappedBy = "card")
     private List<Transaction> transactionList;//Danh sách mã bơm trả bằng thẻ này
-
-    @ManyToOne
-    @JoinColumn(name = "activate_user_id")
-    private User activatedUser; //Ai active thẻ này
 
     @ManyToOne
     @JoinColumn(name = "customer_id")

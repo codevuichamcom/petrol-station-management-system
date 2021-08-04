@@ -15,5 +15,6 @@ public class CardDTOUpdate {
     private Double initialDebt;
     private Double payInAmount;
     private Double debtLimit;
+    private Integer customerId;
     private Boolean active;
 }

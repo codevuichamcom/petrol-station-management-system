@@ -90,6 +90,10 @@ public class CardServiceImpl implements CardService {
         if (cardDTOUpdate.getPayInAmount() != null) {
             oldCard.setAvailableBalance(oldCard.getAvailableBalance() + cardDTOUpdate.getPayInAmount());
         }
+        Integer customerId = cardDTOUpdate.getCustomerId();
+        if (customerId != null && oldCard.getCustomer() == null) {
+            oldCard.setCustomer(optionalValidate.getUserById(customerId));
+        }
         oldCard = cardRepository.save(oldCard);
         return CardMapper.toCardDTO(oldCard);
     }

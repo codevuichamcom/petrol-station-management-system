@@ -30,17 +30,21 @@ public class CardController {
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
                                           @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                           @RequestParam(name = "accountsPayable", required = false) Double accountsPayable,
+                                          @RequestParam(name = "availableBalance", required = false) Double availableBalance,
                                           @RequestParam(name = "statuses", required = false) String[] statuses,
                                           @RequestParam(name = "createdDate", required = false) Long createdDate,
                                           @RequestParam(name = "customerName", required = false) String customerName,
+                                          @RequestParam(name = "customerPhone", required = false) String customerPhone,
                                           @RequestParam(name = "licensePlate", required = false) String licensePlate) {
         CardDTOFilter filter = CardDTOFilter.builder()
                 .pageIndex(pageIndex)
                 .pageSize(pageSize)
                 .accountsPayable(accountsPayable)
+                .availableBalance(availableBalance)
                 .statuses(statuses)
                 .createdDate(createdDate)
                 .customerName(customerName)
+                .customerPhone(customerPhone)
                 .licensePlate(licensePlate).build();
         return cardService.findAll(filter);
     }

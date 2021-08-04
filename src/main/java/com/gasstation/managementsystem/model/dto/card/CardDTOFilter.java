@@ -14,8 +14,10 @@ public class CardDTOFilter {
     private Integer pageIndex;
     private Integer pageSize;
     private Double accountsPayable;
+    private Double availableBalance;
     private String[] statuses;
     private Long createdDate;
     private String customerName;
+    private String customerPhone;
     private String licensePlate;
 }

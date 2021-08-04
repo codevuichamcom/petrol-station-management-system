@@ -12,6 +12,7 @@ import com.gasstation.managementsystem.model.mapper.CardMapper;
 import com.gasstation.managementsystem.repository.CardRepository;
 import com.gasstation.managementsystem.repository.criteria.CardRepositoryCriteria;
 import com.gasstation.managementsystem.service.CardService;
+import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
@@ -81,6 +82,9 @@ public class CardServiceImpl implements CardService {
         String licensePalate = cardDTOUpdate.getLicensePlate();
         if (needCheckDuplicate(licensePalate, oldCard)) {
             checkDuplicate(licensePalate);
+        }
+        if (cardDTOUpdate.getDebtLimit() != null) {
+            oldCard.setLimitSetDate(DateTimeHelper.getCurrentDate());
         }
         CardMapper.copyNonNullToCard(oldCard, cardDTOUpdate);
         oldCard = cardRepository.save(oldCard);

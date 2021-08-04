@@ -14,8 +14,6 @@ public class CardDTOUpdate {
     private String licensePlate;
     private Double initialDebt;
     private Double availableBalance;
-    private Double accountsPayable;
     private Double debtLimit;
-    private Long limitSetDate;
     private Boolean active;
 }

@@ -25,8 +25,10 @@ public class CardRepositoryCriteria {
         Map<String, String> statusMap = toMap(statuses);
 
         qHelper.between("c.accountsPayable", 0d, filter.getAccountsPayable(), "accountsPayable", filter.getAccountsPayable())
-                .between("c.createdDate", 0l, filter.getCreatedDate(), "createdDate", filter.getCreatedDate())
+                .between("c.availableBalance", 0d, filter.getAvailableBalance(), "availableBalance", filter.getAvailableBalance())
+                .between("c.createdDate", 0L, filter.getCreatedDate(), "createdDate", filter.getCreatedDate())
                 .like("cus.name", "customerName", filter.getCustomerName())
+                .like("cus.phone", "customerPhone", filter.getCustomerPhone())
                 .like("c.licensePlate", "licensePlate", filter.getLicensePlate());
         boolean isOr = false;
         if (statusMap.containsKey(CardDTOFilter.STATUS_ACTIVATED)) {

@@ -58,7 +58,7 @@ public class HandOverShiftRepositoryCriteria {
 
         String countQuery = qHelper.getQuery().toString().replace("select h", "select count(h.id)");
         Query countTotalQuery = em.createQuery(countQuery);
-        qHelper.sort("h.createdDate", "DESC");
+        qHelper.sort("h.id", "DESC");
         TypedQuery<HandOverShift> tQuery = em.createQuery(qHelper.getQuery().toString(), HandOverShift.class);
         return qHelper.paging(tQuery, countTotalQuery, filter.getPageIndex(), filter.getPageSize());
     }

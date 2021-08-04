@@ -72,7 +72,7 @@ public class CardServiceImpl implements CardService {
         Optional<Card> cardOptional = cardRepository.findByLicensePlate(licensePalate);
         if (cardOptional.isPresent()) {
             throw new CustomDuplicateFieldException(CustomError.builder()
-                    .code("duplicate").field("licensePalate").message("License Palate is duplicate").table("card_table").build());
+                    .code("duplicate").field("licensePlate").message("License Plate is duplicate").table("card_table").build());
         }
     }
 

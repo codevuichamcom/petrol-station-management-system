@@ -3,6 +3,7 @@ package com.gasstation.managementsystem.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "receipt_tbl")
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Builder
+@ToString
 public class Receipt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,4 +38,12 @@ public class Receipt {
     @ManyToOne
     @JoinColumn(name = "debt_id", nullable = false)
     private Debt debt; //Hóa đơn này của ca nào
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Receipt receipt = (Receipt) o;
+        return id == receipt.id && Double.compare(receipt.amount, amount) == 0 && Objects.equals(createdDate, receipt.createdDate) && Objects.equals(reason, receipt.reason) && Objects.equals(creator, receipt.creator) && Objects.equals(card, receipt.card) && Objects.equals(debt, receipt.debt);
+    }
 }

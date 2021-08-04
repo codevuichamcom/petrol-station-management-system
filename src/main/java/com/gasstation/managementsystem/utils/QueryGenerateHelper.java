@@ -9,16 +9,26 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class QueryGenerateHelper {
     private StringBuilder query;
     private Map<String, Object> params = new HashMap<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        QueryGenerateHelper that = (QueryGenerateHelper) o;
+        return this.query.toString().trim().equals(that.query.toString().trim())&&
+                this.params.toString().trim().equals(that.params.toString().trim());
+    }
 
     public QueryGenerateHelper in(String field, String key, Object[] values) {
         if (values == null) return this;

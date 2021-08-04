@@ -80,10 +80,10 @@ public class CardServiceImpl implements CardService {
     public CardDTO update(UUID id, CardDTOUpdate cardDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         Card oldCard = optionalValidate.getCardById(id);
         String licensePalate = cardDTOUpdate.getLicensePlate();
-        CardMapper.copyNonNullToCard(oldCard, cardDTOUpdate);
         if (needCheckDuplicate(licensePalate, oldCard)) {
             checkDuplicate(licensePalate);
         }
+        CardMapper.copyNonNullToCard(oldCard, cardDTOUpdate);
         if (cardDTOUpdate.getDebtLimit() != null) {
             oldCard.setLimitSetDate(DateTimeHelper.getCurrentDate());
         }

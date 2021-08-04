@@ -10,6 +10,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Builder
+@ToString
 public class ShiftDTO {
     private int id;
     private String name;

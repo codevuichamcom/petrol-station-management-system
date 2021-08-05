@@ -19,8 +19,8 @@ import java.util.HashMap;
 public class DashboardController {
     private final DashboardService dashboardService;
 
-    @Operation(summary = "Fuel statistics")
-    @GetMapping("fuel-statistics")
+    @Operation(summary = "Fuel statistic")
+    @GetMapping("fuel-statistic")
     public HashMap<String, Object> fuelStatistic(@RequestParam(name = "startTime") Long startTime,
                                                  @RequestParam(name = "endTime") Long endTime,
                                                  @RequestParam(name = "stationId", required = false) Integer stationId) {
@@ -30,8 +30,8 @@ public class DashboardController {
         return dashboardService.fuelStatistic(filter);
     }
 
-    @Operation(summary = "Tank statistics")
-    @GetMapping("tank-statistics")
+    @Operation(summary = "Tank statistic")
+    @GetMapping("tank-statistic")
     public HashMap<String, Object> tankStatistic(@RequestParam(name = "startTime") Long startTime,
                                                  @RequestParam(name = "endTime") Long endTime) {
         TankStatisticDTOFilter filter = TankStatisticDTOFilter.builder()

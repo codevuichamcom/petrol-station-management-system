@@ -19,7 +19,7 @@ public class DashboardRepositoryCriteria {
     private final EntityManager em;
 
     public HashMap<String, Object> fuelStatistic(FuelStatisticDTOFilter filter) {
-        String str = "select tbl1.*, tbl2.totalPaid\n" +
+        String str = "select tbl1.*, tbl2.totalPaid \n" +
                 "from (SELECT ft.id                                           as fuel_id,\n" +
                 "             ft.name                                         AS fuel_name,\n" +
                 "             st.id                                           AS station_id,\n" +
@@ -39,9 +39,11 @@ public class DashboardRepositoryCriteria {
                 "         or tran.time is null\n" +
                 "      GROUP BY ft.id, ft.name, st.id, st.name, st.address) as tbl1,\n" +
                 "     (\n" +
-                "         select ft.id as fuel_id, coalesce(sum(tt.volume * tt.unit_price), 0) as totalPaid\n" +
+                "         select ft.id                                                                            as fuel_id,\n" +
+                "                coalesce(sum(tt.volume * tt.unit_price - coalesce((dt.accounts_payable), 0)), 0) as totalPaid\n" +
                 "         from card_tbl ct\n" +
                 "                  right join transaction_tbl tt on ct.id = tt.card_id\n" +
+                "                  right join debt_tbl dt on tt.id = dt.transaction_id\n" +
                 "                  right join pump_shift_tbl pst on pst.id = tt.pump_shift_id\n" +
                 "                  right join pump_tbl pt on pt.id = pst.pump_id\n" +
                 "                  right join tank_tbl t on t.id = pt.tank_id\n" +
@@ -50,7 +52,8 @@ public class DashboardRepositoryCriteria {
                 "            or tt.time is null\n" +
                 "         GROUP BY ft.id)\n" +
                 "         as tbl2\n" +
-                "where tbl1.fuel_id = tbl2.fuel_id and tbl1.station_id is not null";
+                "where tbl1.fuel_id = tbl2.fuel_id\n" +
+                "  and tbl1.station_id is not null";
         if (filter.getStationId() != null) {
             str += "  and tbl1.station_id = :stationId";
         }
@@ -112,7 +115,7 @@ public class DashboardRepositoryCriteria {
                 "         or tran.time is null\n" +
                 "      group by tt.id, tt.name, ft.id, ft.name\n" +
                 "      having tt.id is not null) as tx\n" +
-                "where tx.tank_id = tn.tank_id;";
+                "where tx.tank_id = tn.tank_id";
 
         Query nativeQuery = em.createNativeQuery(str);
         nativeQuery.setParameter("startTime", filter.getStartTime());

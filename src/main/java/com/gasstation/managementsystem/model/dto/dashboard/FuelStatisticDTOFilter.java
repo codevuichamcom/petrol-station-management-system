@@ -7,7 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class DashboardDTOFilter {
+public class FuelStatisticDTOFilter {
     private Long startTime;
     private Long endTime;
     private Integer stationId;

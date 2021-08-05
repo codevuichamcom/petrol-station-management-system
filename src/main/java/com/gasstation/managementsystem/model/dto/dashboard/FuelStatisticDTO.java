@@ -9,7 +9,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class DashboardDTO {
+public class FuelStatisticDTO {
     private FuelDTO fuel;
     private StationDTO station;
     private Double totalRevenue;

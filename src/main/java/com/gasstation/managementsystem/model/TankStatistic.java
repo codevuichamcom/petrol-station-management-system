@@ -7,7 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class Dashboard {
+public class TankStatistic {
     private Integer fuelId;
     private String fuelName;
     private Integer stationId;

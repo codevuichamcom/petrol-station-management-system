@@ -1,7 +1,7 @@
 package com.gasstation.managementsystem.repository.criteria;
 
-import com.gasstation.managementsystem.model.Dashboard;
-import com.gasstation.managementsystem.model.dto.dashboard.DashboardDTOFilter;
+import com.gasstation.managementsystem.model.FuelStatistic;
+import com.gasstation.managementsystem.model.dto.dashboard.FuelStatisticDTOFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +16,7 @@ import java.util.List;
 public class DashboardRepositoryCriteria {
     private final EntityManager em;
 
-    public HashMap<String, Object> statistic(DashboardDTOFilter filter) {
+    public HashMap<String, Object> fuelStatistic(FuelStatisticDTOFilter filter) {
         String str = "select tbl1.*, tbl2.totalPaid\n" +
                 "from (SELECT ft.id                                           as fuel_id,\n" +
                 "             ft.name                                         AS fuel_name,\n" +
@@ -48,7 +48,7 @@ public class DashboardRepositoryCriteria {
                 "            or tt.time is null\n" +
                 "         GROUP BY ft.id)\n" +
                 "         as tbl2\n" +
-                "where tbl1.fuel_id = tbl2.fuel_id";
+                "where tbl1.fuel_id = tbl2.fuel_id and tbl1.station_id is not null";
         if (filter.getStationId() != null) {
             str += "  and tbl1.station_id = :stationId";
         }
@@ -60,9 +60,9 @@ public class DashboardRepositoryCriteria {
         }
 
         List<Object[]> listResult = nativeQuery.getResultList();
-        List<Dashboard> dashboards = new ArrayList<>();
+        List<FuelStatistic> fuelStatistics = new ArrayList<>();
         listResult.forEach(objects -> {
-            Dashboard revenue = Dashboard.builder()
+            FuelStatistic revenue = FuelStatistic.builder()
                     .fuelId((Integer) objects[0])
                     .fuelName((String) objects[1])
                     .stationId((Integer) objects[2])
@@ -73,10 +73,10 @@ public class DashboardRepositoryCriteria {
                     .totalVolume((Double) objects[7])
                     .totalPaid((Double) objects[8])
                     .build();
-            dashboards.add(revenue);
+            fuelStatistics.add(revenue);
         });
         HashMap<String, Object> map = new HashMap<>();
-        map.put("data", dashboards);
+        map.put("data", fuelStatistics);
         return map;
     }
 }

@@ -92,12 +92,12 @@ public class PumpShiftRepositoryCriteria {
         volumeAmountHelper.setParams(qHelper.getParams());
         Query volumeAmountQuery = em.createQuery(totalVolumeAndAmountQuery);
         volumeAmountHelper.setValueToParams(volumeAmountQuery);
-        Object[] object = (Object[]) volumeAmountQuery.getSingleResult();
+        Object[] volumeAndAmount = (Object[]) volumeAmountQuery.getSingleResult();
         qHelper.sort("ps.createdDate", "DESC");
         TypedQuery<PumpShift> tQuery = em.createQuery(qHelper.getQuery().toString(), PumpShift.class);
         HashMap<String, Object> map = qHelper.paging(tQuery, countTotalQuery, filter.getPageIndex(), filter.getPageSize());
-        map.put("totalVolume", object[0]);
-        map.put("totalAmount", object[1]);
+        map.put("totalVolume", volumeAndAmount[0]);
+        map.put("totalAmount", volumeAndAmount[1]);
         return map;
     }
 

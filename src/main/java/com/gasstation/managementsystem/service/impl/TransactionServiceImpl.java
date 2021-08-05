@@ -56,6 +56,8 @@ public class TransactionServiceImpl implements TransactionService {
         HashMap<String, Object> map = listTransactionToMap((List<Transaction>) temp.get("data"));
         map.put("totalElement", temp.get("totalElement"));
         map.put("totalPage", temp.get("totalPage"));
+        map.put("totalVolume", temp.get("totalVolume"));
+        map.put("totalAmount", temp.get("totalAmount"));
         return map;
 
     }

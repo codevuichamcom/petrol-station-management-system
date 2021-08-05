@@ -29,8 +29,18 @@ public class TransactionRepositoryCriteria {
                 .between("t.volume", 0.0, filter.getVolume(), "volume", filter.getVolume());
         String countQuery = qHelper.getQuery().toString().replace("select t", "select count(t.id)");
         Query countTotalQuery = em.createQuery(countQuery);
+        String totalVolumeAndAmountQuery = qHelper.getQuery().toString().replace("select t", "select coalesce(sum(t.volume), 0), coalesce(sum(t.volume * t.unitPrice), 0)");
+        QueryGenerateHelper volumeAmountHelper = new QueryGenerateHelper();
+        volumeAmountHelper.setQuery(new StringBuilder(totalVolumeAndAmountQuery));
+        volumeAmountHelper.setParams(qHelper.getParams());
+        Query volumeAmountQuery = em.createQuery(totalVolumeAndAmountQuery);
+        volumeAmountHelper.setValueToParams(volumeAmountQuery);
+        Object[] volumeAndAmount = (Object[]) volumeAmountQuery.getSingleResult();
         qHelper.sort("t.time", "DESC");
         TypedQuery<Transaction> tQuery = em.createQuery(query.toString(), Transaction.class);
-        return qHelper.paging(tQuery, countTotalQuery, filter.getPageIndex(), filter.getPageSize());
+        HashMap<String, Object> map = qHelper.paging(tQuery, countTotalQuery, filter.getPageIndex(), filter.getPageSize());
+        map.put("totalVolume", volumeAndAmount[0]);
+        map.put("totalAmount", volumeAndAmount[1]);
+        return map;
     }
 }

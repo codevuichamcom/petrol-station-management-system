@@ -8,13 +8,11 @@ import lombok.*;
 @Setter
 @Builder
 public class TankStatistic {
+    private Integer tankId;
+    private String tankName;
+    private Double tankRemain;
     private Integer fuelId;
     private String fuelName;
-    private Integer stationId;
-    private String stationName;
-    private String stationAddress;
-    private Double totalRevenue;
-    private Double totalDebt;
-    private Double totalVolume;
-    private Double totalPaid;
+    private Double totalImport;
+    private Double totalExport;
 }

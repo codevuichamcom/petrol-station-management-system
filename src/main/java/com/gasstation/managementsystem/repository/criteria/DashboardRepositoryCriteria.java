@@ -1,7 +1,9 @@
 package com.gasstation.managementsystem.repository.criteria;
 
 import com.gasstation.managementsystem.model.FuelStatistic;
+import com.gasstation.managementsystem.model.TankStatistic;
 import com.gasstation.managementsystem.model.dto.dashboard.FuelStatisticDTOFilter;
+import com.gasstation.managementsystem.model.dto.dashboard.TankStatisticDTOFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -77,6 +79,62 @@ public class DashboardRepositoryCriteria {
         });
         HashMap<String, Object> map = new HashMap<>();
         map.put("data", fuelStatistics);
+        return map;
+    }
+
+    public HashMap<String, Object> tankStatistic(TankStatisticDTOFilter filter) {
+        String str = "select tn.tank_id as tank_id,\n" +
+                "       tank_name,\n" +
+                "       remain     as tank_remain,\n" +
+                "       fuel_id,\n" +
+                "       fuel_name,\n" +
+                "       total_import,\n" +
+                "       total_export\n" +
+                "from (select tt.id                        as tank_id,\n" +
+                "             tt.remain                    as remain,\n" +
+                "             coalesce(sum(fit.volume), 0) as total_import\n" +
+                "      from fuel_import_tbl fit\n" +
+                "               right join tank_tbl tt on tt.id = fit.tank_id\n" +
+                "      where fit.created_date between :startTime and :endTime\n" +
+                "         or fit.created_date is null\n" +
+                "      group by tt.id) as tn,\n" +
+                "     (select tt.id                         as tank_id,\n" +
+                "             tt.name                       as tank_name,\n" +
+                "             ft.id                         as fuel_id,\n" +
+                "             ft.name                       as fuel_name,\n" +
+                "             coalesce(sum(tran.volume), 0) as total_export\n" +
+                "      from transaction_tbl tran\n" +
+                "               right join pump_shift_tbl pst on pst.id = tran.pump_shift_id\n" +
+                "               right join pump_tbl pt on pt.id = pst.pump_id\n" +
+                "               right join tank_tbl tt on tt.id = pt.tank_id\n" +
+                "               right join fuel_tbl ft on ft.id = tt.fuel_id\n" +
+                "      where tran.time between :startTime and :endTime\n" +
+                "         or tran.time is null\n" +
+                "      group by tt.id, tt.name, ft.id, ft.name\n" +
+                "      having tt.id is not null) as tx\n" +
+                "where tx.tank_id = tn.tank_id;";
+
+        Query nativeQuery = em.createNativeQuery(str);
+        nativeQuery.setParameter("startTime", filter.getStartTime());
+        nativeQuery.setParameter("endTime", filter.getEndTime());
+
+
+        List<Object[]> listResult = nativeQuery.getResultList();
+        List<TankStatistic> tankStatistics = new ArrayList<>();
+        listResult.forEach(objects -> {
+            TankStatistic revenue = TankStatistic.builder()
+                    .tankId((Integer) objects[0])
+                    .tankName((String) objects[1])
+                    .tankRemain((Double) objects[2])
+                    .fuelId((Integer) objects[3])
+                    .fuelName((String) objects[4])
+                    .totalImport((Double) objects[5])
+                    .totalExport((Double) objects[6])
+                    .build();
+            tankStatistics.add(revenue);
+        });
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("data", tankStatistics);
         return map;
     }
 }

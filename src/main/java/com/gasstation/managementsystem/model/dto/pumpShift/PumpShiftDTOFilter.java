@@ -10,6 +10,8 @@ import lombok.*;
 public class PumpShiftDTOFilter {
     public static final String STATUS_CLOSED = "CLOSED";
     public static final String STATUS_UNCLOSE = "UNCLOSE";
+    public static final String STATUS_WORKING = "WORKING";
+    public static final String STATUS_FUTURE = "FUTURE";
     private Integer pageIndex;
     private Integer pageSize;
     private Long createdDate;

@@ -45,7 +45,7 @@ public class DebtMapper {
                 .time(transaction.getTime())
                 .volume(transaction.getVolume())
                 .unitPrice(transaction.getUnitPrice())
-                .handOverShift(pumpShiftDTO).build();
+                .pumpShift(pumpShiftDTO).build();
         return DebtDTO.builder()
                 .id(debt.getId())
                 .card(cardDTO)

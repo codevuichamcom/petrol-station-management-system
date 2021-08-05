@@ -32,7 +32,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final OptionalValidate optionalValidate;
     private final TransactionRepositoryCriteria transactionCriteria;
-    private final PumpShiftRepositoryCriteria handOverShiftCriteria;
+    private final PumpShiftRepositoryCriteria pumpShiftCriteria;
     private final PumpRepository pumpRepository;
     private final ShiftRepository shiftRepository;
     private final PumpShiftRepository pumpShiftRepository;
@@ -80,9 +80,9 @@ public class TransactionServiceImpl implements TransactionService {
                             .atZone(TimeZone.getDefault()
                                     .toZoneId()).toEpochSecond() * 1000, milliSeconds);
             if (pumpShift == null) {
-                pumpShift = handOverShiftCriteria.getHandOverShiftToday();
+                pumpShift = pumpShiftCriteria.getPumpShiftToday();
                 if (pumpShift == null) {
-                    createHandOverShiftForAllPump();
+                    createPumpShiftForAllPump();
                     pumpShift = optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(),
                             LocalDateTime.of(localDate, LocalTime.MIN)
                                     .atZone(TimeZone.getDefault()
@@ -130,7 +130,7 @@ public class TransactionServiceImpl implements TransactionService {
         return listUuidSync;
     }
 
-    private void createHandOverShiftForAllPump() {
+    private void createPumpShiftForAllPump() {
         ArrayList<PumpShift> pumpShifts = new ArrayList<>();
         pumpRepository.findAll().forEach(pump -> {
             int stationId = pump.getTank().getStation().getId();

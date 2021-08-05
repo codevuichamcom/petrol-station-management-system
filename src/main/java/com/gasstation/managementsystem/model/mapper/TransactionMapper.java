@@ -45,7 +45,7 @@ public class TransactionMapper {
                 .unitPrice(transaction.getUnitPrice())
                 .uuid(transaction.getUuid())
                 .card(cardDTO)
-                .handOverShift(pumpShiftDTO)
+                .pumpShift(pumpShiftDTO)
                 .build();
     }
 

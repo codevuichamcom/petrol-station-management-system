@@ -31,7 +31,7 @@ public class PumpShiftServiceImpl implements PumShiftService {
     private final OptionalValidate optionalValidate;
     private final UserHelper userHelper;
 
-    private HashMap<String, Object> listHandOverShiftToMap(List<PumpShift> pumpShifts) {
+    private HashMap<String, Object> listPumpShiftToMap(List<PumpShift> pumpShifts) {
         if (pumpShifts == null) return new HashMap<>();
         List<PumpShiftDTO> tankDTOS = pumpShifts.stream().map(PumpShiftMapper::toHandOverShiftDTO).collect(Collectors.toList());
         HashMap<String, Object> map = new HashMap<>();
@@ -41,9 +41,11 @@ public class PumpShiftServiceImpl implements PumShiftService {
 
     public HashMap<String, Object> findAll(PumpShiftDTOFilter filter) {
         HashMap<String, Object> temp = handOverShiftCriteria.findAll(filter);
-        HashMap<String, Object> map = listHandOverShiftToMap((List<PumpShift>) temp.get("data"));
+        HashMap<String, Object> map = listPumpShiftToMap((List<PumpShift>) temp.get("data"));
         map.put("totalElement", temp.get("totalElement"));
         map.put("totalPage", temp.get("totalPage"));
+        map.put("totalVolume", temp.get("totalVolume"));
+        map.put("totalAmount", temp.get("totalAmount"));
         return map;
 
     }

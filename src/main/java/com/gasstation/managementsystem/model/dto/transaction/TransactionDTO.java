@@ -21,7 +21,7 @@ public class TransactionDTO {
     private Double unitPrice;
     private String uuid;
     private CardDTO card;
-    private PumpShiftDTO handOverShift;
+    private PumpShiftDTO pumpShift;
     private StationDTO station;
     private PumpDTO pump;
 

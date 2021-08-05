@@ -20,7 +20,7 @@ public class PumpShiftRepositoryCriteria {
     private final EntityManager em;
 
     public HashMap<String, Object> findAll(PumpShiftDTOFilter filter) {
-        StringBuilder query = new StringBuilder("select ps from PumpShift ps inner join ps.pump p inner join p.tank t where 1=1 ");
+        StringBuilder query = new StringBuilder("select ps from PumpShift ps inner join ps.pump p inner join p.tank t inner join ps.shift s where 1=1 ");
         QueryGenerateHelper qHelper = new QueryGenerateHelper();
         qHelper.setQuery(query);
         String[] statuses = filter.getStatuses();
@@ -31,54 +31,97 @@ public class PumpShiftRepositoryCriteria {
                 .in("ps.shift.id", "shiftIds", filter.getShiftIds())
                 .in("p.id", "pumpIds", filter.getPumpIds())
                 .like("ps.executor.name", "executorName", filter.getExecutorName());
-        boolean isOr = false;
         if (statuses == null || statuses.length == 0) {
             qHelper.between("ps.closedTime", 0L, filter.getClosedTime(), "closedTime", filter.getClosedTime());
         } else {
-            if (statusMap.containsKey(PumpShiftDTOFilter.STATUS_UNCLOSE)) {
-                qHelper.and().openBracket().isNULL("ps.closedTime");
+            String closedCondition = "ps.closedTime IS NOT NULL";
+            String unClosedCondition = "(ps.closedTime IS NULL AND (ps.createdDate+s.endTime) < (:today))";
+            String workingCondition = "(ps.closedTime IS NULL AND (:today) BETWEEN (ps.createdDate+s.startTime) AND (ps.createdDate+s.endTime))";
+            String futureCondition = "(ps.closedTime IS NULL AND (:today) < (ps.createdDate+s.startTime))";
+            boolean isOr = false;
+            Long today = DateTimeHelper.getCurrentUnixTime();
+            if (statusMap.containsKey(PumpShiftDTOFilter.STATUS_CLOSED)) {
+                qHelper.and().openBracket().getQuery().append(closedCondition);
                 isOr = true;
             }
-            if (statusMap.containsKey(PumpShiftDTOFilter.STATUS_CLOSED)) {
+            if (statusMap.containsKey(PumpShiftDTOFilter.STATUS_UNCLOSE)) {
                 if (isOr) {
                     qHelper.or();
                 } else {
-                    qHelper.and();
+                    qHelper.and().openBracket();
+                    isOr = true;
                 }
-                qHelper.openBracket()
-                        .isNotNULL("ps.closedTime")
-                        .between("ps.closedTime", 0L, filter.getClosedTime(), "closedTime", filter.getClosedTime())
-                        .closeBracket();
+                qHelper.getQuery().append(unClosedCondition);
+                if (!qHelper.getParams().containsKey("today")) {
+                    qHelper.getParams().put("today", today);
+                }
+            }
+            if (statusMap.containsKey(PumpShiftDTOFilter.STATUS_WORKING)) {
+                if (isOr) {
+                    qHelper.or();
+                } else {
+                    qHelper.and().openBracket();
+                    isOr = true;
+                }
+                qHelper.getQuery().append(workingCondition);
+                if (!qHelper.getParams().containsKey("today")) {
+                    qHelper.getParams().put("today", today);
+                }
+            }
+            if (statusMap.containsKey(PumpShiftDTOFilter.STATUS_FUTURE)) {
+                if (isOr) {
+                    qHelper.or();
+                } else {
+                    qHelper.and().openBracket();
+                    isOr = true;
+                }
+                qHelper.getQuery().append(futureCondition);
+                if (!qHelper.getParams().containsKey("today")) {
+                    qHelper.getParams().put("today", today);
+                }
             }
             if (isOr) {
                 qHelper.closeBracket();
             }
         }
-
-
         String countQuery = qHelper.getQuery().toString().replace("select ps", "select count(ps.id)");
         Query countTotalQuery = em.createQuery(countQuery);
+        String totalVolumeAndAmountQuery = qHelper.getQuery().toString().replace("select ps from PumpShift", "select coalesce(sum(tran.volume), 0), coalesce(sum(tran.volume * tran.unitPrice), 0) from Transaction tran inner join tran.pumpShift");
+        QueryGenerateHelper volumeAmountHelper = new QueryGenerateHelper();
+        volumeAmountHelper.setQuery(new StringBuilder(totalVolumeAndAmountQuery));
+        volumeAmountHelper.setParams(qHelper.getParams());
+        Query volumeAmountQuery = em.createQuery(totalVolumeAndAmountQuery);
+        volumeAmountHelper.setValueToParams(volumeAmountQuery);
+        Object[] object = (Object[]) volumeAmountQuery.getSingleResult();
         qHelper.sort("ps.createdDate", "DESC");
         TypedQuery<PumpShift> tQuery = em.createQuery(qHelper.getQuery().toString(), PumpShift.class);
-        return qHelper.paging(tQuery, countTotalQuery, filter.getPageIndex(), filter.getPageSize());
+        HashMap<String, Object> map = qHelper.paging(tQuery, countTotalQuery, filter.getPageIndex(), filter.getPageSize());
+        map.put("totalVolume", object[0]);
+        map.put("totalAmount", object[1]);
+        return map;
     }
 
     private Map<String, String> toMap(String[] statuses) {
         Map<String, String> map = new HashMap<>();
         if (statuses != null && statuses.length != 0) {
             for (String status : statuses) {
-                if (status.trim().equalsIgnoreCase(PumpShiftDTOFilter.STATUS_UNCLOSE)) {
-                    map.put(PumpShiftDTOFilter.STATUS_UNCLOSE, "UNCLOSE");
-                }
-                if (status.trim().equalsIgnoreCase(PumpShiftDTOFilter.STATUS_CLOSED)) {
-                    map.put(PumpShiftDTOFilter.STATUS_CLOSED, "CLOSED");
+                status = status.trim().toUpperCase();
+                switch (status) {
+                    case PumpShiftDTOFilter.STATUS_UNCLOSE:
+                    case PumpShiftDTOFilter.STATUS_CLOSED:
+                    case PumpShiftDTOFilter.STATUS_WORKING:
+                    case PumpShiftDTOFilter.STATUS_FUTURE:
+                        map.put(status, status);
+                        break;
+                    default:
+                        break;
                 }
             }
         }
         return map;
     }
 
-    public PumpShift getHandOverShiftToday() {
+    public PumpShift getPumpShiftToday() {
         TypedQuery<PumpShift> tQuery = em.createQuery("select ps from PumpShift ps where  ps.createdDate = :today", PumpShift.class);
         tQuery.setParameter("today", DateTimeHelper.getCurrentDate());
         tQuery.setMaxResults(1);

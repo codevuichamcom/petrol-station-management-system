@@ -51,7 +51,7 @@ public class ReceiptMapper {
         TransactionDTO transactionDTO = transaction != null ? TransactionDTO.builder()
                 .id(transaction.getId())
                 .time(transaction.getTime())
-                .handOverShift(pumpShiftDTO).build() : null;
+                .pumpShift(pumpShiftDTO).build() : null;
         DebtDTO debtDTO = debt != null ? DebtDTO.builder()
                 .id(debt.getId())
                 .transaction(transactionDTO).build() : null;

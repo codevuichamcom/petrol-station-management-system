@@ -31,7 +31,7 @@ public class Shift {
     private List<WorkSchedule> workScheduleList = new ArrayList<>();
 
     @OneToMany(mappedBy = "shift")
-    private List<HandOverShift> handOverShiftList = new ArrayList<>();
+    private List<PumpShift> pumpShiftList = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "station_id", nullable = false)

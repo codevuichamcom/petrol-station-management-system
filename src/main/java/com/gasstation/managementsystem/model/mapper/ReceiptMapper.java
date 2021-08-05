@@ -4,7 +4,7 @@ import com.gasstation.managementsystem.entity.*;
 import com.gasstation.managementsystem.model.dto.card.CardDTO;
 import com.gasstation.managementsystem.model.dto.debt.DebtDTO;
 import com.gasstation.managementsystem.model.dto.fuel.FuelDTO;
-import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTO;
+import com.gasstation.managementsystem.model.dto.pumpShift.PumpShiftDTO;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
 import com.gasstation.managementsystem.model.dto.receipt.ReceiptDTO;
 import com.gasstation.managementsystem.model.dto.receipt.ReceiptDTOCreate;
@@ -25,8 +25,8 @@ public class ReceiptMapper {
         CardDTO cardDTO = card != null ? CardDTO.builder().id(card.getId()).customer(customerDTO).build() : null;
         Debt debt = receipt.getDebt();
         Transaction transaction = debt != null ? debt.getTransaction() : null;
-        HandOverShift handOverShift = transaction != null ? transaction.getHandOverShift() : null;
-        Pump pump = handOverShift != null ? handOverShift.getPump() : null;
+        PumpShift pumpShift = transaction != null ? transaction.getPumpShift() : null;
+        Pump pump = pumpShift != null ? pumpShift.getPump() : null;
         Tank tank = pump != null ? pump.getTank() : null;
         Station station = null;
         Fuel fuel = null;
@@ -46,12 +46,12 @@ public class ReceiptMapper {
                 .fuel(fuelDTO).build() : null;
         PumpDTO pumpDTO = pump != null ? PumpDTO.builder()
                 .tank(tankDTO).build() : null;
-        HandOverShiftDTO handOverShiftDTO = handOverShift != null ? HandOverShiftDTO.builder()
+        PumpShiftDTO pumpShiftDTO = pumpShift != null ? PumpShiftDTO.builder()
                 .pump(pumpDTO).build() : null;
         TransactionDTO transactionDTO = transaction != null ? TransactionDTO.builder()
                 .id(transaction.getId())
                 .time(transaction.getTime())
-                .handOverShift(handOverShiftDTO).build() : null;
+                .handOverShift(pumpShiftDTO).build() : null;
         DebtDTO debtDTO = debt != null ? DebtDTO.builder()
                 .id(debt.getId())
                 .transaction(transactionDTO).build() : null;

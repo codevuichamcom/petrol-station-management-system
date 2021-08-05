@@ -1,7 +1,7 @@
 package com.gasstation.managementsystem.model.dto.transaction;
 
 import com.gasstation.managementsystem.model.dto.card.CardDTO;
-import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTO;
+import com.gasstation.managementsystem.model.dto.pumpShift.PumpShiftDTO;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import lombok.*;
@@ -21,7 +21,7 @@ public class TransactionDTO {
     private Double unitPrice;
     private String uuid;
     private CardDTO card;
-    private HandOverShiftDTO handOverShift;
+    private PumpShiftDTO handOverShift;
     private StationDTO station;
     private PumpDTO pump;
 

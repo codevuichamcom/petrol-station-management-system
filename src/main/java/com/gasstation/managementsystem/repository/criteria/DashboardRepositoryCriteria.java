@@ -27,8 +27,8 @@ public class DashboardRepositoryCriteria {
                 "       (coalesce(sum(tran.volume * tran.unit_price), 0) - coalesce(sum(dt.accounts_payable), 0)) as total_money\n" +
                 "FROM transaction_tbl tran\n" +
                 "         right join debt_tbl dt on tran.id = dt.transaction_id\n" +
-                "         RIGHT JOIN hand_over_shift_tbl host ON host.id = tran.hand_over_shift_id\n" +
-                "         RIGHT JOIN pump_tbl pt ON pt.id = host.pump_id\n" +
+                "         RIGHT JOIN pump_shift_tbl pst ON pst.id = tran.pump_shift_id\n" +
+                "         RIGHT JOIN pump_tbl pt ON pt.id = pst.pump_id\n" +
                 "         RIGHT JOIN tank_tbl tt ON tt.id = pt.tank_id\n" +
                 "         right join station_tbl st on st.id = tt.station_id\n" +
                 "         RIGHT JOIN fuel_tbl ft ON ft.id = tt.fuel_id\n" +

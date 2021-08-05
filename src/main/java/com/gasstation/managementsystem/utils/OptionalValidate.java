@@ -28,7 +28,7 @@ public class OptionalValidate {
     private final WorkScheduleRepository workScheduleRepository;
     private final FuelImportRepository fuelImportRepository;
     private final ExpenseRepository expenseRepository;
-    private final HandOverShiftRepository handOverShiftRepository;
+    private final PumpShiftRepository pumpShiftRepository;
     private final ReceiptRepository receiptRepository;
     private final DebtRepository debtRepository;
 
@@ -183,8 +183,8 @@ public class OptionalValidate {
         }
     }
 
-    public HandOverShift getHandOverShiftById(int id) throws CustomNotFoundException {
-        Optional<HandOverShift> handOverShiftOptional = handOverShiftRepository.findById(id);
+    public PumpShift getHandOverShiftById(int id) throws CustomNotFoundException {
+        Optional<PumpShift> handOverShiftOptional = pumpShiftRepository.findById(id);
         if (handOverShiftOptional.isPresent()) {
             return handOverShiftOptional.get();
         } else {
@@ -193,8 +193,8 @@ public class OptionalValidate {
         }
     }
 
-    public HandOverShift getHandOverShiftByPumpIdNotClose(int id, long createdDate, long milliSeconds) {
-        Optional<HandOverShift> handOverShiftOptional = handOverShiftRepository.findByPumpIdNotClose(id, createdDate, milliSeconds);
+    public PumpShift getHandOverShiftByPumpIdNotClose(int id, long createdDate, long milliSeconds) {
+        Optional<PumpShift> handOverShiftOptional = pumpShiftRepository.findByPumpIdNotClose(id, createdDate, milliSeconds);
         return handOverShiftOptional.orElse(null);
     }
 

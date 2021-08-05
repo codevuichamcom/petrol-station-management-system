@@ -73,7 +73,7 @@ public class User {
     private List<FuelImport> fuelImportList = new ArrayList<>();
 
     @OneToMany(mappedBy = "executor")
-    private List<HandOverShift> handOverShiftList = new ArrayList<>();
+    private List<PumpShift> pumpShiftList = new ArrayList<>();
 
     @OneToMany(mappedBy = "creator")
     private List<Card> cardListCreatorByMe = new ArrayList<>();

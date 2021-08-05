@@ -30,7 +30,7 @@ public class DebtRepositoryCriteria {
         QueryGenerateHelper qHelper = new QueryGenerateHelper();
         qHelper.setQuery(query);
         qHelper.equal("d.transaction.card.id", "cardId", filter.getCardId())
-                .equal("d.transaction.handOverShift.pump.tank.station.id", "stationId", filter.getStationId());
+                .equal("d.transaction.pumpShift.pump.tank.station.id", "stationId", filter.getStationId());
 
         TypedQuery<Debt> tQuery = em.createQuery(query.toString(), Debt.class);
         qHelper.setValueToParams(tQuery);

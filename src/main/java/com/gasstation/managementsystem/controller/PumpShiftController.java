@@ -1,9 +1,9 @@
 package com.gasstation.managementsystem.controller;
 
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
-import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTO;
-import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTOFilter;
-import com.gasstation.managementsystem.service.HandOverShiftService;
+import com.gasstation.managementsystem.model.dto.pumpShift.PumpShiftDTO;
+import com.gasstation.managementsystem.model.dto.pumpShift.PumpShiftDTOFilter;
+import com.gasstation.managementsystem.service.PumShiftService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -14,13 +14,13 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/api/v1")
 @CrossOrigin
-@Tag(name = "HandOverShift", description = "API for handOverShift")
+@Tag(name = "PumpShift", description = "API for pumpShift")
 @RequiredArgsConstructor
-public class HandOverShiftController {
-    private final HandOverShiftService handOverShiftService;
+public class PumpShiftController {
+    private final PumShiftService pumShiftService;
 
-    @Operation(summary = "View All HandOverShift")
-    @GetMapping("/hand-over-shifts")
+    @Operation(summary = "View All PumpShift")
+    @GetMapping("/pump-shifts")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
                                           @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                           @RequestParam(name = "createdDate", required = false) Long createdDate,
@@ -30,7 +30,7 @@ public class HandOverShiftController {
                                           @RequestParam(name = "stationIds", required = false) Integer[] stationIds,
                                           @RequestParam(name = "executorName", required = false) String executorName,
                                           @RequestParam(name = "statuses", required = false) String[] statuses) {
-        HandOverShiftDTOFilter filter = HandOverShiftDTOFilter.builder()
+        PumpShiftDTOFilter filter = PumpShiftDTOFilter.builder()
                 .pageIndex(pageIndex)
                 .pageSize(pageSize)
                 .createdDate(createdDate)
@@ -40,24 +40,24 @@ public class HandOverShiftController {
                 .stationIds(stationIds)
                 .executorName(executorName)
                 .statuses(statuses).build();
-        return handOverShiftService.findAll(filter);
+        return pumShiftService.findAll(filter);
     }
 
-    @Operation(summary = "Find HandOverShift by id")
-    @GetMapping("/hand-over-shifts/{id}")
-    public HandOverShiftDTO getOne(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
-        return handOverShiftService.findById(id);
+    @Operation(summary = "Find PumpShift by id")
+    @GetMapping("/pump-shifts/{id}")
+    public PumpShiftDTO getOne(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
+        return pumShiftService.findById(id);
     }
 
-    @Operation(summary = "Hand Over Shift")
-    @PutMapping("/hand-over-shifts/{id}")
-    public HandOverShiftDTO update(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
-        return handOverShiftService.update(id);
+    @Operation(summary = "Update Pump shift by id")
+    @PutMapping("/pump-shifts/{id}")
+    public PumpShiftDTO update(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
+        return pumShiftService.update(id);
     }
 
-    @Operation(summary = "Hand Over Shift")
-    @PutMapping("/hand-over-shifts")
-    public HashMap<String,Object> updateAllByStationId(@RequestParam(name = "stationId")Integer stationId) throws CustomNotFoundException {
-        return handOverShiftService.updateAllByStationId(stationId);
+    @Operation(summary = "Update Pump shift by station id")
+    @PutMapping("/pump-shifts")
+    public HashMap<String, Object> updateAllByStationId(@RequestParam(name = "stationId") Integer stationId) throws CustomNotFoundException {
+        return pumShiftService.updateAllByStationId(stationId);
     }
 }

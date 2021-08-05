@@ -2,7 +2,7 @@ package com.gasstation.managementsystem.model.mapper;
 
 import com.gasstation.managementsystem.entity.*;
 import com.gasstation.managementsystem.model.dto.card.CardDTO;
-import com.gasstation.managementsystem.model.dto.handOverShift.HandOverShiftDTO;
+import com.gasstation.managementsystem.model.dto.pumpShift.PumpShiftDTO;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
 import com.gasstation.managementsystem.model.dto.shift.ShiftDTO;
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
@@ -15,14 +15,14 @@ public class TransactionMapper {
     public static TransactionDTO toTransactionDTO(Transaction transaction) {
         if (transaction == null) return null;
         Card card = transaction.getCard();
-        HandOverShift handOverShift = transaction.getHandOverShift();
+        PumpShift pumpShift = transaction.getPumpShift();
         CardDTO cardDTO = card != null ? CardDTO.builder().id(card.getId())
                 .customer(UserDTO.builder()
                         .id(card.getCustomer().getId())
                         .name(card.getCustomer().getName())
                         .build()).build() : null;
-        Shift shift = handOverShift.getShift();
-        Pump pump = handOverShift.getPump();
+        Shift shift = pumpShift.getShift();
+        Pump pump = pumpShift.getPump();
         Tank tank = pump.getTank();
         Station station = tank.getStation();
         TankDTO tankDTO = TankDTO.builder()
@@ -33,8 +33,8 @@ public class TransactionMapper {
                         .name(station.getName())
                         .address(station.getAddress())
                         .build()).build();
-        HandOverShiftDTO handOverShiftDTO = HandOverShiftDTO.builder()
-                .id(handOverShift.getId())
+        PumpShiftDTO pumpShiftDTO = PumpShiftDTO.builder()
+                .id(pumpShift.getId())
                 .shift(ShiftDTO.builder().id(shift.getId()).name(shift.getName()).build())
                 .pump(PumpDTO.builder().id(pump.getId()).name(pump.getName()).tank(tankDTO).build())
                 .build();
@@ -45,7 +45,7 @@ public class TransactionMapper {
                 .unitPrice(transaction.getUnitPrice())
                 .uuid(transaction.getUuid())
                 .card(cardDTO)
-                .handOverShift(handOverShiftDTO)
+                .handOverShift(pumpShiftDTO)
                 .build();
     }
 

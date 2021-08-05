@@ -1,4 +1,4 @@
-package com.gasstation.managementsystem.model.dto.handOverShift;
+package com.gasstation.managementsystem.model.dto.pumpShift;
 
 import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
 import com.gasstation.managementsystem.model.dto.shift.ShiftDTO;
@@ -13,7 +13,7 @@ import java.util.Objects;
 @Setter
 @Builder
 @ToString
-public class HandOverShiftDTO {
+public class PumpShiftDTO {
     private int id;
     private Long createdDate;
     private Long closedTime;
@@ -25,7 +25,7 @@ public class HandOverShiftDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        HandOverShiftDTO that = (HandOverShiftDTO) o;
+        PumpShiftDTO that = (PumpShiftDTO) o;
         return id == that.id && Objects.equals(createdDate, that.createdDate) && Objects.equals(closedTime, that.closedTime) && Objects.equals(shift, that.shift) && Objects.equals(pump, that.pump) && Objects.equals(executor, that.executor);
     }
 }

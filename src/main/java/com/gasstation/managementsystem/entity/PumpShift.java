@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "hand_over_shift_tbl")
+@Table(name = "pump_shift_tbl")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
-public class HandOverShift {
+public class PumpShift {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -36,7 +36,7 @@ public class HandOverShift {
     @JoinColumn(name = "executor_id")
     private User executor; //người chốt ca
 
-    @OneToMany(mappedBy = "handOverShift")
+    @OneToMany(mappedBy = "pumpShift")
     private List<Transaction> transactionList = new ArrayList<>();
 
 }

@@ -17,7 +17,7 @@ public class TransactionRepositoryCriteria {
     private final EntityManager em;
 
     public HashMap<String, Object> findAll(TransactionDTOFilter filter) {
-        StringBuilder query = new StringBuilder("select t from Transaction t inner join t.handOverShift h ")
+        StringBuilder query = new StringBuilder("select t from Transaction t inner join t.pumpShift h ")
                 .append("inner join h.pump p inner join p.tank tank where 1=1 ");
         QueryGenerateHelper qHelper = new QueryGenerateHelper();
         qHelper.setQuery(query);

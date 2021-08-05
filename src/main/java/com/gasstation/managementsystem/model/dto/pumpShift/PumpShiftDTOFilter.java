@@ -1,4 +1,4 @@
-package com.gasstation.managementsystem.model.dto.handOverShift;
+package com.gasstation.managementsystem.model.dto.pumpShift;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class HandOverShiftDTOFilter {
+public class PumpShiftDTOFilter {
     public static final String STATUS_CLOSED = "CLOSED";
     public static final String STATUS_UNCLOSE = "UNCLOSE";
     private Integer pageIndex;

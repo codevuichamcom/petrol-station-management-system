@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Getter
 @Setter
@@ -26,7 +26,7 @@ public class QueryGenerateHelper {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         QueryGenerateHelper that = (QueryGenerateHelper) o;
-        return this.query.toString().trim().equals(that.query.toString().trim())&&
+        return this.query.toString().trim().equals(that.query.toString().trim()) &&
                 this.params.toString().trim().equals(that.params.toString().trim());
     }
 
@@ -98,6 +98,25 @@ public class QueryGenerateHelper {
                 .append(field)
                 .append(" ")
                 .append(value);
+        return this;
+    }
+
+    public QueryGenerateHelper sort(HashMap<String, String> sortMap) {
+        AtomicBoolean isFirst = new AtomicBoolean(true);
+        sortMap.forEach((field, value) -> {
+            if (isFirst.get()) {
+                query.append(" ORDER BY")
+                        .append(field)
+                        .append(" ")
+                        .append(value);
+                isFirst.set(false);
+            }
+            query.append(", ")
+                    .append(field)
+                    .append(" ")
+                    .append(value);
+
+        });
         return this;
     }
 

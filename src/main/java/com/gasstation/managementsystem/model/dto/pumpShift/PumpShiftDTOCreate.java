@@ -1,4 +1,4 @@
-package com.gasstation.managementsystem.model.dto.handOverShift;
+package com.gasstation.managementsystem.model.dto.pumpShift;
 
 import lombok.*;
 
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Builder
-public class HandOverShiftDTOCreate {
+public class PumpShiftDTOCreate {
     @NotNull(message = "shift id is mandatory")
     private Integer shiftId;
     @NotNull(message = "pump id is mandatory")

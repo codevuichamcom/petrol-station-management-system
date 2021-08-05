@@ -2,7 +2,7 @@ package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.Card;
 import com.gasstation.managementsystem.entity.Debt;
-import com.gasstation.managementsystem.entity.HandOverShift;
+import com.gasstation.managementsystem.entity.PumpShift;
 import com.gasstation.managementsystem.entity.Transaction;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
@@ -12,7 +12,7 @@ import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOFilte
 import com.gasstation.managementsystem.model.dto.transaction.TransactionUuidDTO;
 import com.gasstation.managementsystem.model.mapper.TransactionMapper;
 import com.gasstation.managementsystem.repository.*;
-import com.gasstation.managementsystem.repository.criteria.HandOverShiftRepositoryCriteria;
+import com.gasstation.managementsystem.repository.criteria.PumpShiftRepositoryCriteria;
 import com.gasstation.managementsystem.repository.criteria.TransactionRepositoryCriteria;
 import com.gasstation.managementsystem.service.TransactionService;
 import com.gasstation.managementsystem.utils.DateTimeHelper;
@@ -32,10 +32,10 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final OptionalValidate optionalValidate;
     private final TransactionRepositoryCriteria transactionCriteria;
-    private final HandOverShiftRepositoryCriteria handOverShiftCriteria;
+    private final PumpShiftRepositoryCriteria handOverShiftCriteria;
     private final PumpRepository pumpRepository;
     private final ShiftRepository shiftRepository;
-    private final HandOverShiftRepository handOverShiftRepository;
+    private final PumpShiftRepository pumpShiftRepository;
     private final DebtRepository debtRepository;
     private final CardRepository cardRepository;
 
@@ -75,15 +75,15 @@ public class TransactionServiceImpl implements TransactionService {
             LocalDate localDate = LocalDate.of(localDateTime.getYear(), localDateTime.getMonth(), localDateTime.getDayOfMonth());
             long milliSeconds = (localDateTime.getHour() * 3600 + localDateTime.getMinute() * 60 + localDateTime.getSecond()) * 1000;
 
-            HandOverShift handOverShift = optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(),
+            PumpShift pumpShift = optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(),
                     LocalDateTime.of(localDate, LocalTime.MIN)
                             .atZone(TimeZone.getDefault()
                                     .toZoneId()).toEpochSecond() * 1000, milliSeconds);
-            if (handOverShift == null) {
-                handOverShift = handOverShiftCriteria.getHandOverShiftToday();
-                if (handOverShift == null) {
+            if (pumpShift == null) {
+                pumpShift = handOverShiftCriteria.getHandOverShiftToday();
+                if (pumpShift == null) {
                     createHandOverShiftForAllPump();
-                    handOverShift = optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(),
+                    pumpShift = optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(),
                             LocalDateTime.of(localDate, LocalTime.MIN)
                                     .atZone(TimeZone.getDefault()
                                             .toZoneId()).toEpochSecond() * 1000, milliSeconds);
@@ -92,8 +92,8 @@ public class TransactionServiceImpl implements TransactionService {
                             .code("not.found").field("id").message("Hand over shift is not exist").table("hand_over_shift_table").build());
                 }
             }
-            if (handOverShift != null) {
-                transaction.setHandOverShift(handOverShift);
+            if (pumpShift != null) {
+                transaction.setPumpShift(pumpShift);
             }
             transactionList.add(transaction);
         }
@@ -131,18 +131,18 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private void createHandOverShiftForAllPump() {
-        ArrayList<HandOverShift> handOverShifts = new ArrayList<>();
+        ArrayList<PumpShift> pumpShifts = new ArrayList<>();
         pumpRepository.findAll().forEach(pump -> {
             int stationId = pump.getTank().getStation().getId();
             shiftRepository.findAllShiftByStationId(stationId).forEach(shift -> {
-                HandOverShift handOverShift = HandOverShift.builder().
+                PumpShift pumpShift = PumpShift.builder().
                         createdDate(DateTimeHelper.getCurrentDate())
                         .shift(shift)
                         .pump(pump).build();
-                handOverShifts.add(handOverShift);
+                pumpShifts.add(pumpShift);
             });
         });
-        handOverShiftRepository.saveAll(handOverShifts);
+        pumpShiftRepository.saveAll(pumpShifts);
     }
 
 }

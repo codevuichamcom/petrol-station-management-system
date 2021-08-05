@@ -28,6 +28,6 @@ public class Pump {
     private Tank tank;
 
     @OneToMany(mappedBy = "pump")
-    private List<HandOverShift> handOverShiftList = new ArrayList<>();
+    private List<PumpShift> pumpShiftList = new ArrayList<>();
 
 }

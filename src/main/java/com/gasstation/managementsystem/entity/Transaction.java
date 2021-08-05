@@ -36,9 +36,9 @@ public class Transaction {
 
 
     @ManyToOne
-    @JoinColumn(name = "hand_over_shift_id", nullable = false)
+    @JoinColumn(name = "pump_shift_id", nullable = false)
     @ToString.Exclude
-    private HandOverShift handOverShift;
+    private PumpShift pumpShift;
 
     @OneToOne(mappedBy = "transaction")
     private Debt debt;

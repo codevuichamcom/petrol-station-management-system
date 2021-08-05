@@ -15,5 +15,6 @@ public class Dashboard {
     private String stationAddress;
     private Double totalRevenue;
     private Double totalDebt;
-    private Double totalMoney;
+    private Double totalVolume;
+    private Double totalPaid;
 }

@@ -22,7 +22,7 @@ public class DashboardController {
     @GetMapping("/dashboard")
     public HashMap<String, Object> getAll(@RequestParam(name = "startTime") Long startTime,
                                           @RequestParam(name = "endTime") Long endTime,
-                                          @RequestParam(name = "stationId") Integer stationId) {
+                                          @RequestParam(name = "stationId", required = false) Integer stationId) {
         DashboardDTOFilter filter = DashboardDTOFilter.builder()
                 .startTime(startTime)
                 .endTime(endTime).stationId(stationId).build();

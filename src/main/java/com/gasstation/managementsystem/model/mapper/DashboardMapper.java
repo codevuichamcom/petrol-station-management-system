@@ -9,17 +9,19 @@ public class DashboardMapper {
 
     public static DashboardDTO toDashboardDTO(Dashboard dashboard) {
         if (dashboard == null) return null;
-        FuelDTO fuelDTO = FuelDTO.builder().id(dashboard.getFuelId())
-                .name(dashboard.getFuelName()).build();
-        StationDTO stationDTO = StationDTO.builder()
+
+        FuelDTO fuelDTO = dashboard.getFuelId() != null ? FuelDTO.builder().id(dashboard.getFuelId())
+                .name(dashboard.getFuelName()).build() : null;
+        StationDTO stationDTO = dashboard.getStationId() != null ? StationDTO.builder()
                 .id(dashboard.getStationId())
                 .name(dashboard.getStationName())
-                .address(dashboard.getStationAddress()).build();
+                .address(dashboard.getStationAddress()).build() : null;
         return DashboardDTO.builder()
                 .fuel(fuelDTO)
                 .station(stationDTO)
                 .totalRevenue(dashboard.getTotalRevenue())
                 .totalDebt(dashboard.getTotalDebt())
-                .totalMoney(dashboard.getTotalMoney()).build();
+                .totalVolume(dashboard.getTotalVolume())
+                .totalPaid(dashboard.getTotalPaid()).build();
     }
 }

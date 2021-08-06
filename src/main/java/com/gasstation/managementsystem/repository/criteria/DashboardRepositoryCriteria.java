@@ -36,7 +36,7 @@ public class DashboardRepositoryCriteria {
                 "      where (tran.time between :startTime and :endTime\n" +
                 "          or tran.time is null)\n" +
                 "      GROUP BY ft.id, ft.name, st.id, st.name, st.address) as tbl1,\n" +
-                "     (select ft.id as fuel_id, coalesce(sum(tran.volume * tran.unit_price), 0) as total_debt\n" +
+                "     (select ft.id as fuel_id, coalesce(sum(dt.accounts_payable), 0) as total_debt\n" +
                 "      FROM debt_tbl dt\n" +
                 "               right join transaction_tbl tran on tran.id = dt.transaction_id\n" +
                 "               RIGHT JOIN pump_shift_tbl pst ON pst.id = tran.pump_shift_id\n" +

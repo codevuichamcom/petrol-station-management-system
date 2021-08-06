@@ -35,7 +35,6 @@ public class StationMapper {
                 .address(stationDTOCreate.getAddress())
                 .longitude(stationDTOCreate.getLongitude())
                 .latitude(stationDTOCreate.getLatitude())
-                .owner(User.builder().id(stationDTOCreate.getOwnerId()).build())
                 .build();
     }
 

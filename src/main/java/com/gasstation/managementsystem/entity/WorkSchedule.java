@@ -1,9 +1,9 @@
 package com.gasstation.managementsystem.entity;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -12,13 +12,9 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @ToString
-public class WorkSchedule {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class WorkSchedule extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "employee_id")
@@ -29,10 +25,10 @@ public class WorkSchedule {
     private Shift shift;
 
     @Column(nullable = false)
-    private long startDate;
+    private Long startDate;
 
     @Column(nullable = false)
-    private long endDate;
+    private Long endDate;
 
     @Override
     public boolean equals(Object o) {

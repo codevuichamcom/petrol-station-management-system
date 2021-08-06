@@ -1,6 +1,7 @@
 package com.gasstation.managementsystem.entity;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -11,12 +12,9 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @ToString
-public class Receipt {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class Receipt extends BaseEntity {
 
     @Column(nullable = false)
     private Long createdDate;
@@ -25,7 +23,7 @@ public class Receipt {
     private String reason;
 
     @Column(nullable = false)
-    private double amount = 0;
+    private Double amount;
 
     @ManyToOne
     @JoinColumn(name = "creator_id", nullable = false)

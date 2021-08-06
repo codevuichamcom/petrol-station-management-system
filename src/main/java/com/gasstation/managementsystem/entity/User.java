@@ -1,6 +1,7 @@
 package com.gasstation.managementsystem.entity;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,12 +13,9 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @ToString
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class User extends BaseEntity {
 
     @Column(unique = true, nullable = false)
     private String username;
@@ -30,10 +28,10 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    private boolean gender = false;
+    private Boolean gender;
 
     @Column(nullable = false)
-    private long dateOfBirth;
+    private Long dateOfBirth;
 
     @Column(nullable = false)
     private String address;
@@ -46,7 +44,7 @@ public class User {
 
     private String note;
 
-    private boolean active = false;
+    private Boolean active;
 
     @OneToMany(mappedBy = "editor")
     private List<PriceChangeHistory> priceChangeHistoryList;//Danh sách những giá do người dùng này đổi

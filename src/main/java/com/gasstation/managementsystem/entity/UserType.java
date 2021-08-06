@@ -1,6 +1,10 @@
 package com.gasstation.managementsystem.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -13,16 +17,13 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
-public class UserType {
+@SuperBuilder
+public class UserType extends BaseEntity {
     public static final int ADMIN = 1;
     public static final int OWNER = 2;
     //    public static final int EMPLOYEE = 3;
     public static final int CUSTOMER = 4;
     //    public static final int SUPPLIER = 5;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
     @Column(nullable = false)
     private String type;
 

@@ -17,13 +17,13 @@ public class UserMapper {
                 .username(user.getUsername())
                 .identityCardNumber(user.getIdentityCardNumber())
                 .name(user.getName())
-                .gender(user.isGender())
+                .gender(user.getGender())
                 .dateOfBirth(user.getDateOfBirth())
                 .address(user.getAddress())
                 .phone(user.getPhone())
                 .email(user.getEmail())
                 .note(user.getNote())
-                .active(user.isActive())
+                .active(user.getActive())
                 .userType(UserTypeMapper.toUserTypeDTO(user.getUserType())).build();
     }
 

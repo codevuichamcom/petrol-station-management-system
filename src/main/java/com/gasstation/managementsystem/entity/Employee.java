@@ -1,6 +1,10 @@
 package com.gasstation.managementsystem.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,11 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
-public class Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+@SuperBuilder
+public class Employee extends BaseEntity {
 
     @Column(nullable = false)
     private String name;
@@ -28,10 +29,10 @@ public class Employee {
     private String phone;
 
     @Column(nullable = false)
-    private Boolean gender = true;
+    private Boolean gender = false;
 
     @Column(nullable = false)
-    private long dateOfBirth;
+    private Long dateOfBirth;
 
     @Column(nullable = false, unique = true)
     private String identityCardNumber;

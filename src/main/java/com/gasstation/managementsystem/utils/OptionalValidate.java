@@ -183,19 +183,19 @@ public class OptionalValidate {
         }
     }
 
-    public PumpShift getHandOverShiftById(int id) throws CustomNotFoundException {
-        Optional<PumpShift> handOverShiftOptional = pumpShiftRepository.findById(id);
-        if (handOverShiftOptional.isPresent()) {
-            return handOverShiftOptional.get();
+    public PumpShift getPumpShiftById(int id) throws CustomNotFoundException {
+        Optional<PumpShift> pumpShiftOptional = pumpShiftRepository.findById(id);
+        if (pumpShiftOptional.isPresent()) {
+            return pumpShiftOptional.get();
         } else {
             throw new CustomNotFoundException(CustomError.builder()
-                    .code("not.found").field("id").message("Hand over shift is not exist").table("hand_over_shift_table").build());
+                    .code("not.found").field("id").message("Pump shift is not exist").table("pump_shift_table").build());
         }
     }
 
-    public PumpShift getHandOverShiftByPumpIdNotClose(int id, long createdDate, long milliSeconds) {
-        Optional<PumpShift> handOverShiftOptional = pumpShiftRepository.findByPumpIdNotClose(id, createdDate, milliSeconds);
-        return handOverShiftOptional.orElse(null);
+    public PumpShift getPumpShiftByPumpIdNotClose(int id, long createdDate, long milliSeconds) {
+        Optional<PumpShift> pumpShiftOptional = pumpShiftRepository.findByPumpIdNotClose(id, createdDate, milliSeconds);
+        return pumpShiftOptional.orElse(null);
     }
 
     public Receipt getReceiptById(int id) throws CustomNotFoundException {

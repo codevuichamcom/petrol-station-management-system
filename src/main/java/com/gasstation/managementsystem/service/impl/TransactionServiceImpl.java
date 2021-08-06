@@ -77,7 +77,7 @@ public class TransactionServiceImpl implements TransactionService {
             LocalDate localDate = LocalDate.of(localDateTime.getYear(), localDateTime.getMonth(), localDateTime.getDayOfMonth());
             long milliSeconds = (localDateTime.getHour() * 3600 + localDateTime.getMinute() * 60 + localDateTime.getSecond()) * 1000;
 
-            PumpShift pumpShift = optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(),
+            PumpShift pumpShift = optionalValidate.getPumpShiftByPumpIdNotClose(T.getPumpId(),
                     LocalDateTime.of(localDate, LocalTime.MIN)
                             .atZone(TimeZone.getDefault()
                                     .toZoneId()).toEpochSecond() * 1000, milliSeconds);
@@ -85,13 +85,13 @@ public class TransactionServiceImpl implements TransactionService {
                 pumpShift = pumpShiftCriteria.getPumpShiftToday();
                 if (pumpShift == null) {
                     createPumpShiftForAllPump();
-                    pumpShift = optionalValidate.getHandOverShiftByPumpIdNotClose(T.getPumpId(),
+                    pumpShift = optionalValidate.getPumpShiftByPumpIdNotClose(T.getPumpId(),
                             LocalDateTime.of(localDate, LocalTime.MIN)
                                     .atZone(TimeZone.getDefault()
                                             .toZoneId()).toEpochSecond() * 1000, milliSeconds);
                 } else {
                     throw new CustomNotFoundException(CustomError.builder()
-                            .code("not.found").field("id").message("Hand over shift is not exist").table("hand_over_shift_table").build());
+                            .code("not.found").field("id").message("Pump shift is not exist").table("pump_shift_table").build());
                 }
             }
             if (pumpShift != null) {
@@ -106,8 +106,7 @@ public class TransactionServiceImpl implements TransactionService {
                 transactionRepository.save(transaction);
                 Card card = transaction.getCard();
                 if (card != null) {
-                    double totalMoneyTransaction = transaction.getUnitPrice() * transaction.getVolume();
-
+                    double totalMoneyTransaction = Math.ceil(transaction.getUnitPrice() * transaction.getVolume());
                     double accountsPayable = totalMoneyTransaction - card.getAvailableBalance();
                     if (accountsPayable <= 0) {
                         card.setAvailableBalance(card.getAvailableBalance() - totalMoneyTransaction);

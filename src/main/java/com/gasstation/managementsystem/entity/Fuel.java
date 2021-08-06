@@ -1,8 +1,12 @@
 package com.gasstation.managementsystem.entity;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,12 +16,9 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @ToString
-public class Fuel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class Fuel extends BaseEntity {
 
     @Column(nullable = false, unique = true)
     private String name;
@@ -26,10 +27,10 @@ public class Fuel {
     private String unit;
 
     @Column(nullable = false)
-    private double price = 0;
+    private Double price;
 
     @Column(nullable = false)
-    private String type = "Xăng";
+    private String type;
 
     @OneToMany(mappedBy = "fuel")
     private List<Tank> tankList;

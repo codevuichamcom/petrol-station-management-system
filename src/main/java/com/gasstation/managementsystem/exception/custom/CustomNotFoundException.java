@@ -1,19 +1,9 @@
 package com.gasstation.managementsystem.exception.custom;
 
 import com.gasstation.managementsystem.model.CustomError;
-import lombok.Getter;
-import lombok.Setter;
 
-import java.util.HashMap;
-import java.util.Map;
-
-@Getter
-@Setter
-public class CustomNotFoundException extends Exception {
-    Map<String, CustomError> errorHashMap;
-
+public class CustomNotFoundException extends BaseCustomException {
     public CustomNotFoundException(CustomError customError) {
-        errorHashMap = new HashMap<>();
-        errorHashMap.put("error", customError);
+        super(customError);
     }
 }

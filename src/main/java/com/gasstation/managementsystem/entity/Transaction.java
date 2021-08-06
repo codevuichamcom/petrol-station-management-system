@@ -1,6 +1,7 @@
 package com.gasstation.managementsystem.entity;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
@@ -10,21 +11,18 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @ToString
-public class Transaction {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class Transaction extends BaseEntity {
 
     @Column(nullable = false)
-    private long time; //unix time
+    private Long time; //unix time
 
     @Column(nullable = false)
-    private double volume = 0;
+    private Double volume;
 
     @Column(nullable = false)
-    private double unitPrice = 0;
+    private Double unitPrice;
 
     @Column(nullable = false, unique = true)
     private String uuid;

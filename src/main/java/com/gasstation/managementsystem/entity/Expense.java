@@ -1,7 +1,11 @@
 package com.gasstation.managementsystem.entity;
 
 import com.gasstation.managementsystem.utils.DateTimeHelper;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
@@ -11,12 +15,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
-public class Expense {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+@SuperBuilder
+public class Expense extends BaseEntity {
 
     @Column(nullable = false)
     private Long createdDate = DateTimeHelper.getCurrentDate();

@@ -15,7 +15,6 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
-
     @ExceptionHandler(CustomDuplicateFieldException.class)
     @ResponseStatus(value = HttpStatus.CONFLICT)
     public Map<String, CustomError> duplicateFieldException(CustomDuplicateFieldException ex) {

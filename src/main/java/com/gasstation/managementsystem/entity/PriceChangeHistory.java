@@ -1,7 +1,11 @@
 package com.gasstation.managementsystem.entity;
 
 import com.gasstation.managementsystem.utils.DateTimeHelper;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
@@ -11,20 +15,17 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
-public class PriceChangeHistory {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+@SuperBuilder
+public class PriceChangeHistory extends BaseEntity {
 
     @Column(nullable = false)
-    private long time = DateTimeHelper.getCurrentUnixTime();
+    private Long time = DateTimeHelper.getCurrentUnixTime();
 
     @Column(nullable = false)
-    private double oldPrice = 0;
+    private Double oldPrice;
 
     @Column(nullable = false)
-    private double newPrice = 0;
+    private Double newPrice;
 
     @ManyToOne
     @JoinColumn(name = "editor_id", nullable = false)

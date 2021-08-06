@@ -1,6 +1,7 @@
 package com.gasstation.managementsystem.entity;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,24 +12,21 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @ToString
-public class Tank {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class Tank extends BaseEntity {
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
-    private double volume = 0;
+    private Double volume;
 
     @Column(nullable = false)
-    private double remain = 0;
+    private Double remain;
 
     @Column(nullable = false)
-    private double currentPrice = 0;
+    private Double currentPrice;
 
     @OneToMany(mappedBy = "tank")
     private List<FuelImport> fuelImportList; //Danh sách phiếu nhập của bể này

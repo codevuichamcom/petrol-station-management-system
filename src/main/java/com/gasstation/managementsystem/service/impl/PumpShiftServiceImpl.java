@@ -52,12 +52,12 @@ public class PumpShiftServiceImpl implements PumShiftService {
 
     @Override
     public PumpShiftDTO findById(int id) throws CustomNotFoundException {
-        return PumpShiftMapper.toHandOverShiftDTO(optionalValidate.getHandOverShiftById(id));
+        return PumpShiftMapper.toHandOverShiftDTO(optionalValidate.getPumpShiftById(id));
     }
 
     @Override
     public PumpShiftDTO update(int id) throws CustomNotFoundException {
-        PumpShift oldPumpShift = optionalValidate.getHandOverShiftById(id);
+        PumpShift oldPumpShift = optionalValidate.getPumpShiftById(id);
         oldPumpShift.setClosedTime(DateTimeHelper.getCurrentUnixTime());
         oldPumpShift.setExecutor(userHelper.getUserLogin());
         return PumpShiftMapper.toHandOverShiftDTO(oldPumpShift);

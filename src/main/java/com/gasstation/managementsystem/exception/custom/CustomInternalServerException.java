@@ -4,17 +4,9 @@ import com.gasstation.managementsystem.model.CustomError;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashMap;
-import java.util.Map;
-
-@Getter
-@Setter
-public class CustomInternalServerException extends Exception {
-    Map<String, CustomError> errorHashMap;
+public class CustomInternalServerException extends BaseCustomException {
 
     public CustomInternalServerException(CustomError customError) {
-        errorHashMap = new HashMap<>();
-        errorHashMap.put("error", customError);
+        super(customError);
     }
-
 }

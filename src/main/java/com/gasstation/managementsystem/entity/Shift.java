@@ -1,6 +1,10 @@
 package com.gasstation.managementsystem.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,20 +16,17 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
-public class Shift {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+@SuperBuilder
+public class Shift extends BaseEntity {
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
-    private long startTime;
+    private Long startTime;
 
     @Column(nullable = false)
-    private long endTime;
+    private Long endTime;
 
     @OneToMany(mappedBy = "shift")
     private List<WorkSchedule> workScheduleList = new ArrayList<>();

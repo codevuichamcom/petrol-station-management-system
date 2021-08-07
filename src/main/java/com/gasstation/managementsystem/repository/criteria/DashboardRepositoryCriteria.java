@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -66,14 +67,14 @@ public class DashboardRepositoryCriteria {
                 "      group by ft.id, st.id) as total_paid_tbl\n" +
                 "     on total_debt_tbl.fuel_id = total_paid_tbl.fuel_id\n" +
                 "         and total_debt_tbl.station_id = total_paid_tbl.station_id\n";
-        if (filter.getStationId() != null) {
-            str += "  \"where total_revenue_tbl.station_id = :stationId\";";
+        if (filter.getStationIds() != null && filter.getStationIds().length > 0) {
+            str += "  where total_revenue_tbl.station_id in (:stationIds)";
         }
         Query nativeQuery = em.createNativeQuery(str);
         nativeQuery.setParameter("startTime", filter.getStartTime());
         nativeQuery.setParameter("endTime", filter.getEndTime());
-        if (filter.getStationId() != null) {
-            nativeQuery.setParameter("stationId", filter.getStationId());
+        if (filter.getStationIds() != null && filter.getStationIds().length > 0) {
+            nativeQuery.setParameter("stationIds", Arrays.asList(filter.getStationIds()));
         }
 
         List<Object[]> listResult = nativeQuery.getResultList();

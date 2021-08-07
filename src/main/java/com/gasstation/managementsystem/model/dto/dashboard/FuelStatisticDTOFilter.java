@@ -10,5 +10,5 @@ import lombok.*;
 public class FuelStatisticDTOFilter {
     private Long startTime;
     private Long endTime;
-    private Integer stationId;
+    private Integer[] stationIds;
 }

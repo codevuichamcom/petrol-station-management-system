@@ -84,8 +84,8 @@ public class DashboardRepositoryCriteria {
                     .fuelName((String) objects[1])
                     .stationId((Integer) objects[2])
                     .stationName((String) objects[3])
-                    .totalRevenue((Double) objects[4])
-                    .totalVolume((Double) objects[5])
+                    .totalVolume((Double) objects[4])
+                    .totalRevenue((Double) objects[5])
                     .totalDebt((Double) objects[6])
                     .totalPaid((Double) objects[7])
                     .build();

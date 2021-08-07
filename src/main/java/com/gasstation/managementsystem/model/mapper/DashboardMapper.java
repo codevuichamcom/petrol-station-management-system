@@ -21,9 +21,9 @@ public class DashboardMapper {
         return FuelStatisticDTO.builder()
                 .fuel(fuelDTO)
                 .station(stationDTO)
+                .totalVolume(fuelStatistic.getTotalVolume())
                 .totalRevenue(fuelStatistic.getTotalRevenue())
                 .totalDebt(fuelStatistic.getTotalDebt())
-                .totalVolume(fuelStatistic.getTotalVolume())
                 .totalPaid(fuelStatistic.getTotalPaid()).build();
     }
 

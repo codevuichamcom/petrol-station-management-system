@@ -19,52 +19,55 @@ public class DashboardRepositoryCriteria {
     private final EntityManager em;
 
     public HashMap<String, Object> fuelStatistic(FuelStatisticDTOFilter filter) {
-        String str = "select tbl1.*,tbl2.total_debt, tbl3.totalPaid\n" +
-                "from (SELECT ft.id                                           as fuel_id,\n" +
-                "             ft.name                                         AS fuel_name,\n" +
-                "             st.id                                           AS station_id,\n" +
-                "             st.name                                         AS station_name,\n" +
-                "             st.address                                      AS station_address,\n" +
-                "             coalesce(sum(tran.volume * tran.unit_price), 0) as total_revenue,\n" +
-                "             coalesce(sum(tran.volume), 0)                   as totalVolume\n" +
-                "      FROM transaction_tbl tran\n" +
-                "               RIGHT JOIN pump_shift_tbl pst ON pst.id = tran.pump_shift_id\n" +
-                "               RIGHT JOIN pump_tbl pt ON pt.id = pst.pump_id\n" +
-                "               RIGHT JOIN tank_tbl tt ON tt.id = pt.tank_id\n" +
-                "               right join station_tbl st on st.id = tt.station_id\n" +
-                "               RIGHT JOIN fuel_tbl ft ON ft.id = tt.fuel_id\n" +
-                "      where (tran.time between :startTime and :endTime\n" +
-                "          or tran.time is null)\n" +
-                "      GROUP BY ft.id, ft.name, st.id, st.name, st.address) as tbl1,\n" +
-                "     (select ft.id as fuel_id, coalesce(sum(dt.accounts_payable), 0) as total_debt\n" +
-                "      FROM debt_tbl dt\n" +
-                "               right join transaction_tbl tran on tran.id = dt.transaction_id\n" +
-                "               RIGHT JOIN pump_shift_tbl pst ON pst.id = tran.pump_shift_id\n" +
-                "               RIGHT JOIN pump_tbl pt ON pt.id = pst.pump_id\n" +
-                "               RIGHT JOIN tank_tbl tt ON tt.id = pt.tank_id\n" +
-                "               right join station_tbl st on st.id = tt.station_id\n" +
-                "               RIGHT JOIN fuel_tbl ft ON ft.id = tt.fuel_id\n" +
-                "      where (tran.time between :startTime and :endTime\n" +
-                "          or tran.time is null)\n" +
-                "      GROUP BY ft.id) as tbl2,\n" +
-                "     (\n" +
-                "         select ft.id                                                                            as fuel_id,\n" +
-                "                coalesce(sum(tt.volume * tt.unit_price - coalesce((dt.accounts_payable), 0)), 0) as totalPaid\n" +
-                "         from card_tbl ct\n" +
-                "                  right join transaction_tbl tt on ct.id = tt.card_id\n" +
-                "                  right join debt_tbl dt on tt.id = dt.transaction_id\n" +
-                "                  right join pump_shift_tbl pst on pst.id = tt.pump_shift_id\n" +
-                "                  right join pump_tbl pt on pt.id = pst.pump_id\n" +
-                "                  right join tank_tbl t on t.id = pt.tank_id\n" +
-                "                  right join fuel_tbl ft on ft.id = t.fuel_id\n" +
-                "         where (tt.time between :startTime and :endTime\n" +
-                "             or tt.time is null)\n" +
-                "         GROUP BY ft.id)\n" +
-                "         as tbl3\n" +
-                "where tbl1.fuel_id = tbl2.fuel_id and tbl2.fuel_id = tbl3.fuel_id\n" +
-                "  and tbl1.station_id is not null\n";
+        String str = "select total_revenue_tbl.*,\n" +
+                "       coalesce(total_debt_tbl.total_debt, 0) as total_debt,\n" +
+                "       coalesce(total_paid_tbl.total_paid, 0) as total_paid\n" +
+                "from (select ft.id                                           as fuel_id,\n" +
+                "             ft.name                                         as fuel_name,\n" +
+                "             st.id                                           as station_id,\n" +
+                "             st.name                                         as station_nameo,\n" +
+                "             coalesce(sum(tran.volume), 0)                   as total_volume,\n" +
+                "             coalesce(sum(tran.volume * tran.unit_price), 0) as total_revenue\n" +
+                "      from transaction_tbl tran\n" +
+                "               inner join pump_shift_tbl pst on pst.id = tran.pump_shift_id\n" +
+                "               inner join pump_tbl pt on pt.id = pst.pump_id\n" +
+                "               inner join tank_tbl tt on tt.id = pt.tank_id\n" +
+                "               inner join station_tbl st on st.id = tt.station_id\n" +
+                "               inner join fuel_tbl ft on ft.id = tt.fuel_id\n" +
+                "      where tran.time between :startTime and :endTime\n" +
+                "      group by ft.id, st.id) as total_revenue_tbl\n" +
+                "         left join\n" +
+                "\n" +
+                "     (select ft.id                    as fuel_id,\n" +
+                "             st.id                    as station_id,\n" +
+                "             sum(dt.accounts_payable) as total_debt\n" +
+                "      from debt_tbl dt\n" +
+                "               inner join transaction_tbl tt on tt.id = dt.transaction_id\n" +
+                "               inner join pump_shift_tbl pst on pst.id = tt.pump_shift_id\n" +
+                "               inner join pump_tbl pt on pt.id = pst.pump_id\n" +
+                "               inner join tank_tbl t on t.id = pt.tank_id\n" +
+                "               inner join station_tbl st on st.id = t.station_id\n" +
+                "               inner join fuel_tbl ft on ft.id = t.fuel_id\n" +
+                "      group by ft.id, st.id) as total_debt_tbl\n" +
+                "     on total_revenue_tbl.fuel_id = total_debt_tbl.fuel_id\n" +
+                "         and total_revenue_tbl.fuel_id = total_debt_tbl.fuel_id\n" +
+                "         left join\n" +
+                "     (select ft.id                                                                 as fuel_id,\n" +
+                "             st.id                                                                 as station_id,\n" +
+                "             sum((tt.volume * tt.unit_price) - coalesce((dt.accounts_payable), 0)) as total_paid\n" +
+                "      from transaction_tbl tt\n" +
+                "               left join debt_tbl dt on tt.id = dt.transaction_id\n" +
+                "               inner join pump_shift_tbl pst on pst.id = tt.pump_shift_id\n" +
+                "               inner join pump_tbl pt on pt.id = pst.pump_id\n" +
+                "               inner join tank_tbl t on t.id = pt.tank_id\n" +
+                "               inner join station_tbl st on st.id = t.station_id\n" +
+                "               inner join fuel_tbl ft on ft.id = t.fuel_id\n" +
+                "      where tt.card_id is not null\n" +
+                "      group by ft.id, st.id) as total_paid_tbl\n" +
+                "     on total_debt_tbl.fuel_id = total_paid_tbl.fuel_id\n" +
+                "         and total_debt_tbl.station_id = total_paid_tbl.station_id\n";
         if (filter.getStationId() != null) {
-            str += "  and tbl1.station_id = :stationId";
+            str += "  \"where total_revenue_tbl.station_id = :stationId\";";
         }
         Query nativeQuery = em.createNativeQuery(str);
         nativeQuery.setParameter("startTime", filter.getStartTime());
@@ -76,18 +79,17 @@ public class DashboardRepositoryCriteria {
         List<Object[]> listResult = nativeQuery.getResultList();
         List<FuelStatistic> fuelStatistics = new ArrayList<>();
         listResult.forEach(objects -> {
-            FuelStatistic revenue = FuelStatistic.builder()
+            FuelStatistic fuelStatistic = FuelStatistic.builder()
                     .fuelId((Integer) objects[0])
                     .fuelName((String) objects[1])
                     .stationId((Integer) objects[2])
                     .stationName((String) objects[3])
-                    .stationAddress((String) objects[4])
-                    .totalRevenue((Double) objects[5])
-                    .totalVolume((Double) objects[6])
-                    .totalDebt((Double) objects[7])
-                    .totalPaid((Double) objects[8])
+                    .totalRevenue((Double) objects[4])
+                    .totalVolume((Double) objects[5])
+                    .totalDebt((Double) objects[6])
+                    .totalPaid((Double) objects[7])
                     .build();
-            fuelStatistics.add(revenue);
+            fuelStatistics.add(fuelStatistic);
         });
         HashMap<String, Object> map = new HashMap<>();
         map.put("data", fuelStatistics);

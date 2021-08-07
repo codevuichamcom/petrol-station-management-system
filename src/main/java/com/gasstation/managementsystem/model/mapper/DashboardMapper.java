@@ -17,8 +17,7 @@ public class DashboardMapper {
                 .name(fuelStatistic.getFuelName()).build() : null;
         StationDTO stationDTO = fuelStatistic.getStationId() != null ? StationDTO.builder()
                 .id(fuelStatistic.getStationId())
-                .name(fuelStatistic.getStationName())
-                .address(fuelStatistic.getStationAddress()).build() : null;
+                .name(fuelStatistic.getStationName()).build() : null;
         return FuelStatisticDTO.builder()
                 .fuel(fuelDTO)
                 .station(stationDTO)

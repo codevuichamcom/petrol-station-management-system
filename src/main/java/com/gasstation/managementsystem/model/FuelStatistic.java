@@ -12,7 +12,6 @@ public class FuelStatistic {
     private String fuelName;
     private Integer stationId;
     private String stationName;
-    private String stationAddress;
     private Double totalRevenue;
     private Double totalDebt;
     private Double totalVolume;

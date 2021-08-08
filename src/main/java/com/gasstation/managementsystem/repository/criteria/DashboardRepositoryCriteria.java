@@ -123,7 +123,7 @@ public class DashboardRepositoryCriteria {
                 "               right join pump_tbl pt on pt.id = pst.pump_id\n" +
                 "               right join tank_tbl tt on tt.id = pt.tank_id\n" +
                 "               right join fuel_tbl ft on ft.id = tt.fuel_id\n" +
-                "      where tran.time between 0 and 900000000000000\n" +
+                "      where tran.time between :startTime and :endTime\n" +
                 "         or tran.time is null\n" +
                 "      group by tt.id, tt.name, ft.id, ft.name\n" +
                 "      having tt.id is not null) as tx\n" +

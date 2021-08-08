@@ -53,10 +53,12 @@ public class DashboardController {
     @Operation(summary = "Tank statistic")
     @GetMapping("tank-statistic")
     public HashMap<String, Object> tankStatistic(@RequestParam(name = "startTime") Long startTime,
-                                                 @RequestParam(name = "endTime") Long endTime) {
+                                                 @RequestParam(name = "endTime") Long endTime,
+                                                 @RequestParam(name = "stationIds", required = false) Integer[] stationIds) {
         TankStatisticDTOFilter filter = TankStatisticDTOFilter.builder()
                 .startTime(startTime)
-                .endTime(endTime).build();
+                .endTime(endTime)
+                .stationIds(stationIds).build();
         return dashboardService.tankStatistic(filter);
     }
 }

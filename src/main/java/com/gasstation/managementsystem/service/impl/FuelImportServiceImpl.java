@@ -78,9 +78,9 @@ public class FuelImportServiceImpl implements FuelImportService {
         }
         if (fuelImportDTOCreate.getVolume() > tank.getVolume() - tank.getRemain()) {
             throw new CustomBadRequestException(CustomError.builder()
-                    .code("not.enough")
+                    .code("full")
                     .message("Tank not enough to hold")
-                    .table("fuel_import_tbl").build());
+                    .table("tank_tbl").build());
         }
 
         tank.setRemain(tank.getRemain() + fuelImportDTOCreate.getVolume());
@@ -125,9 +125,9 @@ public class FuelImportServiceImpl implements FuelImportService {
         }
         if (fuelImportDTOUpdate.getVolume() > oldFuelImport.getTank().getVolume() - oldFuelImport.getTank().getRemain()) {
             throw new CustomBadRequestException(CustomError.builder()
-                    .code("not.enough")
+                    .code("full")
                     .message("Tank not enough to hold")
-                    .table("fuel_import_tbl").build());
+                    .table("tank_tbl").build());
         }
         oldFuelImport = fuelImportRepository.save(oldFuelImport);
         return FuelImportMapper.toFuelImportDTO(oldFuelImport);

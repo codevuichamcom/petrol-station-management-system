@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.service;
 
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.workSchedule.WorkScheduleDTO;
 import com.gasstation.managementsystem.model.dto.workSchedule.WorkScheduleDTOCreate;
@@ -16,9 +17,9 @@ public interface WorkScheduleService {
 
     WorkScheduleDTO findById(int id) throws CustomNotFoundException;
 
-    WorkScheduleDTO create(WorkScheduleDTOCreate workScheduleDTOCreate) throws CustomNotFoundException;
+    WorkScheduleDTO create(WorkScheduleDTOCreate workScheduleDTOCreate) throws CustomNotFoundException, CustomBadRequestException;
 
-    WorkScheduleDTO update(int id, WorkScheduleDTOUpdate workScheduleDTOUpdate) throws CustomNotFoundException;
+    WorkScheduleDTO update(int id, WorkScheduleDTOUpdate workScheduleDTOUpdate) throws CustomNotFoundException, CustomBadRequestException;
 
     WorkScheduleDTO delete(int id) throws CustomNotFoundException;
 }

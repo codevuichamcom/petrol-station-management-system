@@ -1,7 +1,11 @@
 package com.gasstation.managementsystem.service.impl;
 
+import com.gasstation.managementsystem.entity.Employee;
+import com.gasstation.managementsystem.entity.Shift;
 import com.gasstation.managementsystem.entity.WorkSchedule;
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
+import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.dto.workSchedule.WorkScheduleDTO;
 import com.gasstation.managementsystem.model.dto.workSchedule.WorkScheduleDTOCreate;
 import com.gasstation.managementsystem.model.dto.workSchedule.WorkScheduleDTOUpdate;
@@ -18,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,24 +59,59 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
     }
 
     @Override
-    public WorkScheduleDTO create(WorkScheduleDTOCreate workScheduleDTOCreate) throws CustomNotFoundException {
+    public WorkScheduleDTO create(WorkScheduleDTOCreate workScheduleDTOCreate) throws CustomNotFoundException, CustomBadRequestException {
         WorkSchedule workSchedule = WorkScheduleMapper.toWorkSchedule(workScheduleDTOCreate);
-        workSchedule.setEmployee(optionalValidate.getEmployeeById(workScheduleDTOCreate.getEmployeeId()));
-        workSchedule.setShift(optionalValidate.getShiftById(workScheduleDTOCreate.getShiftId()));
+        Employee employee = optionalValidate.getEmployeeById(workScheduleDTOCreate.getEmployeeId());
+        Shift shift = optionalValidate.getShiftById(workScheduleDTOCreate.getShiftId());
+        List<WorkSchedule> workScheduleList = employee.getWorkScheduleList();
+        for (WorkSchedule schedule : workScheduleList) {
+            if (Objects.equals(schedule.getShift().getId(), shift.getId())) {
+                checkIntersectDate(workSchedule, schedule);
+            }
+        }
+        workSchedule.setEmployee(employee);
+        workSchedule.setShift(shift);
         workSchedule = workScheduleRepository.save(workSchedule);
         return WorkScheduleMapper.toWorkScheduleDTO(workSchedule);
     }
 
+    private void checkIntersectDate(WorkSchedule newSchedule, WorkSchedule oldSchedule) throws CustomBadRequestException {
+        Long oldMinStart = oldSchedule.getStartDate();
+        Long oldMinEnd = oldSchedule.getEndDate();
+        Long newMinStart = newSchedule.getStartDate();
+        Long newMinEnd = newSchedule.getEndDate();
+        if (inRange(oldMinStart, newMinStart, newMinEnd)
+                || inRange(oldMinEnd, newMinStart, newMinEnd)
+                || inRange(newMinStart, oldMinStart, oldMinEnd)
+                || inRange(newMinEnd, oldMinStart, oldMinEnd)) {
+            throw new CustomBadRequestException(CustomError.builder()
+                    .code("intersect")
+                    .message("Work schedule is existed")
+                    .table("work_schedule_tbl").build());
+        }
+    }
+
+    private boolean inRange(Long value, Long start, Long end) {
+        return value >= start && value <= end;
+    }
+
     @Override
-    public WorkScheduleDTO update(int id, WorkScheduleDTOUpdate workScheduleDTOUpdate) throws CustomNotFoundException {
-        WorkSchedule workSchedule = optionalValidate.getWorkScheduleById(id);
-        WorkScheduleMapper.copyNonNullToWorkSchedule(workSchedule, workScheduleDTOUpdate);
+    public WorkScheduleDTO update(int id, WorkScheduleDTOUpdate workScheduleDTOUpdate) throws CustomNotFoundException, CustomBadRequestException {
+        WorkSchedule oldWorkSchedule = optionalValidate.getWorkScheduleById(id);
+        WorkScheduleMapper.copyNonNullToWorkSchedule(oldWorkSchedule, workScheduleDTOUpdate);
         Integer shiftId = workScheduleDTOUpdate.getShiftId();
         if (shiftId != null) {
-            workSchedule.setShift(optionalValidate.getShiftById(shiftId));
+            Employee oldEmployee = oldWorkSchedule.getEmployee();
+            List<WorkSchedule> workScheduleList = oldEmployee.getWorkScheduleList();
+            for (WorkSchedule schedule : workScheduleList) {
+                if (Objects.equals(schedule.getShift().getId(), shiftId)) {
+                    checkIntersectDate(oldWorkSchedule, schedule);
+                }
+            }
+            oldWorkSchedule.setShift(optionalValidate.getShiftById(shiftId));
         }
-        workSchedule = workScheduleRepository.save(workSchedule);
-        return WorkScheduleMapper.toWorkScheduleDTO(workSchedule);
+        oldWorkSchedule = workScheduleRepository.save(oldWorkSchedule);
+        return WorkScheduleMapper.toWorkScheduleDTO(oldWorkSchedule);
 
     }
 

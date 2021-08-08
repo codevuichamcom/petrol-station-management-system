@@ -1,6 +1,7 @@
 package com.gasstation.managementsystem.controller;
 
 import com.gasstation.managementsystem.entity.Api;
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.workSchedule.WorkScheduleDTO;
 import com.gasstation.managementsystem.model.dto.workSchedule.WorkScheduleDTOCreate;
@@ -43,14 +44,14 @@ public class WorkScheduleController {
 
     @Operation(summary = "Create new work schedule")
     @PostMapping("/work-schedules")
-    public WorkScheduleDTO create(@Valid @RequestBody WorkScheduleDTOCreate workScheduleDTOCreate) throws CustomNotFoundException {
+    public WorkScheduleDTO create(@Valid @RequestBody WorkScheduleDTOCreate workScheduleDTOCreate) throws CustomNotFoundException, CustomBadRequestException {
         return workScheduleService.create(workScheduleDTOCreate);
     }
 
     @Operation(summary = "Update work schedule by id")
     @PutMapping("/work-schedules/{id}")
     public WorkScheduleDTO update(@PathVariable(name = "id") Integer id,
-                                  @Valid @RequestBody WorkScheduleDTOUpdate workScheduleDTOUpdate) throws CustomNotFoundException {
+                                  @Valid @RequestBody WorkScheduleDTOUpdate workScheduleDTOUpdate) throws CustomNotFoundException, CustomBadRequestException {
         return workScheduleService.update(id, workScheduleDTOUpdate);
     }
 

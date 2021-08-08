@@ -6,7 +6,6 @@ import com.gasstation.managementsystem.entity.Receipt;
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.receipt.ReceiptDTO;
-import com.gasstation.managementsystem.model.dto.receipt.ReceiptDTOCreate;
 import com.gasstation.managementsystem.model.dto.receipt.ReceiptDTOFilter;
 import com.gasstation.managementsystem.model.mapper.ReceiptMapper;
 import com.gasstation.managementsystem.repository.DebtRepository;
@@ -47,20 +46,5 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Override
     public ReceiptDTO findById(int id) throws CustomNotFoundException {
         return ReceiptMapper.toReceiptDTO(optionalValidate.getReceiptById(id));
-    }
-
-    @Override
-    public ReceiptDTO create(ReceiptDTOCreate receiptDTOCreate) throws CustomNotFoundException {
-        Receipt receipt = ReceiptMapper.toReceipt(receiptDTOCreate);
-        User creator = userHelper.getUserLogin();
-        Card card = optionalValidate.getCardById(receiptDTOCreate.getCardId());
-        Debt debt = optionalValidate.getDebtById(receiptDTOCreate.getDebtId());
-        receipt.setCreator(creator);
-        receipt.setCard(card);
-        receipt = receiptRepository.save(receipt);
-
-        debt.setAccountsPayable(debt.getAccountsPayable() - receipt.getAmount());
-        debtRepository.save(debt);
-        return ReceiptMapper.toReceiptDTO(receipt);
     }
 }

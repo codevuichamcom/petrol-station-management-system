@@ -2,7 +2,6 @@ package com.gasstation.managementsystem.controller;
 
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.receipt.ReceiptDTO;
-import com.gasstation.managementsystem.model.dto.receipt.ReceiptDTOCreate;
 import com.gasstation.managementsystem.model.dto.receipt.ReceiptDTOFilter;
 import com.gasstation.managementsystem.service.ReceiptService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,7 +9,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.HashMap;
 
 @RestController
@@ -49,11 +47,5 @@ public class ReceiptController {
     @GetMapping("/receipts/{id}")
     public ReceiptDTO getOne(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
         return receiptService.findById(id);
-    }
-
-    @Operation(summary = "Create new Receipt")
-    @PostMapping("/receipts")
-    public ReceiptDTO create(@Valid @RequestBody ReceiptDTOCreate receiptDTOCreate) throws CustomNotFoundException {
-        return receiptService.create(receiptDTOCreate);
     }
 }

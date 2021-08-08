@@ -6,12 +6,10 @@ import com.gasstation.managementsystem.model.dto.fuel.FuelDTO;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
 import com.gasstation.managementsystem.model.dto.pumpShift.PumpShiftDTO;
 import com.gasstation.managementsystem.model.dto.receipt.ReceiptDTO;
-import com.gasstation.managementsystem.model.dto.receipt.ReceiptDTOCreate;
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import com.gasstation.managementsystem.model.dto.tank.TankDTO;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
-import com.gasstation.managementsystem.utils.DateTimeHelper;
 
 public class ReceiptMapper {
     public static ReceiptDTO toReceiptDTO(Receipt receipt) {
@@ -58,15 +56,6 @@ public class ReceiptMapper {
                 .creator(creatorDTO)
                 .card(cardDTO)
                 .transaction(transactionDTO)
-                .build();
-    }
-
-    public static Receipt toReceipt(ReceiptDTOCreate receiptDTOCreate) {
-        if (receiptDTOCreate == null) return null;
-        return Receipt.builder()
-                .createdDate(DateTimeHelper.getCurrentDate())
-                .reason(receiptDTOCreate.getReason())
-                .amount(receiptDTOCreate.getAmount())
                 .build();
     }
 }

@@ -17,20 +17,19 @@ public class ReceiptRepositoryCriteria {
     private final EntityManager em;
 
     public HashMap<String, Object> findAll(ReceiptDTOFilter filter) {
-
-        StringBuilder query = new StringBuilder("select r from Receipt r inner join Card c inner join c.customer cus inner join c.creator cre where 1 = 1");
+        StringBuilder query = new StringBuilder("select r from Receipt r inner join r.card c inner join c.customer cus inner join r.creator cre where 1 = 1");
         QueryGenerateHelper qHelper = new QueryGenerateHelper();
         qHelper.setQuery(query);
         qHelper.between("r.createdDate", 0l, filter.getCreatedDate(), "createdDate", filter.getCreatedDate())
                 .between("r.amount", 0d, filter.getAmount(), "amount", filter.getAmount())
                 .like("r.reason", "reason", filter.getReason())
-                .like("r.card.id", "cardId", filter.getCardId())
+                .like("c.id", "cardId", filter.getCardId())
                 .like("cus.name", "customerName", filter.getCustomerName())
                 .like("cus.phone", "customerPhone", filter.getCustomerPhone())
                 .like("cre.name", "creatorName", filter.getCreatorName());
         String countQuery = qHelper.getQuery().toString().replace("select r", "select count(r.id)");
         Query countTotalQuery = em.createQuery(countQuery);
-        qHelper.sort("e.id", "DESC");
+        qHelper.sort("r.id", "DESC");
         TypedQuery<Receipt> tQuery = em.createQuery(query.toString(), Receipt.class);
         return qHelper.paging(tQuery, countTotalQuery, filter.getPageIndex(), filter.getPageSize());
     }

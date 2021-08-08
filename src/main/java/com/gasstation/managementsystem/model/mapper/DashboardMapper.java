@@ -22,9 +22,9 @@ public class DashboardMapper {
                 .fuel(fuelDTO)
                 .station(stationDTO)
                 .totalVolume(fuelStatistic.getTotalVolume())
-                .totalRevenue(fuelStatistic.getTotalRevenue())
-                .totalDebt(fuelStatistic.getTotalDebt())
-                .totalCash(fuelStatistic.getTotalCash()).build();
+                .totalRevenue(Math.ceil(fuelStatistic.getTotalRevenue()))
+                .totalDebt(Math.ceil(fuelStatistic.getTotalDebt()))
+                .totalCash(Math.ceil(fuelStatistic.getTotalCash())).build();
     }
 
     public static TankStatisticDTO toTankStatisticDTO(TankStatistic tankStatistic) {

@@ -97,21 +97,22 @@ public class DashboardRepositoryCriteria {
     }
 
     public HashMap<String, Object> tankStatistic(TankStatisticDTOFilter filter) {
-        String str = "select tn.tank_id as tank_id,\n" +
+        String str = "select tn.tank_id    as tank_id,\n" +
                 "       tank_name,\n" +
-                "       remain     as tank_remain,\n" +
+                "       remain        as tank_remain,\n" +
                 "       fuel_id,\n" +
                 "       fuel_name,\n" +
                 "       total_import,\n" +
                 "       total_export\n" +
                 "from (select tt.id                        as tank_id,\n" +
+                "             tt.station_id                as station_id,\n" +
                 "             tt.remain                    as remain,\n" +
                 "             coalesce(sum(fit.volume), 0) as total_import\n" +
                 "      from fuel_import_tbl fit\n" +
                 "               right join tank_tbl tt on tt.id = fit.tank_id\n" +
-                "      where fit.created_date between :startTime and :endTime\n" +
+                "      where fit.created_date between 0 and 9000000000000\n" +
                 "         or fit.created_date is null\n" +
-                "      group by tt.id) as tn,\n" +
+                "      group by tt.id, tt.station_id) as tn,\n" +
                 "     (select tt.id                         as tank_id,\n" +
                 "             tt.name                       as tank_name,\n" +
                 "             ft.id                         as fuel_id,\n" +
@@ -122,16 +123,20 @@ public class DashboardRepositoryCriteria {
                 "               right join pump_tbl pt on pt.id = pst.pump_id\n" +
                 "               right join tank_tbl tt on tt.id = pt.tank_id\n" +
                 "               right join fuel_tbl ft on ft.id = tt.fuel_id\n" +
-                "      where tran.time between :startTime and :endTime\n" +
+                "      where tran.time between 0 and 900000000000000\n" +
                 "         or tran.time is null\n" +
                 "      group by tt.id, tt.name, ft.id, ft.name\n" +
                 "      having tt.id is not null) as tx\n" +
-                "where tx.tank_id = tn.tank_id";
-
+                "where tx.tank_id = tn.tank_id\n";
+        if (filter.getStationIds() != null && filter.getStationIds().length > 0) {
+            str += "  and tn.station_id = 2";
+        }
         Query nativeQuery = em.createNativeQuery(str);
         nativeQuery.setParameter("startTime", filter.getStartTime());
         nativeQuery.setParameter("endTime", filter.getEndTime());
-
+        if (filter.getStationIds() != null && filter.getStationIds().length > 0) {
+            nativeQuery.setParameter("stationIds", Arrays.asList(filter.getStationIds()));
+        }
 
         List<Object[]> listResult = nativeQuery.getResultList();
         List<TankStatistic> tankStatistics = new ArrayList<>();

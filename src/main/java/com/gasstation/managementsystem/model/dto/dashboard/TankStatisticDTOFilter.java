@@ -10,4 +10,5 @@ import lombok.*;
 public class TankStatisticDTOFilter {
     private Long startTime;
     private Long endTime;
+    private Integer[] stationIds;
 }

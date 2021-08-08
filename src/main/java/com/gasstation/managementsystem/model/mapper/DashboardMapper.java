@@ -24,7 +24,7 @@ public class DashboardMapper {
                 .totalVolume(fuelStatistic.getTotalVolume())
                 .totalRevenue(fuelStatistic.getTotalRevenue())
                 .totalDebt(fuelStatistic.getTotalDebt())
-                .totalPaid(fuelStatistic.getTotalPaid()).build();
+                .totalCash(fuelStatistic.getTotalCash()).build();
     }
 
     public static TankStatisticDTO toTankStatisticDTO(TankStatistic tankStatistic) {

@@ -15,5 +15,5 @@ public class FuelStatisticDTO {
     private Double totalRevenue;
     private Double totalDebt;
     private Double totalVolume;
-    private Double totalPaid;
+    private Double totalCash;
 }

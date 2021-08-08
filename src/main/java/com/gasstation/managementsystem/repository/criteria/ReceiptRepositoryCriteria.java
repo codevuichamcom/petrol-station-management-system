@@ -17,7 +17,7 @@ public class ReceiptRepositoryCriteria {
     private final EntityManager em;
 
     public HashMap<String, Object> findAll(ReceiptDTOFilter filter) {
-        em.createQuery("select r from Receipt r inner join Card c inner join c.customer cus inner join c.creator cre where 1 = 1 and cre.name");
+
         StringBuilder query = new StringBuilder("select r from Receipt r inner join Card c inner join c.customer cus inner join c.creator cre where 1 = 1");
         QueryGenerateHelper qHelper = new QueryGenerateHelper();
         qHelper.setQuery(query);

@@ -48,7 +48,7 @@ public class QueryGenerateHelper {
                 .append(field)
                 .append(" LIKE LOWER")
                 .append(" (:").append(key).append(")");
-        params.put(key, "%" + value + "%");
+        params.put(key, "%" + value.toLowerCase() + "%");
         return this;
     }
 

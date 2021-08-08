@@ -29,10 +29,13 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public HashMap<String, Object> findAll(ExpenseDTOFilter filter) {
-        List<Expense> expenseList = (List<Expense>) expenseCriteria.findAll(filter).get("data");
+        HashMap<String, Object> temp = expenseCriteria.findAll(filter);
+        List<Expense> expenseList = (List<Expense>) temp.get("data");
         List<ExpenseDTO> expenseDTOS = expenseList.stream().map(ExpenseMapper::toExpenseDTO).collect(Collectors.toList());
         HashMap<String, Object> map = new HashMap<>();
         map.put("data", expenseDTOS);
+        map.put("totalElement", temp.get("totalElement"));
+        map.put("totalPage", temp.get("totalPage"));
         return map;
     }
 

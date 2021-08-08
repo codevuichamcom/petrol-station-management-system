@@ -22,11 +22,11 @@ public class DashboardRepositoryCriteria {
     public HashMap<String, Object> fuelStatistic(FuelStatisticDTOFilter filter) {
         String str = "select total_revenue_tbl.*,\n" +
                 "       coalesce(total_debt_tbl.total_debt, 0) as total_debt,\n" +
-                "       coalesce(total_paid_tbl.total_paid, 0) as total_paid\n" +
+                "       coalesce(total_cash_tbl.total_cash, 0) as total_cash\n" +
                 "from (select ft.id                                           as fuel_id,\n" +
                 "             ft.name                                         as fuel_name,\n" +
                 "             st.id                                           as station_id,\n" +
-                "             st.name                                         as station_nameo,\n" +
+                "             st.name                                         as station_name,\n" +
                 "             coalesce(sum(tran.volume), 0)                   as total_volume,\n" +
                 "             coalesce(sum(tran.volume * tran.unit_price), 0) as total_revenue\n" +
                 "      from transaction_tbl tran\n" +
@@ -35,10 +35,9 @@ public class DashboardRepositoryCriteria {
                 "               inner join tank_tbl tt on tt.id = pt.tank_id\n" +
                 "               inner join station_tbl st on st.id = tt.station_id\n" +
                 "               inner join fuel_tbl ft on ft.id = tt.fuel_id\n" +
-                "      where tran.time between :startTime and :endTime\n" +
+                "    where tran.time between :startTime and :endTime\n" +
                 "      group by ft.id, st.id) as total_revenue_tbl\n" +
-                "         left join\n" +
-                "\n" +
+                "         inner join\n" +
                 "     (select ft.id                    as fuel_id,\n" +
                 "             st.id                    as station_id,\n" +
                 "             sum(dt.accounts_payable) as total_debt\n" +
@@ -51,22 +50,22 @@ public class DashboardRepositoryCriteria {
                 "               inner join fuel_tbl ft on ft.id = t.fuel_id\n" +
                 "      group by ft.id, st.id) as total_debt_tbl\n" +
                 "     on total_revenue_tbl.fuel_id = total_debt_tbl.fuel_id\n" +
-                "         and total_revenue_tbl.fuel_id = total_debt_tbl.fuel_id\n" +
-                "         left join\n" +
-                "     (select ft.id                                                                 as fuel_id,\n" +
-                "             st.id                                                                 as station_id,\n" +
-                "             sum((tt.volume * tt.unit_price) - coalesce((dt.accounts_payable), 0)) as total_paid\n" +
+                "         and total_revenue_tbl.station_id = total_debt_tbl.station_id\n" +
+                "         inner join\n" +
+                "     (select ft.id                                       as fuel_id,\n" +
+                "             st.id                                       as station_id,\n" +
+                "             coalesce(sum(tt.volume * tt.unit_price), 0) as total_cash\n" +
                 "      from transaction_tbl tt\n" +
-                "               left join debt_tbl dt on tt.id = dt.transaction_id\n" +
-                "               inner join pump_shift_tbl pst on pst.id = tt.pump_shift_id\n" +
+                "               inner join pump_shift_tbl pst\n" +
+                "                          on pst.id = tt.pump_shift_id\n" +
                 "               inner join pump_tbl pt on pt.id = pst.pump_id\n" +
                 "               inner join tank_tbl t on t.id = pt.tank_id\n" +
                 "               inner join station_tbl st on st.id = t.station_id\n" +
                 "               inner join fuel_tbl ft on ft.id = t.fuel_id\n" +
-                "      where tt.card_id is not null\n" +
-                "      group by ft.id, st.id) as total_paid_tbl\n" +
-                "     on total_debt_tbl.fuel_id = total_paid_tbl.fuel_id\n" +
-                "         and total_debt_tbl.station_id = total_paid_tbl.station_id\n";
+                "      where tt.card_id is null\n" +
+                "      group by ft.id, st.id) as total_cash_tbl\n" +
+                "     on total_debt_tbl.fuel_id = total_cash_tbl.fuel_id\n" +
+                "         and total_debt_tbl.station_id = total_cash_tbl.station_id\n";
         if (filter.getStationIds() != null && filter.getStationIds().length > 0) {
             str += "  where total_revenue_tbl.station_id in (:stationIds)";
         }

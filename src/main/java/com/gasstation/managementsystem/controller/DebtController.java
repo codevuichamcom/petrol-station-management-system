@@ -2,6 +2,7 @@ package com.gasstation.managementsystem.controller;
 
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.debt.DebtDTOFilter;
+import com.gasstation.managementsystem.model.dto.debt.DebtDTOPay;
 import com.gasstation.managementsystem.model.dto.debt.DebtDTOSummaryFilter;
 import com.gasstation.managementsystem.service.DebtService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,7 +10,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -49,5 +52,11 @@ public class DebtController {
                 .cardId(cardId)
                 .stationId(stationId).build();
         return debtService.getDetail(filter);
+    }
+
+    @Operation(summary = "Find debt by id")
+    @PostMapping("/debts/pay")
+    public void payDebts(@Valid @RequestBody List<DebtDTOPay> debtDTOPays) throws CustomNotFoundException {
+        debtService.payDebts(debtDTOPays);
     }
 }

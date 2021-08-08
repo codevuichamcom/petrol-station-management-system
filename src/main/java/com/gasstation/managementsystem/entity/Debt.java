@@ -7,8 +7,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "debt_tbl")
@@ -25,7 +23,4 @@ public class Debt extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "transaction_id")
     private Transaction transaction;
-
-    @OneToMany(mappedBy = "debt")
-    private List<Receipt> receiptList = new ArrayList<>();
 }

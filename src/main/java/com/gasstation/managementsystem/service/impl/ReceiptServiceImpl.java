@@ -57,7 +57,6 @@ public class ReceiptServiceImpl implements ReceiptService {
         Debt debt = optionalValidate.getDebtById(receiptDTOCreate.getDebtId());
         receipt.setCreator(creator);
         receipt.setCard(card);
-        receipt.setDebt(debt);
         receipt = receiptRepository.save(receipt);
 
         debt.setAccountsPayable(debt.getAccountsPayable() - receipt.getAmount());

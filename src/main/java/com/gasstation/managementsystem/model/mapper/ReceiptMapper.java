@@ -2,10 +2,9 @@ package com.gasstation.managementsystem.model.mapper;
 
 import com.gasstation.managementsystem.entity.*;
 import com.gasstation.managementsystem.model.dto.card.CardDTO;
-import com.gasstation.managementsystem.model.dto.debt.DebtDTO;
 import com.gasstation.managementsystem.model.dto.fuel.FuelDTO;
-import com.gasstation.managementsystem.model.dto.pumpShift.PumpShiftDTO;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
+import com.gasstation.managementsystem.model.dto.pumpShift.PumpShiftDTO;
 import com.gasstation.managementsystem.model.dto.receipt.ReceiptDTO;
 import com.gasstation.managementsystem.model.dto.receipt.ReceiptDTOCreate;
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
@@ -23,8 +22,7 @@ public class ReceiptMapper {
         User customer = card != null ? card.getCustomer() : null;
         UserDTO customerDTO = customer != null ? UserDTO.builder().id(customer.getId()).name(customer.getName()).phone(customer.getPhone()).build() : null;
         CardDTO cardDTO = card != null ? CardDTO.builder().id(card.getId()).customer(customerDTO).build() : null;
-        Debt debt = receipt.getDebt();
-        Transaction transaction = debt != null ? debt.getTransaction() : null;
+        Transaction transaction = receipt.getTransaction();
         PumpShift pumpShift = transaction != null ? transaction.getPumpShift() : null;
         Pump pump = pumpShift != null ? pumpShift.getPump() : null;
         Tank tank = pump != null ? pump.getTank() : null;
@@ -52,10 +50,6 @@ public class ReceiptMapper {
                 .id(transaction.getId())
                 .time(transaction.getTime())
                 .pumpShift(pumpShiftDTO).build() : null;
-        DebtDTO debtDTO = debt != null ? DebtDTO.builder()
-                .id(debt.getId())
-                .transaction(transactionDTO).build() : null;
-
         return ReceiptDTO.builder()
                 .id(receipt.getId())
                 .createdDate(receipt.getCreatedDate())
@@ -63,7 +57,7 @@ public class ReceiptMapper {
                 .amount(receipt.getAmount())
                 .creator(creatorDTO)
                 .card(cardDTO)
-                .debt(debtDTO)
+                .transaction(transactionDTO)
                 .build();
     }
 

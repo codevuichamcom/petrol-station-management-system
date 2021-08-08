@@ -1,7 +1,7 @@
 package com.gasstation.managementsystem.model.dto.receipt;
 
 import com.gasstation.managementsystem.model.dto.card.CardDTO;
-import com.gasstation.managementsystem.model.dto.debt.DebtDTO;
+import com.gasstation.managementsystem.model.dto.transaction.TransactionDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import lombok.*;
 
@@ -20,13 +20,13 @@ public class ReceiptDTO {
     private Double amount;
     private UserDTO creator;
     private CardDTO card;
-    private DebtDTO debt;
+    private TransactionDTO transaction;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ReceiptDTO that = (ReceiptDTO) o;
-        return id == that.id && Objects.equals(createdDate, that.createdDate) && Objects.equals(reason, that.reason) && Objects.equals(amount, that.amount) && Objects.equals(creator, that.creator) && Objects.equals(card, that.card) && Objects.equals(debt, that.debt);
+        return id == that.id && Objects.equals(createdDate, that.createdDate) && Objects.equals(reason, that.reason) && Objects.equals(amount, that.amount) && Objects.equals(creator, that.creator) && Objects.equals(card, that.card) && Objects.equals(transaction, that.transaction);
     }
 }

@@ -33,15 +33,16 @@ public class Receipt extends BaseEntity {
     @JoinColumn(name = "card_id", nullable = false)
     private Card card;
 
-    @ManyToOne
-    @JoinColumn(name = "debt_id", nullable = false)
-    private Debt debt; //Hóa đơn này của ca nào
+    @OneToOne
+    @JoinColumn(name = "transaction_id", nullable = false)
+    private Transaction transaction; //Hóa đơn này của ca nào
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Receipt receipt = (Receipt) o;
-        return id == receipt.id && Double.compare(receipt.amount, amount) == 0 && Objects.equals(createdDate, receipt.createdDate) && Objects.equals(reason, receipt.reason) && Objects.equals(creator, receipt.creator) && Objects.equals(card, receipt.card) && Objects.equals(debt, receipt.debt);
+        return Objects.equals(createdDate, receipt.createdDate) && Objects.equals(reason, receipt.reason) && Objects.equals(amount, receipt.amount) && Objects.equals(creator, receipt.creator) && Objects.equals(card, receipt.card) && Objects.equals(transaction, receipt.transaction);
     }
+
 }

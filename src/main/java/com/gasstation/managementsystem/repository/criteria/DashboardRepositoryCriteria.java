@@ -129,7 +129,7 @@ public class DashboardRepositoryCriteria {
                 "      having tt.id is not null) as tx\n" +
                 "where tx.tank_id = tn.tank_id\n";
         if (filter.getStationIds() != null && filter.getStationIds().length > 0) {
-            str += "  and tn.station_id = 2";
+            str += "  and tn.station_id in (:stationIds)";
         }
         Query nativeQuery = em.createNativeQuery(str);
         nativeQuery.setParameter("startTime", filter.getStartTime());

@@ -45,7 +45,9 @@ public class QueryGenerateHelper {
         if (StringUtils.isEmpty(value)) return this;
         query
                 .append(" AND ")
+                .append("LOWER(")
                 .append(field)
+                .append(")")
                 .append(" LIKE LOWER")
                 .append(" (:").append(key).append(")");
         params.put(key, "%" + value.toLowerCase() + "%");

@@ -36,7 +36,7 @@ public class TransactionRepositoryCriteria {
         Query volumeAmountQuery = em.createQuery(totalVolumeAndAmountQuery);
         volumeAmountHelper.setValueToParams(volumeAmountQuery);
         Object[] volumeAndAmount = (Object[]) volumeAmountQuery.getSingleResult();
-        qHelper.sort("t.time", "DESC");
+        qHelper.sort("t.id", "DESC");
         TypedQuery<Transaction> tQuery = em.createQuery(query.toString(), Transaction.class);
         HashMap<String, Object> map = qHelper.paging(tQuery, countTotalQuery, filter.getPageIndex(), filter.getPageSize());
         map.put("totalVolume", volumeAndAmount[0]);

@@ -46,7 +46,7 @@ public class QueryGenerateHelper {
         query
                 .append(" AND ")
                 .append(field)
-                .append(" LIKE ")
+                .append(" LIKE LOWER")
                 .append(" (:").append(key).append(")");
         params.put(key, "%" + value + "%");
         return this;

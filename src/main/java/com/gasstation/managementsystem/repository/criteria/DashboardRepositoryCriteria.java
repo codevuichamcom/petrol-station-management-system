@@ -110,7 +110,7 @@ public class DashboardRepositoryCriteria {
                 "             coalesce(sum(fit.volume), 0) as total_import\n" +
                 "      from fuel_import_tbl fit\n" +
                 "               right join tank_tbl tt on tt.id = fit.tank_id\n" +
-                "      where fit.created_date between 0 and 9000000000000\n" +
+                "      where fit.created_date between :startTime and :endTime\n" +
                 "         or fit.created_date is null\n" +
                 "      group by tt.id, tt.station_id) as tn,\n" +
                 "     (select tt.id                         as tank_id,\n" +

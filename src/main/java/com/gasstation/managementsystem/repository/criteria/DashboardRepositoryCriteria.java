@@ -87,7 +87,7 @@ public class DashboardRepositoryCriteria {
                     .totalVolume((Double) objects[4])
                     .totalRevenue((Double) objects[5])
                     .totalDebt((Double) objects[6])
-                    .totalPaid((Double) objects[7])
+                    .totalCash((Double) objects[7])
                     .build();
             fuelStatistics.add(fuelStatistic);
         });

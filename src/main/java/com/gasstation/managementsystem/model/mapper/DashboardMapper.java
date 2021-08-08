@@ -29,16 +29,16 @@ public class DashboardMapper {
 
     public static TankStatisticDTO toTankStatisticDTO(TankStatistic tankStatistic) {
         if (tankStatistic == null) return null;
-        TankDTO tankDTO = tankStatistic.getTankId() != null ? TankDTO.builder()
-                .id(tankStatistic.getTankId())
-                .name(tankStatistic.getTankName())
-                .remain(tankStatistic.getTankRemain()).build() : null;
         FuelDTO fuelDTO = tankStatistic.getFuelId() != null ? FuelDTO.builder()
                 .id(tankStatistic.getFuelId())
                 .name(tankStatistic.getFuelName()).build() : null;
+        TankDTO tankDTO = tankStatistic.getTankId() != null ? TankDTO.builder()
+                .id(tankStatistic.getTankId())
+                .name(tankStatistic.getTankName())
+                .remain(tankStatistic.getTankRemain())
+                .fuel(fuelDTO).build() : null;
         return TankStatisticDTO.builder()
                 .tank(tankDTO)
-                .fuel(fuelDTO)
                 .totalImport(tankStatistic.getTotalImport())
                 .totalExport(tankStatistic.getTotalExport()).build();
     }

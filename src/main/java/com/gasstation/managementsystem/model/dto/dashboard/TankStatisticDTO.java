@@ -11,7 +11,6 @@ import lombok.*;
 @Builder
 public class TankStatisticDTO {
     private TankDTO tank;
-    private FuelDTO fuel;
     private Double totalImport;
     private Double totalExport;
 }

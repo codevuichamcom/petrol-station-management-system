@@ -1,9 +1,6 @@
 package com.gasstation.managementsystem.service.impl;
 
-import com.gasstation.managementsystem.entity.Card;
-import com.gasstation.managementsystem.entity.Debt;
-import com.gasstation.managementsystem.entity.Receipt;
-import com.gasstation.managementsystem.entity.User;
+import com.gasstation.managementsystem.entity.*;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.debt.DebtDTO;
 import com.gasstation.managementsystem.model.dto.debt.DebtDTOFilter;
@@ -57,6 +54,7 @@ public class DebtServiceImpl implements DebtService {
         for (DebtDTOPay debtDTOPay : debtDTOPays) {
             Debt debt = optionalValidate.getDebtById(debtDTOPay.getDebtId());
             Card card = optionalValidate.getCardById(debtDTOPay.getCardId());
+            Transaction transaction = optionalValidate.getTransactionById(debtDTOPay.getTransactionId());
             double amount = debt.getAccountsPayable();
             debtRepository.delete(debt);
             Receipt receipt = Receipt.builder()
@@ -64,6 +62,7 @@ public class DebtServiceImpl implements DebtService {
                     .createdDate(DateTimeHelper.getCurrentDate())
                     .reason(debtDTOPay.getReason())
                     .card(card)
+                    .transaction(transaction)
                     .creator(creator).build();
             receiptRepository.save(receipt);
         }

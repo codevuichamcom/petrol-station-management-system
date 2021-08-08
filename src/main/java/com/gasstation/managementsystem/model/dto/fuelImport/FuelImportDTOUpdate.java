@@ -2,8 +2,6 @@ package com.gasstation.managementsystem.model.dto.fuelImport;
 
 import lombok.*;
 
-import java.util.Date;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -11,7 +9,7 @@ import java.util.Date;
 @Builder
 public class FuelImportDTOUpdate {
     private String name;
-    private Long createdDate;
+    private Long importDate;
     private Double volume;
     private Double unitPrice;
     private Double amountPaid;

@@ -2,6 +2,7 @@ package com.gasstation.managementsystem.model.dto.fuel;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class FuelDTOCreate {
     @NotBlank(message = "Name is mandatory")
+    @Length(message = "Length of name must be greater than 3 characters", min = 4)
     private String name;
     @Schema(example = "Lít")
     @NotBlank(message = "Unit is mandatory")

@@ -14,8 +14,8 @@ public class FuelImportDTOCreate {
     @NotBlank(message = "Name is mandatory")
     private String name;
 
-    @NotNull(message = "Date is mandatory")
-    private Long createdDate;
+    @NotNull(message = "ImportDate is mandatory")
+    private Long importDate;
 
     @NotNull(message = "Volume is mandatory")
     private Double volume;

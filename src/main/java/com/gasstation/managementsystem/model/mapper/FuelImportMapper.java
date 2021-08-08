@@ -9,6 +9,7 @@ import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import com.gasstation.managementsystem.model.dto.supplier.SupplierDTO;
 import com.gasstation.managementsystem.model.dto.tank.TankDTO;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
+import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.NullAwareBeanUtilsBean;
 import org.apache.commons.beanutils.BeanUtilsBean;
 
@@ -55,7 +56,8 @@ public class FuelImportMapper {
         if (fuelImportDTOCreate == null) return null;
         return FuelImport.builder()
                 .name(fuelImportDTOCreate.getName())
-                .createdDate(fuelImportDTOCreate.getCreatedDate())
+                .createdDate(DateTimeHelper.getCurrentDate())
+                .importDate(fuelImportDTOCreate.getImportDate())
                 .volume(fuelImportDTOCreate.getVolume())
                 .unitPrice(fuelImportDTOCreate.getUnitPrice())
                 .amountPaid(fuelImportDTOCreate.getAmountPaid())

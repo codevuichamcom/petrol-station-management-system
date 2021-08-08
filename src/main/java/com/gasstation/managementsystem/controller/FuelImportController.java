@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.controller;
 
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.fuelImport.FuelImportDTO;
 import com.gasstation.managementsystem.model.dto.fuelImport.FuelImportDTOCreate;
@@ -42,14 +43,14 @@ public class FuelImportController {
 
     @Operation(summary = "Create new import bill")
     @PostMapping("/fuel-imports")
-    public FuelImportDTO create(@Valid @RequestBody FuelImportDTOCreate fuelImportDTOCreate) throws CustomNotFoundException {
+    public FuelImportDTO create(@Valid @RequestBody FuelImportDTOCreate fuelImportDTOCreate) throws CustomNotFoundException, CustomBadRequestException {
         return fuelImportService.create(fuelImportDTOCreate);
     }
 
     @Operation(summary = "Update import bill by id")
     @PutMapping("/fuel-imports/{id}")
     public FuelImportDTO update(@PathVariable(name = "id") Integer id,
-                                @Valid @RequestBody FuelImportDTOUpdate fuelImportDTOUpdate) throws CustomNotFoundException {
+                                @Valid @RequestBody FuelImportDTOUpdate fuelImportDTOUpdate) throws CustomNotFoundException, CustomBadRequestException {
         return fuelImportService.update(id, fuelImportDTOUpdate);
     }
 

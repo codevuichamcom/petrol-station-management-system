@@ -17,6 +17,7 @@ public class FuelImportDTO {
     private int id;
     private String name;
     private Long createdDate;
+    private Long importDate;
     private Double volume;
     private Double unitPrice;
     private Double amountPaid;

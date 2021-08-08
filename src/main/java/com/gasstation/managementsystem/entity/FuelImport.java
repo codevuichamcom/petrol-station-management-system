@@ -24,16 +24,19 @@ public class FuelImport extends BaseEntity {
     private String name;
 
     @Column(nullable = false)
-    private long createdDate = DateTimeHelper.getCurrentDate();
+    private Long createdDate = DateTimeHelper.getCurrentDate();
 
     @Column(nullable = false)
-    private double volume = 0;
+    private Long importDate;
 
     @Column(nullable = false)
-    private double unitPrice = 0;
+    private Double volume;
 
     @Column(nullable = false)
-    private double amountPaid = 0;
+    private Double unitPrice;
+
+    @Column(nullable = false)
+    private Double amountPaid;
 
     private String note;
 

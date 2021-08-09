@@ -41,7 +41,7 @@ public class StationController {
 
     @Operation(summary = "Get All pump of station")
     @GetMapping("/stations/{id}/pumps")
-    public HashMap<String, Object> getAllPump(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
+    public HashMap<String, Object> getAllPump(@PathVariable(name = "id") Integer id) {
         return pumpService.findAllByStationId(id);
     }
 

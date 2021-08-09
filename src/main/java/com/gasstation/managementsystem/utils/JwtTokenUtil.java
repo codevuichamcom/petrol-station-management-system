@@ -1,4 +1,4 @@
-package com.gasstation.managementsystem.security.jwt;
+package com.gasstation.managementsystem.utils;
 
 import com.gasstation.managementsystem.entity.User;
 import io.jsonwebtoken.Claims;

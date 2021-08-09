@@ -37,7 +37,7 @@ public class ReceiptController {
                 .amount(amount)
                 .reason(reason)
                 .cardId(cardId)
-                .creatorName(creatorName)
+                .customerName(customerName)
                 .customerPhone(customerPhone)
                 .creatorName(creatorName).build();
         return receiptService.findAll(filter);

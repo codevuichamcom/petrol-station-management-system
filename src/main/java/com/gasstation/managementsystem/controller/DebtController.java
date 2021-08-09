@@ -47,7 +47,7 @@ public class DebtController {
     @Operation(summary = "Find debt by id")
     @GetMapping("/debts/detail")
     public HashMap<String, Object> getDetail(@RequestParam(name = "cardId") UUID cardId,
-                                             @RequestParam(name = "stationId") Integer stationId) throws CustomNotFoundException {
+                                             @RequestParam(name = "stationId") Integer stationId) {
         DebtDTOFilter filter = DebtDTOFilter.builder()
                 .cardId(cardId)
                 .stationId(stationId).build();

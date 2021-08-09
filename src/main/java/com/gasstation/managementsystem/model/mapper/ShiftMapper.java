@@ -14,11 +14,12 @@ public class ShiftMapper {
     public static ShiftDTO toShiftDTO(Shift shift) {
         if (shift == null) return null;
         Station station = shift.getStation();
-        User owner = station.getOwner();
+        User owner = station != null ? station.getOwner() : null;
+        UserDTO ownerDTO = owner != null ? UserDTO.builder().id(owner.getId()).name(owner.getName()).build() : null;
         StationDTO stationDTO = station != null ? StationDTO.builder()
                 .id(station.getId()).name(station.getName())
                 .address(station.getAddress())
-                .owner(UserDTO.builder().id(owner.getId()).name(owner.getName()).build())
+                .owner(ownerDTO)
                 .build() : null;
         return ShiftDTO.builder()
                 .id(shift.getId())

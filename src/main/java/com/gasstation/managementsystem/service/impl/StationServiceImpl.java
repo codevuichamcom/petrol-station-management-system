@@ -11,7 +11,6 @@ import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import com.gasstation.managementsystem.model.dto.station.StationDTOCreate;
 import com.gasstation.managementsystem.model.dto.station.StationDTOUpdate;
 import com.gasstation.managementsystem.model.mapper.StationMapper;
-import com.gasstation.managementsystem.repository.PumpRepository;
 import com.gasstation.managementsystem.repository.StationRepository;
 import com.gasstation.managementsystem.repository.UserRepository;
 import com.gasstation.managementsystem.service.StationService;

@@ -12,7 +12,7 @@ public interface DebtService {
 
     HashMap<String, Object> summary(DebtDTOSummaryFilter filter);
 
-    HashMap<String, Object> getDetail(DebtDTOFilter filter) throws CustomNotFoundException;
+    HashMap<String, Object> getDetail(DebtDTOFilter filter);
 
     void payDebts(List<DebtDTOPay> debtDTOPays) throws CustomNotFoundException;
 }

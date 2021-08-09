@@ -4,8 +4,8 @@ import com.gasstation.managementsystem.entity.*;
 import com.gasstation.managementsystem.model.dto.card.CardDTO;
 import com.gasstation.managementsystem.model.dto.debt.DebtDTO;
 import com.gasstation.managementsystem.model.dto.fuel.FuelDTO;
-import com.gasstation.managementsystem.model.dto.pumpShift.PumpShiftDTO;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
+import com.gasstation.managementsystem.model.dto.pumpShift.PumpShiftDTO;
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import com.gasstation.managementsystem.model.dto.tank.TankDTO;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTO;
@@ -40,12 +40,12 @@ public class DebtMapper {
         PumpShiftDTO pumpShiftDTO = pumpShift != null ? PumpShiftDTO.builder()
                 .id(pumpShift.getId())
                 .pump(pumpDTO).build() : null;
-        TransactionDTO transactionDTO = TransactionDTO.builder()
+        TransactionDTO transactionDTO = transaction != null ? TransactionDTO.builder()
                 .id(transaction.getId())
                 .time(transaction.getTime())
                 .volume(transaction.getVolume())
                 .unitPrice(transaction.getUnitPrice())
-                .pumpShift(pumpShiftDTO).build();
+                .pumpShift(pumpShiftDTO).build() : null;
         return DebtDTO.builder()
                 .id(debt.getId())
                 .card(cardDTO)

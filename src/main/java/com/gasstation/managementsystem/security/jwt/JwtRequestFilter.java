@@ -8,6 +8,7 @@ import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.repository.ApiRepository;
 import com.gasstation.managementsystem.repository.UserRepository;
+import com.gasstation.managementsystem.utils.JwtTokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;

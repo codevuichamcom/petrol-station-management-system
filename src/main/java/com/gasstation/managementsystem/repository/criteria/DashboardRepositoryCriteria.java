@@ -22,7 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DashboardRepositoryCriteria {
     private final EntityManager em;
-    private final OptionalValidate optionalValidate;
 
     public HashMap<String, Object> fuelStatistic(FuelStatisticDTOFilter filter) {
         String str = "select total_revenue_tbl.*,\n" +

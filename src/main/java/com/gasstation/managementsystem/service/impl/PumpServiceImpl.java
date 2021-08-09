@@ -96,7 +96,7 @@ public class PumpServiceImpl implements PumpService {
 
     private boolean needCheckDuplicate(String name, Integer tankId, Pump oldPump) {
         if (name == null || tankId == null || oldPump.getTank() == null) return false;
-        return !name.equalsIgnoreCase(oldPump.getName()) || tankId != oldPump.getTank().getId();
+        return !name.equalsIgnoreCase(oldPump.getName()) || !tankId.equals(oldPump.getTank().getId());
     }
 
     @Override

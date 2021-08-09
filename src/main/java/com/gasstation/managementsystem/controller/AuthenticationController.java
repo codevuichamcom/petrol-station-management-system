@@ -12,7 +12,7 @@ import com.gasstation.managementsystem.model.dto.token.JwtResponseLogin;
 import com.gasstation.managementsystem.model.dto.token.JwtResponseRefresh;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.repository.RefreshTokenRepository;
-import com.gasstation.managementsystem.security.jwt.JwtTokenUtil;
+import com.gasstation.managementsystem.utils.JwtTokenUtil;
 import com.gasstation.managementsystem.service.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.v3.oas.annotations.Operation;

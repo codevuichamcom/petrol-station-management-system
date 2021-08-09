@@ -81,7 +81,7 @@ public class TankServiceImpl implements TankService {
             name = null;
         }
         if (stationId != null && oldTank.getStation() != null
-                && stationId != oldTank.getStation().getId()) {
+                && !stationId.equals(oldTank.getStation().getId())) {
             stationId = null;
         }
         checkDuplicate(name, stationId);

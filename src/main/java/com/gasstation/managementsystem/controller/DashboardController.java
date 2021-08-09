@@ -36,6 +36,7 @@ public class DashboardController {
         if (userLoggedIn.getUserType().getId() == UserType.OWNER && (stationIds == null || stationIds.length == 0)) {
             HashMap<String, Object> map = stationService.findAll(userLoggedIn.getUsername());
             List<StationDTO> stationDTOList = (List<StationDTO>) map.get("data");
+            stationIds = new Integer[100];
             if (stationDTOList != null && stationDTOList.size() != 0) {
                 for (int i = 0; i < stationDTOList.size(); i++) {
                     StationDTO stationDTO = stationDTOList.get(i);

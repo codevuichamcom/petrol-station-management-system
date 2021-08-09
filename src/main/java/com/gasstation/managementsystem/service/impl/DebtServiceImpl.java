@@ -38,7 +38,7 @@ public class DebtServiceImpl implements DebtService {
     }
 
     @Override
-    public HashMap<String, Object> getDetail(DebtDTOFilter filter) throws CustomNotFoundException {
+    public HashMap<String, Object> getDetail(DebtDTOFilter filter){
         HashMap<String, Object> temp = debtCriteria.getDetail(filter);
         List<Debt> debtList = (List<Debt>) temp.get("data");
         List<DebtDTO> debtDTOList = debtList.stream().map(DebtMapper::toDebtDTO).collect(Collectors.toList());

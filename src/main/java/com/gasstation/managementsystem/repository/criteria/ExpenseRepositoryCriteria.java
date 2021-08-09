@@ -22,7 +22,7 @@ public class ExpenseRepositoryCriteria {
         qHelper.setQuery(query);
         qHelper.like("e.reason", "reason", filter.getReason())
                 .between("e.amount", 0d, filter.getAmount(), "amount", filter.getAmount())
-                .between("e.createdDate", 0l, filter.getCreatedDate(), "createdDate", filter.getCreatedDate())
+                .between("e.createdDate", 0L, filter.getCreatedDate(), "createdDate", filter.getCreatedDate())
                 .like("c.name", "creatorName", filter.getCreatorName())
                 .in("s.id", "stationIds", filter.getStationIds());
         String countQuery = qHelper.getQuery().toString().replace("select e", "select count(e.id)");

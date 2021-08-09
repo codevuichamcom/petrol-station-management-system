@@ -10,6 +10,8 @@ import lombok.*;
 public class TankStatistic {
     private Integer tankId;
     private String tankName;
+    private Integer stationId;
+    private String stationName;
     private Double tankRemain;
     private Integer fuelId;
     private String fuelName;

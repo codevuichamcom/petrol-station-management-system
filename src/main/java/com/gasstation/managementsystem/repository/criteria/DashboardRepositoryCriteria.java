@@ -97,13 +97,15 @@ public class DashboardRepositoryCriteria {
     }
 
     public HashMap<String, Object> tankStatistic(TankStatisticDTOFilter filter) {
-        String str = "select tn.tank_id    as tank_id,\n" +
+        String str = "select tn.tank_id as tank_id,\n" +
                 "       tank_name,\n" +
-                "       remain        as tank_remain,\n" +
-                "       fuel_id,\n" +
-                "       fuel_name,\n" +
-                "       total_import,\n" +
-                "       total_export\n" +
+                "       st.id      as station_id,\n" +
+                "       st.name    as station_name,\n" +
+                "       tn.remain  as tank_remain,\n" +
+                "       tx.fuel_id,\n" +
+                "       tx.fuel_name,\n" +
+                "       tn.total_import,\n" +
+                "       tx.total_export\n" +
                 "from (select tt.id                        as tank_id,\n" +
                 "             tt.station_id                as station_id,\n" +
                 "             tt.remain                    as remain,\n" +
@@ -112,7 +114,8 @@ public class DashboardRepositoryCriteria {
                 "               right join tank_tbl tt on tt.id = fit.tank_id\n" +
                 "      where fit.created_date between :startTime and :endTime\n" +
                 "         or fit.created_date is null\n" +
-                "      group by tt.id, tt.station_id) as tn,\n" +
+                "      group by tt.id, tt.station_id) as tn\n" +
+                "         inner join\n" +
                 "     (select tt.id                         as tank_id,\n" +
                 "             tt.name                       as tank_name,\n" +
                 "             ft.id                         as fuel_id,\n" +
@@ -127,9 +130,11 @@ public class DashboardRepositoryCriteria {
                 "         or tran.time is null\n" +
                 "      group by tt.id, tt.name, ft.id, ft.name\n" +
                 "      having tt.id is not null) as tx\n" +
-                "where tx.tank_id = tn.tank_id\n";
+                "     on tx.tank_id = tn.tank_id\n" +
+                "         inner join station_tbl st on tn.station_id = st.id\n";
+
         if (filter.getStationIds() != null && filter.getStationIds().length > 0) {
-            str += "  and tn.station_id in (:stationIds)";
+            str += " where st.id in (:stationIds)";
         }
         Query nativeQuery = em.createNativeQuery(str);
         nativeQuery.setParameter("startTime", filter.getStartTime());
@@ -144,11 +149,13 @@ public class DashboardRepositoryCriteria {
             TankStatistic revenue = TankStatistic.builder()
                     .tankId((Integer) objects[0])
                     .tankName((String) objects[1])
-                    .tankRemain((Double) objects[2])
-                    .fuelId((Integer) objects[3])
-                    .fuelName((String) objects[4])
-                    .totalImport((Double) objects[5])
-                    .totalExport((Double) objects[6])
+                    .stationId((Integer) objects[2])
+                    .stationName((String) objects[3])
+                    .tankRemain((Double) objects[4])
+                    .fuelId((Integer) objects[5])
+                    .fuelName((String) objects[6])
+                    .totalImport((Double) objects[7])
+                    .totalExport((Double) objects[8])
                     .build();
             tankStatistics.add(revenue);
         });

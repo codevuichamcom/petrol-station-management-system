@@ -40,7 +40,7 @@ public class DashboardRepositoryCriteria {
                 "               inner join tank_tbl tt on tt.id = pt.tank_id\n" +
                 "               inner join station_tbl st on st.id = tt.station_id\n" +
                 "               inner join fuel_tbl ft on ft.id = tt.fuel_id\n" +
-                "      where tran.time between 0 and 9000000000000000\n" +
+                "      where tran.time between :startTime and :endTime\n" +
                 "      group by ft.id, st.id) as total_revenue_tbl\n" +
                 "         left join\n" +
                 "     (select ft.id                                       as fuel_id,\n" +
@@ -138,7 +138,7 @@ public class DashboardRepositoryCriteria {
                 "                   coalesce(sum(fit.volume), 0) as total_import\n" +
                 "            from fuel_import_tbl fit\n" +
                 "                     right join tank_tbl tt on tt.id = fit.tank_id\n" +
-                "            where fit.created_date between 0 and 9000000000000\n" +
+                "            where fit.created_date between :startTime and :endTime\n" +
                 "               or fit.created_date is null\n" +
                 "            group by tt.id, tt.station_id) as tn\n" +
                 "               inner join\n" +
@@ -149,7 +149,7 @@ public class DashboardRepositoryCriteria {
                 "                     right join pump_tbl pt on pt.id = pst.pump_id\n" +
                 "                     right join tank_tbl tt on tt.id = pt.tank_id\n" +
                 "                     right join fuel_tbl ft on ft.id = tt.fuel_id\n" +
-                "            where tran.time between 0 and 900000000000000\n" +
+                "            where tran.time between :startTime and :endTime00\n" +
                 "               or tran.time is null\n" +
                 "            group by tt.id\n" +
                 "            having tt.id is not null) as tx\n" +

@@ -37,7 +37,7 @@ public class DashboardRepositoryCriteria {
                 "               inner join fuel_tbl ft on ft.id = tt.fuel_id\n" +
                 "    where tran.time between :startTime and :endTime\n" +
                 "      group by ft.id, st.id) as total_revenue_tbl\n" +
-                "         inner join\n" +
+                "         left join\n" +
                 "     (select ft.id                    as fuel_id,\n" +
                 "             st.id                    as station_id,\n" +
                 "             sum(dt.accounts_payable) as total_debt\n" +
@@ -51,7 +51,7 @@ public class DashboardRepositoryCriteria {
                 "      group by ft.id, st.id) as total_debt_tbl\n" +
                 "     on total_revenue_tbl.fuel_id = total_debt_tbl.fuel_id\n" +
                 "         and total_revenue_tbl.station_id = total_debt_tbl.station_id\n" +
-                "         inner join\n" +
+                "         left join\n" +
                 "     (select ft.id                                       as fuel_id,\n" +
                 "             st.id                                       as station_id,\n" +
                 "             coalesce(sum(tt.volume * tt.unit_price), 0) as total_cash\n" +

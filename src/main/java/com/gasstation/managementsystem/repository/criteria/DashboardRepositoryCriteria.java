@@ -115,8 +115,8 @@ public class DashboardRepositoryCriteria {
         final int TOTAL_IMPORT = 9;
         final int TOTAL_EXPORT = 10;
         String str = "select tank_tbl.*,\n" +
-                "       tank_statistic.total_import,\n" +
-                "       tank_statistic.total_export\n" +
+                "       coalesce(tank_statistic.total_import,0) as total_import,\n" +
+                "       coalesce(tank_statistic.total_export,0) as total_export\n" +
                 "from (select tank.id            as tank_id,\n" +
                 "             tank.name          as tank_name,\n" +
                 "             tank.volume        as tank_volume,\n" +
@@ -175,6 +175,7 @@ public class DashboardRepositoryCriteria {
                             .id((Integer) objects[TANK_ID])
                             .name((String) objects[TANK_NAME])
                             .volume((Double) objects[TANK_VOLUME])
+                            .remain((Double) objects[TANK_REMAIN])
                             .currentPrice((Double) objects[TANK_CURRENT_PRICE])
                             .fuel(Fuel.builder()
                                     .id((Integer) objects[FUEL_ID])

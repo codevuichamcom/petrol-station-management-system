@@ -1,6 +1,8 @@
 package com.gasstation.managementsystem.repository.criteria;
 
-import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
+import com.gasstation.managementsystem.entity.Fuel;
+import com.gasstation.managementsystem.entity.Station;
+import com.gasstation.managementsystem.entity.Tank;
 import com.gasstation.managementsystem.model.FuelStatistic;
 import com.gasstation.managementsystem.model.TankStatistic;
 import com.gasstation.managementsystem.model.dto.dashboard.FuelStatisticDTOFilter;
@@ -38,8 +40,24 @@ public class DashboardRepositoryCriteria {
                 "               inner join tank_tbl tt on tt.id = pt.tank_id\n" +
                 "               inner join station_tbl st on st.id = tt.station_id\n" +
                 "               inner join fuel_tbl ft on ft.id = tt.fuel_id\n" +
-                "    where tran.time between :startTime and :endTime\n" +
+                "      where tran.time between 0 and 9000000000000000\n" +
                 "      group by ft.id, st.id) as total_revenue_tbl\n" +
+                "         left join\n" +
+                "     (select ft.id                                       as fuel_id,\n" +
+                "             st.id                                       as station_id,\n" +
+                "             coalesce(sum(tt.volume * tt.unit_price), 0) as total_cash\n" +
+                "      from transaction_tbl tt\n" +
+                "               inner join pump_shift_tbl pst\n" +
+                "                          on pst.id = tt.pump_shift_id\n" +
+                "               inner join pump_tbl pt on pt.id = pst.pump_id\n" +
+                "               inner join tank_tbl t on t.id = pt.tank_id\n" +
+                "               inner join station_tbl st on st.id = t.station_id\n" +
+                "               inner join fuel_tbl ft on ft.id = t.fuel_id\n" +
+                "      where tt.card_id is null\n" +
+                "         or (tt.id in (select receipt_tbl.transaction_id from receipt_tbl))\n" +
+                "      group by ft.id, st.id) as total_cash_tbl\n" +
+                "     on total_revenue_tbl.fuel_id = total_cash_tbl.fuel_id\n" +
+                "         and total_revenue_tbl.station_id = total_cash_tbl.station_id\n" +
                 "         left join\n" +
                 "     (select ft.id                    as fuel_id,\n" +
                 "             st.id                    as station_id,\n" +
@@ -53,22 +71,7 @@ public class DashboardRepositoryCriteria {
                 "               inner join fuel_tbl ft on ft.id = t.fuel_id\n" +
                 "      group by ft.id, st.id) as total_debt_tbl\n" +
                 "     on total_revenue_tbl.fuel_id = total_debt_tbl.fuel_id\n" +
-                "         and total_revenue_tbl.station_id = total_debt_tbl.station_id\n" +
-                "         left join\n" +
-                "     (select ft.id                                       as fuel_id,\n" +
-                "             st.id                                       as station_id,\n" +
-                "             coalesce(sum(tt.volume * tt.unit_price), 0) as total_cash\n" +
-                "      from transaction_tbl tt\n" +
-                "               inner join pump_shift_tbl pst\n" +
-                "                          on pst.id = tt.pump_shift_id\n" +
-                "               inner join pump_tbl pt on pt.id = pst.pump_id\n" +
-                "               inner join tank_tbl t on t.id = pt.tank_id\n" +
-                "               inner join station_tbl st on st.id = t.station_id\n" +
-                "               inner join fuel_tbl ft on ft.id = t.fuel_id\n" +
-                "      where tt.card_id is null\n" +
-                "      group by ft.id, st.id) as total_cash_tbl\n" +
-                "     on total_debt_tbl.fuel_id = total_cash_tbl.fuel_id\n" +
-                "         and total_debt_tbl.station_id = total_cash_tbl.station_id\n";
+                "         and total_revenue_tbl.station_id = total_debt_tbl.station_id\n";
         if (filter.getStationIds() != null && filter.getStationIds().length > 0) {
             str += "  where total_revenue_tbl.station_id in (:stationIds)";
         }
@@ -100,44 +103,62 @@ public class DashboardRepositoryCriteria {
     }
 
     public HashMap<String, Object> tankStatistic(TankStatisticDTOFilter filter) {
-        String str = "select tn.tank_id as tank_id,\n" +
-                "       tank_name,\n" +
-                "       st.id      as station_id,\n" +
-                "       st.name    as station_name,\n" +
-                "       tn.remain  as tank_remain,\n" +
-                "       tx.fuel_id,\n" +
-                "       tx.fuel_name,\n" +
-                "       tn.total_import,\n" +
-                "       tx.total_export\n" +
-                "from (select tt.id                        as tank_id,\n" +
-                "             tt.station_id                as station_id,\n" +
-                "             tt.remain                    as remain,\n" +
-                "             coalesce(sum(fit.volume), 0) as total_import\n" +
-                "      from fuel_import_tbl fit\n" +
-                "               right join tank_tbl tt on tt.id = fit.tank_id\n" +
-                "      where fit.created_date between :startTime and :endTime\n" +
-                "         or fit.created_date is null\n" +
-                "      group by tt.id, tt.station_id) as tn\n" +
-                "         inner join\n" +
-                "     (select tt.id                         as tank_id,\n" +
-                "             tt.name                       as tank_name,\n" +
-                "             ft.id                         as fuel_id,\n" +
-                "             ft.name                       as fuel_name,\n" +
-                "             coalesce(sum(tran.volume), 0) as total_export\n" +
-                "      from transaction_tbl tran\n" +
-                "               right join pump_shift_tbl pst on pst.id = tran.pump_shift_id\n" +
-                "               right join pump_tbl pt on pt.id = pst.pump_id\n" +
-                "               right join tank_tbl tt on tt.id = pt.tank_id\n" +
-                "               right join fuel_tbl ft on ft.id = tt.fuel_id\n" +
-                "      where tran.time between :startTime and :endTime\n" +
-                "         or tran.time is null\n" +
-                "      group by tt.id, tt.name, ft.id, ft.name\n" +
-                "      having tt.id is not null) as tx\n" +
-                "     on tx.tank_id = tn.tank_id\n" +
-                "         inner join station_tbl st on tn.station_id = st.id\n";
+        final int TANK_ID = 0;
+        final int TANK_NAME = 1;
+        final int TANK_VOLUME = 2;
+        final int TANK_REMAIN = 3;
+        final int TANK_CURRENT_PRICE = 4;
+        final int FUEL_ID = 5;
+        final int FUEL_NAME = 6;
+        final int STATION_ID = 7;
+        final int STATION_NAME = 8;
+        final int TOTAL_IMPORT = 9;
+        final int TOTAL_EXPORT = 10;
+        String str = "select tank_tbl.*,\n" +
+                "       tank_statistic.total_import,\n" +
+                "       tank_statistic.total_export\n" +
+                "from (select tank.id            as tank_id,\n" +
+                "             tank.name          as tank_name,\n" +
+                "             tank.volume        as tank_volume,\n" +
+                "             tank.remain        as tank_remain,\n" +
+                "             tank.current_price as tank_current_price,\n" +
+                "             fuel_tbl.id        as fuel_id,\n" +
+                "             fuel_tbl.name      as fuel_name,\n" +
+                "             st.id              as station_id,\n" +
+                "             st.name            as station_name\n" +
+                "      from tank_tbl tank\n" +
+                "               inner join fuel_tbl on tank.fuel_id = fuel_tbl.id\n" +
+                "               inner join station_tbl st on tank.station_id = st.id) as tank_tbl\n" +
+                "         left join\n" +
+                "\n" +
+                "     (select tn.tank_id as tank_id,\n" +
+                "             tn.total_import,\n" +
+                "             tx.total_export\n" +
+                "      from (select tt.id                        as tank_id,\n" +
+                "                   coalesce(sum(fit.volume), 0) as total_import\n" +
+                "            from fuel_import_tbl fit\n" +
+                "                     right join tank_tbl tt on tt.id = fit.tank_id\n" +
+                "            where fit.created_date between 0 and 9000000000000\n" +
+                "               or fit.created_date is null\n" +
+                "            group by tt.id, tt.station_id) as tn\n" +
+                "               inner join\n" +
+                "           (select tt.id                         as tank_id,\n" +
+                "                   coalesce(sum(tran.volume), 0) as total_export\n" +
+                "            from transaction_tbl tran\n" +
+                "                     right join pump_shift_tbl pst on pst.id = tran.pump_shift_id\n" +
+                "                     right join pump_tbl pt on pt.id = pst.pump_id\n" +
+                "                     right join tank_tbl tt on tt.id = pt.tank_id\n" +
+                "                     right join fuel_tbl ft on ft.id = tt.fuel_id\n" +
+                "            where tran.time between 0 and 900000000000000\n" +
+                "               or tran.time is null\n" +
+                "            group by tt.id\n" +
+                "            having tt.id is not null) as tx\n" +
+                "           on tx.tank_id = tn.tank_id\n" +
+                "     ) as tank_statistic\n" +
+                "     on tank_tbl.tank_id = tank_statistic.tank_id\n";
 
         if (filter.getStationIds() != null && filter.getStationIds().length > 0) {
-            str += " where st.id in (:stationIds)";
+            str += " where tank_tbl.station_id in (:stationIds)";
         }
         Query nativeQuery = em.createNativeQuery(str);
         nativeQuery.setParameter("startTime", filter.getStartTime());
@@ -149,16 +170,21 @@ public class DashboardRepositoryCriteria {
         List<Object[]> listResult = nativeQuery.getResultList();
         List<TankStatistic> tankStatistics = new ArrayList<>();
         listResult.forEach(objects -> {
-            TankStatistic tankStatistic = null;
-            try {
-                tankStatistic = TankStatistic.builder()
-                        .tank(optionalValidate.getTankById((Integer) objects[0]))
-                        .totalImport((Double) objects[7])
-                        .totalExport((Double) objects[8])
-                        .build();
-            } catch (CustomNotFoundException e) {
-                e.printStackTrace();
-            }
+            TankStatistic tankStatistic = TankStatistic.builder()
+                    .tank(Tank.builder()
+                            .id((Integer) objects[TANK_ID])
+                            .name((String) objects[TANK_NAME])
+                            .volume((Double) objects[TANK_VOLUME])
+                            .currentPrice((Double) objects[TANK_CURRENT_PRICE])
+                            .fuel(Fuel.builder()
+                                    .id((Integer) objects[FUEL_ID])
+                                    .name((String) objects[FUEL_NAME]).build())
+                            .station(Station.builder()
+                                    .id((Integer) objects[STATION_ID])
+                                    .name((String) objects[STATION_NAME]).build()).build())
+                    .totalImport((Double) objects[TOTAL_IMPORT])
+                    .totalExport((Double) objects[TOTAL_EXPORT])
+                    .build();
             tankStatistics.add(tankStatistic);
         });
         HashMap<String, Object> map = new HashMap<>();

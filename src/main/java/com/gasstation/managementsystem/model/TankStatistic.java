@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.model;
 
+import com.gasstation.managementsystem.entity.Tank;
 import lombok.*;
 
 @NoArgsConstructor
@@ -8,13 +9,7 @@ import lombok.*;
 @Setter
 @Builder
 public class TankStatistic {
-    private Integer tankId;
-    private String tankName;
-    private Integer stationId;
-    private String stationName;
-    private Double tankRemain;
-    private Integer fuelId;
-    private String fuelName;
+    private Tank tank;
     private Double totalImport;
     private Double totalExport;
 }

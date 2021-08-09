@@ -1,9 +1,11 @@
 package com.gasstation.managementsystem.repository.criteria;
 
+import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.FuelStatistic;
 import com.gasstation.managementsystem.model.TankStatistic;
 import com.gasstation.managementsystem.model.dto.dashboard.FuelStatisticDTOFilter;
 import com.gasstation.managementsystem.model.dto.dashboard.TankStatisticDTOFilter;
+import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DashboardRepositoryCriteria {
     private final EntityManager em;
+    private final OptionalValidate optionalValidate;
 
     public HashMap<String, Object> fuelStatistic(FuelStatisticDTOFilter filter) {
         String str = "select total_revenue_tbl.*,\n" +
@@ -146,18 +149,17 @@ public class DashboardRepositoryCriteria {
         List<Object[]> listResult = nativeQuery.getResultList();
         List<TankStatistic> tankStatistics = new ArrayList<>();
         listResult.forEach(objects -> {
-            TankStatistic revenue = TankStatistic.builder()
-                    .tankId((Integer) objects[0])
-                    .tankName((String) objects[1])
-                    .stationId((Integer) objects[2])
-                    .stationName((String) objects[3])
-                    .tankRemain((Double) objects[4])
-                    .fuelId((Integer) objects[5])
-                    .fuelName((String) objects[6])
-                    .totalImport((Double) objects[7])
-                    .totalExport((Double) objects[8])
-                    .build();
-            tankStatistics.add(revenue);
+            TankStatistic tankStatistic = null;
+            try {
+                tankStatistic = TankStatistic.builder()
+                        .tank(optionalValidate.getTankById((Integer) objects[0]))
+                        .totalImport((Double) objects[7])
+                        .totalExport((Double) objects[8])
+                        .build();
+            } catch (CustomNotFoundException e) {
+                e.printStackTrace();
+            }
+            tankStatistics.add(tankStatistic);
         });
         HashMap<String, Object> map = new HashMap<>();
         map.put("data", tankStatistics);

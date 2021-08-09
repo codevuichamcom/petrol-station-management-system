@@ -12,7 +12,6 @@ import javax.persistence.*;
 @Getter
 @Setter
 @SuperBuilder
-@ToString
 public class Transaction extends BaseEntity {
 
     @Column(nullable = false)
@@ -29,13 +28,11 @@ public class Transaction extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "card_id")
-    @ToString.Exclude
     private Card card;//Thanh toán bằng thẻ nào
 
 
     @ManyToOne
     @JoinColumn(name = "pump_shift_id", nullable = false)
-    @ToString.Exclude
     private PumpShift pumpShift;
 
     @OneToOne(mappedBy = "transaction")

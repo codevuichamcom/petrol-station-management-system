@@ -12,7 +12,6 @@ import java.util.Objects;
 @Getter
 @Setter
 @Builder
-@ToString
 public class ReceiptDTO {
     private int id;
     private Long createdDate;

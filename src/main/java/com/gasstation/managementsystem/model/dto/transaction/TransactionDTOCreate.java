@@ -12,7 +12,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-@ToString
 public class TransactionDTOCreate {
     @NotNull(message = "time is mandatory")
     @Schema(description = "unix time")

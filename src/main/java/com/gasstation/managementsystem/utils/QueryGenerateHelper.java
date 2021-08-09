@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class QueryGenerateHelper {
     private StringBuilder query;
     private Map<String, Object> params = new HashMap<>();

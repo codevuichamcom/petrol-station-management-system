@@ -7,7 +7,6 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-@ToString
 public class ExpenseDTOFilter {
     private Integer pageIndex;
     private Integer pageSize;

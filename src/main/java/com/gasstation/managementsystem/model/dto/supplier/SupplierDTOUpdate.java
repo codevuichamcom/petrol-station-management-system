@@ -5,13 +5,11 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
-@ToString
 public class SupplierDTOUpdate {
     private String name;
     private String phone;

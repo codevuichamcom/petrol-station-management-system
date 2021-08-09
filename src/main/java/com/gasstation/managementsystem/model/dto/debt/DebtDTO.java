@@ -12,7 +12,6 @@ import java.util.Objects;
 @Getter
 @Setter
 @Builder
-@ToString
 public class DebtDTO {
     private int id;
     private CardDTO card;

@@ -14,7 +14,6 @@ import java.util.List;
 @Getter
 @Setter
 @SuperBuilder
-@ToString
 public class User extends BaseEntity {
 
     @Column(unique = true, nullable = false)

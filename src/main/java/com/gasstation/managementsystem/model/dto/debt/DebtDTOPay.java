@@ -10,7 +10,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-@ToString
 public class DebtDTOPay {
     @NotNull(message = "debtId is mandatory")
     private Integer debtId;

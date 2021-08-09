@@ -7,7 +7,6 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-@ToString
 public class CardDTOFilter {
     public static final String STATUS_ACTIVATED = "ACTIVATED";
     public static final String STATUS_DEACTIVATED = "DEACTIVATED";

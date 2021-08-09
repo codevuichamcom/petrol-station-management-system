@@ -14,7 +14,6 @@ import java.util.List;
 @Getter
 @Setter
 @SuperBuilder
-@ToString
 public class Station extends BaseEntity {
 
     @Column(name = "name", nullable = false)

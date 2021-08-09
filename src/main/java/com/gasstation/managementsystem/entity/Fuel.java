@@ -17,7 +17,6 @@ import java.util.List;
 @Getter
 @Setter
 @SuperBuilder
-@ToString
 public class Fuel extends BaseEntity {
 
     @Column(nullable = false, unique = true)

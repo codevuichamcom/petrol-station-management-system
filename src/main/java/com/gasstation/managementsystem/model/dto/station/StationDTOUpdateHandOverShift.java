@@ -7,7 +7,6 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-@ToString
 public class StationDTOUpdateHandOverShift {
     private int stationId;
 }

@@ -13,7 +13,6 @@ import java.util.List;
 @Getter
 @Setter
 @SuperBuilder
-@ToString
 public class Tank extends BaseEntity {
 
     @Column(nullable = false)

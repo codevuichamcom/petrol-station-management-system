@@ -13,7 +13,6 @@ import java.util.Objects;
 @Getter
 @Setter
 @SuperBuilder
-@ToString
 public class WorkSchedule extends BaseEntity {
 
     @ManyToOne

@@ -11,7 +11,6 @@ import java.util.Objects;
 @Getter
 @Setter
 @Builder
-@ToString
 public class WorkScheduleDTO {
     private int id;
     private EmployeeDTO employee;

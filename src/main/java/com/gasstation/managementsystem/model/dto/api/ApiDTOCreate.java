@@ -11,13 +11,11 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-@ToString
 public class ApiDTOCreate {
     @NotBlank(message = "Method is mandatory")
     private String method;
     @NotBlank(message = "Path is mandatory")
     private String path;
     @NotNull(message = "Accessible User Type list is mandatory")
-    @ToString.Exclude()
     private List<Integer> accessibleUserTypes;
 }

@@ -13,7 +13,6 @@ import java.util.Objects;
 @Getter
 @Setter
 @SuperBuilder
-@ToString
 public class Receipt extends BaseEntity {
 
     @Column(nullable = false)

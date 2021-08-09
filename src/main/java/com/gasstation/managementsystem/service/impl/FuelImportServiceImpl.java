@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,7 +63,7 @@ public class FuelImportServiceImpl implements FuelImportService {
 
     @Override
     public FuelImportDTO create(FuelImportDTOCreate fuelImportDTOCreate) throws CustomNotFoundException, CustomBadRequestException {
-        FuelImport fuelImport = FuelImportMapper.toFuelImport(fuelImportDTOCreate);
+
         Tank tank = optionalValidate.getTankById(fuelImportDTOCreate.getTankId());
         if (fuelImportDTOCreate.getImportDate() > DateTimeHelper.getCurrentDate()) {
             throw new CustomBadRequestException(CustomError.builder()
@@ -70,7 +71,7 @@ public class FuelImportServiceImpl implements FuelImportService {
                     .message("Import date cannot be greater than current date")
                     .table("fuel_import_tbl").build());
         }
-        if (fuelImportDTOCreate.getFuelId() != tank.getFuel().getId()) {
+        if (!Objects.equals(fuelImportDTOCreate.getFuelId(), tank.getFuel().getId())) {
             throw new CustomBadRequestException(CustomError.builder()
                     .code("mismatch")
                     .message("Fuel type mismatch with tank")
@@ -82,6 +83,7 @@ public class FuelImportServiceImpl implements FuelImportService {
                     .message("Tank not enough to hold")
                     .table("tank_tbl").build());
         }
+        FuelImport fuelImport = FuelImportMapper.toFuelImport(fuelImportDTOCreate);
 
         tank.setRemain(tank.getRemain() + fuelImportDTOCreate.getVolume());
         fuelImport.setTank(tank);
@@ -115,7 +117,7 @@ public class FuelImportServiceImpl implements FuelImportService {
             oldFuelImport.setSupplier(optionalValidate.getSupplierById(supplierId));
         }
         if (fuelId != null) {
-            if (fuelId != oldFuelImport.getTank().getFuel().getId()) {
+            if (!fuelId.equals(oldFuelImport.getTank().getFuel().getId())) {
                 throw new CustomBadRequestException(CustomError.builder()
                         .code("mismatch")
                         .message("Fuel type mismatch with tank")

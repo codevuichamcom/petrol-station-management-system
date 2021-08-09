@@ -9,7 +9,6 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-@ToString
 public class DebtDTOSummary {
     private CardDTO card;
     private StationDTO station;

@@ -11,7 +11,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-@ToString
 public class CardDTO {
     private UUID id;
     private String driverPhone;

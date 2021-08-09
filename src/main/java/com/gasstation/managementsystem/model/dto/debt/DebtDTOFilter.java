@@ -9,7 +9,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-@ToString
 public class DebtDTOFilter {
     private UUID cardId;
     private Integer stationId;

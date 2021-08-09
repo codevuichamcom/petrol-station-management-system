@@ -11,7 +11,6 @@ import java.util.Objects;
 @Getter
 @Setter
 @Builder
-@ToString
 public class PumpDTOCreate {
     @NotBlank(message = "Name is mandatory")
     private String name;

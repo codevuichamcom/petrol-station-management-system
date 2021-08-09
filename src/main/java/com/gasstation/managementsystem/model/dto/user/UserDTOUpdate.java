@@ -7,14 +7,11 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import java.util.Objects;
-
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
-@ToString
 public class UserDTOUpdate {
 
     @Schema(description = "Password must contain at least 8 characters and include both letters and numbers", example = "1234567a")

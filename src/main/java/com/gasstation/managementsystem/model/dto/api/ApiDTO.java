@@ -11,14 +11,12 @@ import java.util.Objects;
 @Getter
 @Setter
 @Builder
-@ToString
 public class ApiDTO {
     private int id;
 
     private String method;
 
     private String path;
-    @ToString.Exclude
     private List<UserTypeDTO> accessibleUserTypes;
 
     @Override

@@ -13,7 +13,6 @@ import java.util.Objects;
 @Getter
 @Setter
 @Builder
-@ToString
 public class TransactionDTO {
     private int id;
     private Long time;

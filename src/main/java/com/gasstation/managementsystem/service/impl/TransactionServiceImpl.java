@@ -19,6 +19,7 @@ import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -82,21 +83,10 @@ public class TransactionServiceImpl implements TransactionService {
                             .atZone(TimeZone.getDefault()
                                     .toZoneId()).toEpochSecond() * 1000, milliSeconds);
             if (pumpShift == null) {
-                pumpShift = pumpShiftCriteria.getPumpShiftToday();
-                if (pumpShift == null) {
-                    createPumpShiftForAllPump();
-                    pumpShift = optionalValidate.getPumpShiftByPumpIdNotClose(T.getPumpId(),
-                            LocalDateTime.of(localDate, LocalTime.MIN)
-                                    .atZone(TimeZone.getDefault()
-                                            .toZoneId()).toEpochSecond() * 1000, milliSeconds);
-                } else {
-                    throw new CustomNotFoundException(CustomError.builder()
-                            .code("not.found").field("id").message("Pump shift is not exist").table("pump_shift_table").build());
-                }
+                throw new CustomNotFoundException(CustomError.builder()
+                        .code("not.found").field("id").message("Pump shift is not exist").table("pump_shift_table").build());
             }
-            if (pumpShift != null) {
-                transaction.setPumpShift(pumpShift);
-            }
+            transaction.setPumpShift(pumpShift);
             transactionList.add(transaction);
         }
 
@@ -131,6 +121,7 @@ public class TransactionServiceImpl implements TransactionService {
         return listUuidSync;
     }
 
+    @Scheduled(cron = "0 30 17 * * ?")
     private void createPumpShiftForAllPump() {
         ArrayList<PumpShift> pumpShifts = new ArrayList<>();
         pumpRepository.findAll().forEach(pump -> {

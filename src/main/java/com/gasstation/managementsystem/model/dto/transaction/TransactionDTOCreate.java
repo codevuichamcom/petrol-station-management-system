@@ -20,7 +20,9 @@ public class TransactionDTOCreate {
     private Double volume;
     @NotNull(message = "pricePerLitter is mandatory")
     private Double unitPrice;
-    @NotNull(message = "pricePerLitter is mandatory")
+    @NotNull(message = "totalAmount is mandatory")
+    private Double totalAmount;
+    @NotNull(message = "uuid is mandatory")
     private String uuid;
     private UUID cardId;
     @NotNull(message = "Pump ìd is mandatory")

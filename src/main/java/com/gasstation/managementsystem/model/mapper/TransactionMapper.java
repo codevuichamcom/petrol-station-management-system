@@ -2,8 +2,8 @@ package com.gasstation.managementsystem.model.mapper;
 
 import com.gasstation.managementsystem.entity.*;
 import com.gasstation.managementsystem.model.dto.card.CardDTO;
-import com.gasstation.managementsystem.model.dto.pumpShift.PumpShiftDTO;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
+import com.gasstation.managementsystem.model.dto.pumpShift.PumpShiftDTO;
 import com.gasstation.managementsystem.model.dto.shift.ShiftDTO;
 import com.gasstation.managementsystem.model.dto.station.StationDTO;
 import com.gasstation.managementsystem.model.dto.tank.TankDTO;
@@ -43,6 +43,7 @@ public class TransactionMapper {
                 .time(transaction.getTime())
                 .volume(transaction.getVolume())
                 .unitPrice(transaction.getUnitPrice())
+                .totalAmount(transaction.getTotalAmount())
                 .uuid(transaction.getUuid())
                 .card(cardDTO)
                 .pumpShift(pumpShiftDTO)
@@ -56,6 +57,7 @@ public class TransactionMapper {
                 .volume(transactionDTOCreate.getVolume() / 1000)
                 .unitPrice(transactionDTOCreate.getUnitPrice())
                 .uuid(transactionDTOCreate.getUuid())
+                .totalAmount(transactionDTOCreate.getTotalAmount())
                 .build();
     }
 }

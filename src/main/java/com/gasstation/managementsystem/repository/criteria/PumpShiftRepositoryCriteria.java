@@ -86,7 +86,7 @@ public class PumpShiftRepositoryCriteria {
         }
         String countQuery = qHelper.getQuery().toString().replace("select ps", "select count(ps.id)");
         Query countTotalQuery = em.createQuery(countQuery);
-        String totalVolumeAndAmountQuery = qHelper.getQuery().toString().replace("select ps from PumpShift", "select coalesce(sum(tran.volume), 0), coalesce(sum(tran.volume * tran.unitPrice), 0) from Transaction tran inner join tran.pumpShift");
+        String totalVolumeAndAmountQuery = qHelper.getQuery().toString().replace("select ps from PumpShift", "select coalesce(sum(tran.volume), 0), coalesce(sum(tran.totalAmount), 0) from Transaction tran inner join tran.pumpShift");
         QueryGenerateHelper volumeAmountHelper = new QueryGenerateHelper();
         volumeAmountHelper.setQuery(new StringBuilder(totalVolumeAndAmountQuery));
         volumeAmountHelper.setParams(qHelper.getParams());

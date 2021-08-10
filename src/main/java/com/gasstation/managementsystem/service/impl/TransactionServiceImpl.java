@@ -1,9 +1,6 @@
 package com.gasstation.managementsystem.service.impl;
 
-import com.gasstation.managementsystem.entity.Card;
-import com.gasstation.managementsystem.entity.Debt;
-import com.gasstation.managementsystem.entity.PumpShift;
-import com.gasstation.managementsystem.entity.Transaction;
+import com.gasstation.managementsystem.entity.*;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTO;
@@ -12,7 +9,6 @@ import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOFilte
 import com.gasstation.managementsystem.model.dto.transaction.TransactionUuidDTO;
 import com.gasstation.managementsystem.model.mapper.TransactionMapper;
 import com.gasstation.managementsystem.repository.*;
-import com.gasstation.managementsystem.repository.criteria.PumpShiftRepositoryCriteria;
 import com.gasstation.managementsystem.repository.criteria.TransactionRepositoryCriteria;
 import com.gasstation.managementsystem.service.TransactionService;
 import com.gasstation.managementsystem.utils.DateTimeHelper;
@@ -33,12 +29,12 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final OptionalValidate optionalValidate;
     private final TransactionRepositoryCriteria transactionCriteria;
-    private final PumpShiftRepositoryCriteria pumpShiftCriteria;
     private final PumpRepository pumpRepository;
     private final ShiftRepository shiftRepository;
     private final PumpShiftRepository pumpShiftRepository;
     private final DebtRepository debtRepository;
     private final CardRepository cardRepository;
+    private final TankRepository tankRepository;
 
     private HashMap<String, Object> listTransactionToMap(List<Transaction> transactions) {
         List<TransactionDTO> transactionDTOS = new ArrayList<>();
@@ -93,22 +89,11 @@ public class TransactionServiceImpl implements TransactionService {
         List<TransactionUuidDTO> listUuidSync = new ArrayList<>();
         for (Transaction transaction : transactionList) {
             try {
-                transactionRepository.save(transaction);
+                transaction = transactionRepository.save(transaction);
+                updateTankRemain(transaction);
                 Card card = transaction.getCard();
                 if (card != null) {
-                    double totalMoneyTransaction = Math.ceil(transaction.getUnitPrice() * transaction.getVolume());
-                    double accountsPayable = totalMoneyTransaction - card.getAvailableBalance();
-                    if (accountsPayable <= 0) {
-                        card.setAvailableBalance(card.getAvailableBalance() - totalMoneyTransaction);
-                    } else {
-                        card.setAvailableBalance(0d);
-                        card.setAccountsPayable(card.getAccountsPayable() + accountsPayable);
-                        Debt debt = Debt.builder()
-                                .accountsPayable(accountsPayable)
-                                .transaction(transaction).build();
-                        debtRepository.save(debt);
-                    }
-                    cardRepository.save(card);
+                    updateCardAndDebt(card, transaction);
                 }
                 listUuidSync.add(TransactionUuidDTO.builder().uuid(transaction.getUuid()).build());
             } catch (DataIntegrityViolationException ex) {
@@ -119,6 +104,32 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         return listUuidSync;
+    }
+
+    private void updateCardAndDebt(Card card, Transaction transaction) {
+        double totalMoneyTransaction = transaction.getTotalAmount();
+        double accountsPayable = totalMoneyTransaction - card.getAvailableBalance();
+        if (accountsPayable <= 0) {
+            card.setAvailableBalance(card.getAvailableBalance() - totalMoneyTransaction);
+        } else {
+            card.setAvailableBalance(0d);
+            card.setAccountsPayable(card.getAccountsPayable() + accountsPayable);
+            Debt debt = Debt.builder()
+                    .accountsPayable(accountsPayable)
+                    .transaction(transaction).build();
+            debtRepository.save(debt);
+        }
+        cardRepository.save(card);
+    }
+
+    private void updateTankRemain(Transaction transaction) {
+        if (transaction.getPumpShift() != null
+                && transaction.getPumpShift().getPump() != null
+                && transaction.getPumpShift().getPump().getTank() != null) {
+            Tank tank = transaction.getPumpShift().getPump().getTank();
+            tank.setRemain(tank.getRemain() - transaction.getVolume());
+            tankRepository.save(tank);
+        }
     }
 
     @Scheduled(cron = "0 30 1 * * ?")

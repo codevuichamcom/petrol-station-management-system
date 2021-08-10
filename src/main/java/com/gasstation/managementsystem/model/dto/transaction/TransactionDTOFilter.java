@@ -16,4 +16,5 @@ public class TransactionDTOFilter {
     private Long time;
     private Double unitPrice;
     private Double volume;
+    private Double totalAmount;
 }

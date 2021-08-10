@@ -32,7 +32,7 @@ public class DashboardRepositoryCriteria {
                 "             st.id                                           as station_id,\n" +
                 "             st.name                                         as station_name,\n" +
                 "             coalesce(sum(tran.volume), 0)                   as total_volume,\n" +
-                "             coalesce(sum(tran.volume * tran.unit_price), 0) as total_revenue\n" +
+                "             coalesce(sum(tran.total_amount), 0) as total_revenue\n" +
                 "      from transaction_tbl tran\n" +
                 "               inner join pump_shift_tbl pst on pst.id = tran.pump_shift_id\n" +
                 "               inner join pump_tbl pt on pt.id = pst.pump_id\n" +
@@ -44,7 +44,7 @@ public class DashboardRepositoryCriteria {
                 "         left join\n" +
                 "     (select ft.id                                       as fuel_id,\n" +
                 "             st.id                                       as station_id,\n" +
-                "             coalesce(sum(tt.volume * tt.unit_price), 0) as total_cash\n" +
+                "             coalesce(sum(tt.total_amount), 0) as total_cash\n" +
                 "      from transaction_tbl tt\n" +
                 "               inner join pump_shift_tbl pst\n" +
                 "                          on pst.id = tt.pump_shift_id\n" +

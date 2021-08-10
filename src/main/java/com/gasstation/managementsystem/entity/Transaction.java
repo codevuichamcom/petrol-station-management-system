@@ -1,6 +1,9 @@
 package com.gasstation.managementsystem.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
@@ -25,6 +28,9 @@ public class Transaction extends BaseEntity {
 
     @Column(nullable = false, unique = true)
     private String uuid;
+
+    @Column(nullable = false)
+    private Double totalAmount;
 
     @ManyToOne
     @JoinColumn(name = "card_id")

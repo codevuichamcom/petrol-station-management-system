@@ -18,6 +18,7 @@ public class TransactionDTO {
     private Long time;
     private Double volume;
     private Double unitPrice;
+    private Double totalAmount;
     private String uuid;
     private CardDTO card;
     private PumpShiftDTO pumpShift;

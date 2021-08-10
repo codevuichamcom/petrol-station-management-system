@@ -32,7 +32,8 @@ public class TransactionController {
                                           @RequestParam(name = "stationIds", required = false) Integer[] stationIds,
                                           @RequestParam(name = "time", required = false) Long time,
                                           @RequestParam(name = "unitPrice", required = false) Double unitPrice,
-                                          @RequestParam(name = "volume", required = false) Double volume) {
+                                          @RequestParam(name = "volume", required = false) Double volume,
+                                          @RequestParam(name = "totalAmount", required = false) Double totalAmount) {
         TransactionDTOFilter transactionDTOFilter = TransactionDTOFilter.builder()
                 .pageIndex(pageIndex)
                 .pageSize(pageSize)
@@ -41,7 +42,8 @@ public class TransactionController {
                 .stationIds(stationIds)
                 .time(time)
                 .unitPrice(unitPrice)
-                .volume(volume).build();
+                .volume(volume)
+                .totalAmount(totalAmount).build();
         return transactionService.findAll(transactionDTOFilter);
     }
 

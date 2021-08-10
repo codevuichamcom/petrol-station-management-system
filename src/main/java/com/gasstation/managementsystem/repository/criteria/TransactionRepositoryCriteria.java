@@ -26,10 +26,11 @@ public class TransactionRepositoryCriteria {
                 .in("tank.station.id", "stationIds", filter.getStationIds())
                 .between("t.time", 0L, filter.getTime(), "time", filter.getTime())
                 .between("t.unitPrice", 0.0, filter.getUnitPrice(), "total", filter.getUnitPrice())
-                .between("t.volume", 0.0, filter.getVolume(), "volume", filter.getVolume());
+                .between("t.volume", 0.0, filter.getVolume(), "volume", filter.getVolume())
+                .between("t.totalAmount", 0.0, filter.getTotalAmount(), "totalAmount", filter.getTotalAmount());
         String countQuery = qHelper.getQuery().toString().replace("select t", "select count(t.id)");
         Query countTotalQuery = em.createQuery(countQuery);
-        String totalVolumeAndAmountQuery = qHelper.getQuery().toString().replace("select t", "select coalesce(sum(t.volume), 0), coalesce(sum(t.volume * t.unitPrice), 0)");
+        String totalVolumeAndAmountQuery = qHelper.getQuery().toString().replace("select t", "select coalesce(sum(t.volume), 0), coalesce(sum(t.totalAmount), 0)");
         QueryGenerateHelper volumeAmountHelper = new QueryGenerateHelper();
         volumeAmountHelper.setQuery(new StringBuilder(totalVolumeAndAmountQuery));
         volumeAmountHelper.setParams(qHelper.getParams());

@@ -41,6 +41,7 @@ public class FuelImportMapper {
                 .id(fuelImport.getId())
                 .name(fuelImport.getName())
                 .createdDate(fuelImport.getCreatedDate())
+                .importDate(fuelImport.getImportDate())
                 .volume(fuelImport.getVolume())
                 .unitPrice(fuelImport.getUnitPrice())
                 .amountPaid(fuelImport.getAmountPaid())

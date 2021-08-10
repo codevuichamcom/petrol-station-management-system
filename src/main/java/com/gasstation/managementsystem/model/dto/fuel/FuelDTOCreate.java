@@ -14,7 +14,6 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class FuelDTOCreate {
     @NotBlank(message = "Name is mandatory")
-    @Length(message = "Length of name must be greater than 3 characters", min = 4)
     private String name;
     @Schema(example = "Lít")
     @NotBlank(message = "Unit is mandatory")

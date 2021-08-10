@@ -10,7 +10,6 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 @Builder
 public class FuelDTOUpdate {
-    @Length(message = "Length of name must be greater than 3 characters", min = 4)
     private String name;
     @Schema(example = "Lít")
     private String unit;

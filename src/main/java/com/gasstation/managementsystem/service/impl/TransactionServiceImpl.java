@@ -121,7 +121,7 @@ public class TransactionServiceImpl implements TransactionService {
         return listUuidSync;
     }
 
-    @Scheduled(cron = "0 30 17 * * ?")
+    @Scheduled(cron = "0 30 1 * * ?")
     private void createPumpShiftForAllPump() {
         ArrayList<PumpShift> pumpShifts = new ArrayList<>();
         pumpRepository.findAll().forEach(pump -> {

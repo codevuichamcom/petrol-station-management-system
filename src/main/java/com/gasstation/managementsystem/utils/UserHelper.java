@@ -34,4 +34,11 @@ public class UserHelper {
     public boolean isOwner() {
         return getUserTypeOfUserLogin().getId() == UserType.OWNER;
     }
+
+    public boolean isStationOfOwner(User userLoggedIn, int stationId) {
+        if (userLoggedIn.getUserType().getId() == UserType.OWNER) {
+            return userLoggedIn.getStationList().stream().anyMatch(station -> station.getId() == stationId);
+        }
+        return false;
+    }
 }

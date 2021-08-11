@@ -15,6 +15,7 @@ import com.gasstation.managementsystem.repository.StationRepository;
 import com.gasstation.managementsystem.repository.UserRepository;
 import com.gasstation.managementsystem.service.StationService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
+import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class StationServiceImpl implements StationService {
     private final StationRepository stationRepository;
     private final UserRepository userRepository;
     private final OptionalValidate optionalValidate;
+    private final UserHelper userHelper;
 
     private HashMap<String, Object> listStationToMap(List<Station> stations) {
         List<StationDTO> stationDTOS = new ArrayList<>();
@@ -58,7 +60,28 @@ public class StationServiceImpl implements StationService {
 
     @Override
     public StationDTO findById(int id) throws CustomNotFoundException {
-        return StationMapper.toStationDTO(optionalValidate.getStationById(id));
+
+        User userLoggedIn = userHelper.getUserLogin();
+        UserType userType = userLoggedIn.getUserType();
+        Station station = null;
+        switch (userType.getId()) {
+            case UserType.ADMIN:
+                station = optionalValidate.getStationById(id);
+                break;
+            case UserType.OWNER:
+                if (userHelper.isStationOfOwner(userLoggedIn, id)) {
+                    station = optionalValidate.getStationById(id);
+                }
+                break;
+
+        }
+        if (station == null) {
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found")
+                    .message("Station not found or not of the owner")
+                    .table("station_tbl").build());
+        }
+        return StationMapper.toStationDTO(station);
     }
 
     private User validateOwner(int id) throws CustomBadRequestException {

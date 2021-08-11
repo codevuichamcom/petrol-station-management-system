@@ -70,6 +70,8 @@ public class DashboardRepositoryCriteria {
                 "     on total_revenue_tbl.fuel_id = total_debt_tbl.fuel_id";
         if (filter.getStationIds() != null && filter.getStationIds().length > 0) {
             str = str.replace("(###)", "and tt.station_id in (:stationIds)");
+        } else {
+            str = str.replace("(###)", "");
         }
         Query nativeQuery = em.createNativeQuery(str);
         nativeQuery.setParameter("startTime", filter.getStartTime());

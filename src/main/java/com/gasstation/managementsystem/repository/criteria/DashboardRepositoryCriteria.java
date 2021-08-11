@@ -41,7 +41,7 @@ public class DashboardRepositoryCriteria {
                 "               inner join pump_tbl pt on pt.id = pst.pump_id\n" +
                 "               inner join tank_tbl tt on tt.id = pt.tank_id\n" +
                 "               inner join fuel_tbl ft on ft.id = tt.fuel_id\n" +
-                "      where tran.time between 0 and 9000000000000000\n" +
+                "      where tran.time between :startTime and :endTime\n" +
                 "        (###)\n" +
                 "      group by ft.id) as total_revenue_tbl\n" +
                 "         left join\n" +

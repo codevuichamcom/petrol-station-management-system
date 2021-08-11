@@ -26,13 +26,13 @@ public class PumpShiftRepositoryCriteria {
         String[] statuses = filter.getStatuses();
         Map<String, String> statusMap = toMap(statuses);
 
-        qHelper.between("ps.createdDate", 0L, filter.getCreatedDate(), "createdDate", filter.getCreatedDate())
+        qHelper.between("ps.createdDate", 0L, filter.getCreatedDate())
                 .in("t.station.id", "stationIds", filter.getStationIds())
                 .in("ps.shift.id", "shiftIds", filter.getShiftIds())
                 .in("p.id", "pumpIds", filter.getPumpIds())
                 .like("ps.executor.name", "executorName", filter.getExecutorName());
         if (statuses == null || statuses.length == 0) {
-            qHelper.between("ps.closedTime", 0L, filter.getClosedTime(), "closedTime", filter.getClosedTime());
+            qHelper.between("ps.closedTime", 0L, filter.getClosedTime());
         } else {
             String closedCondition = "ps.closedTime IS NOT NULL";
             String unClosedCondition = "(ps.closedTime IS NULL AND (ps.createdDate+s.endTime) < (:today))";

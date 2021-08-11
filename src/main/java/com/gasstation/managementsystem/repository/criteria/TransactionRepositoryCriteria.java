@@ -24,10 +24,10 @@ public class TransactionRepositoryCriteria {
         qHelper.in("p.id", "pumpIds", filter.getPumpIds())
                 .in("h.shift.id", "shiftIds", filter.getShiftIds())
                 .in("tank.station.id", "stationIds", filter.getStationIds())
-                .between("t.time", 0L, filter.getTime(), "time", filter.getTime())
-                .between("t.unitPrice", 0.0, filter.getUnitPrice(), "total", filter.getUnitPrice())
-                .between("t.volume", 0.0, filter.getVolume(), "volume", filter.getVolume())
-                .between("t.totalAmount", 0.0, filter.getTotalAmount(), "totalAmount", filter.getTotalAmount());
+                .between("t.time", 0L, filter.getTime())
+                .between("t.unitPrice", 0.0, filter.getUnitPrice())
+                .between("t.volume", 0.0, filter.getVolume())
+                .between("t.totalAmount", 0.0, filter.getTotalAmount());
         String countQuery = qHelper.getQuery().toString().replace("select t", "select count(t.id)");
         Query countTotalQuery = em.createQuery(countQuery);
         String totalVolumeAndAmountQuery = qHelper.getQuery().toString().replace("select t", "select coalesce(sum(t.volume), 0), coalesce(sum(t.totalAmount), 0)");
@@ -40,8 +40,10 @@ public class TransactionRepositoryCriteria {
         qHelper.sort("t.id", "DESC");
         TypedQuery<Transaction> tQuery = em.createQuery(query.toString(), Transaction.class);
         HashMap<String, Object> map = qHelper.paging(tQuery, countTotalQuery, filter.getPageIndex(), filter.getPageSize());
-        map.put("totalVolume", volumeAndAmount[0]);
-        map.put("totalAmount", volumeAndAmount[1]);
+        final int TOTAL_VOLUME = 0;
+        final int TOTAL_AMOUNT = 1;
+        map.put("totalVolume", volumeAndAmount[TOTAL_VOLUME]);
+        map.put("totalAmount", volumeAndAmount[TOTAL_AMOUNT]);
         return map;
     }
 }

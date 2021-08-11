@@ -12,11 +12,10 @@ public class CardDTOFilter {
     public static final String STATUS_DEACTIVATED = "DEACTIVATED";
     private Integer pageIndex;
     private Integer pageSize;
-    private Double accountsPayable;
-    private Double availableBalance;
+    private Double accountsPayableFrom;
+    private Double accountsPayableTo;
+    private Double availableBalanceFrom;
+    private Double availableBalanceTo;
     private String[] statuses;
-    private Long createdDate;
     private String customerName;
-    private String customerPhone;
-    private String licensePlate;
 }

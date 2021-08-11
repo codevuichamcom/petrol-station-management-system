@@ -20,8 +20,8 @@ public class ReceiptRepositoryCriteria {
         StringBuilder query = new StringBuilder("select r from Receipt r inner join r.card c inner join c.customer cus inner join r.creator cre where 1 = 1");
         QueryGenerateHelper qHelper = new QueryGenerateHelper();
         qHelper.setQuery(query);
-        qHelper.between("r.createdDate", 0L, filter.getCreatedDate(), "createdDate", filter.getCreatedDate())
-                .between("r.amount", 0d, filter.getAmount(), "amount", filter.getAmount())
+        qHelper.between("r.createdDate", 0L, filter.getCreatedDate())
+                .between("r.amount", 0d, filter.getAmount())
                 .like("r.reason", "reason", filter.getReason())
                 .like("c.id", "cardId", filter.getCardId())
                 .like("cus.name", "customerName", filter.getCustomerName())

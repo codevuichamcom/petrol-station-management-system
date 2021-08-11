@@ -64,29 +64,27 @@ public class QueryGenerateHelper {
         return this;
     }
 
-    public QueryGenerateHelper between(String field, Double min, Double max, String key, Double value) {
-        if (value == null || value < min || value > max) return this;
+    public QueryGenerateHelper between(String field, Double min, Double max) {
         query
                 .append(" AND ")
                 .append(field)
                 .append(" BETWEEN ")
                 .append(min)
                 .append(" AND ")
-                .append(" (:").append(key).append(")");
-        params.put(key, value);
+                .append(max)
+                .append(" ");
         return this;
     }
 
-    public QueryGenerateHelper between(String field, Long min, Long max, String key, Long value) {
-        if (value == null || value < min || value > max) return this;
+    public QueryGenerateHelper between(String field, Long min, Long max) {
         query
                 .append(" AND ")
                 .append(field)
                 .append(" BETWEEN ")
                 .append(min)
                 .append(" AND ")
-                .append(" (:").append(key).append(")");
-        params.put(key, value);
+                .append(max)
+                .append(" ");
         return this;
     }
 

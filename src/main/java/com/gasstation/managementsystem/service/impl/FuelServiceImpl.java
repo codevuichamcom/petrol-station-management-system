@@ -37,7 +37,7 @@ public class FuelServiceImpl implements FuelService {
 
     @Override
     public HashMap<String, Object> findAll() {
-        return listFuelToMap(fuelRepository.findAll(Sort.by(Sort.Direction.ASC, "id")));
+        return listFuelToMap(fuelRepository.findAll(Sort.by(Sort.Direction.DESC, "id")));
     }
 
     @Override

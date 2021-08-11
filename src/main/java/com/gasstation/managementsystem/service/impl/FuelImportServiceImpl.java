@@ -65,7 +65,7 @@ public class FuelImportServiceImpl implements FuelImportService {
     public FuelImportDTO create(FuelImportDTOCreate fuelImportDTOCreate) throws CustomNotFoundException, CustomBadRequestException {
 
         Tank tank = optionalValidate.getTankById(fuelImportDTOCreate.getTankId());
-        if (fuelImportDTOCreate.getImportDate() > DateTimeHelper.getCurrentDate()) {
+        if (fuelImportDTOCreate.getImportDate() > DateTimeHelper.getCurrentUnixTime()) {
             throw new CustomBadRequestException(CustomError.builder()
                     .code("import.date.invalid")
                     .message("Import date cannot be greater than current date")
@@ -99,37 +99,11 @@ public class FuelImportServiceImpl implements FuelImportService {
     public FuelImportDTO update(int id, FuelImportDTOUpdate fuelImportDTOUpdate) throws CustomNotFoundException, CustomBadRequestException {
         FuelImport oldFuelImport = optionalValidate.getFuelImportById(id);
         FuelImportMapper.copyNonNullToFuelImport(oldFuelImport, fuelImportDTOUpdate);
-        Integer tankId = fuelImportDTOUpdate.getTankId();
-        Integer supplierId = fuelImportDTOUpdate.getSupplierId();
-        Integer fuelId = fuelImportDTOUpdate.getFuelId();
-        if (fuelImportDTOUpdate.getImportDate() > DateTimeHelper.getCurrentDate()) {
+        if (fuelImportDTOUpdate.getImportDate() > DateTimeHelper.getCurrentUnixTime()) {
             throw new CustomBadRequestException(CustomError.builder()
                     .code("import.date.invalid")
                     .message("Import date cannot be greater than current date")
                     .table("fuel_import_tbl").build());
-        }
-
-
-        if (tankId != null) {
-            oldFuelImport.setTank(optionalValidate.getTankById(tankId));
-        }
-        if (supplierId != null) {
-            oldFuelImport.setSupplier(optionalValidate.getSupplierById(supplierId));
-        }
-        if (fuelId != null) {
-            if (!fuelId.equals(oldFuelImport.getTank().getFuel().getId())) {
-                throw new CustomBadRequestException(CustomError.builder()
-                        .code("mismatch")
-                        .message("Fuel type mismatch with tank")
-                        .table("fuel_import_tbl").build());
-            }
-            oldFuelImport.setFuel(optionalValidate.getFuelById(fuelId));
-        }
-        if (fuelImportDTOUpdate.getVolume() > oldFuelImport.getTank().getVolume() - oldFuelImport.getTank().getRemain()) {
-            throw new CustomBadRequestException(CustomError.builder()
-                    .code("full")
-                    .message("Tank not enough to hold")
-                    .table("tank_tbl").build());
         }
         oldFuelImport = fuelImportRepository.save(oldFuelImport);
         return FuelImportMapper.toFuelImportDTO(oldFuelImport);

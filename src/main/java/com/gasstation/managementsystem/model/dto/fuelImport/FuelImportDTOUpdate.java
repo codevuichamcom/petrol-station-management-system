@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.model.dto.fuelImport;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 @AllArgsConstructor
@@ -10,6 +11,8 @@ import lombok.*;
 public class FuelImportDTOUpdate {
     private String name;
     private Long importDate;
-    private Double amountPaid;
+    private Double accountsPayable;
+    @Schema(description = "Reason when pay expense")
+    private String reason;
     private String note;
 }

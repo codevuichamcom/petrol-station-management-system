@@ -1,8 +1,6 @@
 package com.gasstation.managementsystem.service.impl;
 
-import com.gasstation.managementsystem.entity.FuelImport;
-import com.gasstation.managementsystem.entity.Tank;
-import com.gasstation.managementsystem.entity.User;
+import com.gasstation.managementsystem.entity.*;
 import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
@@ -10,7 +8,9 @@ import com.gasstation.managementsystem.model.dto.fuelImport.FuelImportDTO;
 import com.gasstation.managementsystem.model.dto.fuelImport.FuelImportDTOCreate;
 import com.gasstation.managementsystem.model.dto.fuelImport.FuelImportDTOUpdate;
 import com.gasstation.managementsystem.model.mapper.FuelImportMapper;
+import com.gasstation.managementsystem.repository.ExpenseRepository;
 import com.gasstation.managementsystem.repository.FuelImportRepository;
+import com.gasstation.managementsystem.repository.TankRepository;
 import com.gasstation.managementsystem.service.FuelImportService;
 import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.OptionalValidate;
@@ -34,6 +34,8 @@ public class FuelImportServiceImpl implements FuelImportService {
     private final FuelImportRepository fuelImportRepository;
     private final OptionalValidate optionalValidate;
     private final UserHelper userHelper;
+    private final TankRepository tankRepository;
+    private final ExpenseRepository expenseRepository;
 
     private HashMap<String, Object> listFuelImportToMap(List<FuelImport> tanks) {
         List<FuelImportDTO> fuelImportDTOS = tanks.stream().map(FuelImportMapper::toFuelImportDTO).collect(Collectors.toList());
@@ -86,12 +88,19 @@ public class FuelImportServiceImpl implements FuelImportService {
         FuelImport fuelImport = FuelImportMapper.toFuelImport(fuelImportDTOCreate);
 
         tank.setRemain(tank.getRemain() + fuelImportDTOCreate.getVolume());
+        tank = tankRepository.save(tank);
         fuelImport.setTank(tank);
         fuelImport.setSupplier(optionalValidate.getSupplierById(fuelImportDTOCreate.getSupplierId()));
         User creator = userHelper.getUserLogin();
         fuelImport.setCreator(creator);
         fuelImport.setFuel(optionalValidate.getFuelById(fuelImportDTOCreate.getFuelId()));
         fuelImport = fuelImportRepository.save(fuelImport);
+        Double amountPaid = fuelImportDTOCreate.getAmountPaid();
+        String reasonPayExpense = fuelImportDTOCreate.getReason();
+        if (amountPaid != null) {
+            reasonPayExpense += fuelImport.getId() + "}";
+            addExpense(amountPaid, reasonPayExpense, fuelImport);
+        }
         return FuelImportMapper.toFuelImportDTO(fuelImport);
     }
 
@@ -105,8 +114,32 @@ public class FuelImportServiceImpl implements FuelImportService {
                     .message("Import date cannot be greater than current date")
                     .table("fuel_import_tbl").build());
         }
+
+        Double accountsPayable = fuelImportDTOUpdate.getAccountsPayable();
+        String reasonPayExpense = fuelImportDTOUpdate.getReason();
         oldFuelImport = fuelImportRepository.save(oldFuelImport);
+        if (fuelImportDTOUpdate.getAccountsPayable() != null) {
+            addExpense(accountsPayable, reasonPayExpense, oldFuelImport);
+        }
         return FuelImportMapper.toFuelImportDTO(oldFuelImport);
+    }
+
+    private void addExpense(Double amount, String reasonPayExpense, FuelImport fuelImport) throws CustomBadRequestException {
+        if (reasonPayExpense == null) {
+            throw new CustomBadRequestException(CustomError.builder()
+                    .code("reason.required")
+                    .message("reason is required when pay expenses")
+                    .table("expense_tbl").build());
+        }
+        Station station = fuelImport.getTank().getStation();
+        Expense expense = Expense.builder()
+                .amount(amount)
+                .reason(reasonPayExpense)
+                .station(station)
+                .fuelImport(fuelImport)
+                .createdDate(DateTimeHelper.getCurrentDate())
+                .creator(userHelper.getUserLogin()).build();
+        expenseRepository.save(expense);
     }
 
 

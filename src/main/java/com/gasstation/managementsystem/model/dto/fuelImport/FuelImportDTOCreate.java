@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.model.dto.fuelImport;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -23,8 +24,9 @@ public class FuelImportDTOCreate {
     @NotNull(message = "Unit price is mandatory")
     private Double unitPrice;
 
-    @NotNull(message = "Paid is mandatory")
     private Double amountPaid;
+    @Schema(description = "Reason when pay expense")
+    private String reason;
 
     @NotNull(message = "VAT percent is mandatory")
     private Double vatPercent;

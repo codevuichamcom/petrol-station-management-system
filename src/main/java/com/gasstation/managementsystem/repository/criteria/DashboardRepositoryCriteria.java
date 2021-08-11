@@ -7,7 +7,6 @@ import com.gasstation.managementsystem.model.FuelStatistic;
 import com.gasstation.managementsystem.model.TankStatistic;
 import com.gasstation.managementsystem.model.dto.dashboard.FuelStatisticDTOFilter;
 import com.gasstation.managementsystem.model.dto.dashboard.TankStatisticDTOFilter;
-import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -24,55 +23,53 @@ public class DashboardRepositoryCriteria {
     private final EntityManager em;
 
     public HashMap<String, Object> fuelStatistic(FuelStatisticDTOFilter filter) {
-        String str = "select total_revenue_tbl.*,\n" +
+        final int FUEL_ID = 0;
+        final int TOTAL_VOLUME = 1;
+        final int TOTAL_REVENUE = 2;
+        final int TOTAL_DEBT = 3;
+        final int TOTAL_CASH = 4;
+        String str = "select total_revenue_tbl.fuel_id              as fuel_id,\n" +
+                "       total_revenue_tbl.total_volume         as total_volume,\n" +
+                "       total_revenue_tbl.total_revenue        as total_revenue,\n" +
                 "       coalesce(total_debt_tbl.total_debt, 0) as total_debt,\n" +
                 "       coalesce(total_cash_tbl.total_cash, 0) as total_cash\n" +
-                "from (select ft.id                                           as fuel_id,\n" +
-                "             ft.name                                         as fuel_name,\n" +
-                "             st.id                                           as station_id,\n" +
-                "             st.name                                         as station_name,\n" +
-                "             coalesce(sum(tran.volume), 0)                   as total_volume,\n" +
+                "from (select ft.id                               as fuel_id,\n" +
+                "             coalesce(sum(tran.volume), 0)       as total_volume,\n" +
                 "             coalesce(sum(tran.total_amount), 0) as total_revenue\n" +
                 "      from transaction_tbl tran\n" +
                 "               inner join pump_shift_tbl pst on pst.id = tran.pump_shift_id\n" +
                 "               inner join pump_tbl pt on pt.id = pst.pump_id\n" +
                 "               inner join tank_tbl tt on tt.id = pt.tank_id\n" +
-                "               inner join station_tbl st on st.id = tt.station_id\n" +
                 "               inner join fuel_tbl ft on ft.id = tt.fuel_id\n" +
-                "      where tran.time between :startTime and :endTime\n" +
-                "      group by ft.id, st.id) as total_revenue_tbl\n" +
+                "      where tran.time between 0 and 9000000000000000\n" +
+                "        (###)\n" +
+                "      group by ft.id) as total_revenue_tbl\n" +
                 "         left join\n" +
-                "     (select ft.id                                       as fuel_id,\n" +
-                "             st.id                                       as station_id,\n" +
+                "     (select ft.id                             as fuel_id,\n" +
                 "             coalesce(sum(tt.total_amount), 0) as total_cash\n" +
                 "      from transaction_tbl tt\n" +
                 "               inner join pump_shift_tbl pst\n" +
                 "                          on pst.id = tt.pump_shift_id\n" +
                 "               inner join pump_tbl pt on pt.id = pst.pump_id\n" +
                 "               inner join tank_tbl t on t.id = pt.tank_id\n" +
-                "               inner join station_tbl st on st.id = t.station_id\n" +
                 "               inner join fuel_tbl ft on ft.id = t.fuel_id\n" +
                 "      where tt.card_id is null\n" +
                 "         or (tt.id in (select receipt_tbl.transaction_id from receipt_tbl))\n" +
-                "      group by ft.id, st.id) as total_cash_tbl\n" +
+                "      group by ft.id) as total_cash_tbl\n" +
                 "     on total_revenue_tbl.fuel_id = total_cash_tbl.fuel_id\n" +
-                "         and total_revenue_tbl.station_id = total_cash_tbl.station_id\n" +
                 "         left join\n" +
                 "     (select ft.id                    as fuel_id,\n" +
-                "             st.id                    as station_id,\n" +
                 "             sum(dt.accounts_payable) as total_debt\n" +
                 "      from debt_tbl dt\n" +
                 "               inner join transaction_tbl tt on tt.id = dt.transaction_id\n" +
                 "               inner join pump_shift_tbl pst on pst.id = tt.pump_shift_id\n" +
                 "               inner join pump_tbl pt on pt.id = pst.pump_id\n" +
                 "               inner join tank_tbl t on t.id = pt.tank_id\n" +
-                "               inner join station_tbl st on st.id = t.station_id\n" +
                 "               inner join fuel_tbl ft on ft.id = t.fuel_id\n" +
-                "      group by ft.id, st.id) as total_debt_tbl\n" +
-                "     on total_revenue_tbl.fuel_id = total_debt_tbl.fuel_id\n" +
-                "         and total_revenue_tbl.station_id = total_debt_tbl.station_id\n";
+                "      group by ft.id) as total_debt_tbl\n" +
+                "     on total_revenue_tbl.fuel_id = total_debt_tbl.fuel_id";
         if (filter.getStationIds() != null && filter.getStationIds().length > 0) {
-            str += "  where total_revenue_tbl.station_id in (:stationIds)";
+            str = str.replace("(###)", "and tt.station_id in (:stationIds)");
         }
         Query nativeQuery = em.createNativeQuery(str);
         nativeQuery.setParameter("startTime", filter.getStartTime());
@@ -85,14 +82,11 @@ public class DashboardRepositoryCriteria {
         List<FuelStatistic> fuelStatistics = new ArrayList<>();
         listResult.forEach(objects -> {
             FuelStatistic fuelStatistic = FuelStatistic.builder()
-                    .fuelId((Integer) objects[0])
-                    .fuelName((String) objects[1])
-                    .stationId((Integer) objects[2])
-                    .stationName((String) objects[3])
-                    .totalVolume((Double) objects[4])
-                    .totalRevenue((Double) objects[5])
-                    .totalDebt((Double) objects[6])
-                    .totalCash((Double) objects[7])
+                    .fuelId((Integer) objects[FUEL_ID])
+                    .totalVolume((Double) objects[TOTAL_VOLUME])
+                    .totalRevenue((Double) objects[TOTAL_REVENUE])
+                    .totalDebt((Double) objects[TOTAL_DEBT])
+                    .totalCash((Double) objects[TOTAL_CASH])
                     .build();
             fuelStatistics.add(fuelStatistic);
         });

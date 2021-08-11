@@ -124,7 +124,9 @@ public class FuelImportServiceImpl implements FuelImportService {
     public FuelImportDTO update(int id, FuelImportDTOUpdate fuelImportDTOUpdate) throws CustomNotFoundException, CustomBadRequestException {
         FuelImport oldFuelImport = optionalValidate.getFuelImportById(id);
         FuelImportMapper.copyNonNullToFuelImport(oldFuelImport, fuelImportDTOUpdate);
-        if (fuelImportDTOUpdate.getImportDate() > DateTimeHelper.getCurrentUnixTime()) {
+        Long importDate = fuelImportDTOUpdate.getImportDate();
+        if (importDate != null
+                && importDate > DateTimeHelper.getCurrentUnixTime()) {
             throw new CustomBadRequestException(CustomError.builder()
                     .code("import.date.invalid")
                     .message("Import date cannot be greater than current date")

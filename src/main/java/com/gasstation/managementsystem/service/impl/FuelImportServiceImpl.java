@@ -76,7 +76,17 @@ public class FuelImportServiceImpl implements FuelImportService {
 
     @Override
     public FuelImportDTO findById(int id) throws CustomNotFoundException {
-        return FuelImportMapper.toFuelImportDTO(optionalValidate.getFuelImportById(id));
+        User userLoggedIn = userHelper.getUserLogin();
+        UserType userType = userLoggedIn.getUserType();
+        FuelImport fuelImport = optionalValidate.getFuelImportById(id);
+        if (userType.getId() == UserType.OWNER
+                && !fuelImport.getTank().getStation().getOwner().getId().equals(userLoggedIn.getId())) { //id không phải của nó
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found")
+                    .message("Fuel import not of the owner")
+                    .table("fuel_import_tbl").build());
+        }
+        return FuelImportMapper.toFuelImportDTO(fuelImport);
     }
 
     @Override
@@ -114,7 +124,9 @@ public class FuelImportServiceImpl implements FuelImportService {
         Double amountPaid = fuelImportDTOCreate.getAmountPaid();
         String reasonPayExpense = fuelImportDTOCreate.getReason();
         if (amountPaid != null) {
-            reasonPayExpense += fuelImport.getId() + ")";
+            if (reasonPayExpense != null) {
+                reasonPayExpense += fuelImport.getId() + ")";
+            }
             addExpense(amountPaid, reasonPayExpense, fuelImport);
         }
         return FuelImportMapper.toFuelImportDTO(fuelImport);

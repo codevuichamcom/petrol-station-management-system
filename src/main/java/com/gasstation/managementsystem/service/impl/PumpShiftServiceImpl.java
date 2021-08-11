@@ -1,8 +1,11 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.PumpShift;
+import com.gasstation.managementsystem.entity.Station;
 import com.gasstation.managementsystem.entity.User;
+import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
+import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.dto.pumpShift.PumpShiftDTO;
 import com.gasstation.managementsystem.model.dto.pumpShift.PumpShiftDTOFilter;
 import com.gasstation.managementsystem.model.dto.user.UserDTO;
@@ -27,7 +30,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PumpShiftServiceImpl implements PumShiftService {
     private final PumpShiftRepository pumpShiftRepository;
-    private final PumpShiftRepositoryCriteria handOverShiftCriteria;
+    private final PumpShiftRepositoryCriteria pumpShiftCriteria;
     private final OptionalValidate optionalValidate;
     private final UserHelper userHelper;
 
@@ -40,7 +43,19 @@ public class PumpShiftServiceImpl implements PumShiftService {
     }
 
     public HashMap<String, Object> findAll(PumpShiftDTOFilter filter) {
-        HashMap<String, Object> temp = handOverShiftCriteria.findAll(filter);
+        User userLoggedIn = userHelper.getUserLogin();
+        UserType userType = userLoggedIn.getUserType();
+        if (userType.getId() == UserType.OWNER) {
+            if (filter.getStationIds() == null || filter.getStationIds().length == 0) {
+                List<Station> stationList = userLoggedIn.getStationList();
+                List<Integer> stationIds = new ArrayList<>();
+                for (Station station : stationList) {
+                    stationIds.add(station.getId());
+                }
+                filter.setStationIds(stationIds.toArray(Integer[]::new));
+            }
+        }
+        HashMap<String, Object> temp = pumpShiftCriteria.findAll(filter);
         HashMap<String, Object> map = listPumpShiftToMap((List<PumpShift>) temp.get("data"));
         map.put("totalElement", temp.get("totalElement"));
         map.put("totalPage", temp.get("totalPage"));
@@ -52,7 +67,17 @@ public class PumpShiftServiceImpl implements PumShiftService {
 
     @Override
     public PumpShiftDTO findById(int id) throws CustomNotFoundException {
-        return PumpShiftMapper.toHandOverShiftDTO(optionalValidate.getPumpShiftById(id));
+        User userLoggedIn = userHelper.getUserLogin();
+        UserType userType = userLoggedIn.getUserType();
+        PumpShift pumpShift = optionalValidate.getPumpShiftById(id);
+        if (userType.getId() == UserType.OWNER
+                && !pumpShift.getPump().getTank().getStation().getOwner().getId().equals(userLoggedIn.getId())) {//id không phải owner đang đăng nhâp
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found")
+                    .message("Pump shift not of the owner")
+                    .table("pump_shift_tbl").build());
+        }
+        return PumpShiftMapper.toHandOverShiftDTO(pumpShift);
     }
 
     @Override

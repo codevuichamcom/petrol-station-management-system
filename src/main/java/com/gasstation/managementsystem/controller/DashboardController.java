@@ -34,7 +34,7 @@ public class DashboardController {
                                                  @RequestParam(name = "stationIds", required = false) Integer[] stationIds) {
         User userLoggedIn = userHelper.getUserLogin();
         if (userLoggedIn.getUserType().getId() == UserType.OWNER && (stationIds == null || stationIds.length == 0)) {
-            HashMap<String, Object> map = stationService.findAll(userLoggedIn.getUsername());
+            HashMap<String, Object> map = stationService.findAll();
             List<StationDTO> stationDTOList = (List<StationDTO>) map.get("data");
             stationIds = new Integer[100];
             if (stationDTOList != null && stationDTOList.size() != 0) {

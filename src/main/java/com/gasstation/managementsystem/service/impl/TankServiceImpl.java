@@ -19,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -42,12 +43,37 @@ public class TankServiceImpl implements TankService {
 
     @Override
     public HashMap<String, Object> findAll() {
-        return listTankToMap(tankRepository.findAll(Sort.by(Sort.Direction.ASC, "id")));
+        User userLoggedIn = userHelper.getUserLogin();
+        UserType userType = userLoggedIn.getUserType();
+        List<Tank> tankList = new ArrayList<>();
+        switch (userType.getId()) {
+            case UserType.ADMIN:
+                tankList = tankRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+                break;
+            case UserType.OWNER:
+                List<Station> stationList = userLoggedIn.getStationList();
+                List<Integer> stationIds = new ArrayList<>();
+                for (Station station : stationList) {
+                    stationIds.add(station.getId());
+                }
+                tankList = tankRepository.findAllByStationIds(stationIds, Sort.by(Sort.Direction.DESC, "id"));
+                break;
+        }
+        return listTankToMap(tankList);
     }
 
     @Override
     public TankDTO findById(int id) throws CustomNotFoundException {
-        return TankMapper.toTankDTO(optionalValidate.getTankById(id));
+        User userLoggedIn = userHelper.getUserLogin();
+        UserType userType = userLoggedIn.getUserType();
+        Tank tank = optionalValidate.getTankById(id);
+        if (userType.getId() == UserType.OWNER && !tank.getStation().getOwner().getId().equals(userLoggedIn.getId())) {
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found")
+                    .message("Tank not of the owner")
+                    .table("tank_tbl").build());
+        }
+        return TankMapper.toTankDTO(tank);
     }
 
     @Override

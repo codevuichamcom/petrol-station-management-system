@@ -1,6 +1,5 @@
 package com.gasstation.managementsystem.controller;
 
-import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.pump.PumpDTO;
@@ -23,20 +22,11 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class PumpController {
     private final PumpService pumpService;
-    private final UserHelper userHelper;
 
     @Operation(summary = "View All pump")
     @GetMapping("/pumps")
     public HashMap<String, Object> getAll() {
-        UserType userType = userHelper.getUserTypeOfUserLogin();
-        switch (userType.getId()) {
-            case UserType.ADMIN:
-                return pumpService.findAll();
-            case UserType.OWNER:
-                return pumpService.findAllByOwnerId(UserType.OWNER);
-
-        }
-        return new HashMap<>();
+        return pumpService.findAll();
     }
 
     @Operation(summary = "Find pump by id")

@@ -30,7 +30,7 @@ public class StationController {
     @Operation(summary = "View All Station")
     @GetMapping("/stations")
     public HashMap<String, Object> getAll(Principal principal) {
-        return stationService.findAll(principal.getName());
+        return stationService.findAll();
     }
 
     @Operation(summary = "Find Station by id")

@@ -10,7 +10,7 @@ import com.gasstation.managementsystem.model.dto.station.StationDTOUpdate;
 import java.util.HashMap;
 
 public interface StationService {
-    HashMap<String, Object> findAll(String username);
+    HashMap<String, Object> findAll();
 
     StationDTO findById(int id) throws CustomNotFoundException;
 

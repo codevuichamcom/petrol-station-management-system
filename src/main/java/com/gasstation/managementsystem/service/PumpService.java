@@ -12,8 +12,6 @@ public interface PumpService {
 
     HashMap<String, Object> findAll();
 
-    HashMap<String, Object> findAllByOwnerId(int ownerId);
-
     HashMap<String, Object> findAllByStationId(int stationId);
 
     PumpDTO findById(int id) throws CustomNotFoundException;

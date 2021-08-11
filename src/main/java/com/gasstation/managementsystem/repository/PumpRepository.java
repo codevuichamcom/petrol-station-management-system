@@ -11,11 +11,9 @@ import java.util.Optional;
 
 @Repository
 public interface PumpRepository extends JpaRepository<Pump, Integer> {
-    @Query("select p from Pump p inner join  p.tank t inner join t.station s where s.owner.id=?1")
-    List<Pump> findAllByOwnerId(int ownerId, Sort sort);
 
     Optional<Pump> findByNameAndTankId(String name, int tankId);
 
-    @Query("select p from Pump p inner join p.tank t where t.station.id=?1")
-    List<Pump> findAllByStationId(int stationId, Sort sort);
+    @Query("select p from Pump p inner join p.tank t where t.station.id in (?1)")
+    List<Pump> findAllByStationIds(List stationIds, Sort sort);
 }

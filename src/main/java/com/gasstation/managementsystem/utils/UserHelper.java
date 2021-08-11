@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.utils;
 
+import com.gasstation.managementsystem.entity.Station;
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.repository.UserRepository;
@@ -7,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -35,10 +39,11 @@ public class UserHelper {
         return getUserTypeOfUserLogin().getId() == UserType.OWNER;
     }
 
-    public boolean isStationOfOwner(User userLoggedIn, int stationId) {
-        if (userLoggedIn.getUserType().getId() == UserType.OWNER) {
-            return userLoggedIn.getStationList().stream().anyMatch(station -> station.getId() == stationId);
+    public List<Integer> getListStationIdOfOwner(User owner) {
+        List<Integer> stationIds = new ArrayList<>();
+        for (Station station : owner.getStationList()) {
+            stationIds.add(station.getId());
         }
-        return false;
+        return stationIds;
     }
 }

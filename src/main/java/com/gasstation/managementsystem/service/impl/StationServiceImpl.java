@@ -43,16 +43,16 @@ public class StationServiceImpl implements StationService {
     }
 
     @Override
-    public HashMap<String, Object> findAll(String username) {
-        User user = userRepository.findByUsername(username);
+    public HashMap<String, Object> findAll() {
+        User userLoggedIn = userHelper.getUserLogin();
         List<Station> stations = new ArrayList<>();
-        int userTypeId = user.getUserType().getId();
+        int userTypeId = userLoggedIn.getUserType().getId();
         switch (userTypeId) {
             case UserType.ADMIN:
                 stations = stationRepository.findAll();
                 break;
             case UserType.OWNER:
-                stations = stationRepository.findByOwnerId(user.getId());
+                stations = stationRepository.findByOwnerId(userLoggedIn.getId());
                 break;
         }
         return listStationToMap(stations);
@@ -60,25 +60,13 @@ public class StationServiceImpl implements StationService {
 
     @Override
     public StationDTO findById(int id) throws CustomNotFoundException {
-
         User userLoggedIn = userHelper.getUserLogin();
         UserType userType = userLoggedIn.getUserType();
-        Station station = null;
-        switch (userType.getId()) {
-            case UserType.ADMIN:
-                station = optionalValidate.getStationById(id);
-                break;
-            case UserType.OWNER:
-                if (userHelper.isStationOfOwner(userLoggedIn, id)) {
-                    station = optionalValidate.getStationById(id);
-                }
-                break;
-
-        }
-        if (station == null) {
+        Station station = optionalValidate.getStationById(id);
+        if (userType.getId() == UserType.OWNER && !station.getOwner().getId().equals(userLoggedIn.getId())) {//id không phải của nó
             throw new CustomNotFoundException(CustomError.builder()
                     .code("not.found")
-                    .message("Station not found or not of the owner")
+                    .message("Station not of the owner")
                     .table("station_tbl").build());
         }
         return StationMapper.toStationDTO(station);

@@ -44,7 +44,7 @@ public class ExpenseMapper {
     public static Expense toExpense(ExpenseDTOCreate expenseDTOCreate) {
         if (expenseDTOCreate == null) return null;
         return Expense.builder()
-                .reason(expenseDTOCreate.getReason())
+                .reason(expenseDTOCreate.getReason().trim())
                 .amount(expenseDTOCreate.getAmount())
                 .createdDate(DateTimeHelper.getCurrentDate())
                 .build();

@@ -30,16 +30,16 @@ public class UserMapper {
     public static User toUser(UserDTOCreate userDTOCreate) {
         if (userDTOCreate == null) return null;
         return User.builder()
-                .identityCardNumber(userDTOCreate.getIdentityCardNumber())
+                .identityCardNumber(userDTOCreate.getIdentityCardNumber().trim())
                 .username(userDTOCreate.getUsername())
                 .password(userDTOCreate.getPassword())
-                .name(userDTOCreate.getName())
+                .name(userDTOCreate.getName().trim())
                 .gender(userDTOCreate.getGender())
                 .dateOfBirth(userDTOCreate.getDateOfBirth())
-                .address(userDTOCreate.getAddress())
+                .address(userDTOCreate.getAddress().trim())
                 .phone(userDTOCreate.getPhone())
-                .email(userDTOCreate.getEmail())
-                .note(userDTOCreate.getNote())
+                .email(userDTOCreate.getEmail().trim())
+                .note(userDTOCreate.getNote().trim())
                 .active(true)
                 .userType(UserType.builder().id(userDTOCreate.getUserTypeId()).build()).build();
     }

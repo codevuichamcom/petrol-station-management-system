@@ -31,8 +31,8 @@ public class StationMapper {
     public static Station toStation(StationDTOCreate stationDTOCreate) {
         if (stationDTOCreate == null) return null;
         return Station.builder()
-                .name(stationDTOCreate.getName())
-                .address(stationDTOCreate.getAddress())
+                .name(stationDTOCreate.getName().trim())
+                .address(stationDTOCreate.getAddress().trim())
                 .longitude(stationDTOCreate.getLongitude())
                 .latitude(stationDTOCreate.getLatitude())
                 .build();

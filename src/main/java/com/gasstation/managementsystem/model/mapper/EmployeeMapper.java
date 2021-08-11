@@ -29,9 +29,9 @@ public class EmployeeMapper {
     public static Employee toEmployee(EmployeeDTOCreate employeeDTOCreate) {
         if (employeeDTOCreate == null) return null;
         return Employee.builder()
-                .name(employeeDTOCreate.getName())
-                .address(employeeDTOCreate.getAddress())
-                .phone(employeeDTOCreate.getPhone())
+                .name(employeeDTOCreate.getName().trim())
+                .address(employeeDTOCreate.getAddress().trim())
+                .phone(employeeDTOCreate.getPhone().trim())
                 .gender(employeeDTOCreate.getGender())
                 .dateOfBirth(employeeDTOCreate.getDateOfBirth())
                 .identityCardNumber(employeeDTOCreate.getIdentityCardNumber()).build();

@@ -44,9 +44,9 @@ public class CardMapper {
         }
         if (active == null) active = false;
         return Card.builder()
-                .driverPhone(cardDTOCreate.getDriverPhone())
-                .driverName(cardDTOCreate.getDriverName())
-                .licensePlate(cardDTOCreate.getLicensePlate())
+                .driverPhone(cardDTOCreate.getDriverPhone().trim())
+                .driverName(cardDTOCreate.getDriverName().trim())
+                .licensePlate(cardDTOCreate.getLicensePlate().trim())
                 .initialDebt(0d)
                 .availableBalance(0d)
                 .accountsPayable(0d)

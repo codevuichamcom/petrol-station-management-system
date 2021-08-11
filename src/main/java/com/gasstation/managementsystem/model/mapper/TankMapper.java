@@ -25,7 +25,7 @@ public class TankMapper {
     public static Tank toTank(TankDTOCreate tankDTOCreate) {
         if (tankDTOCreate == null) return null;
         return Tank.builder()
-                .name(tankDTOCreate.getName())
+                .name(tankDTOCreate.getName().trim())
                 .volume(tankDTOCreate.getVolume())
                 .remain(0d)
                 .currentPrice(tankDTOCreate.getCurrentPrice())

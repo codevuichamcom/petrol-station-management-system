@@ -11,6 +11,6 @@ import java.util.List;
 
 @Repository
 public interface FuelImportRepository extends JpaRepository<FuelImport, Integer> {
-    @Query(value = "select f from FuelImport f where (f.unitPrice*f.volume-f.amountPaid)>0")
-    List<FuelImport> findAllFuelImport(Sort sort);
+    @Query(value = "select f from FuelImport f inner join f.tank t where t.station.id in (?1)")
+    List<FuelImport> findAllByStationIds(List stationIds, Sort sort);
 }

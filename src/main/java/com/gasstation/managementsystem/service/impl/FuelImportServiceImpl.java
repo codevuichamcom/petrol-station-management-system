@@ -22,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -55,7 +56,22 @@ public class FuelImportServiceImpl implements FuelImportService {
 
     @Override
     public HashMap<String, Object> findAll() {
-        return listFuelImportToMap(fuelImportRepository.findAllFuelImport(Sort.by(Sort.Direction.DESC, "id")));
+        User userLoggedIn = userHelper.getUserLogin();
+        UserType userType = userLoggedIn.getUserType();
+        List<FuelImport> fuelImportList = new ArrayList<>();
+        switch (userType.getId()) {
+            case UserType.ADMIN:
+                fuelImportList = fuelImportRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+                break;
+            case UserType.OWNER:
+                List<Station> stationList = userLoggedIn.getStationList();
+                List<Integer> stationIds = new ArrayList<>();
+                for (Station station : stationList) {
+                    stationIds.add(station.getId());
+                }
+                fuelImportList = fuelImportRepository.findAllByStationIds(stationIds, Sort.by(Sort.Direction.DESC, "id"));
+        }
+        return listFuelImportToMap(fuelImportList);
     }
 
     @Override

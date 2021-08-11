@@ -114,7 +114,7 @@ public class FuelImportServiceImpl implements FuelImportService {
         Double amountPaid = fuelImportDTOCreate.getAmountPaid();
         String reasonPayExpense = fuelImportDTOCreate.getReason();
         if (amountPaid != null) {
-            reasonPayExpense += fuelImport.getId() + "}";
+            reasonPayExpense += fuelImport.getId() + ")";
             addExpense(amountPaid, reasonPayExpense, fuelImport);
         }
         return FuelImportMapper.toFuelImportDTO(fuelImport);

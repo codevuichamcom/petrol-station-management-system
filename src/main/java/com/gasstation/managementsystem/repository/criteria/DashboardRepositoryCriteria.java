@@ -53,8 +53,9 @@ public class DashboardRepositoryCriteria {
                 "               inner join pump_tbl pt on pt.id = pst.pump_id\n" +
                 "               inner join tank_tbl t on t.id = pt.tank_id\n" +
                 "               inner join fuel_tbl ft on ft.id = t.fuel_id\n" +
-                "      where tt.card_id is null\n" +
-                "         or (tt.id in (select receipt_tbl.transaction_id from receipt_tbl))\n" +
+                "      where (tt.card_id is null\n" +
+                "         or (tt.id in (select receipt_tbl.transaction_id from receipt_tbl)))\n" +
+                "          (####)\n" +
                 "      group by ft.id) as total_cash_tbl\n" +
                 "     on total_revenue_tbl.fuel_id = total_cash_tbl.fuel_id\n" +
                 "         left join\n" +
@@ -66,10 +67,13 @@ public class DashboardRepositoryCriteria {
                 "               inner join pump_tbl pt on pt.id = pst.pump_id\n" +
                 "               inner join tank_tbl t on t.id = pt.tank_id\n" +
                 "               inner join fuel_tbl ft on ft.id = t.fuel_id\n" +
+                "           (#####)\n" +
                 "      group by ft.id) as total_debt_tbl\n" +
                 "     on total_revenue_tbl.fuel_id = total_debt_tbl.fuel_id";
         if (filter.getStationIds() != null && filter.getStationIds().length > 0) {
             str = str.replace("(###)", "and tt.station_id in (:stationIds)");
+            str = str.replace("(####)", "and t.station_id in (:stationIds)");
+            str = str.replace("(#####)", "where t.station_id in (:stationIds)");
         } else {
             str = str.replace("(###)", "");
         }

@@ -2,7 +2,6 @@ package com.gasstation.managementsystem.model.dto.fuel;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,5 +13,4 @@ public class FuelDTOUpdate {
     @Schema(example = "Lít")
     private String unit;
     private Double price;
-    private String type;
 }

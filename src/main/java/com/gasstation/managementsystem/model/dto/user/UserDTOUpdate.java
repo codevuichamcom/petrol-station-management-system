@@ -5,8 +5,8 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Positive;
 import java.util.Objects;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -48,15 +48,13 @@ public class UserDTOUpdate {
 
     private Boolean active;
 
-    @Positive(message = "User type id is positive integer")
-    private Integer userTypeId;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserDTOUpdate that = (UserDTOUpdate) o;
-        return Objects.equals(password, that.password) && Objects.equals(identityCardNumber, that.identityCardNumber) && Objects.equals(name, that.name) && Objects.equals(gender, that.gender) && Objects.equals(dateOfBirth, that.dateOfBirth) && Objects.equals(address, that.address) && Objects.equals(phone, that.phone) && Objects.equals(email, that.email) && Objects.equals(note, that.note) && Objects.equals(active, that.active) && Objects.equals(userTypeId, that.userTypeId);
+        return Objects.equals(password, that.password) && Objects.equals(identityCardNumber, that.identityCardNumber) && Objects.equals(name, that.name) && Objects.equals(gender, that.gender) && Objects.equals(dateOfBirth, that.dateOfBirth) && Objects.equals(address, that.address) && Objects.equals(phone, that.phone) && Objects.equals(email, that.email) && Objects.equals(note, that.note) && Objects.equals(active, that.active);
     }
 
 }

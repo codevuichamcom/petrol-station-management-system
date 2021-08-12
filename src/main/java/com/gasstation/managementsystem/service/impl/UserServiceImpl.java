@@ -132,14 +132,6 @@ public class UserServiceImpl implements UserService {
         checkDuplicateField(null, identityCardNumber, phone, email);
 
         UserMapper.copyToUser(oldUser, userDTOUpdate);
-        if (userDTOUpdate.getUserTypeId() != null) {
-            if (userDTOUpdate.getUserTypeId() == UserType.ADMIN) {
-                throw new CustomBadRequestException(CustomError.builder()
-                        .code("forbidden").field("userType").message("Can't create user with type Admin").build());
-            }
-            UserType userType = optionalValidate.getUserTypeById(userDTOUpdate.getUserTypeId());
-            oldUser.setUserType(userType);
-        }
         if (userDTOUpdate.getPassword() != null) {
             oldUser.setPassword(bcryptEncoder.encode(userDTOUpdate.getPassword()));
         }

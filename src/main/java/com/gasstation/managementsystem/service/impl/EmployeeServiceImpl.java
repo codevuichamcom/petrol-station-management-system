@@ -100,10 +100,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         checkDuplicate(phone, identityCardNumber);
         EmployeeMapper.copyNonNullToEmployee(oldEmployee, employeeDTOUpdate);
-        if (employeeDTOUpdate.getStationId() != null) {
-            Station station = optionalValidate.getStationById(employeeDTOUpdate.getStationId());
-            oldEmployee.setStation(station);
-        }
         trimString(oldEmployee);
         oldEmployee = employeeRepository.save(oldEmployee);
         return EmployeeMapper.toEmployeeDTO(oldEmployee);

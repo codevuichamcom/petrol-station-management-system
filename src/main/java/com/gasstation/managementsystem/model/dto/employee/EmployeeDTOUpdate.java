@@ -22,5 +22,4 @@ public class EmployeeDTOUpdate {
     @Schema(example = "123456789", description = "Identity card number is composed of 9, 10, 12 or 13 digits")
     @Pattern(regexp = "^[0-9]{9}|[0-9]{10}|[0-9]{12}|[0-9]{13}$", message = "Identity card number is composed of 9, 10, 12 or 13 digits")
     private String identityCardNumber;
-    private Integer stationId;
 }

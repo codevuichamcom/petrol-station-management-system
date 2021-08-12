@@ -10,6 +10,7 @@ import com.gasstation.managementsystem.repository.ShiftRepository;
 import com.gasstation.managementsystem.service.ShiftService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -48,14 +49,20 @@ public class ShiftServiceImpl implements ShiftService {
     public ShiftDTO create(ShiftDTOCreate shiftDTOCreate) throws CustomNotFoundException {
         Shift shift = ShiftMapper.toShift(shiftDTOCreate);
         shift.setStation(optionalValidate.getStationById(shiftDTOCreate.getStationId()));
+        trimString(shift);
         shift = shiftRepository.save(shift);
         return ShiftMapper.toShiftDTO(shift);
+    }
+
+    private void trimString(Shift shift) {
+        shift.setName(StringUtils.trim(shift.getName()));
     }
 
     @Override
     public ShiftDTO update(int id, ShiftDTOUpdate shiftDTOUpdate) throws CustomNotFoundException {
         Shift shift = optionalValidate.getShiftById(id);
         ShiftMapper.copyNonNullToShift(shift, shiftDTOUpdate);
+        trimString(shift);
         shift = shiftRepository.save(shift);
         return ShiftMapper.toShiftDTO(shift);
     }

@@ -15,6 +15,7 @@ import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,8 +85,13 @@ public class TankServiceImpl implements TankService {
         Tank tank = TankMapper.toTank(tankDTOCreate);
         tank.setStation(station);
         tank.setFuel(fuel);
+        trimString(tank);
         tankRepository.save(tank);
         return TankMapper.toTankDTO(tank);
+    }
+
+    private void trimString(Tank tank) {
+        tank.setName(StringUtils.trim(tank.getName()));
     }
 
     private void checkDuplicate(String name, Integer stationId) throws CustomDuplicateFieldException {
@@ -122,6 +128,7 @@ public class TankServiceImpl implements TankService {
             Fuel fuel = optionalValidate.getFuelById(tankDTOUpdate.getFuelId());
             oldTank.setFuel(fuel);
         }
+        trimString(oldTank);
         oldTank = tankRepository.save(oldTank);
         if (newPrice != null && newPrice != oldPrice) {
             User editor = userHelper.getUserLogin();

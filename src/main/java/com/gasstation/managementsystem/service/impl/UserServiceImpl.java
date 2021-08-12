@@ -14,6 +14,7 @@ import com.gasstation.managementsystem.repository.UserRepository;
 import com.gasstation.managementsystem.service.UserService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -98,7 +99,16 @@ public class UserServiceImpl implements UserService {
         user.setUserType(userType);
         user.setPassword(bcryptEncoder.encode(userDTOCreate.getPassword()));
         user = userRepository.save(user);
+        trimString(user);
         return UserMapper.toUserDTO(user);
+    }
+
+    private void trimString(User user) {
+        user.setUsername(StringUtils.trim(user.getUsername()));
+        user.setName(StringUtils.trim(user.getName()));
+        user.setAddress(StringUtils.trim(user.getAddress()));
+        user.setEmail(StringUtils.trim(user.getEmail()));
+        user.setNote(StringUtils.trim(user.getNote()));
     }
 
     @Override
@@ -133,6 +143,7 @@ public class UserServiceImpl implements UserService {
         if (userDTOUpdate.getPassword() != null) {
             oldUser.setPassword(bcryptEncoder.encode(userDTOUpdate.getPassword()));
         }
+        trimString(oldUser);
         oldUser = userRepository.save(oldUser);
         return UserMapper.toUserDTO(oldUser);
     }

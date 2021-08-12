@@ -52,8 +52,8 @@ public class PumpMapper {
     public static Pump toPump(PumpDTOCreate pumpDTOCreate) {
         if (pumpDTOCreate == null) return null;
         return Pump.builder()
-                .name(pumpDTOCreate.getName().trim())
-                .note(pumpDTOCreate.getNote().trim()).build();
+                .name(pumpDTOCreate.getName())
+                .note(pumpDTOCreate.getNote()).build();
     }
 
     public static void copyNonNullToFuel(Pump pump, PumpDTOUpdate pumpDTOUpdate) {

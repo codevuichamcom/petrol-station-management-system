@@ -16,6 +16,7 @@ import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -120,6 +121,7 @@ public class FuelImportServiceImpl implements FuelImportService {
         User creator = userHelper.getUserLogin();
         fuelImport.setCreator(creator);
         fuelImport.setFuel(optionalValidate.getFuelById(fuelImportDTOCreate.getFuelId()));
+        trimString(fuelImport);
         fuelImport = fuelImportRepository.save(fuelImport);
         Double amountPaid = fuelImportDTOCreate.getAmountPaid();
         String reasonPayExpense = fuelImportDTOCreate.getReason();
@@ -130,6 +132,11 @@ public class FuelImportServiceImpl implements FuelImportService {
             addExpense(amountPaid, reasonPayExpense, fuelImport);
         }
         return FuelImportMapper.toFuelImportDTO(fuelImport);
+    }
+
+    private void trimString(FuelImport fuelImport) {
+        fuelImport.setName(StringUtils.trim(fuelImport.getName()));
+        fuelImport.setNote(StringUtils.trim(fuelImport.getNote()));
     }
 
     @Override
@@ -147,6 +154,7 @@ public class FuelImportServiceImpl implements FuelImportService {
 
         Double accountsPayable = fuelImportDTOUpdate.getAccountsPayable();
         String reasonPayExpense = fuelImportDTOUpdate.getReason();
+        trimString(oldFuelImport);
         oldFuelImport = fuelImportRepository.save(oldFuelImport);
         if (fuelImportDTOUpdate.getAccountsPayable() != null) {
             addExpense(accountsPayable, reasonPayExpense, oldFuelImport);
@@ -164,7 +172,7 @@ public class FuelImportServiceImpl implements FuelImportService {
         Station station = fuelImport.getTank().getStation();
         Expense expense = Expense.builder()
                 .amount(amount)
-                .reason(reasonPayExpense)
+                .reason(StringUtils.trim(reasonPayExpense))
                 .station(station)
                 .fuelImport(fuelImport)
                 .createdDate(DateTimeHelper.getCurrentDate())

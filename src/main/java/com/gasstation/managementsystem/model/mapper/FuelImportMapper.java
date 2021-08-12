@@ -56,14 +56,14 @@ public class FuelImportMapper {
     public static FuelImport toFuelImport(FuelImportDTOCreate fuelImportDTOCreate) {
         if (fuelImportDTOCreate == null) return null;
         return FuelImport.builder()
-                .name(fuelImportDTOCreate.getName().trim())
+                .name(fuelImportDTOCreate.getName())
                 .createdDate(DateTimeHelper.getCurrentDate())
                 .importDate(fuelImportDTOCreate.getImportDate())
                 .volume(fuelImportDTOCreate.getVolume())
                 .unitPrice(fuelImportDTOCreate.getUnitPrice())
                 .amountPaid(fuelImportDTOCreate.getAmountPaid())
                 .vatPercent(fuelImportDTOCreate.getVatPercent())
-                .note(fuelImportDTOCreate.getNote().trim())
+                .note(fuelImportDTOCreate.getNote())
                 .build();
     }
 

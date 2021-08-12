@@ -16,6 +16,7 @@ import com.gasstation.managementsystem.service.PumpService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -87,7 +88,13 @@ public class PumpServiceImpl implements PumpService {
         Tank tank = optionalValidate.getTankById(pumpDTOCreate.getTankId());
         pump.setTank(tank);
         pump = pumpRepository.save(pump);
+        trimString(pump);
         return PumpMapper.toPumpDTO(pump);
+    }
+
+    private void trimString(Pump pump) {
+        pump.setName(StringUtils.trim(pump.getName()));
+        pump.setNote(StringUtils.trim(pump.getNote()));
     }
 
     private void needCheckDuplicate(String name, Integer tankId) throws CustomDuplicateFieldException {
@@ -113,6 +120,7 @@ public class PumpServiceImpl implements PumpService {
             Tank tank = optionalValidate.getTankById(tankId);
             oldPump.setTank(tank);
         }
+        trimString(oldPump);
         oldPump = pumpRepository.save(oldPump);
         return PumpMapper.toPumpDTO(oldPump);
     }

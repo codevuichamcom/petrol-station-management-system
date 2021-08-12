@@ -13,6 +13,7 @@ import com.gasstation.managementsystem.service.ExpenseService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -52,8 +53,13 @@ public class ExpenseServiceImpl implements ExpenseService {
             expense.setFuelImport(optionalValidate.getFuelImportById(expenseDTOCreate.getFuelImportId()));
         }
         expense.setCreator(userHelper.getUserLogin());
+        trimString(expense);
         expense = expenseRepository.save(expense);
         return ExpenseMapper.toExpenseDTO(expense);
+    }
+
+    private void trimString(Expense expense) {
+        expense.setReason(StringUtils.trim(expense.getReason()));
     }
 
     @Override
@@ -68,6 +74,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         if (fuelImportId != null) {
             oldExpense.setFuelImport(optionalValidate.getFuelImportById(fuelImportId));
         }
+        trimString(oldExpense);
         oldExpense = expenseRepository.save(oldExpense);
         return ExpenseMapper.toExpenseDTO(oldExpense);
     }

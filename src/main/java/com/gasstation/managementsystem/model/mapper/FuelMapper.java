@@ -21,10 +21,10 @@ public class FuelMapper {
     public static Fuel toFuel(FuelDTOCreate fuelDTOCreate) {
         if (fuelDTOCreate == null) return null;
         return Fuel.builder()
-                .name(fuelDTOCreate.getName().trim())
+                .name(fuelDTOCreate.getName())
                 .unit(fuelDTOCreate.getUnit())
                 .price(fuelDTOCreate.getPrice())
-                .type(fuelDTOCreate.getType().trim()).build();
+                .type(fuelDTOCreate.getType()).build();
     }
 
     public static void copyNonNullToFuel(Fuel fuel, FuelDTOUpdate fuelDTOUpdate) {

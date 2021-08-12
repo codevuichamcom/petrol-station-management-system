@@ -16,6 +16,7 @@ import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,8 +64,14 @@ public class CardServiceImpl implements CardService {
         if (cardDTOCreate.getCustomerId() != null) {
             card.setCustomer(optionalValidate.getUserById(cardDTOCreate.getCustomerId()));
         }
+        trimString(card);
         card = cardRepository.save(card);
         return CardMapper.toCardDTO(card);
+    }
+
+    private void trimString(Card card) {
+        card.setDriverName(StringUtils.trim(card.getDriverName()));
+        card.setLicensePlate(StringUtils.trim(card.getLicensePlate()));
     }
 
     private void checkDuplicate(String licensePalate) throws CustomDuplicateFieldException {
@@ -94,6 +101,7 @@ public class CardServiceImpl implements CardService {
         if (customerId != null && oldCard.getCustomer() == null) {
             oldCard.setCustomer(optionalValidate.getUserById(customerId));
         }
+        trimString(oldCard);
         oldCard = cardRepository.save(oldCard);
         return CardMapper.toCardDTO(oldCard);
     }

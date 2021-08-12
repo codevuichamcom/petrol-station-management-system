@@ -33,7 +33,7 @@ public class ShiftMapper {
     public static Shift toShift(ShiftDTOCreate shiftDTOCreate) {
         if (shiftDTOCreate == null) return null;
         return Shift.builder()
-                .name(shiftDTOCreate.getName().trim())
+                .name(shiftDTOCreate.getName())
                 .startTime(DateTimeHelper.toMilliSecond(shiftDTOCreate.getStartTime()))
                 .endTime(DateTimeHelper.toMilliSecond(shiftDTOCreate.getEndTime())).build();
     }

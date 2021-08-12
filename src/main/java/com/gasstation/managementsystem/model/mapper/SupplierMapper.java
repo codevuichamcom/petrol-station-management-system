@@ -22,10 +22,10 @@ public class SupplierMapper {
     public static Supplier toSupplier(SupplierDTOCreate supplierDTOCreate) {
         if (supplierDTOCreate == null) return null;
         return Supplier.builder()
-                .name(supplierDTOCreate.getName().trim())
-                .phone(supplierDTOCreate.getPhone().trim())
-                .address(supplierDTOCreate.getAddress().trim())
-                .note(supplierDTOCreate.getNote().trim()).build();
+                .name(supplierDTOCreate.getName())
+                .phone(supplierDTOCreate.getPhone())
+                .address(supplierDTOCreate.getAddress())
+                .note(supplierDTOCreate.getNote()).build();
     }
 
     public static void copyNonNullToSupplier(Supplier supplier, SupplierDTOUpdate supplierDTOUpdate) {

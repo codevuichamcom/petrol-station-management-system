@@ -12,6 +12,7 @@ import com.gasstation.managementsystem.repository.FuelRepository;
 import com.gasstation.managementsystem.service.FuelService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,8 +50,13 @@ public class FuelServiceImpl implements FuelService {
     public FuelDTO create(FuelDTOCreate fuelDTOCreate) throws CustomDuplicateFieldException {
         checkDuplicate(fuelDTOCreate.getName());
         Fuel fuel = FuelMapper.toFuel(fuelDTOCreate);
+        trimString(fuel);
         fuel = fuelRepository.save(fuel);
         return FuelMapper.toFuelDTO(fuel);
+    }
+
+    private void trimString(Fuel fuel) {
+        fuel.setName(StringUtils.trim(fuel.getName()));
     }
 
     private void checkDuplicate(String name) throws CustomDuplicateFieldException {
@@ -72,6 +78,7 @@ public class FuelServiceImpl implements FuelService {
         }
         checkDuplicate(name);
         FuelMapper.copyNonNullToFuel(oldFuel, fuelDTOUpdate);
+        trimString(oldFuel);
         oldFuel = fuelRepository.save(oldFuel);
         return FuelMapper.toFuelDTO(oldFuel);
     }

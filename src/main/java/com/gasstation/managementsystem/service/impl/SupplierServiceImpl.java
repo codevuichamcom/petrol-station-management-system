@@ -12,6 +12,7 @@ import com.gasstation.managementsystem.repository.SupplierRepository;
 import com.gasstation.managementsystem.service.SupplierService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -48,8 +49,15 @@ public class SupplierServiceImpl implements SupplierService {
     public SupplierDTO create(SupplierDTOCreate supplierDTOCreate) throws CustomDuplicateFieldException {
         checkDuplicate(supplierDTOCreate.getPhone());
         Supplier supplier = SupplierMapper.toSupplier(supplierDTOCreate);
+        trimString(supplier);
         supplier = supplierRepository.save(supplier);
         return SupplierMapper.toSupplierDTO(supplier);
+    }
+
+    private void trimString(Supplier supplier) {
+        supplier.setName(StringUtils.trim(supplier.getName()));
+        supplier.setAddress(StringUtils.trim(supplier.getAddress()));
+        supplier.setNote(StringUtils.trim(supplier.getNote()));
     }
 
     private void checkDuplicate(String phone) throws CustomDuplicateFieldException {
@@ -70,6 +78,7 @@ public class SupplierServiceImpl implements SupplierService {
         }
         checkDuplicate(phone);
         SupplierMapper.copyNonNullToSupplier(oldSupplier, supplierDTOUpdate);
+        trimString(oldSupplier);
         oldSupplier = supplierRepository.save(oldSupplier);
         return SupplierMapper.toSupplierDTO(oldSupplier);
     }

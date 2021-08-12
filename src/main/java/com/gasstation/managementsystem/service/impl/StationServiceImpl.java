@@ -17,6 +17,7 @@ import com.gasstation.managementsystem.service.StationService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -90,8 +91,14 @@ public class StationServiceImpl implements StationService {
         Station station = StationMapper.toStation(stationDTOCreate);
         User owner = validateOwner(stationDTOCreate.getOwnerId());
         station.setOwner(owner);
+        trimString(station);
         station = stationRepository.save(station);
         return StationMapper.toStationDTO(station);
+    }
+
+    private void trimString(Station station) {
+        station.setName(StringUtils.trim(station.getName()));
+        station.setAddress(StringUtils.trim(station.getAddress()));
     }
 
     private void checkDuplicate(String name, String address) throws CustomDuplicateFieldException {
@@ -120,6 +127,7 @@ public class StationServiceImpl implements StationService {
             User owner = validateOwner(stationDTOUpdate.getOwnerId());
             oldStation.setOwner(owner);
         }
+        trimString(oldStation);
         oldStation = stationRepository.save(oldStation);
         return StationMapper.toStationDTO(oldStation);
     }

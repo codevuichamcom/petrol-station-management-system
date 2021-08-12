@@ -13,6 +13,7 @@ import com.gasstation.managementsystem.repository.EmployeeRepository;
 import com.gasstation.managementsystem.service.EmployeeService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,8 +59,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = EmployeeMapper.toEmployee(employeeDTOCreate);
         Station station = optionalValidate.getStationById(employeeDTOCreate.getStationId());
         employee.setStation(station);
+        trimString(employee);
         employee = employeeRepository.save(employee);
         return EmployeeMapper.toEmployeeDTO(employee);
+    }
+
+    private void trimString(Employee employee) {
+        employee.setName(StringUtils.trim(employee.getName()));
+        employee.setAddress(StringUtils.trim(employee.getAddress()));
     }
 
     private void checkDuplicate(String phone, String identityCardNumber) throws CustomDuplicateFieldException {
@@ -97,6 +104,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             Station station = optionalValidate.getStationById(employeeDTOUpdate.getStationId());
             oldEmployee.setStation(station);
         }
+        trimString(oldEmployee);
         oldEmployee = employeeRepository.save(oldEmployee);
         return EmployeeMapper.toEmployeeDTO(oldEmployee);
     }

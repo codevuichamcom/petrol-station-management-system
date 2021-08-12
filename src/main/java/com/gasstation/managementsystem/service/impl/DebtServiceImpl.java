@@ -15,6 +15,7 @@ import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,7 +61,7 @@ public class DebtServiceImpl implements DebtService {
             Receipt receipt = Receipt.builder()
                     .amount(amount)
                     .createdDate(DateTimeHelper.getCurrentDate())
-                    .reason(debtDTOPay.getReason())
+                    .reason(StringUtils.trim(debtDTOPay.getReason()))
                     .card(card)
                     .transaction(transaction)
                     .creator(creator).build();

@@ -83,9 +83,9 @@ public class PumpServiceImpl implements PumpService {
 
     @Override
     public PumpDTO create(PumpDTOCreate pumpDTOCreate) throws CustomNotFoundException, CustomDuplicateFieldException {
-        needCheckDuplicate(pumpDTOCreate.getName(), pumpDTOCreate.getTankId());
-        Pump pump = PumpMapper.toPump(pumpDTOCreate);
         Tank tank = optionalValidate.getTankById(pumpDTOCreate.getTankId());
+        checkDuplicate(pumpDTOCreate.getName(), tank.getStation().getId());
+        Pump pump = PumpMapper.toPump(pumpDTOCreate);
         pump.setTank(tank);
         pump = pumpRepository.save(pump);
         trimString(pump);
@@ -97,12 +97,13 @@ public class PumpServiceImpl implements PumpService {
         pump.setNote(StringUtils.trim(pump.getNote()));
     }
 
-    private void needCheckDuplicate(String name, Integer tankId) throws CustomDuplicateFieldException {
-        if (name == null || tankId == null) return;
-        Optional<Pump> pumpOptional = pumpRepository.findByNameAndTankId(name, tankId);
-        if (pumpOptional.isPresent()) {
-            throw new CustomDuplicateFieldException(CustomError.builder()
-                    .code("duplicate").field("(name,tankId)").message("Name and tankId is duplicate").table("pump_table").build());
+    private void checkDuplicate(String name, Integer stationId) throws CustomDuplicateFieldException {
+        if (name != null && stationId != null) {
+            Optional<Pump> pumpOptional = pumpRepository.findByNameAndStationId(name, stationId);
+            if (pumpOptional.isPresent()) {
+                throw new CustomDuplicateFieldException(CustomError.builder()
+                        .code("duplicate").field("(name,stationId)").message("Name and stationId is duplicate").table("pump_table").build());
+            }
         }
     }
 
@@ -110,24 +111,18 @@ public class PumpServiceImpl implements PumpService {
     public PumpDTO update(int id, PumpDTOUpdate pumpDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         Pump oldPump = optionalValidate.getPumpById(id);
         String name = pumpDTOUpdate.getName();
-        Integer tankId = pumpDTOUpdate.getTankId();
 
-        if (needCheckDuplicate(name, tankId, oldPump)) {
-            needCheckDuplicate(name, tankId);
+        if (needCheckDuplicate(name, oldPump)) {
+            checkDuplicate(name, oldPump.getTank().getStation().getId());
         }
         PumpMapper.copyNonNullToFuel(oldPump, pumpDTOUpdate);
-        if (tankId != null) {
-            Tank tank = optionalValidate.getTankById(tankId);
-            oldPump.setTank(tank);
-        }
         trimString(oldPump);
         oldPump = pumpRepository.save(oldPump);
         return PumpMapper.toPumpDTO(oldPump);
     }
 
-    private boolean needCheckDuplicate(String name, Integer tankId, Pump oldPump) {
-        if (name == null || tankId == null || oldPump.getTank() == null) return false;
-        return !name.equalsIgnoreCase(oldPump.getName()) || !tankId.equals(oldPump.getTank().getId());
+    private boolean needCheckDuplicate(String name, Pump oldPump) {
+        return (name != null && !name.equalsIgnoreCase(oldPump.getName()));
     }
 
     @Override

@@ -108,26 +108,12 @@ public class TankServiceImpl implements TankService {
     public TankDTO update(int id, TankDTOUpdate tankDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         Tank oldTank = optionalValidate.getTankById(id);
         String name = tankDTOUpdate.getName();
-        Integer stationId = tankDTOUpdate.getStationId();
-        if (name != null && name.equals(oldTank.getName())) {
-            name = null;
+        if (needCheckDuplicate(name, oldTank)) {
+            checkDuplicate(name, oldTank.getStation().getId());
         }
-        if (stationId != null && oldTank.getStation() != null
-                && !stationId.equals(oldTank.getStation().getId())) {
-            stationId = null;
-        }
-        checkDuplicate(name, stationId);
         Double newPrice = tankDTOUpdate.getCurrentPrice();
         double oldPrice = oldTank.getCurrentPrice();
         TankMapper.copyNonNullToTank(oldTank, tankDTOUpdate);
-        if (tankDTOUpdate.getStationId() != null) {
-            Station station = optionalValidate.getStationById(tankDTOUpdate.getStationId());
-            oldTank.setStation(station);
-        }
-        if (tankDTOUpdate.getFuelId() != null) {
-            Fuel fuel = optionalValidate.getFuelById(tankDTOUpdate.getFuelId());
-            oldTank.setFuel(fuel);
-        }
         trimString(oldTank);
         oldTank = tankRepository.save(oldTank);
         if (newPrice != null && newPrice != oldPrice) {
@@ -143,6 +129,10 @@ public class TankServiceImpl implements TankService {
         }
 
         return TankMapper.toTankDTO(oldTank);
+    }
+
+    private boolean needCheckDuplicate(String name, Tank oldTank) {
+        return name != null && !name.equals(oldTank.getName());
     }
 
 

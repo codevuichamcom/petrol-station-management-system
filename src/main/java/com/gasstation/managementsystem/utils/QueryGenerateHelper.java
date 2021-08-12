@@ -65,6 +65,7 @@ public class QueryGenerateHelper {
     }
 
     public QueryGenerateHelper between(String field, Double min, Double max) {
+        if (min == null || max == null) return this;
         query
                 .append(" AND ")
                 .append(field)
@@ -77,6 +78,7 @@ public class QueryGenerateHelper {
     }
 
     public QueryGenerateHelper between(String field, Long min, Long max) {
+        if (min == null || max == null) return this;
         query
                 .append(" AND ")
                 .append(field)

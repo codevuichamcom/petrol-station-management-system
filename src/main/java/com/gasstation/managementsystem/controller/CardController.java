@@ -38,6 +38,10 @@ public class CardController {
         CardDTOFilter filter = CardDTOFilter.builder()
                 .pageIndex(pageIndex)
                 .pageSize(pageSize)
+                .accountsPayableFrom(accountsPayableFrom)
+                .accountsPayableTo(accountsPayableTo)
+                .availableBalanceFrom(availableBalanceFrom)
+                .availableBalanceTo(availableBalanceTo)
                 .statuses(statuses)
                 .customerName(customerName).build();
         return cardService.findAll(filter);

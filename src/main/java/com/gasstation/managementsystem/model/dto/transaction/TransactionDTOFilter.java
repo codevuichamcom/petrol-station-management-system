@@ -13,8 +13,10 @@ public class TransactionDTOFilter {
     private Integer[] pumpIds;
     private Integer[] shiftIds;
     private Integer[] stationIds;
-    private Long time;
-    private Double unitPrice;
-    private Double volume;
-    private Double totalAmount;
+    private Long timeFrom;
+    private Long timeTo;
+    private Double unitPriceFrom;
+    private Double unitPriceTo;
+    private Double volumeFrom;
+    private Double volumeTo;
 }

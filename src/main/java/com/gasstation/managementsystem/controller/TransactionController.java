@@ -30,9 +30,12 @@ public class TransactionController {
                                           @RequestParam(name = "pumpIds", required = false) Integer[] pumpIds,
                                           @RequestParam(name = "shiftIds", required = false) Integer[] shiftIds,
                                           @RequestParam(name = "stationIds", required = false) Integer[] stationIds,
-                                          @RequestParam(name = "time", required = false) Long time,
-                                          @RequestParam(name = "unitPrice", required = false) Double unitPrice,
-                                          @RequestParam(name = "volume", required = false) Double volume,
+                                          @RequestParam(name = "timeFrom", required = false) Long timeFrom,
+                                          @RequestParam(name = "timeTo", required = false) Long timeTo,
+                                          @RequestParam(name = "unitPriceFrom", required = false) Double unitPriceFrom,
+                                          @RequestParam(name = "unitPriceTo", required = false) Double unitPriceTo,
+                                          @RequestParam(name = "volumeFrom", required = false) Double volumeFrom,
+                                          @RequestParam(name = "volumeTo", required = false) Double volumeTo,
                                           @RequestParam(name = "totalAmount", required = false) Double totalAmount) {
         TransactionDTOFilter transactionDTOFilter = TransactionDTOFilter.builder()
                 .pageIndex(pageIndex)
@@ -40,10 +43,12 @@ public class TransactionController {
                 .pumpIds(pumpIds)
                 .shiftIds(shiftIds)
                 .stationIds(stationIds)
-                .time(time)
-                .unitPrice(unitPrice)
-                .volume(volume)
-                .totalAmount(totalAmount).build();
+                .timeFrom(timeFrom)
+                .timeTo(timeTo)
+                .unitPriceFrom(unitPriceFrom)
+                .unitPriceTo(unitPriceTo)
+                .volumeFrom(volumeFrom)
+                .volumeTo(volumeTo).build();
         return transactionService.findAll(transactionDTOFilter);
     }
 

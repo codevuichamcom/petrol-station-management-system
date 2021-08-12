@@ -76,6 +76,8 @@ public class DashboardRepositoryCriteria {
             str = str.replace("(#####)", "where t.station_id in (:stationIds)");
         } else {
             str = str.replace("(###)", "");
+            str = str.replace("(####)", "");
+            str = str.replace("(#####)", "");
         }
         Query nativeQuery = em.createNativeQuery(str);
         nativeQuery.setParameter("startTime", filter.getStartTime());

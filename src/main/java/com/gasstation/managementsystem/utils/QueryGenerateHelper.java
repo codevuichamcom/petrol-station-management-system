@@ -65,15 +65,18 @@ public class QueryGenerateHelper {
     }
 
     public QueryGenerateHelper between(String field, Double min, Double max) {
-        if (min == null || max == null) return this;
-        query
-                .append(" AND ")
-                .append(field)
-                .append(" BETWEEN ")
-                .append(min)
-                .append(" AND ")
-                .append(max)
-                .append(" ");
+        if (min != null) {
+            query.append(" AND ")
+                    .append(field)
+                    .append(" >= ")
+                    .append(min);
+        }
+        if (max != null) {
+            query.append(" AND ")
+                    .append(field)
+                    .append(" <= ")
+                    .append(max);
+        }
         return this;
     }
 

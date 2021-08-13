@@ -27,28 +27,31 @@ public class TransactionController {
     @GetMapping("/transactions")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
                                           @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-                                          @RequestParam(name = "pumpIds", required = false) Integer[] pumpIds,
-                                          @RequestParam(name = "shiftIds", required = false) Integer[] shiftIds,
-                                          @RequestParam(name = "stationIds", required = false) Integer[] stationIds,
                                           @RequestParam(name = "timeFrom", required = false) Long timeFrom,
                                           @RequestParam(name = "timeTo", required = false) Long timeTo,
                                           @RequestParam(name = "unitPriceFrom", required = false) Double unitPriceFrom,
                                           @RequestParam(name = "unitPriceTo", required = false) Double unitPriceTo,
                                           @RequestParam(name = "volumeFrom", required = false) Double volumeFrom,
                                           @RequestParam(name = "volumeTo", required = false) Double volumeTo,
-                                          @RequestParam(name = "totalAmount", required = false) Double totalAmount) {
+                                          @RequestParam(name = "amountFrom", required = false) Double amountFrom,
+                                          @RequestParam(name = "amountTo", required = false) Double amountTo,
+                                          @RequestParam(name = "pumpName", required = false) String pumpName,
+                                          @RequestParam(name = "shiftName", required = false) String shiftName,
+                                          @RequestParam(name = "stationName", required = false) String stationName) {
         TransactionDTOFilter transactionDTOFilter = TransactionDTOFilter.builder()
                 .pageIndex(pageIndex)
                 .pageSize(pageSize)
-                .pumpIds(pumpIds)
-                .shiftIds(shiftIds)
-                .stationIds(stationIds)
                 .timeFrom(timeFrom)
                 .timeTo(timeTo)
                 .unitPriceFrom(unitPriceFrom)
                 .unitPriceTo(unitPriceTo)
                 .volumeFrom(volumeFrom)
-                .volumeTo(volumeTo).build();
+                .volumeTo(volumeTo)
+                .amountFrom(amountFrom)
+                .amountTo(amountTo)
+                .pumpName(pumpName)
+                .shiftName(shiftName)
+                .stationName(stationName).build();
         return transactionService.findAll(transactionDTOFilter);
     }
 

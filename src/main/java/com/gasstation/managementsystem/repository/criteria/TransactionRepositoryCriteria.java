@@ -21,12 +21,14 @@ public class TransactionRepositoryCriteria {
                 .append("inner join h.pump p inner join p.tank tank where 1=1 ");
         QueryGenerateHelper qHelper = new QueryGenerateHelper();
         qHelper.setQuery(query);
-        qHelper.in("p.id", "pumpIds", filter.getPumpIds())
-                .in("h.shift.id", "shiftIds", filter.getShiftIds())
-                .in("tank.station.id", "stationIds", filter.getStationIds())
+        qHelper
                 .between("t.time", filter.getTimeFrom(), filter.getTimeTo())
                 .between("t.unitPrice", filter.getUnitPriceFrom(), filter.getUnitPriceTo())
-                .between("t.volume", filter.getVolumeFrom(), filter.getVolumeTo());
+                .between("t.volume", filter.getVolumeFrom(), filter.getVolumeTo())
+                .between("t.totalAmount", filter.getAmountFrom(), filter.getAmountTo())
+                .like("p.name", "pumpName", filter.getPumpName())
+                .like("h.shift.name", "shiftName", filter.getShiftName())
+                .like("tank.station.name", "stationName", filter.getStationName());
         String countQuery = qHelper.getQuery().toString().replace("select t", "select count(t.id)");
         Query countTotalQuery = em.createQuery(countQuery);
         String totalVolumeAndAmountQuery = qHelper.getQuery().toString().replace("select t", "select coalesce(sum(t.volume), 0), coalesce(sum(t.totalAmount), 0)");

@@ -29,7 +29,7 @@ public class PumpShiftController {
                                           @RequestParam(name = "closedTimeTo", required = false) Long closedTimeTo,
                                           @RequestParam(name = "shiftName", required = false) String shiftName,
                                           @RequestParam(name = "pumpName", required = false) String pumpName,
-                                          @RequestParam(name = "stationIds", required = false) String stationIds,
+                                          @RequestParam(name = "stationIds", required = false) Integer[] stationIds,
                                           @RequestParam(name = "stationName", required = false) String stationName,
                                           @RequestParam(name = "statuses", required = false) String[] statuses) {
         PumpShiftDTOFilter filter = PumpShiftDTOFilter.builder()

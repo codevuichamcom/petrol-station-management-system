@@ -14,12 +14,14 @@ public class PumpShiftDTOFilter {
     public static final String STATUS_FUTURE = "FUTURE";
     private Integer pageIndex;
     private Integer pageSize;
-    private Long createdDate;
-    private Long closedTime;
-    private Integer[] shiftIds;
-    private Integer[] pumpIds;
+    private Long createdDateFrom;
+    private Long createdDateTo;
+    private Long closedTimeFrom;
+    private Long closedTimeTo;
+    private String shiftName;
+    private String pumpName;
     private Integer[] stationIds;
-    private String executorName;
+    private String stationName;
     private String[] statuses;
 
 }

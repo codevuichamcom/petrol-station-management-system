@@ -23,22 +23,24 @@ public class PumpShiftController {
     @GetMapping("/pump-shifts")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
                                           @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-                                          @RequestParam(name = "createdDate", required = false) Long createdDate,
-                                          @RequestParam(name = "closedTime", required = false) Long closedTime,
-                                          @RequestParam(name = "shiftIds", required = false) Integer[] shiftIds,
-                                          @RequestParam(name = "pumpIds", required = false) Integer[] pumpIds,
-                                          @RequestParam(name = "stationIds", required = false) Integer[] stationIds,
-                                          @RequestParam(name = "executorName", required = false) String executorName,
+                                          @RequestParam(name = "createdDateFrom", required = false) Long createdDateFrom,
+                                          @RequestParam(name = "createdDateTo", required = false) Long createdDateTo,
+                                          @RequestParam(name = "closedTimeFrom", required = false) Long closedTimeFrom,
+                                          @RequestParam(name = "closedTimeTo", required = false) Long closedTimeTo,
+                                          @RequestParam(name = "shiftName", required = false) String shiftName,
+                                          @RequestParam(name = "pumpName", required = false) String pumpName,
+                                          @RequestParam(name = "stationName", required = false) String stationName,
                                           @RequestParam(name = "statuses", required = false) String[] statuses) {
         PumpShiftDTOFilter filter = PumpShiftDTOFilter.builder()
                 .pageIndex(pageIndex)
                 .pageSize(pageSize)
-                .createdDate(createdDate)
-                .closedTime(closedTime)
-                .shiftIds(shiftIds)
-                .pumpIds(pumpIds)
-                .stationIds(stationIds)
-                .executorName(executorName)
+                .createdDateFrom(createdDateFrom)
+                .createdDateTo(createdDateTo)
+                .closedTimeFrom(closedTimeFrom)
+                .closedTimeTo(closedTimeTo)
+                .shiftName(shiftName)
+                .pumpName(pumpName)
+                .stationName(stationName)
                 .statuses(statuses).build();
         return pumShiftService.findAll(filter);
     }

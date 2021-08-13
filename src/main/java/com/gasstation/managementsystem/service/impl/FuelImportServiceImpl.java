@@ -125,7 +125,7 @@ public class FuelImportServiceImpl implements FuelImportService {
         fuelImport = fuelImportRepository.save(fuelImport);
         Double amountPaid = fuelImportDTOCreate.getAmountPaid();
         String reasonPayExpense = fuelImportDTOCreate.getReason();
-        if (amountPaid != null) {
+        if (amountPaid != null && amountPaid != 0) {
             if (reasonPayExpense != null) {
                 reasonPayExpense += fuelImport.getId() + ")";
             }
@@ -156,7 +156,7 @@ public class FuelImportServiceImpl implements FuelImportService {
         String reasonPayExpense = fuelImportDTOUpdate.getReason();
         trimString(oldFuelImport);
         oldFuelImport = fuelImportRepository.save(oldFuelImport);
-        if (fuelImportDTOUpdate.getAccountsPayable() != null) {
+        if (accountsPayable != null && accountsPayable != 0) {
             addExpense(accountsPayable, reasonPayExpense, oldFuelImport);
         }
         return FuelImportMapper.toFuelImportDTO(oldFuelImport);

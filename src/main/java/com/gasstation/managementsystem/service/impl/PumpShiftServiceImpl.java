@@ -36,7 +36,7 @@ public class PumpShiftServiceImpl implements PumShiftService {
 
     private HashMap<String, Object> listPumpShiftToMap(List<PumpShift> pumpShifts) {
         if (pumpShifts == null) return new HashMap<>();
-        List<PumpShiftDTO> tankDTOS = pumpShifts.stream().map(PumpShiftMapper::toHandOverShiftDTO).collect(Collectors.toList());
+        List<PumpShiftDTO> tankDTOS = pumpShifts.stream().map(PumpShiftMapper::toPumpShiftDTO).collect(Collectors.toList());
         HashMap<String, Object> map = new HashMap<>();
         map.put("data", tankDTOS);
         return map;
@@ -77,7 +77,7 @@ public class PumpShiftServiceImpl implements PumShiftService {
                     .message("Pump shift not of the owner")
                     .table("pump_shift_tbl").build());
         }
-        return PumpShiftMapper.toHandOverShiftDTO(pumpShift);
+        return PumpShiftMapper.toPumpShiftDTO(pumpShift);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class PumpShiftServiceImpl implements PumShiftService {
         PumpShift oldPumpShift = optionalValidate.getPumpShiftById(id);
         oldPumpShift.setClosedTime(DateTimeHelper.getCurrentUnixTime());
         oldPumpShift.setExecutor(userHelper.getUserLogin());
-        return PumpShiftMapper.toHandOverShiftDTO(oldPumpShift);
+        return PumpShiftMapper.toPumpShiftDTO(oldPumpShift);
     }
 
     @Override

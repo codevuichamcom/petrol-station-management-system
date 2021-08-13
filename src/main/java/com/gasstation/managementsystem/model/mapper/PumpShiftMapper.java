@@ -11,7 +11,7 @@ import com.gasstation.managementsystem.model.dto.user.UserDTO;
 import com.gasstation.managementsystem.utils.DateTimeHelper;
 
 public class PumpShiftMapper {
-    public static PumpShiftDTO toHandOverShiftDTO(PumpShift pumpShift) {
+    public static PumpShiftDTO toPumpShiftDTO(PumpShift pumpShift) {
         Shift shift = pumpShift.getShift();
         Pump pump = pumpShift.getPump();
         ShiftDTO shiftDTO = shift != null ? ShiftDTO.builder()

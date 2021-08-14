@@ -1,8 +1,11 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.Shift;
+import com.gasstation.managementsystem.entity.Station;
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.entity.UserType;
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
+import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.dto.shift.ShiftDTO;
@@ -21,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -71,12 +75,51 @@ public class ShiftServiceImpl implements ShiftService {
     }
 
     @Override
-    public ShiftDTO create(ShiftDTOCreate shiftDTOCreate) throws CustomNotFoundException {
-        Shift shift = ShiftMapper.toShift(shiftDTOCreate);
-        shift.setStation(optionalValidate.getStationById(shiftDTOCreate.getStationId()));
-        trimString(shift);
-        shift = shiftRepository.save(shift);
-        return ShiftMapper.toShiftDTO(shift);
+    public ShiftDTO create(ShiftDTOCreate shiftDTOCreate) throws CustomNotFoundException, CustomBadRequestException, CustomDuplicateFieldException {
+        Station station = optionalValidate.getStationById(shiftDTOCreate.getStationId());
+        checkDuplicateName(shiftDTOCreate.getName(), station.getId());
+        List<Shift> shiftList = station.getShiftList();
+        Shift newShift = ShiftMapper.toShift(shiftDTOCreate);
+
+        for (Shift oldShift : shiftList) {
+            checkIntersectShift(newShift, oldShift);
+        }
+        newShift.setStation(station);
+        trimString(newShift);
+        newShift = shiftRepository.save(newShift);
+        return ShiftMapper.toShiftDTO(newShift);
+    }
+
+    private void checkDuplicateName(String name, Integer stationId) throws CustomDuplicateFieldException {
+        Optional<Shift> shiftOptional = shiftRepository.findByNameAndStationId(name, stationId);
+        if (shiftOptional.isPresent()) {
+            throw new CustomDuplicateFieldException(CustomError.builder()
+                    .code("duplicate")
+                    .field("name")
+                    .message("Duplicate name in station")
+                    .table("shift_tbl").build());
+        }
+    }
+
+    private void checkIntersectShift(Shift newShift, Shift oldShift) throws CustomBadRequestException {
+        Long oldMinStart = oldShift.getStartTime();
+        Long oldMinEnd = oldShift.getEndTime();
+        Long newMinStart = newShift.getStartTime();
+        Long newMinEnd = newShift.getEndTime();
+        if (inRange(oldMinStart, newMinStart, newMinEnd)
+                || inRange(oldMinEnd, newMinStart, newMinEnd)
+                || inRange(newMinStart, oldMinStart, oldMinEnd)
+                || inRange(newMinEnd, oldMinStart, oldMinEnd)) {
+            throw new CustomBadRequestException(CustomError.builder()
+                    .code("intersect")
+                    .field("time")
+                    .message("Shift of station is existed")
+                    .table("shift_tbl").build());
+        }
+    }
+
+    private boolean inRange(Long value, Long start, Long end) {
+        return value >= start && value <= end;
     }
 
     private void trimString(Shift shift) {
@@ -84,10 +127,20 @@ public class ShiftServiceImpl implements ShiftService {
     }
 
     @Override
-    public ShiftDTO update(int id, ShiftDTOUpdate shiftDTOUpdate) throws CustomNotFoundException {
+    public ShiftDTO update(int id, ShiftDTOUpdate shiftDTOUpdate) throws CustomNotFoundException, CustomBadRequestException, CustomDuplicateFieldException {
         Shift shift = optionalValidate.getShiftById(id);
+        if (shiftDTOUpdate.getName() != null && !shift.getName().equals(shiftDTOUpdate.getName())) {
+            checkDuplicateName(shiftDTOUpdate.getName(), shift.getStation().getId());
+        }
         ShiftMapper.copyNonNullToShift(shift, shiftDTOUpdate);
         trimString(shift);
+        if (shiftDTOUpdate.getStartTime() != null || shiftDTOUpdate.getEndTime() != null) {
+            Station station = shift.getStation();
+            List<Shift> shiftList = station.getShiftList();
+            for (Shift oldShift : shiftList) {
+                checkIntersectShift(oldShift, shift);
+            }
+        }
         shift = shiftRepository.save(shift);
         return ShiftMapper.toShiftDTO(shift);
     }

@@ -1,5 +1,7 @@
 package com.gasstation.managementsystem.controller;
 
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
+import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.shift.ShiftDTO;
 import com.gasstation.managementsystem.model.dto.shift.ShiftDTOCreate;
@@ -35,13 +37,13 @@ public class ShiftController {
 
     @Operation(summary = "Create new Shift")
     @PostMapping("/shifts")
-    public ShiftDTO create(@Valid @RequestBody ShiftDTOCreate shiftDTOCreate) throws CustomNotFoundException {
+    public ShiftDTO create(@Valid @RequestBody ShiftDTOCreate shiftDTOCreate) throws CustomNotFoundException, CustomBadRequestException, CustomDuplicateFieldException {
         return shiftService.create(shiftDTOCreate);
     }
 
     @Operation(summary = "Update Shift by id")
     @PutMapping("/shifts/{id}")
-    public ShiftDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody ShiftDTOUpdate shiftDTOUpdate) throws CustomNotFoundException {
+    public ShiftDTO update(@PathVariable(name = "id") Integer id, @Valid @RequestBody ShiftDTOUpdate shiftDTOUpdate) throws CustomNotFoundException, CustomBadRequestException, CustomDuplicateFieldException {
         return shiftService.update(id, shiftDTOUpdate);
     }
 

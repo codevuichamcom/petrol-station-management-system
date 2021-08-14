@@ -52,8 +52,7 @@ public class PumpServiceImpl implements PumpService {
                 pumpList = pumpRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
                 break;
             case UserType.OWNER:
-                List<Integer> stationIds = userHelper.getListStationIdOfOwner(userLoggedIn);
-                pumpList = pumpRepository.findAllByStationIds(stationIds, Sort.by(Sort.Direction.DESC, "id"));
+                pumpList = pumpRepository.findAllByOwnerId(userLoggedIn.getId(), Sort.by(Sort.Direction.DESC, "id"));
                 break;
         }
         return listPumpToMap(pumpList);
@@ -62,9 +61,7 @@ public class PumpServiceImpl implements PumpService {
 
     @Override
     public HashMap<String, Object> findAllByStationId(int stationId) {
-        List<Integer> stationIds = new ArrayList<>();
-        stationIds.add(stationId);
-        return listPumpToMap(pumpRepository.findAllByStationIds(stationIds, Sort.by(Sort.Direction.DESC, "id")));
+        return listPumpToMap(pumpRepository.findAllByStationId(stationId, Sort.by(Sort.Direction.DESC, "id")));
     }
 
     @Override
@@ -72,7 +69,7 @@ public class PumpServiceImpl implements PumpService {
         User userLoggedIn = userHelper.getUserLogin();
         UserType userType = userLoggedIn.getUserType();
         Pump pump = optionalValidate.getPumpById(id);
-        if (userType.getId() == UserType.OWNER && pump.getTank().getStation().getOwner().getId().equals(userLoggedIn.getId())) {
+        if (userType.getId() == UserType.OWNER && !pump.getTank().getStation().getOwner().getId().equals(userLoggedIn.getId())) {
             throw new CustomNotFoundException(CustomError.builder()
                     .code("not.found")
                     .message("Pump not of the owner")

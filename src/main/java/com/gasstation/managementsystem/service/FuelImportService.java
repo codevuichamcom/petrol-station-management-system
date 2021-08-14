@@ -10,8 +10,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.HashMap;
 
 public interface FuelImportService {
-    HashMap<String, Object> findAll(Pageable pageable);
-
     HashMap<String, Object> findAll();
 
     FuelImportDTO findById(int id) throws CustomNotFoundException;

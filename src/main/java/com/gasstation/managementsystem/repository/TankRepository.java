@@ -14,6 +14,6 @@ public interface TankRepository extends JpaRepository<Tank, Integer> {
     @Query("select t from Tank t where t.name=?1 and t.station.id=?2")
     Optional<Tank> findByNameAndStationId(String name, int stationId);
 
-    @Query("select t from Tank t where t.station.id in (?1)")
-    List<Tank> findAllByStationIds(List stationIds, Sort sort);
+    @Query("select t from Tank t where t.station.owner.id = ?1")
+    List<Tank> findAllByOwnerId(int ownerId, Sort sort);
 }

@@ -1,7 +1,6 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.PumpShift;
-import com.gasstation.managementsystem.entity.Station;
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
@@ -47,11 +46,7 @@ public class PumpShiftServiceImpl implements PumShiftService {
         UserType userType = userLoggedIn.getUserType();
         if (userType.getId() == UserType.OWNER) {
             if (filter.getStationIds() == null || filter.getStationIds().length == 0) {
-                List<Station> stationList = userLoggedIn.getStationList();
-                List<Integer> stationIds = new ArrayList<>();
-                for (Station station : stationList) {
-                    stationIds.add(station.getId());
-                }
+                List<Integer> stationIds = userHelper.getListStationIdOfOwner(userLoggedIn);
                 filter.setStationIds(stationIds.toArray(Integer[]::new));
             }
         }

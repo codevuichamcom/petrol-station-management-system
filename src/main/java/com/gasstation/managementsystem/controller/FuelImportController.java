@@ -9,8 +9,6 @@ import com.gasstation.managementsystem.service.FuelImportService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,9 +27,6 @@ public class FuelImportController {
     @GetMapping("/fuel-imports")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
                                           @RequestParam(name = "pageSize", required = false) Integer pageSize) {
-        if (pageSize != null) {
-            return fuelImportService.findAll(PageRequest.of(pageIndex - 1, pageSize, Sort.by(Sort.Direction.DESC, "id")));
-        }
         return fuelImportService.findAll();
     }
 

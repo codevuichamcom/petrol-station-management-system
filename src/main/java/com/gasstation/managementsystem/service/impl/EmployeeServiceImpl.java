@@ -2,6 +2,8 @@ package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.Employee;
 import com.gasstation.managementsystem.entity.Station;
+import com.gasstation.managementsystem.entity.User;
+import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
@@ -12,12 +14,14 @@ import com.gasstation.managementsystem.model.mapper.EmployeeMapper;
 import com.gasstation.managementsystem.repository.EmployeeRepository;
 import com.gasstation.managementsystem.service.EmployeeService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
+import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +33,7 @@ import java.util.stream.Collectors;
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final OptionalValidate optionalValidate;
+    private final UserHelper userHelper;
 
     private HashMap<String, Object> listEmployeeToMap(List<Employee> employees) {
         List<EmployeeDTO> employeeDTOS = employees.stream().map(EmployeeMapper::toEmployeeDTO).collect(Collectors.toList());
@@ -40,13 +45,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public HashMap<String, Object> findAll() {
-        return listEmployeeToMap(employeeRepository.findAll(Sort.by(Sort.Direction.ASC, "id")));
+        User userLoggedIn = userHelper.getUserLogin();
+        UserType userType = userLoggedIn.getUserType();
+        List<Employee> employeeList = new ArrayList<>();
+        switch (userType.getId()) {
+            case UserType.ADMIN:
+                employeeList = employeeRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+                break;
+            case UserType.OWNER:
+                employeeList = employeeRepository.findAllByOwnerId(userLoggedIn.getId(), Sort.by(Sort.Direction.ASC, "id"));
+        }
+        return listEmployeeToMap(employeeList);
     }
 
-    @Override
-    public HashMap<String, Object> findAllByOwnerId(int ownerId) {
-        return listEmployeeToMap(employeeRepository.findAllByOwnerId(ownerId, Sort.by(Sort.Direction.ASC, "id")));
-    }
 
     @Override
     public EmployeeDTO findById(int id) throws CustomNotFoundException {

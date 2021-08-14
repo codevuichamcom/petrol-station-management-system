@@ -17,8 +17,6 @@ import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,15 +45,6 @@ public class FuelImportServiceImpl implements FuelImportService {
     }
 
     @Override
-    public HashMap<String, Object> findAll(Pageable pageable) {
-        Page<FuelImport> fuelImportBills = fuelImportRepository.findAll(pageable);
-        HashMap<String, Object> map = listFuelImportToMap(fuelImportBills.getContent());
-        map.put("totalElement", fuelImportBills.getTotalElements());
-        map.put("totalPage", fuelImportBills.getTotalPages());
-        return map;
-    }
-
-    @Override
     public HashMap<String, Object> findAll() {
         User userLoggedIn = userHelper.getUserLogin();
         UserType userType = userLoggedIn.getUserType();
@@ -65,12 +54,7 @@ public class FuelImportServiceImpl implements FuelImportService {
                 fuelImportList = fuelImportRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
                 break;
             case UserType.OWNER:
-                List<Station> stationList = userLoggedIn.getStationList();
-                List<Integer> stationIds = new ArrayList<>();
-                for (Station station : stationList) {
-                    stationIds.add(station.getId());
-                }
-                fuelImportList = fuelImportRepository.findAllByStationIds(stationIds, Sort.by(Sort.Direction.DESC, "id"));
+                fuelImportList = fuelImportRepository.findAllByOwnerId(userLoggedIn.getId(), Sort.by(Sort.Direction.DESC, "id"));
         }
         return listFuelImportToMap(fuelImportList);
     }

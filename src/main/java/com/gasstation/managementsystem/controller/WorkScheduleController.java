@@ -30,10 +30,7 @@ public class WorkScheduleController {
     @GetMapping("/work-schedules")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
                                           @RequestParam(name = "pageSize", required = false) Integer pageSize) {
-        if (pageSize != null) {
-            return workScheduleService.findAll(PageRequest.of(pageIndex - 1, pageSize, Sort.by(Sort.Direction.DESC, "id")));
-        }
-        return workScheduleService.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        return workScheduleService.findAll();
     }
 
     @Operation(summary = "Find work schedule by id")

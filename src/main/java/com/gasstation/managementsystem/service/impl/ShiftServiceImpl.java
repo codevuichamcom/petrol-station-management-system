@@ -61,7 +61,7 @@ public class ShiftServiceImpl implements ShiftService {
         User userLoggedIn = userHelper.getUserLogin();
         UserType userType = userLoggedIn.getUserType();
         Shift shift = optionalValidate.getShiftById(id);
-        if (userType.getId() == UserType.OWNER && userLoggedIn.getId() != shift.getStation().getOwner().getId()) {
+        if (userType.getId() == UserType.OWNER && !userLoggedIn.getId().equals(shift.getStation().getOwner().getId())) {
             throw new CustomNotFoundException(CustomError.builder()
                     .code("not.found")
                     .message("Shift not of the owner")

@@ -1,8 +1,6 @@
 package com.gasstation.managementsystem.service.impl;
 
-import com.gasstation.managementsystem.entity.Employee;
-import com.gasstation.managementsystem.entity.Shift;
-import com.gasstation.managementsystem.entity.WorkSchedule;
+import com.gasstation.managementsystem.entity.*;
 import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
@@ -13,13 +11,13 @@ import com.gasstation.managementsystem.model.mapper.WorkScheduleMapper;
 import com.gasstation.managementsystem.repository.WorkScheduleRepository;
 import com.gasstation.managementsystem.service.WorkScheduleService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
+import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -31,6 +29,7 @@ import java.util.stream.Collectors;
 public class WorkScheduleServiceImpl implements WorkScheduleService {
     private final WorkScheduleRepository workScheduleRepository;
     private final OptionalValidate optionalValidate;
+    private final UserHelper userHelper;
 
     private HashMap<String, Object> listWorkScheduleToMap(List<WorkSchedule> workSchedules) {
         List<WorkScheduleDTO> workScheduleDTOS = workSchedules.stream().map(WorkScheduleMapper::toWorkScheduleDTO).collect(Collectors.toList());
@@ -40,22 +39,32 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
     }
 
     @Override
-    public HashMap<String, Object> findAll(Pageable pageable) {
-        Page<WorkSchedule> workSchedules = workScheduleRepository.findAll(pageable);
-        HashMap<String, Object> map = listWorkScheduleToMap(workSchedules.getContent());
-        map.put("totalElement", workSchedules.getTotalElements());
-        map.put("totalPage", workSchedules.getTotalPages());
-        return map;
-    }
-
-    @Override
-    public HashMap<String, Object> findAll(Sort sort) {
-        return listWorkScheduleToMap(workScheduleRepository.findAll(sort));
+    public HashMap<String, Object> findAll() {
+        User userLoggedIn = userHelper.getUserLogin();
+        UserType userType = userLoggedIn.getUserType();
+        List<WorkSchedule> workScheduleList = new ArrayList<>();
+        switch (userType.getId()) {
+            case UserType.ADMIN:
+                workScheduleList = workScheduleRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+                break;
+            case UserType.OWNER:
+                workScheduleList = workScheduleRepository.findAllByOwnerId(userLoggedIn.getId(), Sort.by(Sort.Direction.DESC, "id"));
+        }
+        return listWorkScheduleToMap(workScheduleList);
     }
 
     @Override
     public WorkScheduleDTO findById(int id) throws CustomNotFoundException {
-        return WorkScheduleMapper.toWorkScheduleDTO(optionalValidate.getWorkScheduleById(id));
+        User userLoggedIn = userHelper.getUserLogin();
+        UserType userType = userLoggedIn.getUserType();
+        WorkSchedule workSchedule = optionalValidate.getWorkScheduleById(id);
+        if (userType.getId() == UserType.OWNER && !userLoggedIn.getId().equals(workSchedule.getShift().getStation().getOwner().getId())) {
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found")
+                    .message("work schedule not of the owner")
+                    .table("work_schedule_tbl").build());
+        }
+        return WorkScheduleMapper.toWorkScheduleDTO(workSchedule);
     }
 
     @Override

@@ -61,7 +61,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDTO findById(int id) throws CustomNotFoundException {
-        return EmployeeMapper.toEmployeeDTO(optionalValidate.getEmployeeById(id));
+        User userLoggedIn = userHelper.getUserLogin();
+        UserType userType = userLoggedIn.getUserType();
+        Employee employee = optionalValidate.getEmployeeById(id);
+        if (userType.getId() == UserType.OWNER && !userLoggedIn.getId().equals(employee.getStation().getOwner().getId())) {
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found")
+                    .message("Employee not of the owner")
+                    .table("employee_tbl").build());
+        }
+        return EmployeeMapper.toEmployeeDTO(employee);
     }
 
     @Override

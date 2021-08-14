@@ -20,5 +20,6 @@ public class TransactionDTOFilter {
     private Double amountTo;
     private String pumpName;
     private String shiftName;
+    private Integer[] stationIds;
     private String stationName;
 }

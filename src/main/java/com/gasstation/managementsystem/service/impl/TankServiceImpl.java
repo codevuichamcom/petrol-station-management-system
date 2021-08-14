@@ -52,11 +52,7 @@ public class TankServiceImpl implements TankService {
                 tankList = tankRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
                 break;
             case UserType.OWNER:
-                List<Station> stationList = userLoggedIn.getStationList();
-                List<Integer> stationIds = new ArrayList<>();
-                for (Station station : stationList) {
-                    stationIds.add(station.getId());
-                }
+                List<Integer> stationIds = userHelper.getListStationIdOfOwner(userLoggedIn);
                 tankList = tankRepository.findAllByStationIds(stationIds, Sort.by(Sort.Direction.DESC, "id"));
                 break;
         }

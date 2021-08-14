@@ -13,6 +13,7 @@ import com.gasstation.managementsystem.repository.criteria.TransactionRepository
 import com.gasstation.managementsystem.service.TransactionService;
 import com.gasstation.managementsystem.utils.DateTimeHelper;
 import com.gasstation.managementsystem.utils.OptionalValidate;
+import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -35,6 +36,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final DebtRepository debtRepository;
     private final CardRepository cardRepository;
     private final TankRepository tankRepository;
+    private final UserHelper userHelper;
 
     private HashMap<String, Object> listTransactionToMap(List<Transaction> transactions) {
         List<TransactionDTO> transactionDTOS = new ArrayList<>();
@@ -49,6 +51,12 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public HashMap<String, Object> findAll(TransactionDTOFilter transactionDTOFilter) {
+        User userLoggedIn = userHelper.getUserLogin();
+        UserType userType = userLoggedIn.getUserType();
+        if (userType.getId() == UserType.OWNER) {
+            List<Integer> stationIds = userHelper.getListStationIdOfOwner(userLoggedIn);
+            transactionDTOFilter.setStationIds(stationIds.toArray(Integer[]::new));
+        }
         HashMap<String, Object> temp = transactionCriteria.findAll(transactionDTOFilter);
         HashMap<String, Object> map = listTransactionToMap((List<Transaction>) temp.get("data"));
         map.put("totalElement", temp.get("totalElement"));

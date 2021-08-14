@@ -28,7 +28,8 @@ public class TransactionRepositoryCriteria {
                 .between("t.totalAmount", filter.getAmountFrom(), filter.getAmountTo())
                 .like("p.name", "pumpName", filter.getPumpName())
                 .like("h.shift.name", "shiftName", filter.getShiftName())
-                .like("tank.station.name", "stationName", filter.getStationName());
+                .like("tank.station.name", "stationName", filter.getStationName())
+                .in("tank.station.id", "stationIds", filter.getStationIds());
         String countQuery = qHelper.getQuery().toString().replace("select t", "select count(t.id)");
         Query countTotalQuery = em.createQuery(countQuery);
         String totalVolumeAndAmountQuery = qHelper.getQuery().toString().replace("select t", "select coalesce(sum(t.volume), 0), coalesce(sum(t.totalAmount), 0)");

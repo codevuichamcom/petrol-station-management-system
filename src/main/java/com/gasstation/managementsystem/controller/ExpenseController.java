@@ -26,19 +26,24 @@ public class ExpenseController {
     @GetMapping("/expenses")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
                                           @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-                                          @RequestParam(name = "reason", required = false) String reason,
-                                          @RequestParam(name = "amount", required = false) Double amount,
-                                          @RequestParam(name = "createdDate", required = false) Long createdDate,
+                                          @RequestParam(name = "amountFrom", required = false) Double amountFrom,
+                                          @RequestParam(name = "amountTo", required = false) Double amountTo,
+                                          @RequestParam(name = "createdDateFrom", required = false) Long createdDateFrom,
+                                          @RequestParam(name = "createdDateTo", required = false) Long createdDateTo,
                                           @RequestParam(name = "stationIds", required = false) Integer[] stationIds,
+                                          @RequestParam(name = "stationName", required = false) String stationName,
                                           @RequestParam(name = "creatorName", required = false) String creatorName) {
         ExpenseDTOFilter filter = ExpenseDTOFilter.builder()
                 .pageIndex(pageIndex)
                 .pageSize(pageSize)
-                .reason(reason)
-                .amount(amount)
-                .createdDate(createdDate)
+                .amountFrom(amountFrom)
+                .amountTo(amountTo)
+                .createdDateFrom(createdDateFrom)
+                .createdDateTo(createdDateTo)
                 .stationIds(stationIds)
-                .creatorName(creatorName).build();
+                .stationName(stationName)
+                .creatorName(creatorName)
+                .build();
         return expenseService.findAll(filter);
 
     }

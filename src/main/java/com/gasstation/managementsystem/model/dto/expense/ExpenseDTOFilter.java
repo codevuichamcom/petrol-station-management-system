@@ -10,10 +10,12 @@ import lombok.*;
 public class ExpenseDTOFilter {
     private Integer pageIndex;
     private Integer pageSize;
-    private String reason;
-    private Double amount;
-    private Long createdDate;
+    private Double amountFrom;
+    private Double amountTo;
+    private Long createdDateFrom;
+    private Long createdDateTo;
     private Integer[] stationIds;
+    private String stationName;
     private String creatorName;
 
 }

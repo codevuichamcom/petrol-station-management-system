@@ -23,22 +23,20 @@ public class ReceiptController {
     @GetMapping("/receipts")
     public HashMap<String, Object> getAll(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
                                           @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-                                          @RequestParam(name = "createdDate", required = false) Long createdDate,
-                                          @RequestParam(name = "amount", required = false) Double amount,
-                                          @RequestParam(name = "reason", required = false) String reason,
-                                          @RequestParam(name = "cardId", required = false) String cardId,
+                                          @RequestParam(name = "createdDateFrom", required = false) Long createdDateFrom,
+                                          @RequestParam(name = "createdDateTo", required = false) Long createdDateTo,
+                                          @RequestParam(name = "amountFrom", required = false) Double amountFrom,
+                                          @RequestParam(name = "amountTo", required = false) Double amountTo,
                                           @RequestParam(name = "customerName", required = false) String customerName,
-                                          @RequestParam(name = "customerPhone", required = false) String customerPhone,
                                           @RequestParam(name = "creatorName", required = false) String creatorName) {
         ReceiptDTOFilter filter = ReceiptDTOFilter.builder()
                 .pageIndex(pageIndex)
                 .pageSize(pageSize)
-                .createdDate(createdDate)
-                .amount(amount)
-                .reason(reason)
-                .cardId(cardId)
+                .createdDateFrom(createdDateFrom)
+                .createdDateTo(createdDateTo)
+                .amountFrom(amountFrom)
+                .amountTo(amountTo)
                 .customerName(customerName)
-                .customerPhone(customerPhone)
                 .creatorName(creatorName).build();
         return receiptService.findAll(filter);
     }

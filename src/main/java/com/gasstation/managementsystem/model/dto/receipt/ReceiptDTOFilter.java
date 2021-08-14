@@ -10,11 +10,10 @@ import lombok.*;
 public class ReceiptDTOFilter {
     private Integer pageIndex;
     private Integer pageSize;
-    private Long createdDate;
-    private Double amount;
-    private String reason;
-    private String cardId;
+    private Long createdDateFrom;
+    private Long createdDateTo;
+    private Double amountFrom;
+    private Double amountTo;
     private String customerName;
-    private String customerPhone;
     private String creatorName;
 }

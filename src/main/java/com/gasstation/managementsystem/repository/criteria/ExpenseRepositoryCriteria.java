@@ -20,10 +20,11 @@ public class ExpenseRepositoryCriteria {
         StringBuilder query = new StringBuilder("select e from Expense e inner join e.station s inner join e.creator c where 1=1");
         QueryGenerateHelper qHelper = new QueryGenerateHelper();
         qHelper.setQuery(query);
-        qHelper.like("e.reason", "reason", filter.getReason())
-                .between("e.amount", 0d, filter.getAmount())
-                .between("e.createdDate", 0L, filter.getCreatedDate())
+        qHelper
+                .between("e.amount", filter.getAmountFrom(), filter.getAmountTo())
+                .between("e.createdDate", filter.getCreatedDateFrom(), filter.getCreatedDateTo())
                 .like("c.name", "creatorName", filter.getCreatorName())
+                .like("s.name", "stationName", filter.getStationName())
                 .in("s.id", "stationIds", filter.getStationIds());
         String countQuery = qHelper.getQuery().toString().replace("select e", "select count(e.id)");
         Query countTotalQuery = em.createQuery(countQuery);

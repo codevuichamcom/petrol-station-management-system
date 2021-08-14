@@ -30,7 +30,6 @@ public class ExpenseController {
                                           @RequestParam(name = "amountTo", required = false) Double amountTo,
                                           @RequestParam(name = "createdDateFrom", required = false) Long createdDateFrom,
                                           @RequestParam(name = "createdDateTo", required = false) Long createdDateTo,
-                                          @RequestParam(name = "stationIds", required = false) Integer[] stationIds,
                                           @RequestParam(name = "stationName", required = false) String stationName,
                                           @RequestParam(name = "creatorName", required = false) String creatorName) {
         ExpenseDTOFilter filter = ExpenseDTOFilter.builder()
@@ -40,7 +39,6 @@ public class ExpenseController {
                 .amountTo(amountTo)
                 .createdDateFrom(createdDateFrom)
                 .createdDateTo(createdDateTo)
-                .stationIds(stationIds)
                 .stationName(stationName)
                 .creatorName(creatorName)
                 .build();

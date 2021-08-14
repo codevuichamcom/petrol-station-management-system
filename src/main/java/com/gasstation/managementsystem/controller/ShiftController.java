@@ -25,7 +25,7 @@ public class ShiftController {
     @Operation(summary = "View All Shift")
     @GetMapping("/shifts")
     public HashMap<String, Object> getAll() {
-        return shiftService.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        return shiftService.findAll();
     }
 
     @Operation(summary = "Find Shift by id")

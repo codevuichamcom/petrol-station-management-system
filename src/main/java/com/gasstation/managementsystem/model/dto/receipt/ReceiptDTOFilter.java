@@ -16,4 +16,5 @@ public class ReceiptDTOFilter {
     private Double amountTo;
     private String customerName;
     private String creatorName;
+    private Integer ownerId;
 }

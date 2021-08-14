@@ -23,7 +23,8 @@ public class ReceiptRepositoryCriteria {
         qHelper.between("r.createdDate", filter.getCreatedDateFrom(), filter.getCreatedDateTo())
                 .between("r.amount", filter.getAmountFrom(), filter.getAmountTo())
                 .like("cus.name", "customerName", filter.getCustomerName())
-                .like("cre.name", "creatorName", filter.getCreatorName());
+                .like("cre.name", "creatorName", filter.getCreatorName())
+                .equal("r.transaction.pumpShift.pump.tank.station.owner.id", "ownerId", filter.getOwnerId());
         String countQuery = qHelper.getQuery().toString().replace("select r", "select count(r.id)");
         Query countTotalQuery = em.createQuery(countQuery);
         qHelper.sort("r.id", "DESC");

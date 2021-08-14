@@ -1,7 +1,10 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.Expense;
+import com.gasstation.managementsystem.entity.User;
+import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
+import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.dto.expense.ExpenseDTO;
 import com.gasstation.managementsystem.model.dto.expense.ExpenseDTOCreate;
 import com.gasstation.managementsystem.model.dto.expense.ExpenseDTOFilter;
@@ -30,6 +33,11 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public HashMap<String, Object> findAll(ExpenseDTOFilter filter) {
+        User userLoggedIn = userHelper.getUserLogin();
+        UserType userType = userLoggedIn.getUserType();
+        if (userType.getId() == UserType.OWNER) {
+            filter.setOwnerId(userLoggedIn.getId());
+        }
         HashMap<String, Object> temp = expenseCriteria.findAll(filter);
         List<Expense> expenseList = (List<Expense>) temp.get("data");
         List<ExpenseDTO> expenseDTOS = expenseList.stream().map(ExpenseMapper::toExpenseDTO).collect(Collectors.toList());
@@ -42,7 +50,16 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public ExpenseDTO findById(int id) throws CustomNotFoundException {
-        return ExpenseMapper.toExpenseDTO(optionalValidate.getExpenseById(id));
+        User userLoggedIn = userHelper.getUserLogin();
+        UserType userType = userLoggedIn.getUserType();
+        Expense expense = optionalValidate.getExpenseById(id);
+        if (userType.getId() == UserType.OWNER && !userLoggedIn.getId().equals(expense.getStation().getOwner().getId())) {
+            throw new CustomNotFoundException(CustomError.builder()
+                    .code("not.found")
+                    .message("Expense not of the owner")
+                    .table("expense_tbl").build());
+        }
+        return ExpenseMapper.toExpenseDTO(expense);
     }
 
     @Override

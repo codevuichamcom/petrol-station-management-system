@@ -14,8 +14,8 @@ public class ExpenseDTOFilter {
     private Double amountTo;
     private Long createdDateFrom;
     private Long createdDateTo;
-    private Integer[] stationIds;
     private String stationName;
     private String creatorName;
+    private Integer ownerId;
 
 }

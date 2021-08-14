@@ -15,7 +15,7 @@ public interface ShiftService {
 
     ShiftDTO findById(int id) throws CustomNotFoundException;
 
-    ShiftDTO create(ShiftDTOCreate shiftDTOCreate) throws CustomNotFoundException, CustomBadRequestException, CustomDuplicateFieldException;
+    ShiftDTO create(ShiftDTOCreate shiftDTOCreate) throws CustomNotFoundException, CustomDuplicateFieldException;
 
     ShiftDTO update(int id, ShiftDTOUpdate shiftDTOUpdate) throws CustomNotFoundException, CustomBadRequestException, CustomDuplicateFieldException;
 

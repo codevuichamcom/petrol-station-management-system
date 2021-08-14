@@ -75,7 +75,7 @@ public class ShiftServiceImpl implements ShiftService {
     }
 
     @Override
-    public ShiftDTO create(ShiftDTOCreate shiftDTOCreate) throws CustomNotFoundException, CustomBadRequestException, CustomDuplicateFieldException {
+    public ShiftDTO create(ShiftDTOCreate shiftDTOCreate) throws CustomNotFoundException, CustomDuplicateFieldException {
         Station station = optionalValidate.getStationById(shiftDTOCreate.getStationId());
         checkDuplicateName(shiftDTOCreate.getName(), station.getId());
         List<Shift> shiftList = station.getShiftList();
@@ -101,7 +101,7 @@ public class ShiftServiceImpl implements ShiftService {
         }
     }
 
-    private void checkIntersectShift(Shift newShift, Shift oldShift) throws CustomBadRequestException {
+    private void checkIntersectShift(Shift newShift, Shift oldShift) throws CustomDuplicateFieldException {
         Long oldMinStart = oldShift.getStartTime();
         Long oldMinEnd = oldShift.getEndTime();
         Long newMinStart = newShift.getStartTime();
@@ -110,7 +110,7 @@ public class ShiftServiceImpl implements ShiftService {
                 || inRange(oldMinEnd, newMinStart, newMinEnd)
                 || inRange(newMinStart, oldMinStart, oldMinEnd)
                 || inRange(newMinEnd, oldMinStart, oldMinEnd)) {
-            throw new CustomBadRequestException(CustomError.builder()
+            throw new CustomDuplicateFieldException(CustomError.builder()
                     .code("intersect")
                     .field("time")
                     .message("Shift of station is existed")

@@ -37,7 +37,7 @@ public class ShiftController {
 
     @Operation(summary = "Create new Shift")
     @PostMapping("/shifts")
-    public ShiftDTO create(@Valid @RequestBody ShiftDTOCreate shiftDTOCreate) throws CustomNotFoundException, CustomBadRequestException, CustomDuplicateFieldException {
+    public ShiftDTO create(@Valid @RequestBody ShiftDTOCreate shiftDTOCreate) throws CustomNotFoundException, CustomDuplicateFieldException {
         return shiftService.create(shiftDTOCreate);
     }
 

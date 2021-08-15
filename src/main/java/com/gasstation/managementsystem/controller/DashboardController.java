@@ -28,7 +28,7 @@ public class DashboardController {
     private final StationService stationService;
 
     @Operation(summary = "Fuel statistic")
-    @GetMapping("fuel-statistic")
+    @GetMapping("/fuel-statistic")
     public HashMap<String, Object> fuelStatistic(@RequestParam(name = "startTime") Long startTime,
                                                  @RequestParam(name = "endTime") Long endTime,
                                                  @RequestParam(name = "stationIds", required = false) Integer[] stationIds) {
@@ -52,7 +52,7 @@ public class DashboardController {
     }
 
     @Operation(summary = "Tank statistic")
-    @GetMapping("tank-statistic")
+    @GetMapping("/tank-statistic")
     public HashMap<String, Object> tankStatistic(@RequestParam(name = "startTime") Long startTime,
                                                  @RequestParam(name = "endTime") Long endTime,
                                                  @RequestParam(name = "stationIds", required = false) Integer[] stationIds) {

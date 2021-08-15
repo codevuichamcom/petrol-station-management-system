@@ -1,7 +1,7 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.*;
-import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
+import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
 import com.gasstation.managementsystem.model.dto.workSchedule.WorkScheduleDTO;
@@ -61,6 +61,7 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
         if (userType.getId() == UserType.OWNER && !userLoggedIn.getId().equals(workSchedule.getShift().getStation().getOwner().getId())) {
             throw new CustomNotFoundException(CustomError.builder()
                     .code("not.found")
+                    .field("id")
                     .message("work schedule not of the owner")
                     .table("work_schedule_tbl").build());
         }
@@ -68,7 +69,7 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
     }
 
     @Override
-    public WorkScheduleDTO create(WorkScheduleDTOCreate workScheduleDTOCreate) throws CustomNotFoundException, CustomBadRequestException {
+    public WorkScheduleDTO create(WorkScheduleDTOCreate workScheduleDTOCreate) throws CustomNotFoundException, CustomDuplicateFieldException {
         WorkSchedule workSchedule = WorkScheduleMapper.toWorkSchedule(workScheduleDTOCreate);
         Employee employee = optionalValidate.getEmployeeById(workScheduleDTOCreate.getEmployeeId());
         Shift shift = optionalValidate.getShiftById(workScheduleDTOCreate.getShiftId());
@@ -84,7 +85,7 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
         return WorkScheduleMapper.toWorkScheduleDTO(workSchedule);
     }
 
-    private void checkIntersectDate(WorkSchedule newSchedule, WorkSchedule oldSchedule) throws CustomBadRequestException {
+    private void checkIntersectDate(WorkSchedule newSchedule, WorkSchedule oldSchedule) throws CustomDuplicateFieldException {
         Long oldMinStart = oldSchedule.getStartDate();
         Long oldMinEnd = oldSchedule.getEndDate();
         Long newMinStart = newSchedule.getStartDate();
@@ -93,7 +94,7 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
                 || inRange(oldMinEnd, newMinStart, newMinEnd)
                 || inRange(newMinStart, oldMinStart, oldMinEnd)
                 || inRange(newMinEnd, oldMinStart, oldMinEnd)) {
-            throw new CustomBadRequestException(CustomError.builder()
+            throw new CustomDuplicateFieldException(CustomError.builder()
                     .code("intersect")
                     .field("time")
                     .message("Work schedule is existed")
@@ -106,7 +107,7 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
     }
 
     @Override
-    public WorkScheduleDTO update(int id, WorkScheduleDTOUpdate workScheduleDTOUpdate) throws CustomNotFoundException, CustomBadRequestException {
+    public WorkScheduleDTO update(int id, WorkScheduleDTOUpdate workScheduleDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         WorkSchedule oldWorkSchedule = optionalValidate.getWorkScheduleById(id);
         WorkScheduleMapper.copyNonNullToWorkSchedule(oldWorkSchedule, workScheduleDTOUpdate);
         Integer shiftId = workScheduleDTOUpdate.getShiftId();

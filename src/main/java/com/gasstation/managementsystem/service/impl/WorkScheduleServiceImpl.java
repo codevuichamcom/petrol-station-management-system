@@ -113,6 +113,7 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
             Employee oldEmployee = oldWorkSchedule.getEmployee();
             List<WorkSchedule> workScheduleList = oldEmployee.getWorkScheduleList();
             for (WorkSchedule schedule : workScheduleList) {
+                if (schedule.getId().equals(oldWorkSchedule.getId())) continue;
                 if (Objects.equals(schedule.getShift().getId(), shiftId)) {
                     checkIntersectDate(oldWorkSchedule, schedule);
                 }

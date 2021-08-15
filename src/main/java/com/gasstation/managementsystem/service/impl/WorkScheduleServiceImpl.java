@@ -101,7 +101,7 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
     }
 
     private boolean inRange(Long value, Long start, Long end) {
-        return value >= start && value <= end;
+        return value > start && value < end;
     }
 
     @Override
@@ -113,7 +113,7 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
             Employee oldEmployee = oldWorkSchedule.getEmployee();
             List<WorkSchedule> workScheduleList = oldEmployee.getWorkScheduleList();
             for (WorkSchedule schedule : workScheduleList) {
-                if (schedule.getId().equals(oldWorkSchedule.getId())) continue;
+                if (schedule.getId().equals(oldWorkSchedule.getId())) continue; //bỏ qua so với chính nó
                 if (Objects.equals(schedule.getShift().getId(), shiftId)) {
                     checkIntersectDate(oldWorkSchedule, schedule);
                 }

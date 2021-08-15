@@ -18,6 +18,6 @@ public interface ShiftRepository extends JpaRepository<Shift, Integer> {
     @Query("select s from Shift s where s.station.owner.id=?1")
     List<Shift> findAllShiftByOwnerId(int ownerId, Sort sort);
 
-    @Query("select s from Shift s where s.name = ?1 and s.station.id = ?2")
+    @Query("select s from Shift s where s.name=?1 and s.station.id=?2")
     Optional<Shift> findByNameAndStationId(String name, int stationId);
 }

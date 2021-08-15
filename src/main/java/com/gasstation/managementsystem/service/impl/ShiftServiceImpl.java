@@ -138,7 +138,7 @@ public class ShiftServiceImpl implements ShiftService {
             Station station = oldShift.getStation();
             List<Shift> shiftList = station.getShiftList();
             for (Shift shift : shiftList) {
-                if (shift.getId() == oldShift.getId()) continue;
+                if (shift.getId() == oldShift.getId()) continue;//bỏ qua so với chính nó
                 checkIntersectShift(oldShift, shift);
             }
         }

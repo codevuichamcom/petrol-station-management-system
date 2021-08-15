@@ -27,7 +27,7 @@ public class ExpenseMapper {
         FuelImportDTO fuelImportDTO = (fuelImport != null) ? FuelImportDTO.builder()
                 .id(fuelImport.getId())
                 .name(fuelImport.getName())
-                .createdDate(fuelImport.getCreatedDate()).build() : null;
+                .importDate(fuelImport.getImportDate()).build() : null;
         User creator = expense.getCreator();
         UserDTO creatorDTO = creator != null ? UserDTO.builder().id(creator.getId()).name(creator.getName()).build() : null;
         return ExpenseDTO.builder()

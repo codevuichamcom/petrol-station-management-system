@@ -28,18 +28,20 @@ public class DebtController {
     public HashMap<String, Object> summary(@RequestParam(name = "pageIndex", defaultValue = "1") Integer pageIndex,
                                            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                            @RequestParam(name = "cardId", required = false) String cardId,
-                                           @RequestParam(name = "stationIds", required = false) Integer[] stationIds,
+                                           @RequestParam(name = "stationId", required = false) Integer stationId,
+                                           @RequestParam(name = "stationName", required = false) String stationName,
                                            @RequestParam(name = "customerName", required = false) String customerName,
-                                           @RequestParam(name = "customerPhone", required = false) String customerPhone,
-                                           @RequestParam(name = "totalAccountsPayable", required = false) Double totalAccountsPayable) {
+                                           @RequestParam(name = "totalAccountsPayableFrom", required = false) Double totalAccountsPayableFrom,
+                                           @RequestParam(name = "totalAccountsPayableTo", required = false) Double totalAccountsPayableTo) {
         DebtDTOSummaryFilter filter = DebtDTOSummaryFilter.builder()
                 .pageIndex(pageIndex)
                 .pageSize(pageSize)
                 .cardId(cardId)
-                .stationIds(stationIds)
+                .stationId(stationId)
+                .stationName(stationName)
                 .customerName(customerName)
-                .customerPhone(customerPhone)
-                .totalAccountsPayable(totalAccountsPayable).build();
+                .totalAccountsPayableFrom(totalAccountsPayableFrom)
+                .totalAccountsPayableTo(totalAccountsPayableTo).build();
         return debtService.summary(filter);
 
     }

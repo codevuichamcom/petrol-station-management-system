@@ -28,7 +28,7 @@ public class ExpenseRepositoryCriteria {
                 .equal("s.owner.id", "ownerId", filter.getOwnerId());
         String countQuery = qHelper.getQuery().toString().replace("select e", "select count(e.id)");
         Query countTotalQuery = em.createQuery(countQuery);
-        qHelper.sort("e.createdDate", "DESC");
+        qHelper.sort("e.id", "DESC");
         TypedQuery<Expense> tQuery = em.createQuery(query.toString(), Expense.class);
         return qHelper.paging(tQuery, countTotalQuery, filter.getPageIndex(), filter.getPageSize());
     }

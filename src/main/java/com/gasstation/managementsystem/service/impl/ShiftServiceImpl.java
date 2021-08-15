@@ -51,10 +51,10 @@ public class ShiftServiceImpl implements ShiftService {
         List<Shift> shiftList = new ArrayList<>();
         switch (userType.getId()) {
             case UserType.ADMIN:
-                shiftList = shiftRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+                shiftList = shiftRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
                 break;
             case UserType.OWNER:
-                shiftList = shiftRepository.findAllShiftByOwnerId(userLoggedIn.getId(), Sort.by(Sort.Direction.ASC, "id"));
+                shiftList = shiftRepository.findAllShiftByOwnerId(userLoggedIn.getId(), Sort.by(Sort.Direction.DESC, "id"));
                 break;
         }
         return listShiftToMap(shiftList);

@@ -95,6 +95,7 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
                 || inRange(newMinEnd, oldMinStart, oldMinEnd)) {
             throw new CustomBadRequestException(CustomError.builder()
                     .code("intersect")
+                    .field("time")
                     .message("Work schedule is existed")
                     .table("work_schedule_tbl").build());
         }

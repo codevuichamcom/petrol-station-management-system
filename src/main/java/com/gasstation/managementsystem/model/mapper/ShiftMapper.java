@@ -46,10 +46,10 @@ public class ShiftMapper {
             shift.setName(name);
         }
         if (startTime != null) {
-            shift.setStartTime(shift.getStartTime());
+            shift.setStartTime(DateTimeHelper.toMilliSecond(shiftDTOUpdate.getStartTime()));
         }
         if (endTime != null) {
-            shift.setEndTime(shift.getEndTime());
+            shift.setEndTime(DateTimeHelper.toMilliSecond(shiftDTOUpdate.getEndTime()));
         }
     }
 }

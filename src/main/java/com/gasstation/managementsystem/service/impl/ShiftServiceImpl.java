@@ -119,7 +119,7 @@ public class ShiftServiceImpl implements ShiftService {
     }
 
     private boolean inRange(Long value, Long start, Long end) {
-        return value >= start && value <= end;
+        return value > start && value < end;
     }
 
     private void trimString(Shift shift) {
@@ -128,22 +128,22 @@ public class ShiftServiceImpl implements ShiftService {
 
     @Override
     public ShiftDTO update(int id, ShiftDTOUpdate shiftDTOUpdate) throws CustomNotFoundException, CustomBadRequestException, CustomDuplicateFieldException {
-        Shift shift = optionalValidate.getShiftById(id);
-        if (shiftDTOUpdate.getName() != null && !shift.getName().equals(shiftDTOUpdate.getName())) {
-            checkDuplicateName(shiftDTOUpdate.getName(), shift.getStation().getId());
+        Shift oldShift = optionalValidate.getShiftById(id);
+        if (shiftDTOUpdate.getName() != null && !oldShift.getName().equals(shiftDTOUpdate.getName())) {
+            checkDuplicateName(shiftDTOUpdate.getName(), oldShift.getStation().getId());
         }
-        ShiftMapper.copyNonNullToShift(shift, shiftDTOUpdate);
-        trimString(shift);
+        ShiftMapper.copyNonNullToShift(oldShift, shiftDTOUpdate);
+        trimString(oldShift);
         if (shiftDTOUpdate.getStartTime() != null || shiftDTOUpdate.getEndTime() != null) {
-            Station station = shift.getStation();
+            Station station = oldShift.getStation();
             List<Shift> shiftList = station.getShiftList();
-            for (Shift oldShift : shiftList) {
+            for (Shift shift : shiftList) {
                 if (shift.getId() == oldShift.getId()) continue;
                 checkIntersectShift(oldShift, shift);
             }
         }
-        shift = shiftRepository.save(shift);
-        return ShiftMapper.toShiftDTO(shift);
+        oldShift = shiftRepository.save(oldShift);
+        return ShiftMapper.toShiftDTO(oldShift);
     }
 
 

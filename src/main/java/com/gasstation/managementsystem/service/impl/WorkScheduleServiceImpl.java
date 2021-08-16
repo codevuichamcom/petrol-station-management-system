@@ -103,7 +103,7 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
     }
 
     private boolean inRange(Long value, Long start, Long end) {
-        long secondInDay = 86400000;
+        long secondInDay = 86400000000L;
         value = value / secondInDay;
         start = start / secondInDay;
         end = end / secondInDay;

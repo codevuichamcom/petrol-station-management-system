@@ -28,8 +28,7 @@ public class JwtTokenUtil implements Serializable {
     public static final long REFRESH_TOKEN_EXPIRED = 2 * 24 * 60 * 60; //2 ngày
 
 
-    @Value("${jwt.secret}")
-    private String secret;
+    private String secret = System.getenv("SECRET_KEY");
 
     //retrieve username from jwt token
     public String getUsernameFromToken(String token) {
@@ -69,7 +68,7 @@ public class JwtTokenUtil implements Serializable {
     //3. According to JWS Compact Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
     //   compaction of the JWT to a URL-safe string
     private String doGenerateToken(Map<String, Object> claims, String subject, long expiredDate) {
-
+        System.out.println(secret);
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiredDate * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();

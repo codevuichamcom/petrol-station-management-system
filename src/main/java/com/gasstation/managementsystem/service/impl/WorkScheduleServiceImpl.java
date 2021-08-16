@@ -86,10 +86,11 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
     }
 
     private void checkIntersectDate(WorkSchedule newSchedule, WorkSchedule oldSchedule) throws CustomDuplicateFieldException {
-        Long oldMinStart = oldSchedule.getStartDate();
-        Long oldMinEnd = oldSchedule.getEndDate();
-        Long newMinStart = newSchedule.getStartDate();
-        Long newMinEnd = newSchedule.getEndDate();
+        long secondInDay = 86400000000L;
+        Long oldMinStart = oldSchedule.getStartDate() / secondInDay;
+        Long oldMinEnd = oldSchedule.getEndDate() / secondInDay;
+        Long newMinStart = newSchedule.getStartDate() / secondInDay;
+        Long newMinEnd = newSchedule.getEndDate() / secondInDay;
         if (inRange(oldMinStart, newMinStart, newMinEnd)
                 || inRange(oldMinEnd, newMinStart, newMinEnd)
                 || inRange(newMinStart, oldMinStart, oldMinEnd)
@@ -103,10 +104,6 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
     }
 
     private boolean inRange(Long value, Long start, Long end) {
-        long secondInDay = 86400000000L;
-        value = value / secondInDay;
-        start = start / secondInDay;
-        end = end / secondInDay;
         return value >= start && value <= end;
     }
 

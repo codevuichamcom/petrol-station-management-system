@@ -13,6 +13,7 @@ import com.gasstation.managementsystem.model.mapper.UserMapper;
 import com.gasstation.managementsystem.repository.UserRepository;
 import com.gasstation.managementsystem.service.UserService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
+import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
@@ -30,6 +31,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final OptionalValidate optionalValidate;
+    private final UserHelper userHelper;
 
     private final PasswordEncoder bcryptEncoder;
 
@@ -89,14 +91,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO create(UserDTOCreate userDTOCreate) throws CustomDuplicateFieldException, CustomBadRequestException, CustomNotFoundException {
+        User userLoggedIn = userHelper.getUserLogin();
+        UserType userType = userLoggedIn.getUserType();
+        if (userType.getId() == UserType.OWNER && userDTOCreate.getUserTypeId() != UserType.CUSTOMER) {
+            throw new CustomBadRequestException(CustomError.builder()
+                    .code("not.match.type").field("userType").message("You only create user with type Customer").build());
+        }
         if (userDTOCreate.getUserTypeId() == UserType.ADMIN) {
             throw new CustomBadRequestException(CustomError.builder()
                     .code("not.match.type").field("userType").message("Can't create user with type Admin").build());
         }
         checkDuplicateField(userDTOCreate.getUsername(), userDTOCreate.getIdentityCardNumber(), userDTOCreate.getPhone(), userDTOCreate.getEmail());
         User user = UserMapper.toUser(userDTOCreate);
-        UserType userType = optionalValidate.getUserTypeById(userDTOCreate.getUserTypeId());
-        user.setUserType(userType);
+        user.setUserType(optionalValidate.getUserTypeById(userDTOCreate.getUserTypeId()));
         user.setPassword(bcryptEncoder.encode(userDTOCreate.getPassword()));
         user = userRepository.save(user);
         trimString(user);

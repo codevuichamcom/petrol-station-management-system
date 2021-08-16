@@ -14,9 +14,9 @@ public interface WorkScheduleService {
 
     WorkScheduleDTO findById(int id) throws CustomNotFoundException;
 
-    WorkScheduleDTO create(WorkScheduleDTOCreate workScheduleDTOCreate) throws CustomNotFoundException, CustomBadRequestException, CustomDuplicateFieldException;
+    WorkScheduleDTO create(WorkScheduleDTOCreate workScheduleDTOCreate) throws CustomNotFoundException, CustomDuplicateFieldException;
 
-    WorkScheduleDTO update(int id, WorkScheduleDTOUpdate workScheduleDTOUpdate) throws CustomNotFoundException, CustomBadRequestException, CustomDuplicateFieldException;
+    WorkScheduleDTO update(int id, WorkScheduleDTOUpdate workScheduleDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException;
 
     WorkScheduleDTO delete(int id) throws CustomNotFoundException;
 }

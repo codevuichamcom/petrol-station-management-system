@@ -142,6 +142,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             return false;
         if (url.startsWith("/api/v1/fuels") && method.equalsIgnoreCase("GET") && userType.getId() == UserType.OWNER)
             return false;
+        if (url.startsWith("/api/v1/user-types") && method.equalsIgnoreCase("GET") && userType.getId() == UserType.OWNER)
+            return false;
         if (url.startsWith("/api/v1/apis") && method.equalsIgnoreCase("GET"))
             return false;
         if (url.startsWith("/api/v1/profile") && method.equalsIgnoreCase("GET"))

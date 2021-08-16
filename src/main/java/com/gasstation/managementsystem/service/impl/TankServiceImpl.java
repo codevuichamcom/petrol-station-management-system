@@ -81,7 +81,7 @@ public class TankServiceImpl implements TankService {
         tank.setStation(station);
         tank.setFuel(fuel);
         trimString(tank);
-        tankRepository.save(tank);
+        tank = tankRepository.save(tank);
         return TankMapper.toTankDTO(tank);
     }
 

@@ -40,14 +40,14 @@ public class WorkScheduleController {
 
     @Operation(summary = "Create new work schedule")
     @PostMapping("/work-schedules")
-    public WorkScheduleDTO create(@Valid @RequestBody WorkScheduleDTOCreate workScheduleDTOCreate) throws CustomNotFoundException, CustomBadRequestException, CustomDuplicateFieldException {
+    public WorkScheduleDTO create(@Valid @RequestBody WorkScheduleDTOCreate workScheduleDTOCreate) throws CustomNotFoundException, CustomDuplicateFieldException {
         return workScheduleService.create(workScheduleDTOCreate);
     }
 
     @Operation(summary = "Update work schedule by id")
     @PutMapping("/work-schedules/{id}")
     public WorkScheduleDTO update(@PathVariable(name = "id") Integer id,
-                                  @Valid @RequestBody WorkScheduleDTOUpdate workScheduleDTOUpdate) throws CustomNotFoundException, CustomBadRequestException, CustomDuplicateFieldException {
+                                  @Valid @RequestBody WorkScheduleDTOUpdate workScheduleDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         return workScheduleService.update(id, workScheduleDTOUpdate);
     }
 

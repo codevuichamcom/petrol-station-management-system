@@ -103,7 +103,7 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
     }
 
     private boolean inRange(Long value, Long start, Long end) {
-        return value > start && value < end;
+        return value >= start && value <= end;
     }
 
     @Override

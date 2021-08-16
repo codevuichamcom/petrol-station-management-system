@@ -86,7 +86,7 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
     }
 
     private void checkIntersectDate(WorkSchedule newSchedule, WorkSchedule oldSchedule) throws CustomDuplicateFieldException {
-        long secondInDay = 86400000000L;
+        long secondInDay = 86400000L;
         Long oldMinStart = oldSchedule.getStartDate() / secondInDay;
         Long oldMinEnd = oldSchedule.getEndDate() / secondInDay;
         Long newMinStart = newSchedule.getStartDate() / secondInDay;

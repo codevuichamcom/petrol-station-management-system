@@ -47,7 +47,9 @@ public class DebtRepositoryCriteria {
                 .equal("ds.station_id", "stationId", filter.getStationId())
                 .like("ds.station_name", "stationName", filter.getStationName())
                 .like("ds.customer_name", "customerName", filter.getCustomerName())
-                .between("ds.total_accounts_payable", filter.getTotalAccountsPayableFrom(), filter.getTotalAccountsPayableTo());
+                .between("ds.total_accounts_payable", filter.getTotalAccountsPayableFrom(), filter.getTotalAccountsPayableTo())
+                .in("ds.station_id", "stationIds", filter.getStationIds())
+                .equal("ds.customer_id", "customerId", filter.getCustomerId());
 
         Query queryExecutor = em.createNativeQuery(query.toString());
         String countQuery = qHelper.getQuery().toString().replace("*", "count(*)");

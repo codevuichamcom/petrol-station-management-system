@@ -16,4 +16,6 @@ public class DebtDTOSummaryFilter {
     private String customerName;
     private Double totalAccountsPayableFrom;
     private Double totalAccountsPayableTo;
+    private Integer[] stationIds;
+    private Integer customerId;
 }

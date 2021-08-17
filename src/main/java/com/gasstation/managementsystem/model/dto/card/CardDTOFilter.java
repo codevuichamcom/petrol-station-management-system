@@ -18,4 +18,5 @@ public class CardDTOFilter {
     private Double availableBalanceTo;
     private String[] statuses;
     private String customerName;
+    private Integer customerId;
 }

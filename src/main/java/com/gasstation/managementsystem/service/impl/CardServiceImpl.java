@@ -1,6 +1,8 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.Card;
+import com.gasstation.managementsystem.entity.User;
+import com.gasstation.managementsystem.entity.UserType;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
@@ -44,6 +46,11 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public HashMap<String, Object> findAll(CardDTOFilter filter) {
+        User userLoggedIn = userHelper.getUserLogin();
+        UserType userType = userLoggedIn.getUserType();
+        if (userType.getId() == UserType.CUSTOMER) {
+            filter.setCustomerId(userLoggedIn.getId());
+        }
         HashMap<String, Object> temp = cardCriteria.findAll(filter);
         HashMap<String, Object> map = listCardToMap((List<Card>) temp.get("data"));
         map.put("totalElement", temp.get("totalElement"));

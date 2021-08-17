@@ -35,11 +35,18 @@ public class DebtServiceImpl implements DebtService {
 
     @Override
     public HashMap<String, Object> summary(DebtDTOSummaryFilter filter) {
+        User userLoggedIn = userHelper.getUserLogin();
+        UserType userType = userLoggedIn.getUserType();
+        if (userType.getId() == UserType.OWNER) {
+            filter.setStationIds(userHelper.getListStationIdOfOwner(userLoggedIn).toArray(Integer[]::new));
+        } else if (userType.getId() == UserType.CUSTOMER) {
+            filter.setCustomerId(userLoggedIn.getId());
+        }
         return debtCriteria.summary(filter);
     }
 
     @Override
-    public HashMap<String, Object> getDetail(DebtDTOFilter filter){
+    public HashMap<String, Object> getDetail(DebtDTOFilter filter) {
         HashMap<String, Object> temp = debtCriteria.getDetail(filter);
         List<Debt> debtList = (List<Debt>) temp.get("data");
         List<DebtDTO> debtDTOList = debtList.stream().map(DebtMapper::toDebtDTO).collect(Collectors.toList());

@@ -18,7 +18,7 @@ public class CardRepositoryCriteria {
     private final EntityManager em;
 
     public HashMap<String, Object> findAll(CardDTOFilter filter) {
-        StringBuilder query = new StringBuilder("select c from Card  c left outer join c.customer cus where 1=1");
+        StringBuilder query = new StringBuilder("select c from Card c left outer join c.customer cus where 1=1");
         QueryGenerateHelper qHelper = new QueryGenerateHelper();
         qHelper.setQuery(query);
         String[] statuses = filter.getStatuses();
@@ -26,7 +26,8 @@ public class CardRepositoryCriteria {
 
         qHelper.between("c.accountsPayable", filter.getAccountsPayableFrom(), filter.getAccountsPayableTo())
                 .between("c.availableBalance", filter.getAvailableBalanceFrom(), filter.getAvailableBalanceTo())
-                .like("cus.name", "customerName", filter.getCustomerName());
+                .like("cus.name", "customerName", filter.getCustomerName())
+                .equal("cus.id", "customerId", filter.getCustomerId());
         boolean isOr = false;
         if (statusMap.containsKey(CardDTOFilter.STATUS_ACTIVATED)) {
             qHelper.and().openBracket();
@@ -48,7 +49,7 @@ public class CardRepositoryCriteria {
 
         String countQuery = qHelper.getQuery().toString().replace("select c", "select count(c.id)");
         Query countTotalQuery = em.createQuery(countQuery);
-        qHelper.sort("c.createdDate", "DESC");
+        qHelper.sort("c.createdDate", "id");
         TypedQuery<Card> tQuery = em.createQuery(qHelper.getQuery().toString(), Card.class);
         return qHelper.paging(tQuery, countTotalQuery, filter.getPageIndex(), filter.getPageSize());
     }

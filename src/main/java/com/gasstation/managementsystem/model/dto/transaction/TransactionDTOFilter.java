@@ -22,4 +22,5 @@ public class TransactionDTOFilter {
     private String shiftName;
     private Integer[] stationIds;
     private String stationName;
+    private Integer customerId;
 }

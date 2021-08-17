@@ -56,6 +56,8 @@ public class TransactionServiceImpl implements TransactionService {
         if (userType.getId() == UserType.OWNER) {
             List<Integer> stationIds = userHelper.getListStationIdOfOwner(userLoggedIn);
             transactionDTOFilter.setStationIds(stationIds.toArray(Integer[]::new));
+        } else if (userType.getId() == UserType.CUSTOMER) {
+            transactionDTOFilter.setCustomerId(userLoggedIn.getId());
         }
         HashMap<String, Object> temp = transactionCriteria.findAll(transactionDTOFilter);
         HashMap<String, Object> map = listTransactionToMap((List<Transaction>) temp.get("data"));

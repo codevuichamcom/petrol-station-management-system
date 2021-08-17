@@ -49,7 +49,7 @@ public class CardRepositoryCriteria {
 
         String countQuery = qHelper.getQuery().toString().replace("select c", "select count(c.id)");
         Query countTotalQuery = em.createQuery(countQuery);
-        qHelper.sort("c.createdDate", "id");
+        qHelper.sort("c.createdDate", "DESC");
         TypedQuery<Card> tQuery = em.createQuery(qHelper.getQuery().toString(), Card.class);
         return qHelper.paging(tQuery, countTotalQuery, filter.getPageIndex(), filter.getPageSize());
     }

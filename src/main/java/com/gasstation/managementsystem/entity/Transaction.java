@@ -44,4 +44,7 @@ public class Transaction extends BaseEntity {
     @OneToOne(mappedBy = "transaction")
     private Debt debt;
 
+    @OneToOne(mappedBy = "transaction")
+    private Receipt receipt;
+
 }

@@ -49,20 +49,20 @@ public class UserServiceImpl implements UserService {
     public void checkDuplicateField(String username, String identityCardNumber, String phone, String email) throws CustomDuplicateFieldException {
         User userDuplicate;
         if (username != null) {
-            userDuplicate = userRepository.findByUsername(username);
+            userDuplicate = userRepository.findByUsername(username.trim());
             if (userDuplicate != null) {
                 throw new CustomDuplicateFieldException(CustomError.builder().code("duplicate").field("username").message("User name field").build());
             }
         }
         if (identityCardNumber != null) {
-            userDuplicate = userRepository.findByIdentityCardNumber(identityCardNumber);
+            userDuplicate = userRepository.findByIdentityCardNumber(identityCardNumber.trim());
             if (userDuplicate != null) {
                 throw new CustomDuplicateFieldException(CustomError.builder().code("duplicate")
                         .field("identityCardNumber").message("Duplicate field").build());
             }
         }
         if (phone != null) {
-            userDuplicate = userRepository.findByPhone(phone);
+            userDuplicate = userRepository.findByPhone(phone.trim());
             if (userDuplicate != null) {
                 throw new CustomDuplicateFieldException(CustomError.builder()
                         .code("duplicate").field("phone").message("Duplicate field").build());
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (email != null) {
-            userDuplicate = userRepository.findByEmail(email);
+            userDuplicate = userRepository.findByEmail(email.trim());
             if (userDuplicate != null) {
                 throw new CustomDuplicateFieldException(CustomError.builder()
                         .code("duplicate").field("email").message("Duplicate field").build());

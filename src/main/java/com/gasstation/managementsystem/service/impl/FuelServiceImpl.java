@@ -17,7 +17,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -62,7 +61,7 @@ public class FuelServiceImpl implements FuelService {
 
     private void checkDuplicate(String name) throws CustomDuplicateFieldException {
         if (name != null) {
-            Optional<Fuel> fuelOptional = fuelRepository.findByNameContainingIgnoreCase(name);
+            Optional<Fuel> fuelOptional = fuelRepository.findByNameContainingIgnoreCase(name.trim());
             if (fuelOptional.isPresent()) {
                 throw new CustomDuplicateFieldException(CustomError.builder()
                         .code("duplicate").field("name").message("Duplicate field name").build());

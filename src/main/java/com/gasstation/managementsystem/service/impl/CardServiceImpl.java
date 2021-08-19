@@ -22,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -84,7 +83,7 @@ public class CardServiceImpl implements CardService {
 
     private void checkDuplicate(String licensePalate) throws CustomDuplicateFieldException {
         if (licensePalate == null) return;
-        Optional<Card> cardOptional = cardRepository.findByLicensePlate(licensePalate);
+        Optional<Card> cardOptional = cardRepository.findByLicensePlate(licensePalate.trim());
         if (cardOptional.isPresent()) {
             throw new CustomDuplicateFieldException(CustomError.builder()
                     .code("duplicate").field("licensePlate").message("License Plate is duplicate").table("card_table").build());

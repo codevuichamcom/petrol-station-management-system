@@ -105,7 +105,7 @@ public class StationServiceImpl implements StationService {
 
     private void checkDuplicate(String name, String address) throws CustomDuplicateFieldException {
         if (name != null && address != null) {
-            Optional<Station> stationOptional = stationRepository.findByNameAndAddress(name, address);
+            Optional<Station> stationOptional = stationRepository.findByNameAndAddress(name.trim(), address.trim());
             if (stationOptional.isPresent()) {
                 throw new CustomDuplicateFieldException(CustomError.builder()
                         .code("duplicate").field("(name,address)").message("Duplicate field (name,address)")

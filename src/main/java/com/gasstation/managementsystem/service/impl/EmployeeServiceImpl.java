@@ -21,7 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,14 +91,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private void checkDuplicate(String phone, String identityCardNumber) throws CustomDuplicateFieldException {
         if (phone != null) {
-            Optional<Employee> employee = employeeRepository.findByPhone(phone);
+            Optional<Employee> employee = employeeRepository.findByPhone(phone.trim());
             if (employee.isPresent()) {
                 throw new CustomDuplicateFieldException(CustomError.builder()
                         .code("duplicate").field("phone").message("Phone is duplicate").table("employee_table").build());
             }
         }
         if (identityCardNumber != null) {
-            Optional<Employee> employee = employeeRepository.findByIdentityCardNumber(identityCardNumber);
+            Optional<Employee> employee = employeeRepository.findByIdentityCardNumber(identityCardNumber.trim());
             if (employee.isPresent()) {
                 throw new CustomDuplicateFieldException(CustomError.builder().code("duplicate")
                         .field("identityCardNumber").message("Duplicate field").build());

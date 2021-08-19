@@ -64,7 +64,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     private void checkDuplicate(String phone) throws CustomDuplicateFieldException {
         if (phone == null) return;
-        Optional<Supplier> supplier = supplierRepository.findByPhone(phone);
+        Optional<Supplier> supplier = supplierRepository.findByPhone(phone.trim());
         if (supplier.isPresent()) {
             throw new CustomDuplicateFieldException(CustomError.builder()
                     .code("duplicate").field("phone").message("Phone is duplicate").table("supplier_table").build());

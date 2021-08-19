@@ -92,7 +92,7 @@ public class ShiftServiceImpl implements ShiftService {
     }
 
     private void checkDuplicateName(String name, Integer stationId) throws CustomDuplicateFieldException {
-        Optional<Shift> shiftOptional = shiftRepository.findByNameAndStationId(name, stationId);
+        Optional<Shift> shiftOptional = shiftRepository.findByNameAndStationId(name.trim(), stationId);
         if (shiftOptional.isPresent()) {
             throw new CustomDuplicateFieldException(CustomError.builder()
                     .code("duplicate")

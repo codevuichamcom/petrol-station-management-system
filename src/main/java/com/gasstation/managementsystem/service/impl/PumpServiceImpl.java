@@ -98,7 +98,7 @@ public class PumpServiceImpl implements PumpService {
 
     private void checkDuplicate(String name, Integer stationId) throws CustomDuplicateFieldException {
         if (name != null && stationId != null) {
-            Optional<Pump> pumpOptional = pumpRepository.findByNameAndStationId(name, stationId);
+            Optional<Pump> pumpOptional = pumpRepository.findByNameAndStationId(name.trim(), stationId);
             if (pumpOptional.isPresent()) {
                 throw new CustomDuplicateFieldException(CustomError.builder()
                         .code("duplicate").field("(name,stationId)").message("Name and stationId is duplicate").table("pump_table").build());

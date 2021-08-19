@@ -4,8 +4,6 @@ import com.gasstation.managementsystem.entity.Api;
 import com.gasstation.managementsystem.model.dto.dashboard.FuelStatisticDTOFilter;
 import com.gasstation.managementsystem.model.dto.dashboard.TankStatisticDTOFilter;
 import com.gasstation.managementsystem.service.DashboardService;
-import com.gasstation.managementsystem.service.StationService;
-import com.gasstation.managementsystem.utils.UserHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +18,6 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class DashboardController {
     private final DashboardService dashboardService;
-    private final UserHelper userHelper;
-    private final StationService stationService;
 
     @Operation(summary = "Fuel statistic")
     @GetMapping("/fuel-statistic")

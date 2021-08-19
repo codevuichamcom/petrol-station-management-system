@@ -18,6 +18,7 @@ import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -50,10 +51,10 @@ public class StationServiceImpl implements StationService {
         int userTypeId = userLoggedIn.getUserType().getId();
         switch (userTypeId) {
             case UserType.ADMIN:
-                stations = stationRepository.findAll();
+                stations = stationRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
                 break;
             case UserType.OWNER:
-                stations = stationRepository.findByOwnerId(userLoggedIn.getId());
+                stations = stationRepository.findByOwnerId(userLoggedIn.getId(), Sort.by(Sort.Direction.DESC, "id"));
                 break;
         }
         return listStationToMap(stations);

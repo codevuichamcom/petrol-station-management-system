@@ -145,7 +145,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Scheduled(cron = "0 30 1 * * ?")
-    private void createPumpShiftForAllPump() {
+    public void createPumpShiftForAllPump() {
         ArrayList<PumpShift> pumpShifts = new ArrayList<>();
         pumpRepository.findAll().forEach(pump -> {
             int stationId = pump.getTank().getStation().getId();

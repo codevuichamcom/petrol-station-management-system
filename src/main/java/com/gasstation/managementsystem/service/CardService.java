@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.service;
 
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.card.CardDTO;
@@ -19,5 +20,5 @@ public interface CardService {
 
     CardDTO update(UUID id, CardDTOUpdate cardDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException;
 
-    CardDTO delete(UUID id) throws CustomNotFoundException;
+    CardDTO delete(UUID id) throws CustomNotFoundException, CustomBadRequestException;
 }

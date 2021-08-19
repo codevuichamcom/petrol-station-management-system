@@ -1,6 +1,7 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.*;
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
@@ -16,6 +17,7 @@ import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -132,9 +134,16 @@ public class TankServiceImpl implements TankService {
 
 
     @Override
-    public TankDTO delete(int id) throws CustomNotFoundException {
+    public TankDTO delete(int id) throws CustomNotFoundException, CustomBadRequestException {
         Tank tank = optionalValidate.getTankById(id);
-        tankRepository.delete(tank);
+        try {
+            tankRepository.delete(tank);
+        } catch (DataIntegrityViolationException ex) {
+            throw new CustomBadRequestException(CustomError.builder()
+                    .code("fk_constraint")
+                    .field("tank_id")
+                    .message("Tank in use").build());
+        }
         return TankMapper.toTankDTO(tank);
     }
 }

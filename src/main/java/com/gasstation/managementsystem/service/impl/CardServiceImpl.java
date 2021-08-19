@@ -3,6 +3,7 @@ package com.gasstation.managementsystem.service.impl;
 import com.gasstation.managementsystem.entity.Card;
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.entity.UserType;
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
@@ -19,6 +20,7 @@ import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -120,9 +122,16 @@ public class CardServiceImpl implements CardService {
 
 
     @Override
-    public CardDTO delete(UUID id) throws CustomNotFoundException {
+    public CardDTO delete(UUID id) throws CustomNotFoundException, CustomBadRequestException {
         Card card = optionalValidate.getCardById(id);
-        cardRepository.delete(card);
+        try {
+            cardRepository.delete(card);
+        } catch (DataIntegrityViolationException ex) {
+            throw new CustomBadRequestException(CustomError.builder()
+                    .code("fk_constraint")
+                    .field("card_id")
+                    .message("Card in use").build());
+        }
         return CardMapper.toCardDTO(card);
     }
 }

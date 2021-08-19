@@ -4,6 +4,7 @@ import com.gasstation.managementsystem.entity.Pump;
 import com.gasstation.managementsystem.entity.Tank;
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.entity.UserType;
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
@@ -17,6 +18,7 @@ import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -123,9 +125,16 @@ public class PumpServiceImpl implements PumpService {
     }
 
     @Override
-    public PumpDTO delete(int id) throws CustomNotFoundException {
+    public PumpDTO delete(int id) throws CustomNotFoundException, CustomBadRequestException {
         Pump pump = optionalValidate.getPumpById(id);
-        pumpRepository.delete(pump);
+        try {
+            pumpRepository.delete(pump);
+        } catch (DataIntegrityViolationException ex) {
+            throw new CustomBadRequestException(CustomError.builder()
+                    .code("fk_constraint")
+                    .field("pump_id")
+                    .message("Pump in use").build());
+        }
         return PumpMapper.toPumpDTO(pump);
     }
 }

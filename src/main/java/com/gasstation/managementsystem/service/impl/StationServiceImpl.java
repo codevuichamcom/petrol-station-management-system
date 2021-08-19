@@ -18,6 +18,7 @@ import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -139,9 +140,16 @@ public class StationServiceImpl implements StationService {
     }
 
     @Override
-    public StationDTO delete(int id) throws CustomNotFoundException {
+    public StationDTO delete(int id) throws CustomNotFoundException, CustomBadRequestException {
         Station station = optionalValidate.getStationById(id);
-        stationRepository.delete(station);
+        try {
+            stationRepository.delete(station);
+        } catch (DataIntegrityViolationException ex) {
+            throw new CustomBadRequestException(CustomError.builder()
+                    .code("fk_constraint")
+                    .field("station_id")
+                    .message("Station in use").build());
+        }
         return StationMapper.toStationDTO(station);
     }
 }

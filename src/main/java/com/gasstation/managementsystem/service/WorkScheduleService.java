@@ -18,5 +18,5 @@ public interface WorkScheduleService {
 
     WorkScheduleDTO update(int id, WorkScheduleDTOUpdate workScheduleDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException;
 
-    WorkScheduleDTO delete(int id) throws CustomNotFoundException;
+    WorkScheduleDTO delete(int id) throws CustomNotFoundException, CustomBadRequestException;
 }

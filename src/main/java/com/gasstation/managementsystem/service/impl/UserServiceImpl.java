@@ -16,6 +16,7 @@ import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -148,9 +149,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO delete(int id) throws CustomNotFoundException {
+    public UserDTO delete(int id) throws CustomNotFoundException, CustomBadRequestException {
         User user = optionalValidate.getUserById(id);
-        userRepository.delete(user);
+        try {
+            userRepository.delete(user);
+        } catch (DataIntegrityViolationException ex) {
+            throw new CustomBadRequestException(CustomError.builder()
+                    .code("fk_constraint")
+                    .field("user_id")
+                    .message("User in use").build());
+        }
         return UserMapper.toUserDTO(user);
     }
 

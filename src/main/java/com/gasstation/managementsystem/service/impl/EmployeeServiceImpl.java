@@ -4,6 +4,7 @@ import com.gasstation.managementsystem.entity.Employee;
 import com.gasstation.managementsystem.entity.Station;
 import com.gasstation.managementsystem.entity.User;
 import com.gasstation.managementsystem.entity.UserType;
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
@@ -17,6 +18,7 @@ import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -126,9 +128,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDTO delete(int id) throws CustomNotFoundException {
+    public EmployeeDTO delete(int id) throws CustomNotFoundException, CustomBadRequestException {
         Employee employee = optionalValidate.getEmployeeById(id);
-        employeeRepository.delete(employee);
+        try {
+            employeeRepository.delete(employee);
+        } catch (DataIntegrityViolationException ex) {
+            throw new CustomBadRequestException(CustomError.builder()
+                    .code("fk_constraint")
+                    .field("Employee_id")
+                    .message("Employee in use").build());
+        }
         return EmployeeMapper.toEmployeeDTO(employee);
     }
 

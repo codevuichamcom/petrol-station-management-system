@@ -18,5 +18,5 @@ public interface FuelImportService {
 
     FuelImportDTO update(int id, FuelImportDTOUpdate fuelImportDTOUpdate) throws CustomNotFoundException, CustomBadRequestException;
 
-    FuelImportDTO delete(int id) throws CustomNotFoundException;
+    FuelImportDTO delete(int id) throws CustomNotFoundException, CustomBadRequestException;
 }

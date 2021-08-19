@@ -17,6 +17,7 @@ import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -166,9 +167,16 @@ public class FuelImportServiceImpl implements FuelImportService {
 
 
     @Override
-    public FuelImportDTO delete(int id) throws CustomNotFoundException {
+    public FuelImportDTO delete(int id) throws CustomNotFoundException, CustomBadRequestException {
         FuelImport fuelImport = optionalValidate.getFuelImportById(id);
-        fuelImportRepository.delete(fuelImport);
+        try {
+            fuelImportRepository.delete(fuelImport);
+        } catch (DataIntegrityViolationException ex) {
+            throw new CustomBadRequestException(CustomError.builder()
+                    .code("fk_constraint")
+                    .field("fuel_import_id")
+                    .message("Fuel import in use").build());
+        }
         return FuelImportMapper.toFuelImportDTO(fuelImport);
     }
 }

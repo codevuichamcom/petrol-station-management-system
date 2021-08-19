@@ -1,6 +1,7 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.*;
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
@@ -13,6 +14,7 @@ import com.gasstation.managementsystem.service.WorkScheduleService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -129,9 +131,16 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
     }
 
     @Override
-    public WorkScheduleDTO delete(int id) throws CustomNotFoundException {
+    public WorkScheduleDTO delete(int id) throws CustomNotFoundException, CustomBadRequestException {
         WorkSchedule workSchedule = optionalValidate.getWorkScheduleById(id);
-        workScheduleRepository.delete(workSchedule);
+        try {
+            workScheduleRepository.delete(workSchedule);
+        } catch (DataIntegrityViolationException ex) {
+            throw new CustomBadRequestException(CustomError.builder()
+                    .code("fk_constraint")
+                    .field("work_schedule_id")
+                    .message("Work schedule in use").build());
+        }
         return WorkScheduleMapper.toWorkScheduleDTO(workSchedule);
     }
 }

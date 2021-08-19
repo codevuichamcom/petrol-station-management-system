@@ -52,7 +52,7 @@ public class UserController {
 
     @Operation(summary = "Delete user by id")
     @DeleteMapping("/users/{id}")
-    public UserDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
+    public UserDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException, CustomBadRequestException {
         return userService.delete(id);
     }
 }

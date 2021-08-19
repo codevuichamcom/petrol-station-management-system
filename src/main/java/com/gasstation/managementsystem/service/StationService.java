@@ -18,5 +18,5 @@ public interface StationService {
 
     StationDTO update(int id, StationDTOUpdate stationDTOUpdate) throws CustomBadRequestException, CustomNotFoundException, CustomDuplicateFieldException;
 
-    StationDTO delete(int id) throws CustomNotFoundException;
+    StationDTO delete(int id) throws CustomNotFoundException, CustomBadRequestException;
 }

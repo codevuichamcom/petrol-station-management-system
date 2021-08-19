@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.controller;
 
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.card.CardDTO;
@@ -67,7 +68,7 @@ public class CardController {
 
     @Operation(summary = "Delete card by id")
     @DeleteMapping("/cards/{id}")
-    public CardDTO delete(@PathVariable(name = "id") UUID id) throws CustomNotFoundException {
+    public CardDTO delete(@PathVariable(name = "id") UUID id) throws CustomNotFoundException, CustomBadRequestException {
         return cardService.delete(id);
     }
 }

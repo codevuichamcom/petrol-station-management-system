@@ -1,6 +1,7 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.Supplier;
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
@@ -13,6 +14,7 @@ import com.gasstation.managementsystem.service.SupplierService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -85,9 +87,16 @@ public class SupplierServiceImpl implements SupplierService {
 
 
     @Override
-    public SupplierDTO delete(int id) throws CustomNotFoundException {
+    public SupplierDTO delete(int id) throws CustomNotFoundException, CustomBadRequestException {
         Supplier supplier = optionalValidate.getSupplierById(id);
-        supplierRepository.delete(supplier);
+        try {
+            supplierRepository.delete(supplier);
+        } catch (DataIntegrityViolationException ex) {
+            throw new CustomBadRequestException(CustomError.builder()
+                    .code("fk_constraint")
+                    .field("supplier_id")
+                    .message("Supplier in use").build());
+        }
         return SupplierMapper.toSupplierDTO(supplier);
     }
 }

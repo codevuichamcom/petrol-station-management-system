@@ -59,7 +59,7 @@ public class StationController {
 
     @Operation(summary = "Delete Station by id")
     @DeleteMapping("/stations/{id}")
-    public StationDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
+    public StationDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException, CustomBadRequestException {
         return stationService.delete(id);
     }
 }

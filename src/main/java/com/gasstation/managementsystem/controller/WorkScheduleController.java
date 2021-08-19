@@ -53,7 +53,7 @@ public class WorkScheduleController {
 
     @Operation(summary = "Delete work schedule by id")
     @DeleteMapping("/work-schedules/{id}")
-    public WorkScheduleDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
+    public WorkScheduleDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException, CustomBadRequestException {
         return workScheduleService.delete(id);
     }
 

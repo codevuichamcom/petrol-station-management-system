@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.controller;
 
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.supplier.SupplierDTO;
@@ -49,7 +50,7 @@ public class SupplierController {
 
     @Operation(summary = "Delete supplier by id")
     @DeleteMapping("/suppliers/{id}")
-    public SupplierDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
+    public SupplierDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException, CustomBadRequestException {
         return supplierService.delete(id);
     }
 }

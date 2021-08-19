@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.service;
 
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.employee.EmployeeDTO;
@@ -17,5 +18,5 @@ public interface EmployeeService {
 
     EmployeeDTO update(int id, EmployeeDTOUpdate employeeDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException;
 
-    EmployeeDTO delete(int id) throws CustomNotFoundException;
+    EmployeeDTO delete(int id) throws CustomNotFoundException, CustomBadRequestException;
 }

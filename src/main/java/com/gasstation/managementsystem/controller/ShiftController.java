@@ -49,7 +49,7 @@ public class ShiftController {
 
     @Operation(summary = "Delete Shift by id")
     @DeleteMapping("/shifts/{id}")
-    public ShiftDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
+    public ShiftDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException, CustomBadRequestException {
         return shiftService.delete(id);
     }
 }

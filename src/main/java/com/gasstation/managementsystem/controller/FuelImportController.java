@@ -51,7 +51,7 @@ public class FuelImportController {
 
     @Operation(summary = "Delete import bill by id")
     @DeleteMapping("/fuel-imports/{id}")
-    public FuelImportDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
+    public FuelImportDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException, CustomBadRequestException {
         return fuelImportService.delete(id);
     }
 }

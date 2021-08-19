@@ -20,7 +20,7 @@ public interface UserService {
 
     UserDTO update(int id, UserDTOUpdate userDTOUpdate) throws CustomDuplicateFieldException, CustomBadRequestException, CustomNotFoundException;
 
-    UserDTO delete(int id) throws CustomNotFoundException;
+    UserDTO delete(int id) throws CustomNotFoundException, CustomBadRequestException;
 
     UserDTO findByUserName(String username);
 

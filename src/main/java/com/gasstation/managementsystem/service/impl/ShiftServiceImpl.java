@@ -18,6 +18,7 @@ import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -148,9 +149,16 @@ public class ShiftServiceImpl implements ShiftService {
 
 
     @Override
-    public ShiftDTO delete(int id) throws CustomNotFoundException {
+    public ShiftDTO delete(int id) throws CustomNotFoundException, CustomBadRequestException {
         Shift shift = optionalValidate.getShiftById(id);
-        shiftRepository.delete(shift);
+        try {
+            shiftRepository.delete(shift);
+        } catch (DataIntegrityViolationException ex) {
+            throw new CustomBadRequestException(CustomError.builder()
+                    .code("fk_constraint")
+                    .field("shift_id")
+                    .message("Shift in use").build());
+        }
         return ShiftMapper.toShiftDTO(shift);
     }
 }

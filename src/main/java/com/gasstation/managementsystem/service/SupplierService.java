@@ -1,5 +1,6 @@
 package com.gasstation.managementsystem.service;
 
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.supplier.SupplierDTO;
@@ -19,5 +20,5 @@ public interface SupplierService {
 
     SupplierDTO update(int id, SupplierDTOUpdate supplierDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException;
 
-    SupplierDTO delete(int id) throws CustomNotFoundException;
+    SupplierDTO delete(int id) throws CustomNotFoundException, CustomBadRequestException;
 }

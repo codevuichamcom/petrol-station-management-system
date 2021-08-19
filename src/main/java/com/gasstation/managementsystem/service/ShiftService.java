@@ -19,5 +19,5 @@ public interface ShiftService {
 
     ShiftDTO update(int id, ShiftDTOUpdate shiftDTOUpdate) throws CustomNotFoundException, CustomBadRequestException, CustomDuplicateFieldException;
 
-    ShiftDTO delete(int id) throws CustomNotFoundException;
+    ShiftDTO delete(int id) throws CustomNotFoundException, CustomBadRequestException;
 }

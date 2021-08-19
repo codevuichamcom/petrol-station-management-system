@@ -1,6 +1,7 @@
 package com.gasstation.managementsystem.controller;
 
 import com.gasstation.managementsystem.entity.Api;
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.dto.employee.EmployeeDTO;
@@ -50,7 +51,7 @@ public class EmployeeController {
 
     @Operation(summary = "Delete employee by id")
     @DeleteMapping("/employees/{id}")
-    public EmployeeDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException {
+    public EmployeeDTO delete(@PathVariable(name = "id") Integer id) throws CustomNotFoundException, CustomBadRequestException {
         return employeeService.delete(id);
     }
 }

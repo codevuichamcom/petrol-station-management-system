@@ -1,6 +1,7 @@
 package com.gasstation.managementsystem.service.impl;
 
 import com.gasstation.managementsystem.entity.Fuel;
+import com.gasstation.managementsystem.exception.custom.CustomBadRequestException;
 import com.gasstation.managementsystem.exception.custom.CustomDuplicateFieldException;
 import com.gasstation.managementsystem.exception.custom.CustomNotFoundException;
 import com.gasstation.managementsystem.model.CustomError;
@@ -13,6 +14,7 @@ import com.gasstation.managementsystem.service.FuelService;
 import com.gasstation.managementsystem.utils.OptionalValidate;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,9 +85,16 @@ public class FuelServiceImpl implements FuelService {
     }
 
     @Override
-    public FuelDTO delete(int id) throws CustomNotFoundException {
+    public FuelDTO delete(int id) throws CustomNotFoundException, CustomBadRequestException {
         Fuel fuel = optionalValidate.getFuelById(id);
-        fuelRepository.delete(fuel);
+        try {
+            fuelRepository.delete(fuel);
+        } catch (DataIntegrityViolationException ex) {
+            throw new CustomBadRequestException(CustomError.builder()
+                    .code("fk_constraint")
+                    .field("fuel_id")
+                    .message("Fuel in use").build());
+        }
         return FuelMapper.toFuelDTO(fuel);
     }
 }

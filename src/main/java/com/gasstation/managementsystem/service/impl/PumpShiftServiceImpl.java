@@ -86,7 +86,7 @@ public class PumpShiftServiceImpl implements PumShiftService {
     @Override
     public HashMap<String, Object> updateAllByStationId(int stationId) throws CustomNotFoundException {
         optionalValidate.getStationById(stationId);
-        List<PumpShift> pumpShifts = pumpShiftRepository.findAllByStationId(stationId);
+        List<PumpShift> pumpShifts = pumpShiftRepository.findAllByStationId(stationId, DateTimeHelper.getCurrentUnixTime());
         HashMap<String, Object> map = new HashMap<>();
         if (pumpShifts != null && pumpShifts.size() != 0) {
             long currentTime = DateTimeHelper.getCurrentUnixTime();

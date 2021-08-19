@@ -29,7 +29,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class TankServiceImpl implements TankService {
     private final TankRepository tankRepository;
@@ -102,6 +101,7 @@ public class TankServiceImpl implements TankService {
     }
 
     @Override
+    @Transactional
     public TankDTO update(int id, TankDTOUpdate tankDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         Tank oldTank = optionalValidate.getTankById(id);
         String name = tankDTOUpdate.getName();

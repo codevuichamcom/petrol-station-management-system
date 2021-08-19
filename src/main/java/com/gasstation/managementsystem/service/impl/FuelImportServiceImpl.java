@@ -29,7 +29,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class FuelImportServiceImpl implements FuelImportService {
     private final FuelImportRepository fuelImportRepository;
@@ -76,6 +75,7 @@ public class FuelImportServiceImpl implements FuelImportService {
     }
 
     @Override
+    @Transactional
     public FuelImportDTO create(FuelImportDTOCreate fuelImportDTOCreate) throws CustomNotFoundException, CustomBadRequestException {
 
         Tank tank = optionalValidate.getTankById(fuelImportDTOCreate.getTankId());
@@ -125,6 +125,7 @@ public class FuelImportServiceImpl implements FuelImportService {
     }
 
     @Override
+    @Transactional
     public FuelImportDTO update(int id, FuelImportDTOUpdate fuelImportDTOUpdate) throws CustomNotFoundException, CustomBadRequestException {
         FuelImport oldFuelImport = optionalValidate.getFuelImportById(id);
         FuelImportMapper.copyNonNullToFuelImport(oldFuelImport, fuelImportDTOUpdate);

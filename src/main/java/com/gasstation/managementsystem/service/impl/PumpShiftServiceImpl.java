@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class PumpShiftServiceImpl implements PumShiftService {
     private final PumpShiftRepository pumpShiftRepository;
@@ -84,6 +83,7 @@ public class PumpShiftServiceImpl implements PumShiftService {
     }
 
     @Override
+    @Transactional
     public HashMap<String, Object> updateAllByStationId(int stationId) throws CustomNotFoundException {
         optionalValidate.getStationById(stationId);
         List<PumpShift> pumpShifts = pumpShiftRepository.findAllByStationId(stationId, DateTimeHelper.getCurrentUnixTime());

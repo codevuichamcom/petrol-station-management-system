@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;

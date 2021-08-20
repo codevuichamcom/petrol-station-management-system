@@ -82,8 +82,9 @@ public class CardServiceImpl implements CardService {
     }
 
     private void checkDuplicate(String licensePalate) throws CustomDuplicateFieldException {
+        licensePalate = StringUtils.trim(licensePalate);
         if (licensePalate == null) return;
-        Optional<Card> cardOptional = cardRepository.findByLicensePlate(licensePalate.trim());
+        Optional<Card> cardOptional = cardRepository.findByLicensePlate(licensePalate);
         if (cardOptional.isPresent()) {
             throw new CustomDuplicateFieldException(CustomError.builder()
                     .code("duplicate").field("licensePlate").message("License Plate is duplicate").table("card_table").build());
@@ -93,7 +94,7 @@ public class CardServiceImpl implements CardService {
     @Override
     public CardDTO update(UUID id, CardDTOUpdate cardDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         Card oldCard = optionalValidate.getCardById(id);
-        String licensePalate = cardDTOUpdate.getLicensePlate();
+        String licensePalate = StringUtils.trim(cardDTOUpdate.getLicensePlate());
         if (needCheckDuplicate(licensePalate, oldCard)) {
             checkDuplicate(licensePalate);
         }
@@ -114,8 +115,9 @@ public class CardServiceImpl implements CardService {
     }
 
     private boolean needCheckDuplicate(String licensePlate, Card oldCard) {
+        licensePlate = StringUtils.trim(licensePlate);
         if (licensePlate == null) return false;
-        return !licensePlate.trim().equalsIgnoreCase(oldCard.getLicensePlate().trim());
+        return !licensePlate.equalsIgnoreCase(oldCard.getLicensePlate());
     }
 
 

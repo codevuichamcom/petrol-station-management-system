@@ -90,15 +90,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     private void checkDuplicate(String phone, String identityCardNumber) throws CustomDuplicateFieldException {
+        phone = StringUtils.trim(phone);
+        identityCardNumber = StringUtils.trim(identityCardNumber);
         if (phone != null) {
-            Optional<Employee> employee = employeeRepository.findByPhone(phone.trim());
+            Optional<Employee> employee = employeeRepository.findByPhone(phone);
             if (employee.isPresent()) {
                 throw new CustomDuplicateFieldException(CustomError.builder()
                         .code("duplicate").field("phone").message("Phone is duplicate").table("employee_table").build());
             }
         }
         if (identityCardNumber != null) {
-            Optional<Employee> employee = employeeRepository.findByIdentityCardNumber(identityCardNumber.trim());
+            Optional<Employee> employee = employeeRepository.findByIdentityCardNumber(identityCardNumber);
             if (employee.isPresent()) {
                 throw new CustomDuplicateFieldException(CustomError.builder().code("duplicate")
                         .field("identityCardNumber").message("Duplicate field").build());
@@ -110,8 +112,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDTO update(int id, EmployeeDTOUpdate employeeDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         Employee oldEmployee = optionalValidate.getEmployeeById(id);
-        String phone = employeeDTOUpdate.getPhone();
-        String identityCardNumber = employeeDTOUpdate.getIdentityCardNumber();
+        String phone = StringUtils.trim(employeeDTOUpdate.getPhone());
+        String identityCardNumber = StringUtils.trim(employeeDTOUpdate.getIdentityCardNumber());
         if (phone != null && phone.equalsIgnoreCase(oldEmployee.getPhone())) {
             phone = null;
         }

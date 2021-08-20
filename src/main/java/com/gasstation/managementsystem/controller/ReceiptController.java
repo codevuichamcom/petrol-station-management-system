@@ -28,6 +28,7 @@ public class ReceiptController {
                                           @RequestParam(name = "amountFrom", required = false) Double amountFrom,
                                           @RequestParam(name = "amountTo", required = false) Double amountTo,
                                           @RequestParam(name = "customerName", required = false) String customerName,
+                                          @RequestParam(name = "reason", required = false) String reason,
                                           @RequestParam(name = "creatorName", required = false) String creatorName) {
         ReceiptDTOFilter filter = ReceiptDTOFilter.builder()
                 .pageIndex(pageIndex)
@@ -37,7 +38,8 @@ public class ReceiptController {
                 .amountFrom(amountFrom)
                 .amountTo(amountTo)
                 .customerName(customerName)
-                .creatorName(creatorName).build();
+                .creatorName(creatorName)
+                .reason(reason).build();
         return receiptService.findAll(filter);
     }
 

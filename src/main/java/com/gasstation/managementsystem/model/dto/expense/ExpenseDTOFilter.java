@@ -16,6 +16,7 @@ public class ExpenseDTOFilter {
     private Long createdDateTo;
     private String stationName;
     private String creatorName;
+    private String reason;
     private Integer ownerId;
 
 }

@@ -25,6 +25,7 @@ public class ExpenseRepositoryCriteria {
                 .between("e.createdDate", filter.getCreatedDateFrom(), filter.getCreatedDateTo())
                 .like("c.name", "creatorName", filter.getCreatorName())
                 .like("s.name", "stationName", filter.getStationName())
+                .like("e.reason", "reason", filter.getReason())
                 .equal("s.owner.id", "ownerId", filter.getOwnerId());
         String countQuery = qHelper.getQuery().toString().replace("select e", "select count(e.id)");
         Query countTotalQuery = em.createQuery(countQuery);

@@ -73,7 +73,7 @@ public class FuelServiceImpl implements FuelService {
     public FuelDTO update(int id, FuelDTOUpdate fuelDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         Fuel oldFuel = optionalValidate.getFuelById(id);
         String name = fuelDTOUpdate.getName();
-        if (name != null && !name.equalsIgnoreCase(oldFuel.getName())) {
+        if (name != null && !name.trim().equalsIgnoreCase(oldFuel.getName().trim())) {
             checkDuplicate(name);
         }
         FuelMapper.copyNonNullToFuel(oldFuel, fuelDTOUpdate);

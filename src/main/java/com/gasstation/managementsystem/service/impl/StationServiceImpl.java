@@ -135,8 +135,8 @@ public class StationServiceImpl implements StationService {
     }
 
     private boolean notChangeNameAndAddress(String name, String address, Station oldStation) {
-        return name != null && name.equalsIgnoreCase(oldStation.getName())
-                && address != null && address.equalsIgnoreCase(oldStation.getAddress());
+        return name != null && name.trim().equalsIgnoreCase(oldStation.getName().trim())
+                && address != null && address.trim().equalsIgnoreCase(oldStation.getAddress().trim());
     }
 
     @Override

@@ -121,7 +121,7 @@ public class PumpServiceImpl implements PumpService {
     }
 
     private boolean needCheckDuplicate(String name, Pump oldPump) {
-        return (name != null && !name.equalsIgnoreCase(oldPump.getName()));
+        return (name != null && !name.trim().equalsIgnoreCase(oldPump.getName().trim()));
     }
 
     @Override

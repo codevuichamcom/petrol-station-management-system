@@ -130,7 +130,7 @@ public class ShiftServiceImpl implements ShiftService {
     @Override
     public ShiftDTO update(int id, ShiftDTOUpdate shiftDTOUpdate) throws CustomNotFoundException, CustomBadRequestException, CustomDuplicateFieldException {
         Shift oldShift = optionalValidate.getShiftById(id);
-        if (shiftDTOUpdate.getName() != null && !oldShift.getName().equals(shiftDTOUpdate.getName())) {
+        if (shiftDTOUpdate.getName() != null && !oldShift.getName().trim().equals(shiftDTOUpdate.getName().trim())) {
             checkDuplicateName(shiftDTOUpdate.getName(), oldShift.getStation().getId());
         }
         ShiftMapper.copyNonNullToShift(oldShift, shiftDTOUpdate);

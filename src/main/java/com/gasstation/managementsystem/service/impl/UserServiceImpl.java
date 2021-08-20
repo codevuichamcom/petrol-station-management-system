@@ -20,7 +20,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,17 +122,17 @@ public class UserServiceImpl implements UserService {
 
         User oldUser = optionalValidate.getUserById(id);
         String identityCardNumber = userDTOUpdate.getIdentityCardNumber();
-        if (identityCardNumber != null && identityCardNumber.equals(oldUser.getIdentityCardNumber())) {
+        if (identityCardNumber != null && identityCardNumber.trim().equals(oldUser.getIdentityCardNumber().trim())) {
             identityCardNumber = null;
         }
         String phone = userDTOUpdate.getPhone();
-        if (phone != null && phone.equals(oldUser.getPhone())) {
+        if (phone != null && phone.trim().equals(oldUser.getPhone().trim())) {
             phone = null;
         }
         String email = userDTOUpdate.getEmail();
         if (email == null) {
             oldUser.setEmail(null);
-        } else if (email.equals(oldUser.getEmail())) {
+        } else if (email.trim().equals(oldUser.getEmail().trim())) {
             email = null;
         }
         checkDuplicateField(null, identityCardNumber, phone, email);

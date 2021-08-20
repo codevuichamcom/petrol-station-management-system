@@ -75,7 +75,7 @@ public class SupplierServiceImpl implements SupplierService {
     public SupplierDTO update(int id, SupplierDTOUpdate supplierDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         Supplier oldSupplier = optionalValidate.getSupplierById(id);
         String phone = supplierDTOUpdate.getPhone();
-        if (phone != null && phone.equalsIgnoreCase(oldSupplier.getPhone())) {
+        if (phone != null && phone.trim().equalsIgnoreCase(oldSupplier.getPhone().trim())) {
             phone = null;
         }
         checkDuplicate(phone);

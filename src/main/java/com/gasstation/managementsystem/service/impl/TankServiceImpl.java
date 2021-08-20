@@ -129,7 +129,7 @@ public class TankServiceImpl implements TankService {
     }
 
     private boolean needCheckDuplicate(String name, Tank oldTank) {
-        return name != null && !name.equals(oldTank.getName());
+        return name != null && !name.trim().equals(oldTank.getName().trim());
     }
 
 

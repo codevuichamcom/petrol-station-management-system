@@ -86,8 +86,8 @@ public class PumpServiceImpl implements PumpService {
         checkDuplicate(pumpDTOCreate.getName(), tank.getStation().getId());
         Pump pump = PumpMapper.toPump(pumpDTOCreate);
         pump.setTank(tank);
-        pump = pumpRepository.save(pump);
         trimString(pump);
+        pump = pumpRepository.save(pump);
         return PumpMapper.toPumpDTO(pump);
     }
 

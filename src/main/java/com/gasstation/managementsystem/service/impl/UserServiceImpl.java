@@ -46,22 +46,26 @@ public class UserServiceImpl implements UserService {
 
 
     public void checkDuplicateField(String username, String identityCardNumber, String phone, String email) throws CustomDuplicateFieldException {
+        username = StringUtils.trim(username);
+        identityCardNumber = StringUtils.trim(identityCardNumber);
+        phone = StringUtils.trim(phone);
+        email = StringUtils.trim(email);
         User userDuplicate;
         if (username != null) {
-            userDuplicate = userRepository.findByUsername(username.trim());
+            userDuplicate = userRepository.findByUsername(username);
             if (userDuplicate != null) {
                 throw new CustomDuplicateFieldException(CustomError.builder().code("duplicate").field("username").message("User name field").build());
             }
         }
         if (identityCardNumber != null) {
-            userDuplicate = userRepository.findByIdentityCardNumber(identityCardNumber.trim());
+            userDuplicate = userRepository.findByIdentityCardNumber(identityCardNumber);
             if (userDuplicate != null) {
                 throw new CustomDuplicateFieldException(CustomError.builder().code("duplicate")
                         .field("identityCardNumber").message("Duplicate field").build());
             }
         }
         if (phone != null) {
-            userDuplicate = userRepository.findByPhone(phone.trim());
+            userDuplicate = userRepository.findByPhone(phone);
             if (userDuplicate != null) {
                 throw new CustomDuplicateFieldException(CustomError.builder()
                         .code("duplicate").field("phone").message("Duplicate field").build());
@@ -69,7 +73,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (email != null) {
-            userDuplicate = userRepository.findByEmail(email.trim());
+            userDuplicate = userRepository.findByEmail(email);
             if (userDuplicate != null) {
                 throw new CustomDuplicateFieldException(CustomError.builder()
                         .code("duplicate").field("email").message("Duplicate field").build());
@@ -121,18 +125,18 @@ public class UserServiceImpl implements UserService {
     public UserDTO update(int id, UserDTOUpdate userDTOUpdate) throws CustomDuplicateFieldException, CustomBadRequestException, CustomNotFoundException {
 
         User oldUser = optionalValidate.getUserById(id);
-        String identityCardNumber = userDTOUpdate.getIdentityCardNumber();
-        if (identityCardNumber != null && identityCardNumber.trim().equals(oldUser.getIdentityCardNumber().trim())) {
+        String identityCardNumber = StringUtils.trim(userDTOUpdate.getIdentityCardNumber());
+        if (identityCardNumber != null && identityCardNumber.equals(oldUser.getIdentityCardNumber())) {
             identityCardNumber = null;
         }
-        String phone = userDTOUpdate.getPhone();
-        if (phone != null && phone.trim().equals(oldUser.getPhone().trim())) {
+        String phone = StringUtils.trim(userDTOUpdate.getPhone());
+        if (phone != null && phone.trim().equals(oldUser.getPhone())) {
             phone = null;
         }
-        String email = userDTOUpdate.getEmail();
+        String email = StringUtils.trim(userDTOUpdate.getEmail());
         if (email == null) {
             oldUser.setEmail(null);
-        } else if (email.trim().equals(oldUser.getEmail().trim())) {
+        } else if (email.equals(oldUser.getEmail())) {
             email = null;
         }
         checkDuplicateField(null, identityCardNumber, phone, email);

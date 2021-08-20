@@ -92,7 +92,8 @@ public class ShiftServiceImpl implements ShiftService {
     }
 
     private void checkDuplicateName(String name, Integer stationId) throws CustomDuplicateFieldException {
-        Optional<Shift> shiftOptional = shiftRepository.findByNameAndStationId(name.trim(), stationId);
+        name = StringUtils.trim(name);
+        Optional<Shift> shiftOptional = shiftRepository.findByNameAndStationId(name, stationId);
         if (shiftOptional.isPresent()) {
             throw new CustomDuplicateFieldException(CustomError.builder()
                     .code("duplicate")
@@ -130,7 +131,7 @@ public class ShiftServiceImpl implements ShiftService {
     @Override
     public ShiftDTO update(int id, ShiftDTOUpdate shiftDTOUpdate) throws CustomNotFoundException, CustomBadRequestException, CustomDuplicateFieldException {
         Shift oldShift = optionalValidate.getShiftById(id);
-        if (shiftDTOUpdate.getName() != null && !oldShift.getName().trim().equals(shiftDTOUpdate.getName().trim())) {
+        if (shiftDTOUpdate.getName() != null && !oldShift.getName().equals(StringUtils.trim(shiftDTOUpdate.getName()))) {
             checkDuplicateName(shiftDTOUpdate.getName(), oldShift.getStation().getId());
         }
         ShiftMapper.copyNonNullToShift(oldShift, shiftDTOUpdate);

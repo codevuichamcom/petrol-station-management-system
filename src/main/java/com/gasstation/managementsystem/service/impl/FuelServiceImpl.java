@@ -60,8 +60,9 @@ public class FuelServiceImpl implements FuelService {
     }
 
     private void checkDuplicate(String name) throws CustomDuplicateFieldException {
+        name = StringUtils.trim(name);
         if (name != null) {
-            Optional<Fuel> fuelOptional = fuelRepository.findByNameContainingIgnoreCase(name.trim());
+            Optional<Fuel> fuelOptional = fuelRepository.findByNameContainingIgnoreCase(name);
             if (fuelOptional.isPresent()) {
                 throw new CustomDuplicateFieldException(CustomError.builder()
                         .code("duplicate").field("name").message("Duplicate field name").build());
@@ -72,8 +73,8 @@ public class FuelServiceImpl implements FuelService {
     @Override
     public FuelDTO update(int id, FuelDTOUpdate fuelDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         Fuel oldFuel = optionalValidate.getFuelById(id);
-        String name = fuelDTOUpdate.getName();
-        if (name != null && !name.trim().equalsIgnoreCase(oldFuel.getName().trim())) {
+        String name = StringUtils.trim(fuelDTOUpdate.getName());
+        if (name != null && !name.equalsIgnoreCase(oldFuel.getName())) {
             checkDuplicate(name);
         }
         FuelMapper.copyNonNullToFuel(oldFuel, fuelDTOUpdate);

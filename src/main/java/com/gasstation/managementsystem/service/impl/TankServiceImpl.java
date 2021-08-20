@@ -91,8 +91,9 @@ public class TankServiceImpl implements TankService {
     }
 
     private void checkDuplicate(String name, Integer stationId) throws CustomDuplicateFieldException {
+        name = StringUtils.trim(name);
         if (name != null && stationId != null) {
-            Optional<Tank> tankOptional = tankRepository.findByNameAndStationId(name.trim(), stationId);
+            Optional<Tank> tankOptional = tankRepository.findByNameAndStationId(name, stationId);
             if (tankOptional.isPresent()) {
                 throw new CustomDuplicateFieldException(CustomError.builder()
                         .code("duplicate").field("(name,stationId)").message("Name and stationId is duplicate").table("tank_table").build());
@@ -104,7 +105,7 @@ public class TankServiceImpl implements TankService {
     @Transactional
     public TankDTO update(int id, TankDTOUpdate tankDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         Tank oldTank = optionalValidate.getTankById(id);
-        String name = tankDTOUpdate.getName();
+        String name = StringUtils.trim(tankDTOUpdate.getName());
         if (needCheckDuplicate(name, oldTank)) {
             checkDuplicate(name, oldTank.getStation().getId());
         }
@@ -129,7 +130,8 @@ public class TankServiceImpl implements TankService {
     }
 
     private boolean needCheckDuplicate(String name, Tank oldTank) {
-        return name != null && !name.trim().equals(oldTank.getName().trim());
+        name = StringUtils.trim(name);
+        return name != null && !name.equals(oldTank.getName());
     }
 
 

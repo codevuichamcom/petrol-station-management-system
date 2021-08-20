@@ -109,8 +109,7 @@ public class PumpServiceImpl implements PumpService {
     @Override
     public PumpDTO update(int id, PumpDTOUpdate pumpDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         Pump oldPump = optionalValidate.getPumpById(id);
-        String name = pumpDTOUpdate.getName();
-
+        String name = StringUtils.trim(pumpDTOUpdate.getName());
         if (needCheckDuplicate(name, oldPump)) {
             checkDuplicate(name, oldPump.getTank().getStation().getId());
         }
@@ -121,7 +120,8 @@ public class PumpServiceImpl implements PumpService {
     }
 
     private boolean needCheckDuplicate(String name, Pump oldPump) {
-        return (name != null && !name.trim().equalsIgnoreCase(oldPump.getName().trim()));
+        name = StringUtils.trim(name);
+        return (name != null && !name.equalsIgnoreCase(oldPump.getName()));
     }
 
     @Override

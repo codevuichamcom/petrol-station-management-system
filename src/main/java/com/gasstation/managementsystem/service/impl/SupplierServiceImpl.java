@@ -63,8 +63,9 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     private void checkDuplicate(String phone) throws CustomDuplicateFieldException {
+        phone = StringUtils.trim(phone);
         if (phone == null) return;
-        Optional<Supplier> supplier = supplierRepository.findByPhone(phone.trim());
+        Optional<Supplier> supplier = supplierRepository.findByPhone(phone);
         if (supplier.isPresent()) {
             throw new CustomDuplicateFieldException(CustomError.builder()
                     .code("duplicate").field("phone").message("Phone is duplicate").table("supplier_table").build());
@@ -74,8 +75,8 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public SupplierDTO update(int id, SupplierDTOUpdate supplierDTOUpdate) throws CustomNotFoundException, CustomDuplicateFieldException {
         Supplier oldSupplier = optionalValidate.getSupplierById(id);
-        String phone = supplierDTOUpdate.getPhone();
-        if (phone != null && phone.trim().equalsIgnoreCase(oldSupplier.getPhone().trim())) {
+        String phone = StringUtils.trim(supplierDTOUpdate.getPhone());
+        if (phone != null && phone.equalsIgnoreCase(oldSupplier.getPhone())) {
             phone = null;
         }
         checkDuplicate(phone);

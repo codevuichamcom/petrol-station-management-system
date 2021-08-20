@@ -117,8 +117,8 @@ public class StationServiceImpl implements StationService {
     @Override
     public StationDTO update(int id, StationDTOUpdate stationDTOUpdate) throws CustomBadRequestException, CustomNotFoundException, CustomDuplicateFieldException {
         Station oldStation = optionalValidate.getStationById(id);
-        String name = stationDTOUpdate.getName();
-        String address = stationDTOUpdate.getAddress();
+        String name = StringUtils.trim(stationDTOUpdate.getName());
+        String address = StringUtils.trim(stationDTOUpdate.getAddress());
         if (notChangeNameAndAddress(name, address, oldStation)) {
             name = null;
             address = null;
@@ -135,8 +135,10 @@ public class StationServiceImpl implements StationService {
     }
 
     private boolean notChangeNameAndAddress(String name, String address, Station oldStation) {
-        return name != null && name.trim().equalsIgnoreCase(oldStation.getName().trim())
-                && address != null && address.trim().equalsIgnoreCase(oldStation.getAddress().trim());
+        name = StringUtils.trim(name);
+        address = StringUtils.trim(address);
+        return name != null && name.equalsIgnoreCase(oldStation.getName())
+                && address != null && address.equalsIgnoreCase(oldStation.getAddress());
     }
 
     @Override

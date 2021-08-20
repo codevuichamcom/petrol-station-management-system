@@ -108,8 +108,8 @@ public class UserServiceImpl implements UserService {
         User user = UserMapper.toUser(userDTOCreate);
         user.setUserType(optionalValidate.getUserTypeById(userDTOCreate.getUserTypeId()));
         user.setPassword(bcryptEncoder.encode(userDTOCreate.getPassword()));
-        user = userRepository.save(user);
         trimString(user);
+        user = userRepository.save(user);
         return UserMapper.toUserDTO(user);
     }
 

@@ -144,20 +144,4 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
-    @Scheduled(cron = "0 30 1 * * ?")
-    public void createPumpShiftForAllPump() {
-        ArrayList<PumpShift> pumpShifts = new ArrayList<>();
-        pumpRepository.findAll().forEach(pump -> {
-            int stationId = pump.getTank().getStation().getId();
-            shiftRepository.findAllShiftByStationId(stationId).forEach(shift -> {
-                PumpShift pumpShift = PumpShift.builder().
-                        createdDate(DateTimeHelper.getCurrentDate())
-                        .shift(shift)
-                        .pump(pump).build();
-                pumpShifts.add(pumpShift);
-            });
-        });
-        pumpShiftRepository.saveAll(pumpShifts);
-    }
-
 }

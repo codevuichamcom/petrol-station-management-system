@@ -8,7 +8,10 @@ import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOCreat
 import com.gasstation.managementsystem.model.dto.transaction.TransactionDTOFilter;
 import com.gasstation.managementsystem.model.dto.transaction.TransactionUuidDTO;
 import com.gasstation.managementsystem.model.mapper.TransactionMapper;
-import com.gasstation.managementsystem.repository.*;
+import com.gasstation.managementsystem.repository.CardRepository;
+import com.gasstation.managementsystem.repository.DebtRepository;
+import com.gasstation.managementsystem.repository.TankRepository;
+import com.gasstation.managementsystem.repository.TransactionRepository;
 import com.gasstation.managementsystem.repository.criteria.TransactionRepositoryCriteria;
 import com.gasstation.managementsystem.service.TransactionService;
 import com.gasstation.managementsystem.utils.DateTimeHelper;
@@ -16,9 +19,7 @@ import com.gasstation.managementsystem.utils.OptionalValidate;
 import com.gasstation.managementsystem.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,9 +32,6 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final OptionalValidate optionalValidate;
     private final TransactionRepositoryCriteria transactionCriteria;
-    private final PumpRepository pumpRepository;
-    private final ShiftRepository shiftRepository;
-    private final PumpShiftRepository pumpShiftRepository;
     private final DebtRepository debtRepository;
     private final CardRepository cardRepository;
     private final TankRepository tankRepository;
@@ -71,7 +69,6 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    @Transactional
     public List<TransactionUuidDTO> create(List<TransactionDTOCreate> transactionDTOCreates) throws CustomNotFoundException {
         List<Transaction> transactionList = new ArrayList<>();
 

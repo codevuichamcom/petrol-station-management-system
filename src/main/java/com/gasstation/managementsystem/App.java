@@ -27,7 +27,7 @@ public class App {
         SpringApplication.run(App.class, args);
     }
 
-    @Scheduled(cron = "0 30 1 * * ?")
+    @Scheduled(cron = "0 1 0 * * ?")
     public void createPumpShiftForAllPump() {
         ArrayList<PumpShift> pumpShifts = new ArrayList<>();
         pumpRepository.findAll().forEach(pump -> {

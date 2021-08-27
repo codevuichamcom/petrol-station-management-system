@@ -143,6 +143,7 @@ public class FuelImportServiceImpl implements FuelImportService {
         trimString(oldFuelImport);
         oldFuelImport = fuelImportRepository.save(oldFuelImport);
         if (accountsPayable != null && accountsPayable != 0) {
+            oldFuelImport.setAmountPaid(oldFuelImport.getAmountPaid() + accountsPayable);
             addExpense(accountsPayable, reasonPayExpense, oldFuelImport);
         }
         return FuelImportMapper.toFuelImportDTO(oldFuelImport);

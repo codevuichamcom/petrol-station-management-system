@@ -31,7 +31,7 @@ public class PumpShiftRepositoryCriteria {
                 .like("t.station.name", "stationName", filter.getStationName())
                 .like("ps.shift.name", "shiftName", filter.getShiftName())
                 .like("p.name", "pumpName", filter.getPumpName())
-                .equal("p.id", "id", filter.getId());
+                .equal("ps.id", "id", filter.getId());
         if (statuses == null || statuses.length == 0) {
             qHelper.between("ps.closedTime", filter.getClosedTimeFrom(), filter.getClosedTimeTo());
         } else {

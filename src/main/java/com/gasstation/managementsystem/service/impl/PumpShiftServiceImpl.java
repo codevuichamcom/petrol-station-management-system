@@ -63,7 +63,7 @@ public class PumpShiftServiceImpl implements PumShiftService {
     public PumpShiftDTO findById(int id) throws CustomNotFoundException {
         User userLoggedIn = userHelper.getUserLogin();
         UserType userType = userLoggedIn.getUserType();
-        HashMap<String, Object> map = pumpShiftCriteria.findAll(PumpShiftDTOFilter.builder().id(id).build());
+        HashMap<String, Object> map = pumpShiftCriteria.findAll(PumpShiftDTOFilter.builder().id(id).pageIndex(1).pageSize(1).build());
 
         List<PumpShift> pumpShifts = (List<PumpShift>) map.get("data");
         PumpShift pumpShift = null;

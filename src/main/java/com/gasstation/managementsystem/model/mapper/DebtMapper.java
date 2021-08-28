@@ -48,6 +48,7 @@ public class DebtMapper {
                 .totalAmount(transaction.getTotalAmount())
                 .pumpShift(pumpShiftDTO).build() : null;
         return DebtDTO.builder()
+                .accountsPayable(debt.getAccountsPayable())
                 .id(debt.getId())
                 .card(cardDTO)
                 .station(stationDTO)

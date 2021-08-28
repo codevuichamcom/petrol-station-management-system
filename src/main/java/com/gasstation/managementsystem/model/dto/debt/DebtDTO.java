@@ -17,6 +17,7 @@ public class DebtDTO {
     private CardDTO card;
     private StationDTO station;
     private TransactionDTO transaction;
+    private Double accountsPayable;
 
     @Override
     public boolean equals(Object o) {

@@ -67,8 +67,12 @@ public class PumpShiftServiceImpl implements PumShiftService {
 
         List<PumpShift> pumpShifts = (List<PumpShift>) map.get("data");
         PumpShift pumpShift = null;
+        PumpShiftDTO pumpShiftDTO = null;
         if (pumpShifts.size() == 1) {
             pumpShift = pumpShifts.get(0);
+            pumpShiftDTO = PumpShiftMapper.toPumpShiftDTO(pumpShift);
+            pumpShiftDTO.setTotalVolume((Double) map.get("totalVolume"));
+            pumpShiftDTO.setTotalAmount((Double) map.get("totalAmount"));
         }
         if (pumpShift != null && userType.getId() == UserType.OWNER
                 && !pumpShift.getPump().getTank().getStation().getOwner().getId().equals(userLoggedIn.getId())) {//id không phải owner đang đăng nhâp
@@ -77,9 +81,6 @@ public class PumpShiftServiceImpl implements PumShiftService {
                     .message("Pump shift not of the owner")
                     .table("pump_shift_tbl").build());
         }
-        PumpShiftDTO pumpShiftDTO = PumpShiftMapper.toPumpShiftDTO(pumpShift);
-        pumpShiftDTO.setTotalVolume((Double) map.get("totalVolume"));
-        pumpShiftDTO.setTotalAmount((Double) map.get("totalAmount"));
         return pumpShiftDTO;
     }
 

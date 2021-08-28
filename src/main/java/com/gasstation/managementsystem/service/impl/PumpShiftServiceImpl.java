@@ -79,6 +79,7 @@ public class PumpShiftServiceImpl implements PumShiftService {
         PumpShift oldPumpShift = optionalValidate.getPumpShiftById(id);
         oldPumpShift.setClosedTime(DateTimeHelper.getCurrentUnixTime());
         oldPumpShift.setExecutor(userHelper.getUserLogin());
+        oldPumpShift = pumpShiftRepository.save(oldPumpShift);
         return PumpShiftMapper.toPumpShiftDTO(oldPumpShift);
     }
 

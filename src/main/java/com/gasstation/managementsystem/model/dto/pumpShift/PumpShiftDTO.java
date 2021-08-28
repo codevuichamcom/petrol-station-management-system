@@ -19,6 +19,8 @@ public class PumpShiftDTO {
     private ShiftDTO shift;
     private PumpDTO pump;
     private UserDTO executor;
+    private Double totalVolume;
+    private Double totalAmount;
 
     @Override
     public boolean equals(Object o) {

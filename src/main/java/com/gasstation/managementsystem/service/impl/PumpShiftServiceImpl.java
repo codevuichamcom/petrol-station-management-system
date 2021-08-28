@@ -63,15 +63,24 @@ public class PumpShiftServiceImpl implements PumShiftService {
     public PumpShiftDTO findById(int id) throws CustomNotFoundException {
         User userLoggedIn = userHelper.getUserLogin();
         UserType userType = userLoggedIn.getUserType();
-        PumpShift pumpShift = optionalValidate.getPumpShiftById(id);
-        if (userType.getId() == UserType.OWNER
+        HashMap<String, Object> map = pumpShiftCriteria.findAll(PumpShiftDTOFilter.builder().id(id).build());
+
+        List<PumpShift> pumpShifts = (List<PumpShift>) map.get("data");
+        PumpShift pumpShift = null;
+        if (pumpShifts.size() == 1) {
+            pumpShift = pumpShifts.get(0);
+        }
+        if (pumpShift != null && userType.getId() == UserType.OWNER
                 && !pumpShift.getPump().getTank().getStation().getOwner().getId().equals(userLoggedIn.getId())) {//id không phải owner đang đăng nhâp
             throw new CustomNotFoundException(CustomError.builder()
                     .code("not.found")
                     .message("Pump shift not of the owner")
                     .table("pump_shift_tbl").build());
         }
-        return PumpShiftMapper.toPumpShiftDTO(pumpShift);
+        PumpShiftDTO pumpShiftDTO = PumpShiftMapper.toPumpShiftDTO(pumpShift);
+        pumpShiftDTO.setTotalVolume((Double) map.get("totalVolume"));
+        pumpShiftDTO.setTotalAmount((Double) map.get("totalAmount"));
+        return pumpShiftDTO;
     }
 
     @Override

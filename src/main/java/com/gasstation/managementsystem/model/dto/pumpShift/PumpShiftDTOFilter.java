@@ -12,6 +12,7 @@ public class PumpShiftDTOFilter {
     public static final String STATUS_UNCLOSE = "UNCLOSE";
     public static final String STATUS_WORKING = "WORKING";
     public static final String STATUS_FUTURE = "FUTURE";
+    private Integer id;
     private Integer pageIndex;
     private Integer pageSize;
     private Long createdDateFrom;

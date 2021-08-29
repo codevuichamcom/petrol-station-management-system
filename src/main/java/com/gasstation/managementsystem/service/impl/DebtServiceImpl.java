@@ -64,6 +64,7 @@ public class DebtServiceImpl implements DebtService {
             Card card = optionalValidate.getCardById(debtDTOPay.getCardId());
             Transaction transaction = optionalValidate.getTransactionById(debtDTOPay.getTransactionId());
             double amount = debt.getAccountsPayable();
+            card.setAccountsPayable(card.getAccountsPayable() - amount);
             debtRepository.delete(debt);
             Receipt receipt = Receipt.builder()
                     .amount(amount)

@@ -4,6 +4,7 @@ import com.gasstation.managementsystem.entity.PumpShift;
 import com.gasstation.managementsystem.repository.PumpRepository;
 import com.gasstation.managementsystem.repository.PumpShiftRepository;
 import com.gasstation.managementsystem.repository.ShiftRepository;
+import com.gasstation.managementsystem.repository.WorkScheduleRepository;
 import com.gasstation.managementsystem.utils.DateTimeHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -22,6 +23,8 @@ public class App {
     ShiftRepository shiftRepository;
     @Autowired
     PumpShiftRepository pumpShiftRepository;
+    @Autowired
+    WorkScheduleRepository workScheduleRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
@@ -29,18 +32,25 @@ public class App {
 
     @Scheduled(cron = "${cron.expression}")
     public void createPumpShiftForAllPump() {
-        ArrayList<PumpShift> pumpShifts = new ArrayList<>();
-        pumpRepository.findAll().forEach(pump -> {
-            int stationId = pump.getTank().getStation().getId();
-            shiftRepository.findAllShiftByStationId(stationId).forEach(shift -> {
-                PumpShift pumpShift = PumpShift.builder().
-                        createdDate(DateTimeHelper.getCurrentDate())
-                        .shift(shift)
-                        .pump(pump).build();
-                pumpShifts.add(pumpShift);
+        if (hasWorkSchedule()) {
+            ArrayList<PumpShift> pumpShifts = new ArrayList<>();
+            pumpRepository.findAll().forEach(pump -> {
+                int stationId = pump.getTank().getStation().getId();
+                shiftRepository.findAllShiftByStationId(stationId).forEach(shift -> {
+                    PumpShift pumpShift = PumpShift.builder().
+                            createdDate(DateTimeHelper.getCurrentDate())
+                            .shift(shift)
+                            .pump(pump).build();
+                    pumpShifts.add(pumpShift);
+                });
             });
-        });
-        pumpShiftRepository.saveAll(pumpShifts);
+            pumpShiftRepository.saveAll(pumpShifts);
+        }
+    }
+
+    private boolean hasWorkSchedule() {
+        long currentDate = DateTimeHelper.getCurrentDate();
+        return workScheduleRepository.findAll().stream().anyMatch(workSchedule -> workSchedule.getStartDate() <= currentDate && currentDate <= workSchedule.getEndDate());
     }
 
 }

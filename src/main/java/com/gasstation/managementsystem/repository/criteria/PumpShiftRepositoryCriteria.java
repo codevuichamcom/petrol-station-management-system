@@ -95,6 +95,7 @@ public class PumpShiftRepositoryCriteria {
         volumeAmountHelper.setValueToParams(volumeAmountQuery);
         Object[] volumeAndAmount = (Object[]) volumeAmountQuery.getSingleResult();
         HashMap<String, String> sort = new HashMap<>();
+        sort.put(" ps.createdDate", "DESC");
         sort.put("t.station.id", "DESC");
         sort.put("ps.shift.startTime", "DESC");
         qHelper.sort(sort);

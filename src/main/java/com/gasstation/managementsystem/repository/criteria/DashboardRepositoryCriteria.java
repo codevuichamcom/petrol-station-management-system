@@ -12,10 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -188,6 +185,13 @@ public class DashboardRepositoryCriteria {
                     .totalExport((Double) objects[TOTAL_EXPORT])
                     .build();
             tankStatistics.add(tankStatistic);
+        });
+        tankStatistics.sort((o1, o2) -> {
+            if (!o2.getTank().getStation().getId().equals(o1.getTank().getStation().getId())) {
+                return o2.getTank().getStation().getId() - o1.getTank().getStation().getId();
+            } else {
+                return o2.getTank().getId() - o1.getTank().getId();
+            }
         });
         HashMap<String, Object> map = new HashMap<>();
         map.put("data", tankStatistics);
